@@ -1,0 +1,18 @@
+CHANCELARIA 1997 · PACOTE PROFISSIONAL
+
+Arquivos para enviar ao GitHub:
+1. index.html
+2. manifest.json
+3. service-worker.js
+4. icon-192.png
+5. icon-512.png
+
+O index.html reúne o estilo e o código do aplicativo. Assim, a aparência não depende de styles.css ou app.js separados.
+
+Não envie ao GitHub:
+• backups
+• planilhas
+• listas de Irmãos
+• arquivos JSON com cadastros
+
+Emblema fornecido pelo usuário e aplicado como identidade visual e ícone do aplicativo.
