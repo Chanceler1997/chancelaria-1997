@@ -1,7 +1,8 @@
-const CACHE_NAME = "chancelaria-1997-profissional-v4-importacao";
+const CACHE_NAME = "chancelaria-1997-profissional-v5-pdf-whatsapp";
 const APP_FILES = [
   "./",
   "./index.html",
+  "./print.html",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png"
