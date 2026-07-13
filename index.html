@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#152541">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="2.7.0-revisao-frequencia-pdf-whatsapp">
+<meta name="application-version" content="3.0.0-relatorios-historico">
 <style>
 :root{
   --azul:#152541;
@@ -218,6 +218,16 @@ main{padding-top:16px}
 .report-session-item{width:100%;text-align:left;appearance:none;-webkit-appearance:none;color:inherit;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:14px}
 .report-session-item:active{transform:scale(.995)}
 .report-session-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.audit-actions{display:flex;justify-content:flex-end;margin-top:12px;padding-top:12px;border-top:1px solid rgba(201,168,76,.24)}
+.collective-person-card{width:100%;appearance:none;-webkit-appearance:none;text-align:left;background:linear-gradient(180deg,#fffefb 0%,#f7f1e8 100%);border:1px solid rgba(201,168,76,.26);border-radius:16px;padding:13px;margin-bottom:10px;display:grid;grid-template-columns:48px minmax(0,1fr) auto;align-items:center;gap:12px;box-shadow:0 5px 16px rgba(10,20,36,.07);color:inherit;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+.collective-person-card:active{transform:scale(.992);box-shadow:0 3px 10px rgba(10,20,36,.08);border-color:rgba(201,168,76,.62)}
+.collective-person-card .collective-name{font-size:15px;font-weight:900;color:var(--azul);line-height:1.25}
+.collective-person-card .collective-meta{font-size:11px;color:var(--muted);line-height:1.4;margin-top:4px}
+.collective-person-card .collective-action{display:flex;flex-direction:column;align-items:flex-end;gap:6px;color:var(--azul)}
+.collective-person-card .collective-link{font-size:10px;font-weight:900;color:#785c13;background:#fff4ce;border:1px solid rgba(201,168,76,.52);border-radius:999px;padding:5px 8px;white-space:nowrap}
+.collective-person-card .collective-arrow{font-size:22px;line-height:1;color:var(--ouro)}
+@media(max-width:430px){.collective-person-card{grid-template-columns:44px minmax(0,1fr) auto;padding:12px;gap:10px}.collective-person-card .avatar{width:44px;height:44px}.collective-person-card .collective-link{display:none}}
+
 .report-edit-chip{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:5px 10px;font-size:11px;font-weight:900;color:var(--azul);background:#f4e6b6;border:1px solid rgba(201,168,76,.55);border-radius:999px;white-space:nowrap}
 .report-edit-hint{color:#6d5620;font-weight:700}
 .review-summary{background:#fffdf8;border:1px solid var(--linha);border-radius:14px;padding:12px;margin-bottom:12px}
@@ -447,7 +457,11 @@ main{padding-top:16px}
     </div>
     <div class="card">
       <div class="card-head">🧾 Histórico de alterações</div>
-      <div class="card-body"><div id="listaAuditoria"></div></div>
+      <div class="card-body">
+        <p class="small" style="margin-bottom:10px">Registra inclusões, correções e exclusões feitas na Chancelaria.</p>
+        <div id="listaAuditoria"></div>
+        <div class="audit-actions"><button class="btn btn-danger btn-sm" onclick="solicitarAcaoComSenha('limparHistorico')">Excluir histórico</button></div>
+      </div>
     </div>
   </section>
 </main>
@@ -699,6 +713,7 @@ const TRASH_DAYS=30;
 const EXTERNAL_ACTION_GRACE_MS=15*60*1000;
 let aba='inicio';
 let appHistoryDepth=0;
+let relatorioIndividualAtivoId='';
 let navigationReady=false;
 let pendingPrintPayload=null;
 let mensagemDestinoIrmaoId='';
@@ -1244,6 +1259,10 @@ function inicializarNavegacaoInterna(){
     const st=event.state;
     appHistoryDepth=Number(st?.appDepth)||0;
     aplicarAba(st?.appTab||'inicio');
+    if(st?.appTab==='relatorios'&&st?.reportIndividual){
+      const select=document.getElementById('relIrmao');
+      if(select){select.value=st.reportIndividual;renderRelatorioIndividual(false)}
+    }
   });
 }
 function abrirAba(id,registrar=true){
@@ -1596,8 +1615,8 @@ function compartilharMensagem(){
 }
 
 
-function initRelatorios(){const arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome));relIrmao.innerHTML='<option value="">Selecione</option>'+arr.map(i=>`<option value="${i.id}">${h(i.nome)}${i.cim?' · CIM '+h(i.cim):''}</option>`).join('');renderBackupStatus();renderLixeira();renderAuditoria();renderCentralSeguranca()}
-function renderRelatorioIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);relIndividual.innerHTML=i?htmlRelatorioIndividual(i,true):'<div class="empty"><p>Selecione um irmão.</p></div>'}
+function initRelatorios(){const arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome));relIrmao.innerHTML='<option value="">Selecione</option>'+arr.map(i=>`<option value="${i.id}">${h(i.nome)}${i.cim?' · CIM '+h(i.cim):''}</option>`).join('');relatorioIndividualAtivoId='';relIndividual.innerHTML='';renderBackupStatus();renderLixeira();renderAuditoria();renderCentralSeguranca()}
+function renderRelatorioIndividual(registrar=true){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){relatorioIndividualAtivoId='';relIndividual.innerHTML='<div class="empty"><p>Selecione um irmão.</p></div>';return}relatorioIndividualAtivoId=i.id;relIndividual.innerHTML=htmlRelatorioIndividual(i,true);if(registrar&&history.state?.reportIndividual!==i.id){history.pushState({appTab:'relatorios',appDepth:appHistoryDepth,reportIndividual:i.id},'',`#relatorios/individual/${encodeURIComponent(i.id)}`)}atualizarBotaoVoltar()}
 function htmlRelatorioIndividual(i,editavel=false){const f=calcFreq(i);if(!f.periodoAtivo)return `<div class="empty"><p>Cadastre uma sessão para iniciar a contagem de frequência.</p></div>`;return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''} · presença real ${f.pct}% · falta ${f.pctFalta}% · período ${f.periodoTexto}${f.periodo12?'':' · sem alerta Art. 76'}</div></div></div>${htmlFreqDetalhe(i,editavel)}`}
 function abrirRevisaoFrequencia(irmaoId,sessaoId){
   const i=getIrmaos().find(x=>x.id===irmaoId);
@@ -1668,11 +1687,13 @@ function salvarRevisaoFrequencia(){
   setPresencas(pres);
   audit('Frequência individual revisada',`${i.nome} · ${brData(s.data)} · ${statusTexto(anterior)} → ${statusTexto(novoRegistro)}`);
   fecharModal('modalRevisaoFrequencia');
-  renderRelatorioIndividual();
+  renderRelatorioIndividual(false);
   renderInicio();
   toast('Registro individual atualizado')
 }
-function renderRelatorioGeral(){const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta);relGeral.innerHTML=arr.length?arr.map(linhaFreq).join(''):'<div class="empty"><p>Nenhum irmão cadastrado.</p></div>'}
+function linhaRelatorioColetivo(i){const f=calcFreq(i);const resumo=f.periodoAtivo?`Presença real ${f.pct}% · falta justificada ${f.justificada} · falta ${f.pctFalta}%`:'Sem período de apuração';return `<button type="button" class="collective-person-card" onclick="abrirIrmaoDoRelatorioColetivo('${i.id}')"><span class="avatar">${h(iniciais(i.nome))}</span><span><span class="collective-name">${h(i.nome)}</span><span class="collective-meta">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''}<br>${h(resumo)}</span>${f.periodoAtivo?`<span class="progress"><span class="bar" style="display:block;width:${f.pct}%;background:${corPct(f.pct)}"></span></span>`:''}</span><span class="collective-action"><span class="badge ${f.periodoAtivo?classeFreq(f):'b-warn'}">${f.periodoAtivo?f.pctFalta+'% falta':'sem contagem'}</span><span class="collective-link">Revisar</span><span class="collective-arrow">›</span></span></button>`}
+function abrirIrmaoDoRelatorioColetivo(id){const i=getIrmaos().find(x=>x.id===id);if(!i){toast('Irmão não encontrado');return}relIrmao.value=id;renderRelatorioIndividual(true);requestAnimationFrame(()=>document.getElementById('relIndividual')?.scrollIntoView({behavior:'smooth',block:'start'}));toast('Relatório individual aberto para revisão')}
+function renderRelatorioGeral(){const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta||a.nome.localeCompare(b.nome));relGeral.innerHTML=arr.length?`<div class="small" style="margin-bottom:10px">Toque em um Irmão para abrir o relatório individual e revisar as frequências.</div>${arr.map(linhaRelatorioColetivo).join('')}`:'<div class="empty"><p>Nenhum irmão cadastrado.</p></div>'}
 function corpoRelatorioGeral(){const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório coletivo de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>';return `<h2>Relatório coletivo de frequência</h2><p>Critério: período RGF ${per.texto}. Falta justificada é ausência com justa causa: não soma presença real e não entra no cálculo do Art. 76.${per.completo12?' Alertas administrativos habilitados, pois o período completou 12 meses.':' Período em andamento ou inferior a 12 meses: relatório sem alerta do Art. 76.'}</p><table><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Presença real</th><th>Falta justificada</th><th>Falta</th><th>Total</th></tr></thead><tbody>${getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td>${i.cim?h(i.cim):'Não informado'}</td><td>${h(grauSimbolo(i.grau))}</td><td>${f.pct}% (${f.presente})</td><td>${f.justificada}</td><td>${f.pctFalta}% (${f.falta})</td><td>${f.total}</td></tr>`}).join('')}</tbody></table>`}
 function corpoRelatorioIndividual(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<h2>Relatório individual de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>`;const rows=getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>a.data.localeCompare(b.data)).map(s=>{const r=(getPresencas()[s.id]||{})[i.id]||'F';return `<tr><td>${brData(s.data)}</td><td>${tipoSessao(s.tipo)}</td><td>${h(s.numero||'')} ${h(grauSimbolo(grauNaData(i,s.data)))}</td><td>${h(statusTexto(r))}</td></tr>`}).join('');return `<h2>Relatório individual de frequência</h2><p><b>Irmão:</b> ${h(i.nome)} · <b>CIM:</b> ${i.cim?h(i.cim):'Não informado'} · <b>Grau atual:</b> ${h(grauSimbolo(i.grau))} · <b>Período:</b> ${brData(f.inicio)} a ${brData(f.fim)}${f.periodo12?'':' · sem alerta Art. 76'}</p><p><b>Presença real:</b> ${f.pct}% (${f.presente}) · <b>Falta justificada:</b> ${f.justificada} · <b>Falta:</b> ${f.pctFalta}% (${f.falta})</p><table><thead><tr><th>Data</th><th>Tipo</th><th>Identificação</th><th>Status e justificativa</th></tr></thead><tbody>${rows}</tbody></table>`}
 function codificarBase64UrlUtf8(valor){
@@ -1725,10 +1746,11 @@ function restaurarItemLixeira(id){const arr=limparLixeiraExpirada(),idx=arr.find
 function apagarItemLixeira(id){if(!confirm('Apagar este item em definitivo?'))return;const arr=limparLixeiraExpirada(),x=arr.find(v=>v.id===id);setTrash(arr.filter(v=>v.id!==id));if(x)audit('Item apagado em definitivo',`${x.tipo}: ${x.nome}`);renderLixeira();toast('Item apagado')}
 function esvaziarLixeiraConfirmado(){const qtd=limparLixeiraExpirada().length;setTrash([]);audit('Lixeira esvaziada',`${qtd} item(ns)`);renderLixeira();toast('Lixeira esvaziada')}
 function renderAuditoria(){const el=document.getElementById('listaAuditoria');if(!el)return;const arr=getAudit().slice(0,60);el.innerHTML=arr.length?arr.map(x=>`<div class=\"audit-line\"><b>${h(x.acao)}</b><span>${new Date(x.at).toLocaleString('pt-BR')}${x.detalhe?' · '+h(x.detalhe):''}</span></div>`).join(''):'<div class=\"empty\"><p>Nenhuma alteração registrada.</p></div>'}
+function limparHistoricoConfirmado(){const qtd=getAudit().length;if(!qtd){toast('O histórico já está vazio');return}if(!confirm(`Excluir definitivamente ${qtd} registro(s) do histórico?`))return;dbSet('audit',[]);renderAuditoria();toast('Histórico de alterações excluído')}
 async function validarSenha(password,meta=getSecurityMeta()){if(!meta)throw new Error('Segurança não configurada');const key=await deriveVaultKey(password,base64ToBytes(meta.salt),Number(meta.iterations)||SEC_ITERATIONS);const v=await decryptPayload(key,meta.verifier);if(v?.ok!=='CHANCELARIA-1997')throw new Error('Senha incorreta');return key}
-function solicitarAcaoComSenha(acao){sensitiveAction=acao;senhaAcaoTitulo.textContent=acao==='exportar'?'Confirme para exportar':acao==='esvaziarLixeira'?'Confirme para apagar a lixeira':'Confirme sua senha';senhaAcaoInput.value='';senhaAcaoErro.textContent='';abrirModal('modalSenhaAcao');setTimeout(()=>senhaAcaoInput.focus(),80)}
+function solicitarAcaoComSenha(acao){sensitiveAction=acao;senhaAcaoTitulo.textContent=acao==='exportar'?'Confirme para exportar':acao==='esvaziarLixeira'?'Confirme para apagar a lixeira':acao==='limparHistorico'?'Confirme para excluir o histórico':'Confirme sua senha';senhaAcaoInput.value='';senhaAcaoErro.textContent='';abrirModal('modalSenhaAcao');setTimeout(()=>senhaAcaoInput.focus(),80)}
 function cancelarAcaoComSenha(){sensitiveAction='';fecharModal('modalSenhaAcao')}
-async function confirmarAcaoComSenha(){try{await validarSenha(senhaAcaoInput.value);const a=sensitiveAction;cancelarAcaoComSenha();if(a==='exportar')await exportarBackupConfirmado();else if(a==='esvaziarLixeira')esvaziarLixeiraConfirmado()}catch(e){senhaAcaoErro.textContent='Senha incorreta.';senhaAcaoInput.value=''}}
+async function confirmarAcaoComSenha(){try{await validarSenha(senhaAcaoInput.value);const a=sensitiveAction;cancelarAcaoComSenha();if(a==='exportar')await exportarBackupConfirmado();else if(a==='esvaziarLixeira')esvaziarLixeiraConfirmado();else if(a==='limparHistorico')limparHistoricoConfirmado()}catch(e){senhaAcaoErro.textContent='Senha incorreta.';senhaAcaoInput.value=''}}
 async function trocarSenhaMestra(){const atual=senhaAtualTroca.value,nova=senhaNovaTroca.value,conf=senhaNovaConfirma.value;if(nova.length<8){toast('Use no mínimo 8 caracteres');return}if(nova!==conf){toast('As novas senhas não conferem');return}try{await validarSenha(atual);await persistQueue;const salt=crypto.getRandomValues(new Uint8Array(16)),key=await deriveVaultKey(nova,salt,SEC_ITERATIONS),verifier=await encryptPayload(key,{ok:'CHANCELARIA-1997',version:1}),meta={version:1,salt:bytesToBase64(salt),iterations:SEC_ITERATIONS,verifier,createdAt:new Date().toISOString(),changedAt:new Date().toISOString()};vaultKey=key;localStorage.setItem(SEC_META_KEY,JSON.stringify(meta));audit('Senha mestra alterada','Nova chave criptográfica criada');await persistVaultNow();senhaAtualTroca.value=senhaNovaTroca.value=senhaNovaConfirma.value='';fecharModal('modalTrocarSenha');toast('Senha alterada com sucesso')}catch(e){toast('Senha atual incorreta')}}
 function resumoCofre(data){return {irmaos:Array.isArray(data?.irmaos)?data.irmaos.length:0,sessoes:Array.isArray(data?.sessoes)?data.sessoes.length:0,datas:Array.isArray(data?.festivas)?data.festivas.length:0,alteradoEm:data?.updatedAt||''}}
 function guardarCopiaRecuperacao(){const meta=localStorage.getItem(SEC_META_KEY),vault=localStorage.getItem(SEC_VAULT_KEY);if(meta&&vault)localStorage.setItem(SEC_RECOVERY_KEY,JSON.stringify({tipo:'CHANCELARIA1997_RECOVERY',meta:JSON.parse(meta),vault:JSON.parse(vault),savedAt:new Date().toISOString()}))}
