@@ -191,8 +191,11 @@ main{padding-top:16px}
 .report-preview-back{padding:0;background:#0a1424}
 .report-preview-modal{max-width:940px;min-height:100vh;margin:0;border-radius:0;background:#e8e8e8;border:0}
 .report-preview-modal .modal-head{position:sticky;top:0;z-index:5}
-.report-preview-actions{position:sticky;top:50px;z-index:4;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;background:#152541;box-shadow:0 4px 12px rgba(0,0,0,.2)}
-.report-preview-actions .btn{min-height:48px;font-size:15px}
+.report-preview-actions{position:sticky;top:50px;z-index:4;display:flex;justify-content:center;padding:12px;background:#152541;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.report-preview-actions .btn{width:min(100%,420px);min-height:48px;font-size:15px}
+.report-preview-head{justify-content:flex-start;gap:10px}
+.report-preview-back-button{width:38px;height:38px;flex:0 0 38px;border-radius:11px;display:grid;place-items:center;background:rgba(255,255,255,.08);color:var(--ouro);border:1px solid rgba(201,168,76,.45);font-size:24px;line-height:1}
+.report-preview-back-button:active{transform:scale(.96)}
 .report-preview-scroll{padding:12px;overflow:auto}
 .report-preview-page{width:210mm;min-height:297mm;margin:0 auto;background:#fff;padding:10mm 12mm 20mm;box-shadow:0 4px 22px rgba(0,0,0,.18);position:relative;color:#171717;font-family:Arial,"Segoe UI",sans-serif}
 .report-preview-page .official-header{margin-bottom:7mm;border:1.5px solid #c9a84c;border-radius:10px;overflow:hidden;background:#fff}
@@ -211,22 +214,27 @@ main{padding-top:16px}
 .report-toolbar .btn{width:100%;padding:10px 8px}
 @media(max-width:430px){.report-toolbar{grid-template-columns:1fr}.report-toolbar .btn{width:100%}}
 
-/* Revisão individual de frequência e compartilhamento de PDF */
-.report-session-item{width:100%;text-align:left;appearance:none;-webkit-appearance:none;color:inherit;cursor:pointer;position:relative;padding-right:42px}
-.report-session-item:after{content:"Editar";position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:900;color:var(--azul);background:#f4e6b6;border:1px solid rgba(201,168,76,.45);border-radius:999px;padding:4px 7px}
+/* Revisão individual de frequência */
+.report-session-item{width:100%;text-align:left;appearance:none;-webkit-appearance:none;color:inherit;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px;padding:14px}
 .report-session-item:active{transform:scale(.995)}
+.report-session-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.report-edit-chip{display:inline-flex;align-items:center;justify-content:center;min-height:30px;padding:5px 10px;font-size:11px;font-weight:900;color:var(--azul);background:#f4e6b6;border:1px solid rgba(201,168,76,.55);border-radius:999px;white-space:nowrap}
 .report-edit-hint{color:#6d5620;font-weight:700}
 .review-summary{background:#fffdf8;border:1px solid var(--linha);border-radius:14px;padding:12px;margin-bottom:12px}
 .review-summary b{color:var(--azul)}
 .review-current{margin-top:8px;padding-top:8px;border-top:1px solid var(--linha);font-size:12px;color:var(--muted);line-height:1.45}
 .review-status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
 .review-status-grid .status-btn{min-height:46px}
+.review-presence-box{background:#fffdf8;border:1px solid var(--linha);border-radius:14px;padding:12px;margin:0 0 12px}
+.review-presence-box label{display:block;font-size:11px;font-weight:900;color:var(--azul);text-transform:uppercase;letter-spacing:.25px;margin-bottom:5px}
+.review-presence-box select,.review-presence-box input,.review-presence-box textarea{width:100%;border:1.5px solid var(--linha);border-radius:10px;padding:10px;background:#fff;color:var(--texto);outline:none;font-size:13px;line-height:1.35}
+.review-presence-box textarea{min-height:68px;resize:vertical}
+.review-presence-box select:focus,.review-presence-box input:focus,.review-presence-box textarea:focus{border-color:var(--ouro);box-shadow:0 0 0 3px rgba(201,168,76,.16)}
 .btn:disabled{opacity:.58;cursor:not-allowed}
-.pdf-share-note{font-size:11px;color:var(--muted);line-height:1.4;margin-top:8px;text-align:center}
 @media(max-width:600px){
-  .report-preview-actions{grid-template-columns:1fr 1fr}
-  .report-preview-actions .pdf-share-button{grid-column:1/-1}
   .review-status-grid{grid-template-columns:1fr}
+  .report-session-item{grid-template-columns:1fr;gap:10px}
+  .report-session-actions{width:100%;justify-content:space-between}
 }
 
 </style>
@@ -587,6 +595,23 @@ main{padding-top:16px}
           <button id="revisaoStatusJ" class="status-btn" type="button" onclick="selecionarStatusRevisao('J')">Falta justificada</button>
         </div>
       </div>
+      <div id="revisaoTipoPresencaBox" class="review-presence-box" style="display:none">
+        <label for="revisaoTipoPresenca">Tipo de presença</label>
+        <select id="revisaoTipoPresenca" onchange="atualizarTipoPresencaRevisao()">
+          <option value="P">Presença na Loja</option>
+          <option value="V">Presença em outra Loja com atestado</option>
+        </select>
+        <div id="revisaoVisitaBox" style="display:none;margin-top:10px">
+          <div class="row-3">
+            <div><label for="revisaoDataVisita">Data da visita</label><input id="revisaoDataVisita" type="date"></div>
+            <div><label for="revisaoLojaVisita">Loja visitada</label><input id="revisaoLojaVisita" placeholder="Nome da Loja"></div>
+            <div><label for="revisaoOrienteVisita">Oriente</label><input id="revisaoOrienteVisita" placeholder="Oriente"></div>
+          </div>
+          <label for="revisaoAtestadoVisita" style="margin-top:10px">Atestado ou registro</label>
+          <textarea id="revisaoAtestadoVisita" placeholder="Informe o atestado, número do documento ou observação do registro."></textarea>
+          <div class="small" style="margin-top:6px">A presença em outra Loja exige data, Loja, Oriente e atestado ou registro.</div>
+        </div>
+      </div>
       <div id="revisaoJustificativaBox" class="field" style="display:none">
         <label>Justificativa da contestação</label>
         <textarea id="revisaoJustificativa" placeholder="Registre o motivo apresentado pelo Irmão e aceito pela Chancelaria."></textarea>
@@ -602,11 +627,9 @@ main{padding-top:16px}
 
 <div class="modal-back report-preview-back" id="modalPreviewRelatorio" role="dialog" aria-modal="true" aria-labelledby="previewRelatorioTitulo">
   <div class="modal report-preview-modal">
-    <div class="modal-head"><span id="previewRelatorioTitulo">Relatório</span><button class="modal-close" type="button" onclick="fecharPreviewRelatorio()" aria-label="Fechar relatório">×</button></div>
+    <div class="modal-head report-preview-head"><button class="report-preview-back-button" type="button" onclick="fecharPreviewRelatorio()" aria-label="Voltar ao relatório">‹</button><span id="previewRelatorioTitulo">Relatório</span></div>
     <div class="report-preview-actions">
       <button class="btn btn-success" type="button" onclick="imprimirPreviewRelatorio()">Imprimir ou salvar em PDF</button>
-      <button id="btnCompartilharPdf" class="btn btn-warning pdf-share-button" type="button" onclick="compartilharPdfWhatsApp()" style="display:none">Enviar PDF via WhatsApp</button>
-      <button class="btn btn-light" type="button" onclick="fecharPreviewRelatorio()">Voltar ao relatório</button>
     </div>
     <div class="report-preview-scroll">
       <article class="report-preview-page">
@@ -662,7 +685,6 @@ main{padding-top:16px}
 
 <div id="toast" style="position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:#111;color:white;padding:10px 16px;border-radius:999px;z-index:200;opacity:0;pointer-events:none;transition:.25s;font-size:13px"><span id="toastText"></span><button id="toastAction" type="button"></button></div>
 
-<script src="jspdf.umd.min.js"></script>
 <script>
 const PFX='arls1997_';
 const SEC_META_KEY=PFX+'security_v1';
@@ -682,7 +704,6 @@ let mensagemDestinoIrmaoId='';
 let revisaoStatus='F';
 let revisaoStatusAlterado=false;
 let revisaoRegistroOriginal=null;
-let cabecalhoPdfPromise=null;
 let filtroGrau='';
 let filhosTemp=[];
 let chamadaTemp={};
@@ -1339,8 +1360,8 @@ function htmlFreqDetalhe(i,editavel=false){
     const g=grauNaData(i,s.data);
     const detalhe=statusTexto(r);
     const extra=detalhe&&statusPresenca(r)!=='F'?`<div class="item-sub"><b>Registro:</b> ${h(detalhe)}</div>`:'';
-    const conteudo=`<div class="item-main"><div class="item-title">${brData(s.data)} · ${tipoSessao(s.tipo)}</div><div class="item-sub">${h(s.numero||'')} ${grauBadge(g)}</div>${extra}${editavel?'<div class="item-sub report-edit-hint">Toque para revisar este registro individual.</div>':''}</div>${badgeStatus(r)}`;
-    return editavel?`<button type="button" class="list-item report-session-item" onclick="abrirRevisaoFrequencia('${jsArg(i.id)}','${jsArg(s.id)}')">${conteudo}</button>`:`<div class="list-item">${conteudo}</div>`;
+    const conteudo=`<div class="item-main"><div class="item-title">${brData(s.data)} · ${tipoSessao(s.tipo)}</div><div class="item-sub">${h(s.numero||'')} ${grauBadge(g)}</div>${extra}${editavel?'<div class="item-sub report-edit-hint">Toque para revisar este registro individual.</div>':''}</div><div class="report-session-actions">${badgeStatus(r)}${editavel?'<span class="report-edit-chip">Editar</span>':''}</div>`;
+    return editavel?`<button type="button" class="list-item report-session-item" onclick="abrirRevisaoFrequencia('${jsArg(i.id)}','${jsArg(s.id)}')">${conteudo}</button>`:`<div class="list-item report-session-item">${conteudo}</div>`;
   }).join(''):'<div class="empty"><p>Nenhuma sessão válida para o histórico de grau.</p></div>'}`}
 
 function badgeStatus(r){const st=statusPresenca(r);const m={P:['Presença real','b-ok'],F:['Falta','b-bad'],J:['Falta justificada','b-warn'],V:['Presença em outra Loja','b-ok'],L:['Falta justificada','b-warn'],E:['Falta justificada','b-warn']};const x=m[st]||m.F;return `<span class="badge ${x[1]}">${x[0]}</span>`}
@@ -1584,8 +1605,14 @@ function abrirRevisaoFrequencia(irmaoId,sessaoId){
   revisaoRegistroOriginal=registro&&typeof registro==='object'?{...registro}:registro;
   revisaoStatus=statusPresencaReal(registro)?'P':statusFaltaJustificada(registro)?'J':'F';
   revisaoStatusAlterado=false;
+  const visita=detalhesVisitaPresenca(registro);
   document.getElementById('revisaoIrmaoId').value=irmaoId;
   document.getElementById('revisaoSessaoId').value=sessaoId;
+  document.getElementById('revisaoTipoPresenca').value=statusPresenca(registro)==='V'?'V':'P';
+  document.getElementById('revisaoDataVisita').value=visita.dataVisita||s.data||hojeISO();
+  document.getElementById('revisaoLojaVisita').value=visita.lojaVisita||'';
+  document.getElementById('revisaoOrienteVisita').value=visita.orienteVisita||'';
+  document.getElementById('revisaoAtestadoVisita').value=visita.justificativa||'';
   document.getElementById('revisaoJustificativa').value=revisaoStatus==='J'?justificativaPresenca(registro):'';
   document.getElementById('revisaoResumo').innerHTML=`<b>${h(i.nome)}</b> ${grauBadge(grauNaData(i,s.data))}<div class="item-sub">${brData(s.data)} · ${h(tipoSessao(s.tipo))}${s.numero?' · '+h(s.numero):''}</div><div class="review-current"><b>Registro atual:</b> ${h(statusTexto(registro))}</div>`;
   atualizarStatusRevisao();
@@ -1596,10 +1623,18 @@ function selecionarStatusRevisao(status){
   revisaoStatusAlterado=true;
   atualizarStatusRevisao()
 }
+function atualizarTipoPresencaRevisao(){
+  const tipo=document.getElementById('revisaoTipoPresenca')?.value||'P';
+  const box=document.getElementById('revisaoVisitaBox');
+  if(box)box.style.display=tipo==='V'?'block':'none'
+}
 function atualizarStatusRevisao(){
   [['P','p'],['F','f'],['J','j']].forEach(([st,cl])=>{const b=document.getElementById('revisaoStatus'+st);if(b)b.className=`status-btn ${revisaoStatus===st?'active '+cl:''}`});
-  const box=document.getElementById('revisaoJustificativaBox');
-  if(box)box.style.display=revisaoStatus==='J'?'block':'none';
+  const justBox=document.getElementById('revisaoJustificativaBox');
+  const presBox=document.getElementById('revisaoTipoPresencaBox');
+  if(justBox)justBox.style.display=revisaoStatus==='J'?'block':'none';
+  if(presBox)presBox.style.display=revisaoStatus==='P'?'block':'none';
+  atualizarTipoPresencaRevisao();
   if(revisaoStatus==='J')setTimeout(()=>document.getElementById('revisaoJustificativa')?.focus(),60)
 }
 function salvarRevisaoFrequencia(){
@@ -1611,8 +1646,19 @@ function salvarRevisaoFrequencia(){
   const justificativa=document.getElementById('revisaoJustificativa').value.trim();
   if(revisaoStatus==='J'&&!justificativa){toast('Informe a justificativa da falta');return}
   let novoRegistro;
-  if(revisaoStatus==='P'&&!revisaoStatusAlterado&&statusPresenca(revisaoRegistroOriginal)==='V')novoRegistro=revisaoRegistroOriginal;
-  else novoRegistro=registroPresenca(revisaoStatus,justificativa);
+  if(revisaoStatus==='P'){
+    const tipo=document.getElementById('revisaoTipoPresenca').value;
+    if(tipo==='V'){
+      const visita={
+        dataVisita:document.getElementById('revisaoDataVisita').value,
+        lojaVisita:document.getElementById('revisaoLojaVisita').value.trim(),
+        orienteVisita:document.getElementById('revisaoOrienteVisita').value.trim(),
+        justificativa:document.getElementById('revisaoAtestadoVisita').value.trim()
+      };
+      novoRegistro=registroPresenca('V',visita.justificativa,visita);
+      if(!visitaCompleta(novoRegistro)){toast('Informe data, Loja, Oriente e atestado da presença em outra Loja');return}
+    }else novoRegistro=registroPresenca('P');
+  }else novoRegistro=registroPresenca(revisaoStatus,justificativa);
   const pres=getPresencas();
   pres[sessaoId]=pres[sessaoId]||{};
   const anterior=pres[sessaoId][irmaoId]||'F';
@@ -1642,8 +1688,6 @@ function abrirPrint(titulo,corpo,meta={}){
   pendingPrintPayload={titulo,corpo,...meta};
   previewRelatorioTitulo.textContent=titulo;
   previewRelatorioConteudo.innerHTML=corpo;
-  const shareBtn=document.getElementById('btnCompartilharPdf');
-  if(shareBtn){shareBtn.style.display=meta.tipo==='individual'?'inline-flex':'none';shareBtn.disabled=false;shareBtn.textContent='Enviar PDF via WhatsApp'}
   abrirModal('modalPreviewRelatorio');
   document.querySelector('#modalPreviewRelatorio .report-preview-scroll')?.scrollTo({top:0})
 }
@@ -1658,101 +1702,6 @@ function imprimirPreviewRelatorio(){
 }
 function imprimirIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}abrirPrint('Relatório individual',corpoRelatorioIndividual(i),{tipo:'individual',irmaoId:i.id})}
 
-function nomeArquivoSeguro(v){return String(v||'relatorio').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'_').replace(/^_+|_+$/g,'').toLowerCase()||'relatorio'}
-function blobParaDataUrl(blob){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result||''));r.onerror=reject;r.readAsDataURL(blob)})}
-async function carregarCabecalhoPdf(){
-  if(!cabecalhoPdfPromise)cabecalhoPdfPromise=fetch('cabecalho-oficial.jpg',{cache:'force-cache'}).then(r=>{if(!r.ok)throw new Error('Cabeçalho indisponível');return r.blob()}).then(blobParaDataUrl);
-  return cabecalhoPdfPromise
-}
-function desenharSimboloMaconico(doc,simbolo,x,y,tamanho=10){
-  const partes=String(simbolo||'').split('∴');
-  let px=x;
-  doc.setFont('helvetica','bold');doc.setFontSize(tamanho);
-  partes.forEach((parte,idx)=>{
-    if(parte){doc.text(parte,px,y);px+=doc.getTextWidth(parte)}
-    if(idx<partes.length-1){
-      const r=.45,baseY=y-1.15;
-      doc.circle(px+1.25,baseY-1.45,r,'F');doc.circle(px+.55,baseY,r,'F');doc.circle(px+1.95,baseY,r,'F');
-      px+=3.1
-    }
-  });
-  return px
-}
-function desenharCabecalhoTabelaPdf(doc,y,colunas){
-  doc.setFillColor(236,232,223);doc.setDrawColor(160);doc.setTextColor(21,37,65);doc.setFont('helvetica','bold');doc.setFontSize(8.5);
-  let x=12;
-  for(const c of colunas){doc.rect(x,y,c.w,10,'FD');doc.text(c.t,x+2,y+6.3,{maxWidth:c.w-4});x+=c.w}
-  doc.setTextColor(25);return y+10
-}
-function adicionarPaginaPdf(doc,cabecalhoData,tituloCurto){
-  doc.addPage();
-  doc.setDrawColor(201,168,76);doc.roundedRect(12,9,186,37,2,2,'S');doc.addImage(cabecalhoData,'JPEG',13,10,184,35);
-  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(21,37,65);doc.text(tituloCurto,105,54,{align:'center'});doc.setTextColor(25);
-  return 61
-}
-async function gerarPdfIndividualBlob(i){
-  if(!window.jspdf?.jsPDF)throw new Error('Gerador de PDF indisponível');
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
-  const cabecalho=await carregarCabecalhoPdf();
-  const f=calcFreq(i);
-  doc.setProperties({title:`Relatório individual de frequência - ${i.nome}`,subject:'Chancelaria 1997',author:'A.R.L.S. Razão e Força Nº 1997',creator:'Chancelaria 1997'});
-  doc.setDrawColor(201,168,76);doc.roundedRect(12,9,186,37,2,2,'S');doc.addImage(cabecalho,'JPEG',13,10,184,35);
-  doc.setTextColor(21,37,65);doc.setFont('helvetica','bold');doc.setFontSize(14);doc.text('RELATÓRIO INDIVIDUAL DE FREQUÊNCIA',105,56,{align:'center'});
-  doc.setTextColor(25);doc.setFontSize(10.5);doc.setFont('helvetica','bold');doc.text('Irmão:',12,67);doc.setFont('helvetica','normal');doc.text(i.nome,29,67,{maxWidth:169});
-  doc.setFont('helvetica','bold');doc.text('Grau atual:',12,74);desenharSimboloMaconico(doc,grauSimbolo(i.grau),34,74,10.5);
-  doc.setFont('helvetica','bold');doc.text('Período:',68,74);doc.setFont('helvetica','normal');doc.text(`${brData(f.inicio)} a ${brData(f.fim)}${f.periodo12?'':' · sem alerta Art. 76'}`,86,74,{maxWidth:112});
-  doc.setFont('helvetica','bold');doc.text('Presença real:',12,82);doc.setFont('helvetica','normal');doc.text(`${f.pct}% (${f.presente})`,42,82);
-  doc.setFont('helvetica','bold');doc.text('Falta justificada:',72,82);doc.setFont('helvetica','normal');doc.text(String(f.justificada),108,82);
-  doc.setFont('helvetica','bold');doc.text('Falta:',126,82);doc.setFont('helvetica','normal');doc.text(`${f.pctFalta}% (${f.falta})`,139,82);
-  const colunas=[{t:'Data',w:27},{t:'Tipo',w:45},{t:'Identificação',w:36},{t:'Status e justificativa',w:78}];
-  let y=89;y=desenharCabecalhoTabelaPdf(doc,y,colunas);
-  const sessoes=getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>a.data.localeCompare(b.data));
-  for(const s of sessoes){
-    const r=(getPresencas()[s.id]||{})[i.id]||'F';
-    const dados=[brData(s.data),tipoSessao(s.tipo),String(s.numero||''),statusTexto(r)];
-    const linhas=[doc.splitTextToSize(dados[0],23),doc.splitTextToSize(dados[1],41),doc.splitTextToSize(dados[2],32),doc.splitTextToSize(dados[3],74)];
-    const hIdentificacao=linhas[2].length*4.1+8;
-    const hRow=Math.max(10,hIdentificacao,...linhas.map(a=>a.length*4.1+4));
-    if(y+hRow>274){y=adicionarPaginaPdf(doc,cabecalho,'RELATÓRIO INDIVIDUAL DE FREQUÊNCIA');y=desenharCabecalhoTabelaPdf(doc,y,colunas)}
-    let x=12;doc.setDrawColor(175);doc.setFontSize(8.4);doc.setFont('helvetica','normal');
-    for(let c=0;c<colunas.length;c++){
-      doc.rect(x,y,colunas[c].w,hRow);
-      doc.text(linhas[c],x+2,y+5,{lineHeightFactor:1.15,maxWidth:colunas[c].w-4});
-      x+=colunas[c].w
-    }
-    const g=grauSimbolo(grauNaData(i,s.data));
-    if(g){doc.setFontSize(7.5);desenharSimboloMaconico(doc,g,12+27+45+2,y+5+(linhas[2].length*4.1),7.5)}
-    y+=hRow
-  }
-  if(!sessoes.length){doc.setFont('helvetica','italic');doc.setFontSize(9);doc.text('Nenhuma sessão registrada no período.',14,y+8);y+=14}
-  if(y+43>280){y=adicionarPaginaPdf(doc,cabecalho,'RELATÓRIO INDIVIDUAL DE FREQUÊNCIA')}
-  doc.setFont('helvetica','normal');doc.setFontSize(10);doc.text('____________________________________',105,y+20,{align:'center'});doc.text('Chancelaria',105,y+26,{align:'center'});
-  doc.setDrawColor(150);doc.line(12,y+35,198,y+35);doc.setFontSize(7.3);doc.setTextColor(65);const rodape='Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';doc.text(doc.splitTextToSize(rodape,186),12,y+40,{lineHeightFactor:1.25});
-  return doc.output('blob')
-}
-function baixarBlobPdf(blob,nome){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=nome;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
-async function compartilharPdfWhatsApp(){
-  const irmaoId=pendingPrintPayload?.irmaoId;
-  const i=getIrmaos().find(x=>x.id===irmaoId);
-  if(!i){toast('Abra primeiro um relatório individual');return}
-  const btn=document.getElementById('btnCompartilharPdf');
-  const textoOriginal=btn?.textContent||'';
-  if(btn){btn.disabled=true;btn.textContent='Gerando PDF...'}
-  try{
-    const blob=await gerarPdfIndividualBlob(i);
-    const nome=`relatorio_frequencia_${nomeArquivoSeguro(i.nome)}.pdf`;
-    const arquivo=new File([blob],nome,{type:'application/pdf'});
-    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[arquivo]})){
-      iniciarAcaoExterna();
-      try{await navigator.share({files:[arquivo],title:`Relatório de frequência - ${i.nome}`,text:`Relatório individual de frequência de ${i.nome}.`});toast('Escolha o WhatsApp e o destinatário')}catch(e){if(e?.name!=='AbortError')throw e}finally{finalizarAcaoExterna()}
-    }else{
-      baixarBlobPdf(blob,nome);
-      toast('PDF salvo. Abra Downloads e compartilhe pelo WhatsApp')
-    }
-  }catch(e){console.error(e);toast('Não foi possível gerar ou compartilhar o PDF')}
-  finally{if(btn){btn.disabled=false;btn.textContent=textoOriginal||'Enviar PDF via WhatsApp'}}
-}
 function imprimirGeral(){abrirPrint('Relatório coletivo',corpoRelatorioGeral())}
 function mensagemFrequenciaIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}mensagemFalta(i.id)}
 function mensagemFrequenciaGeral(){const per=periodoRGFDatas();if(!per.ativo){toast('Cadastre uma sessão para iniciar a contagem de frequência');return}const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta);const linhas=arr.map(i=>{const f=calcFreq(i);return `${i.nome}: presença real ${f.pct}%, falta justificada ${f.justificada}, falta ${f.pctFalta}%`}).join('\n');abrirMensagem('Resumo de frequência',`Meus Irmãos, segue resumo de frequência registrado pela Chancelaria no período RGF ${per.texto}.

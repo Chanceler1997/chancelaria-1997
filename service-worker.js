@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v12-revisao-frequencia-pdf-whatsapp";
+const CACHE_NAME = "chancelaria-1997-v13-revisao-presenca-layout";
 const APP_FILES = [
   "./",
   "./index.html",
@@ -6,8 +6,7 @@ const APP_FILES = [
   "./manifest.json",
   "./cabecalho-oficial.jpg",
   "./icon-192.png",
-  "./icon-512.png",
-  "./jspdf.umd.min.js"
+  "./icon-512.png"
 ];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES)));
