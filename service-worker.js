@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v9-sessao-persistente-manual";
+const CACHE_NAME = "chancelaria-1997-v11-whatsapp-telefone-direto";
 const APP_FILES = [
   "./",
   "./index.html",

@@ -1006,7 +1006,15 @@ function abrirModal(id){document.getElementById(id).classList.add('open')}
 function fecharModal(id){document.getElementById(id).classList.remove('open')}
 function primeiroNome(nome){return String(nome||'').trim().split(/\s+/)[0]||''}
 function iniciais(nome){return String(nome||'?').trim().split(/\s+/).slice(0,2).map(p=>p[0]||'').join('').toUpperCase()||'?'}
-function telLink(t){const n=String(t||'').replace(/\D/g,'');return n?`https://wa.me/55${n}`:''}
+function numeroWhatsApp(t){
+  let n=String(t||'').replace(/\D/g,'');
+  n=n.replace(/^0+/,'');
+  if(!n)return '';
+  if(n.startsWith('55')&&(n.length===12||n.length===13))return n;
+  if(n.length===10||n.length===11)return '55'+n;
+  return n.length>=10&&n.length<=15?n:'';
+}
+function telLink(t){const n=numeroWhatsApp(t);return n?`https://wa.me/${n}`:''}
 
 
 function getSettings(){return {...{lockMinutes:5},...(dbGet('settings',{})||{})}}
@@ -1216,7 +1224,7 @@ function renderInicio(){
 function linhaFreq(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:900;color:var(--azul);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h(i.nome)}</span><span class="badge b-warn">sem contagem</span></div><div class="small">Cadastre uma sessão. A contagem começa na sessão mais antiga cadastrada.</div></div>`;return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:900;color:var(--azul);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h(i.nome)}</span><span class="badge ${classeFreq(f)}">${f.pctFalta}% falta</span></div><div class="progress"><div class="bar" style="width:${f.pct}%;background:${corPct(f.pct)}"></div></div><div class="small">Período RGF ${f.periodoTexto}: ${f.presente} presença real · ${f.justificada} falta justificada · ${f.falta} falta · presença real ${f.pct}% · falta ${f.pctFalta}%${f.periodo12?'':' · sem alerta Art. 76'}${f.periodoParcial?' · contagem parcial até hoje':''}</div></div>`}
 function renderIrmaos(){
   const busca=(document.getElementById('buscaIrmao')?.value||'').toLowerCase();let arr=getIrmaos();if(filtroGrau)arr=arr.filter(i=>i.grau===filtroGrau);if(busca)arr=arr.filter(i=>i.nome.toLowerCase().includes(busca)||String(i.cargo||'').toLowerCase().includes(busca));arr.sort((a,b)=>a.nome.localeCompare(b.nome));
-  document.getElementById('listaIrmaos').innerHTML=arr.length?arr.map(i=>{const f=calcFreq(i);const qtdFilhos=(i.familia?.filhos||[]).length;const fam=[i.familia?.esposa?.nome?'1 esposa':'',qtdFilhos?`${qtdFilhos} filho(s)`:'' ].filter(Boolean).join(' · ');return `<div class="list-item" onclick="verIrmao('${i.id}')"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)} ${i.cargo?' · '+h(i.cargo):''}${fam?' · '+h(fam):''}</div><div class="progress"><div class="bar" style="width:${f.pct}%;background:${corPct(f.pct)}"></div></div><div class="small">Presença real ${f.pct}% · falta ${f.pctFalta}%</div></div><div class="item-side">${i.telefone?`<a class="btn btn-success btn-sm" href="${telLink(i.telefone)}" onclick="event.stopPropagation()">Whats</a>`:''}</div></div>`}).join(''):'<div class="empty"><div class="icon">👤</div><p>Nenhum irmão encontrado. Use o botão Novo irmão.</p></div>';
+  document.getElementById('listaIrmaos').innerHTML=arr.length?arr.map(i=>{const f=calcFreq(i);const qtdFilhos=(i.familia?.filhos||[]).length;const fam=[i.familia?.esposa?.nome?'1 esposa':'',qtdFilhos?`${qtdFilhos} filho(s)`:'' ].filter(Boolean).join(' · ');return `<div class="list-item" onclick="verIrmao('${i.id}')"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)} ${i.cargo?' · '+h(i.cargo):''}${fam?' · '+h(fam):''}</div><div class="progress"><div class="bar" style="width:${f.pct}%;background:${corPct(f.pct)}"></div></div><div class="small">Presença real ${f.pct}% · falta ${f.pctFalta}%</div></div><div class="item-side">${i.telefone?`<button class="btn btn-success btn-sm" type="button" onclick="event.stopPropagation();abrirWhatsAppTelefone('${i.id}')">Whats</button>`:''}</div></div>`}).join(''):'<div class="empty"><div class="icon">👤</div><p>Nenhum irmão encontrado. Use o botão Novo irmão.</p></div>';
 }
 
 function filtrarGrau(g){filtroGrau=g;renderIrmaos()}
@@ -1447,6 +1455,43 @@ function enviarAcaoNativa(tipo,conteudo){
   iniciarAcaoExterna();
   try{ponte.setWebViewString(`${tipo}|${conteudo}`);return true}catch(e){finalizarAcaoExterna();return false}
 }
+function enviarDadoNativo(tipo,conteudo){
+  const ponte=obterPonteKodular();
+  if(!ponte)return false;
+  try{ponte.setWebViewString(`${tipo}|${conteudo}`);return true}catch(e){return false}
+}
+function abrirWhatsAppTelefone(id){
+  const i=getIrmaos().find(x=>x.id===id);
+  if(!i){toast('Cadastro não encontrado');return}
+  const numero=numeroWhatsApp(i.telefone);
+  if(!numero){toast('Revise o telefone. Use DDD e número.');return}
+  const appUrl=`whatsapp://send?phone=${numero}`;
+  const webUrl=`https://wa.me/${numero}`;
+  if(enviarAcaoNativa('T',appUrl)){toast(`Abrindo WhatsApp de ${primeiroNome(i.nome)}`);return}
+  iniciarAcaoExterna();
+  window.location.href=webUrl;
+}
+function textoNotificacaoSeguro(v){return String(v||'').replace(/[|§\r\n]+/g,' ').replace(/\s+/g,' ').trim()}
+function resumoNotificacaoHoje(){
+  const ocorrencias=todasOcorrencias(0);
+  if(!ocorrencias.length)return '';
+  const aniversariosHoje=ocorrencias.filter(x=>x.kind==='pessoa');
+  const datasHoje=ocorrencias.filter(x=>x.kind==='data');
+  const partes=[];
+  if(aniversariosHoje.length){
+    const nomes=aniversariosHoje.map(x=>`${x.tipo}: ${x.nome}`).join(', ');
+    partes.push(`Aniversário hoje, ${nomes}.`);
+  }
+  if(datasHoje.length){
+    partes.push(`Data comemorativa, ${datasHoje.map(x=>x.nome).join(', ')}.`);
+  }
+  return textoNotificacaoSeguro(partes.join(' '));
+}
+function publicarResumoNotificacao(){
+  const mensagem=vaultKey?resumoNotificacaoHoje():'';
+  enviarDadoNativo('N',mensagem);
+  return mensagem;
+}
 function compartilharMensagem(){
   const texto=msgTexto.value.trim();
   if(!texto){toast('A mensagem está vazia');return}
@@ -1625,7 +1670,6 @@ function importarBackup(ev){
 }
 
 function renderAtual(){if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
-
 iniciarSeguranca();
 </script>
 </body>
