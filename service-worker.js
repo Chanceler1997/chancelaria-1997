@@ -1,9 +1,8 @@
-const CACHE_NAME = "chancelaria-1997-v7-exportacao-interna-profissional";
+const CACHE_NAME = "chancelaria-1997-v8-relatorios-essenciais-navegacao-interna";
 const APP_FILES = [
   "./",
   "./index.html",
   "./print.html",
-  "./export.html",
   "./manifest.json",
   "./cabecalho-oficial.jpg",
   "./icon-192.png",

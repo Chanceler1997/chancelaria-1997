@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#152541">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="2.2.0-exportacao-interna-profissional">
+<meta name="application-version" content="2.3.0-relatorios-essenciais-navegacao-interna">
 <style>
 :root{
   --azul:#152541;
@@ -185,23 +185,31 @@ main{padding-top:16px}
 .settings-now,.lock-now{position:static!important;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(180deg,#152541,#0e1c32);color:#e4c774;border:1px solid rgba(201,168,76,.7);box-shadow:0 4px 10px rgba(10,20,36,.18)}
 .settings-now svg,.lock-now svg{width:20px;height:20px}
 @media(max-width:430px){.header{padding:5px 5px 6px}.app-official-header{border-radius:10px}.header-actions{padding-top:5px}.settings-now,.lock-now{width:34px;height:34px}}
+.back-now{position:static!important;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(180deg,#152541,#0e1c32);color:#e4c774;border:1px solid rgba(201,168,76,.7);box-shadow:0 4px 10px rgba(10,20,36,.18)}
+.back-now svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:430px){.back-now{width:34px;height:34px}}
+.report-preview-back{padding:0;background:#0a1424}
+.report-preview-modal{max-width:940px;min-height:100vh;margin:0;border-radius:0;background:#e8e8e8;border:0}
+.report-preview-modal .modal-head{position:sticky;top:0;z-index:5}
+.report-preview-actions{position:sticky;top:50px;z-index:4;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;background:#152541;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.report-preview-actions .btn{min-height:48px;font-size:15px}
+.report-preview-scroll{padding:12px;overflow:auto}
+.report-preview-page{width:210mm;min-height:297mm;margin:0 auto;background:#fff;padding:10mm 12mm 20mm;box-shadow:0 4px 22px rgba(0,0,0,.18);position:relative;color:#171717;font-family:Arial,"Segoe UI",sans-serif}
+.report-preview-page .official-header{margin-bottom:7mm;border:1.5px solid #c9a84c;border-radius:10px;overflow:hidden;background:#fff}
+.report-preview-page .official-header img{display:block;width:100%;height:auto}
+.report-preview-page h2{font-size:13pt;margin:0 0 5mm;text-align:center;text-transform:uppercase;color:#152541}
+.report-preview-page p{font-size:10pt;line-height:1.45;margin:2mm 0}
+.report-preview-page table{width:100%;border-collapse:collapse;font-size:8.8pt;margin-top:3mm}
+.report-preview-page th,.report-preview-page td{border:1px solid #aaa;padding:2.2mm;text-align:left;vertical-align:top}
+.report-preview-page th{background:#ece8df;color:#152541;font-weight:800}
+.report-preview-signature{margin-top:14mm;text-align:center;font-size:10pt}
+.report-preview-footer{margin-top:14mm;border-top:1px solid #999;padding-top:2mm;font-size:7.5pt;line-height:1.35;text-align:justify;color:#333}
+@media(max-width:800px){.report-preview-scroll{padding:0}.report-preview-page{width:100%;min-height:0;margin:0;box-shadow:none;padding:14px 12px 40px}.report-preview-actions{top:48px}}
 
-/* Exportação interna, sem sair do aplicativo */
+
 .report-toolbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.report-toolbar .btn{width:100%;padding:10px 8px;white-space:nowrap}
-.export-summary{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
-.export-summary .sec-box{min-height:72px}
-.export-file-name{font-weight:900;color:var(--azul);overflow-wrap:anywhere}
-.export-help{background:#fffaf0;border:1px solid rgba(201,168,76,.38);border-radius:12px;padding:11px 12px;color:#5f574a;font-size:12px;line-height:1.45}
-.export-status{min-height:20px;margin-top:10px;font-size:12px;font-weight:700;color:var(--muted)}
-.export-status.ok{color:var(--verde)}
-.export-status.error{color:var(--vermelho)}
-@media(max-width:430px){
-  .report-toolbar{grid-template-columns:1fr 1fr}
-  .report-toolbar .btn:last-child{grid-column:1/-1}
-  .export-summary{grid-template-columns:1fr}
-  #modalExportarPlanilha .modal-foot .btn{flex:1 1 100%}
-}
+.report-toolbar .btn{width:100%;padding:10px 8px}
+@media(max-width:430px){.report-toolbar{grid-template-columns:1fr}.report-toolbar .btn{width:100%}}
 
 </style>
 </head>
@@ -240,6 +248,7 @@ main{padding-top:16px}
       <img class="official-banner" src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997">
     </div>
     <div class="header-actions no-print">
+      <button id="backNowButton" class="back-now" type="button" onclick="voltarNoAplicativo()" aria-label="Voltar" title="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/><path d="M8 12h12"/></svg></button>
       <button id="settingsNowButton" class="settings-now" type="button" onclick="abrirAba('relatorios');setTimeout(()=>document.getElementById('centralSeguranca')?.scrollIntoView({behavior:'smooth'}),120)" aria-label="Abrir segurança" title="Segurança e configurações"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8Zm8.2 4.7-1.7 1c-.1.4-.3.8-.5 1.2l.5 1.9-2.1 2.1-1.9-.5c-.4.2-.8.4-1.2.5l-1 1.7h-3l-1-1.7c-.4-.1-.8-.3-1.2-.5l-1.9.5-2.1-2.1.5-1.9c-.2-.4-.4-.8-.5-1.2l-1.7-1v-3l1.7-1c.1-.4.3-.8.5-1.2l-.5-1.9 2.1-2.1 1.9.5c.4-.2.8-.4 1.2-.5l1-1.7h3l1 1.7c.4.1.8.3 1.2.5l1.9-.5 2.1 2.1-.5 1.9c.2.4.4.8.5 1.2l1.7 1v3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
       <button id="lockNowButton" class="lock-now" type="button" onclick="bloquearAplicativo('Aplicativo bloqueado.')" aria-label="Bloquear aplicativo" title="Bloquear aplicativo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="15" r="1.2" fill="currentColor"/></svg></button>
     </div>
@@ -283,8 +292,8 @@ main{padding-top:16px}
       <button class="btn btn-light" onclick="filtrarGrau('')">Todos</button>
       <button class="btn btn-light" onclick="filtrarGrau('MI')">M∴ I∴</button>
       <button class="btn btn-light" onclick="filtrarGrau('M')">M∴ M∴</button>
-      <button class="btn btn-light" onclick="filtrarGrau('C')">C∴</button>
-      <button class="btn btn-light" onclick="filtrarGrau('A')">A∴</button>
+      <button class="btn btn-light" onclick="filtrarGrau('C')">C∴ M∴</button>
+      <button class="btn btn-light" onclick="filtrarGrau('A')">Apr∴</button>
     </div>
     <div class="search"><span>🔍</span><input id="buscaIrmao" type="search" placeholder="Buscar irmão" oninput="renderIrmaos()"></div>
     <div id="listaIrmaos"></div>
@@ -358,30 +367,14 @@ main{padding-top:16px}
       </div>
     </div>
     <div class="card">
-      <div class="card-head">📊 Relatório geral</div>
+      <div class="card-head">📊 Relatório coletivo</div>
       <div class="card-body">
         <div class="toolbar report-toolbar">
-          <button class="btn btn-info" onclick="renderRelatorioGeral()">Ver todos</button>
+          <button class="btn btn-info" onclick="renderRelatorioGeral()">Ver relatório</button>
           <button class="btn btn-success" onclick="imprimirGeral()">Imprimir/PDF</button>
           <button class="btn btn-warning" onclick="mensagemFrequenciaGeral()">Mensagem</button>
         </div>
         <div id="relGeral"></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-head">📈 Relatórios avançados</div>
-      <div class="card-body">
-        <div class="row">
-          <div class="field"><label>Relatório</label><select id="relAvTipo" onchange="configurarRelatorioAvancado()"><option value="ranking">Ranking de frequência</option><option value="mensal">Resumo mensal</option><option value="anual">Resumo anual</option><option value="grau">Resumo por grau</option><option value="tipo">Resumo por tipo de sessão</option><option value="justificadas">Faltas justificadas</option><option value="pendentes">Chamadas incompletas</option><option value="historico">Histórico individual</option></select></div>
-          <div class="field" id="relAvPeriodoBox"><label>Período</label><input id="relAvPeriodo" type="month" onchange="renderRelatorioAvancado()"></div>
-        </div>
-        <div class="field" id="relAvIrmaoBox" style="display:none"><label>Irmão</label><select id="relAvIrmao" onchange="renderRelatorioAvancado()"></select></div>
-        <div class="toolbar report-toolbar">
-          <button class="btn btn-info" onclick="renderRelatorioAvancado()">Gerar</button>
-          <button class="btn btn-success" onclick="imprimirRelatorioAvancado()">Imprimir/PDF</button>
-          <button class="btn btn-light" onclick="exportarRelatorioCSV()">Exportar planilha</button>
-        </div>
-        <div id="relAvResultado"></div>
       </div>
     </div>
     <div class="card">
@@ -455,7 +448,7 @@ main{padding-top:16px}
       <div id="iDados">
         <div class="field"><label>Nome completo</label><input id="iNome" placeholder="Nome do irmão"></div>
         <div class="row">
-          <div class="field"><label>Grau</label><select id="iGrau" onchange="atualizarAvisoGrau()"><option value="MI">M∴ I∴ - Mestre Instalado</option><option value="M">M∴ M∴ - Mestre Maçom</option><option value="C">C∴ - Companheiro</option><option value="A">A∴ - Aprendiz</option></select></div>
+          <div class="field"><label>Grau</label><select id="iGrau" onchange="atualizarAvisoGrau()"><option value="MI">M∴ I∴ - Mestre Instalado</option><option value="M">M∴ M∴ - Mestre Maçom</option><option value="C">C∴ M∴ - Companheiro Maçom</option><option value="A">Apr∴ - Aprendiz</option></select></div>
           <div class="field"><label>Aniversário</label><input id="iNasc" inputmode="numeric" maxlength="5" placeholder="DD/MM" oninput="mascaraDiaMes(this)"></div>
         </div>
         <div id="boxGrauData" class="alert" style="display:none">
@@ -546,7 +539,7 @@ main{padding-top:16px}
         <div class="txt">Este comando grava uma linha no histórico de grau. As frequências anteriores mantêm o grau antigo.</div>
       </div>
       <div class="row">
-        <div class="field"><label>Novo grau</label><select id="gNovoGrau"><option value="C">C∴ - Companheiro</option><option value="M">M∴ M∴ - Mestre Maçom</option><option value="MI">M∴ I∴ - Mestre Instalado</option></select></div>
+        <div class="field"><label>Novo grau</label><select id="gNovoGrau"><option value="C">C∴ M∴ - Companheiro Maçom</option><option value="M">M∴ M∴ - Mestre Maçom</option><option value="MI">M∴ I∴ - Mestre Instalado</option></select></div>
         <div class="field"><label>Data da mudança</label><input id="gData" type="date"></div>
       </div>
       <p class="small">A nova graduação vale a partir da data escolhida. Sessões anteriores seguem com o grau registrado na época. Para elevação ou exaltação, use o índice de presença real; falta justificada não soma presença real.</p>
@@ -554,6 +547,24 @@ main{padding-top:16px}
     <div class="modal-foot">
       <button class="btn btn-light" onclick="fecharModal('modalGrau')">Cancelar</button>
       <button class="btn btn-primary" onclick="salvarSubidaGrau()">Registrar subida</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-back report-preview-back" id="modalPreviewRelatorio" role="dialog" aria-modal="true" aria-labelledby="previewRelatorioTitulo">
+  <div class="modal report-preview-modal">
+    <div class="modal-head"><span id="previewRelatorioTitulo">Relatório</span><button class="modal-close" type="button" onclick="fecharPreviewRelatorio()" aria-label="Fechar relatório">×</button></div>
+    <div class="report-preview-actions">
+      <button class="btn btn-success" type="button" onclick="imprimirPreviewRelatorio()">Imprimir ou salvar em PDF</button>
+      <button class="btn btn-light" type="button" onclick="fecharPreviewRelatorio()">Voltar ao relatório</button>
+    </div>
+    <div class="report-preview-scroll">
+      <article class="report-preview-page">
+        <header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header>
+        <div id="previewRelatorioConteudo"></div>
+        <div class="report-preview-signature">____________________________________<br>Chancelaria</div>
+        <div class="report-preview-footer">Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.</div>
+      </article>
     </div>
   </div>
 </div>
@@ -599,26 +610,6 @@ main{padding-top:16px}
 </div>
 
 
-<div class="modal-back" id="modalExportarPlanilha" role="dialog" aria-modal="true" aria-labelledby="csvExportTitulo">
-  <div class="modal">
-    <div class="modal-head"><span id="csvExportTitulo">Exportar planilha</span><button class="modal-close" type="button" onclick="fecharExportacaoPlanilha()" aria-label="Fechar">×</button></div>
-    <div class="modal-body">
-      <div class="export-summary">
-        <div class="sec-box"><b>Arquivo</b><span id="csvExportNome" class="export-file-name">relatorio.csv</span></div>
-        <div class="sec-box"><b>Conteúdo</b><span id="csvExportResumo">0 registros</span></div>
-      </div>
-      <div class="export-help">O arquivo usa CSV com separador por ponto e vírgula e codificação UTF 8. Excel e Google Planilhas abrem esse formato. O download começa após seu toque no botão.</div>
-      <div id="csvExportStatus" class="export-status" aria-live="polite">Escolha uma ação abaixo.</div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-light" type="button" onclick="fecharExportacaoPlanilha()">Fechar</button>
-      <button class="btn btn-outline" type="button" onclick="copiarPlanilhaCSV()">Copiar dados</button>
-      <button class="btn btn-info" id="csvShareButton" type="button" onclick="compartilharPlanilhaCSV()" style="display:none">Compartilhar arquivo</button>
-      <button class="btn btn-primary" type="button" onclick="baixarPlanilhaCSV()">Baixar planilha</button>
-    </div>
-  </div>
-</div>
-
 <div id="toast" style="position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:#111;color:white;padding:10px 16px;border-radius:999px;z-index:200;opacity:0;pointer-events:none;transition:.25s;font-size:13px"><span id="toastText"></span><button id="toastAction" type="button"></button></div>
 
 <script>
@@ -633,6 +624,9 @@ const SEC_RECOVERY_KEY=PFX+'recovery_v1';
 const TRASH_DAYS=30;
 const EXTERNAL_ACTION_GRACE_MS=15*60*1000;
 let aba='inicio';
+let appHistoryDepth=0;
+let navigationReady=false;
+let pendingPrintPayload=null;
 let filtroGrau='';
 let filhosTemp=[];
 let chamadaTemp={};
@@ -654,9 +648,6 @@ let sensitiveAction='';
 let pendingBackupFile=null;
 let pendingBackupMode='';
 let deferredInstallPrompt=null;
-let currentAdvancedRows=[];
-let currentAdvancedTitle='Relatório';
-let pendingCsvExport=null;
 let lastUndoAction=null;
 let toastTimer=null;
 
@@ -803,7 +794,7 @@ function abrirAplicativo(){
   document.getElementById('securityGate').classList.remove('open');
   document.body.classList.remove('app-locked');
   resetInactivityTimer();
-  if(!appStarted){appStarted=true;migrar();limparLixeiraExpirada();registrarPWA();renderInicio();}
+  if(!appStarted){appStarted=true;migrar();limparLixeiraExpirada();registrarPWA();inicializarNavegacaoInterna();renderInicio();}
   else renderAtual();
 }
 async function bloquearAplicativo(message='Aplicativo bloqueado por segurança.'){
@@ -1076,7 +1067,9 @@ function getDatas(){return (dbGet('festivas',datasPadrao())||[]).map(d=>({id:d.i
 function setDatas(v){dbSet('festivas',v)}
 function migrar(){setIrmaos(getIrmaos());setDatas(getDatas())}
 
-function grauBadge(g){const m={MI:['M∴ I∴','b-mi','Mestre Instalado'],M:['M∴ M∴','b-m','Mestre Maçom'],C:['C∴','b-c','Companheiro'],A:['A∴','b-a','Aprendiz']};const x=m[g]||[g,'b-m',''];return `<span class="badge ${x[1]}" title="${x[2]}">${x[0]}</span>`}
+function grauSimbolo(g){return {MI:'M∴ I∴',M:'M∴ M∴',C:'C∴ M∴',A:'Apr∴'}[g]||String(g||'')}
+function grauNome(g){return {MI:'Mestre Instalado',M:'Mestre Maçom',C:'Companheiro Maçom',A:'Aprendiz'}[g]||''}
+function grauBadge(g){const m={MI:['b-mi'],M:['b-m'],C:['b-c'],A:['b-a']};const x=m[g]||['b-m'];return `<span class="badge ${x[0]}" title="${grauNome(g)}">${grauSimbolo(g)}</span>`}
 function tipoSessao(t){return {'ordinaria-aprendiz':'Ordinária de Aprendiz','ordinaria-companheiro':'Ordinária de Companheiro','ordinaria-mestre':'Ordinária de Mestre',magna:'Magna',especial:'Especial'}[t]||t}
 function contaPara(g,t){if(g==='MI'||g==='M')return true;if(g==='C')return ['ordinaria-companheiro','magna','especial'].includes(t);if(g==='A')return ['ordinaria-aprendiz','magna','especial'].includes(t);return false}
 function grauNaData(i,data){
@@ -1148,11 +1141,47 @@ function labelFilho(f){if(f.sexo==='F')return 'Sobrinha';if(f.sexo==='M')return 
 function labelFilhoCadastro(f){if(f.sexo==='F')return 'Filha';if(f.sexo==='M')return 'Filho';return 'Filho(a)'}
 function tipoAniversarioTela(a){if(a.tipo==='Cunhada')return 'Esposa';if(a.tipo==='Sobrinha')return 'Filha';if(a.tipo==='Sobrinho')return 'Filho';return a.tipo}
 
-function abrirAba(id){
+function aplicarAba(id){
+  if(!document.getElementById(id))id='inicio';
   aba=id;document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');
   document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+id)?.classList.add('active');
   if(id==='inicio')renderInicio();if(id==='irmaos')renderIrmaos();if(id==='sessoes')renderSessoes();if(id==='presenca')initPresenca();if(id==='datas')renderDatas();if(id==='relatorios')initRelatorios();
+  atualizarBotaoVoltar();
   window.scrollTo({top:0,behavior:'smooth'});
+}
+function inicializarNavegacaoInterna(){
+  if(navigationReady)return;
+  navigationReady=true;
+  appHistoryDepth=0;
+  history.replaceState({appTab:'inicio',appDepth:0},'',location.pathname+location.search);
+  window.addEventListener('popstate',event=>{
+    const st=event.state;
+    appHistoryDepth=Number(st?.appDepth)||0;
+    aplicarAba(st?.appTab||'inicio');
+  });
+}
+function abrirAba(id,registrar=true){
+  if(!navigationReady)inicializarNavegacaoInterna();
+  if(registrar&&id==='inicio'&&appHistoryDepth>0){history.go(-appHistoryDepth);return}
+  if(registrar&&id!==aba){
+    appHistoryDepth++;
+    history.pushState({appTab:id,appDepth:appHistoryDepth},'',`#${id}`);
+  }
+  aplicarAba(id);
+}
+function atualizarBotaoVoltar(){
+  const b=document.getElementById('backNowButton');if(!b)return;
+  const sair=aba==='inicio'&&appHistoryDepth===0;
+  b.setAttribute('aria-label',sair?'Sair do aplicativo':'Voltar à página anterior');
+  b.title=sair?'Sair do aplicativo':'Voltar';
+}
+function voltarNoAplicativo(){
+  const modais=[...document.querySelectorAll('.modal-back.open')];
+  if(modais.length){const atual=modais[modais.length-1];if(atual.id==='modalPreviewRelatorio')fecharPreviewRelatorio();else fecharModal(atual.id);return}
+  if(appHistoryDepth>0){history.back();return}
+  if(aba!=='inicio'){aplicarAba('inicio');return}
+  if(enviarAcaoNativa('X','')){toast('Saindo do aplicativo');return}
+  window.history.back();
 }
 
 function aniversarios(dias=365){
@@ -1252,7 +1281,7 @@ function salvarSubidaGrau(){
   if(!grauValido(novo)){toast('Informe o novo grau');return}
   if(novo===i.grau){toast('O irmão já possui este grau');return}
   if(ordemGrau(novo)<ordemGrau(i.grau)&&!confirm('O novo grau é inferior ao grau atual. Registrar mesmo assim?'))return;
-  i.historicoGraus=adicionarHistoricoGrau(i,novo,data);i.grau=novo;arr[idx]=i;setIrmaos(arr);audit('Grau atualizado',`${i.nome}: ${novo} em ${brData(data)}`);fecharModal('modalGrau');renderAtual();toast('Subida registrada sem alterar frequência antiga');
+  i.historicoGraus=adicionarHistoricoGrau(i,novo,data);i.grau=novo;arr[idx]=i;setIrmaos(arr);audit('Grau atualizado',`${i.nome}: ${grauSimbolo(novo)} em ${brData(data)}`);fecharModal('modalGrau');renderAtual();toast('Subida registrada sem alterar frequência antiga');
 }
 function badgeStatus(r){const st=statusPresenca(r);const m={P:['Presença real','b-ok'],F:['Falta','b-bad'],J:['Falta justificada','b-warn'],V:['Presença em outra Loja','b-ok'],L:['Falta justificada','b-warn'],E:['Falta justificada','b-warn']};const x=m[st]||m.F;return `<span class="badge ${x[1]}">${x[0]}</span>`}
 
@@ -1427,30 +1456,41 @@ function compartilharMensagem(){
   if(navigator.share){iniciarAcaoExterna();navigator.share({text:texto}).then(finalizarAcaoExterna).catch(()=>{finalizarAcaoExterna();abrirWhatsApp()})}else abrirWhatsApp()
 }
 
-function initRelatorios(){const arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome));relIrmao.innerHTML='<option value="">Selecione</option>'+arr.map(i=>`<option value="${i.id}">${h(i.nome)}</option>`).join('');relAvIrmao.innerHTML='<option value="">Selecione</option>'+arr.map(i=>`<option value="${i.id}">${h(i.nome)}</option>`).join('');if(!relAvPeriodo.value)relAvPeriodo.value=mesAtualISO();configurarRelatorioAvancado();renderBackupStatus();renderLixeira();renderAuditoria();renderCentralSeguranca()}
+function initRelatorios(){const arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome));relIrmao.innerHTML='<option value="">Selecione</option>'+arr.map(i=>`<option value="${i.id}">${h(i.nome)}</option>`).join('');renderBackupStatus();renderLixeira();renderAuditoria();renderCentralSeguranca()}
 function renderRelatorioIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);relIndividual.innerHTML=i?htmlRelatorioIndividual(i):'<div class="empty"><p>Selecione um irmão.</p></div>'}
 function htmlRelatorioIndividual(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<div class="empty"><p>Cadastre uma sessão para iniciar a contagem de frequência.</p></div>`;return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)} · presença real ${f.pct}% · falta ${f.pctFalta}% · período ${f.periodoTexto}${f.periodo12?'':' · sem alerta Art. 76'}</div></div></div>${htmlFreqDetalhe(i)}`}
 function renderRelatorioGeral(){const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta);relGeral.innerHTML=arr.length?arr.map(linhaFreq).join(''):'<div class="empty"><p>Nenhum irmão cadastrado.</p></div>'}
-function corpoRelatorioGeral(){const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório geral de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>';return `<h2>Relatório geral de frequência</h2><p>Critério: período RGF ${per.texto}. Falta justificada é ausência com justa causa: não soma presença real e não entra no cálculo do Art. 76.${per.completo12?' Alertas administrativos habilitados, pois o período completou 12 meses.':' Período em andamento ou inferior a 12 meses: relatório sem alerta do Art. 76.'}</p><table><thead><tr><th>Irmão</th><th>Grau</th><th>Presença real</th><th>Falta justificada</th><th>Falta</th><th>Total</th></tr></thead><tbody>${getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td>${h(i.grau)}</td><td>${f.pct}% (${f.presente})</td><td>${f.justificada}</td><td>${f.pctFalta}% (${f.falta})</td><td>${f.total}</td></tr>`}).join('')}</tbody></table>`}
-function corpoRelatorioIndividual(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<h2>Relatório individual de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>`;const rows=getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>a.data.localeCompare(b.data)).map(s=>{const r=(getPresencas()[s.id]||{})[i.id]||'F';return `<tr><td>${brData(s.data)}</td><td>${tipoSessao(s.tipo)}</td><td>${h(s.numero||'')} ${grauNaData(i,s.data)}</td><td>${h(statusTexto(r))}</td></tr>`}).join('');return `<h2>Relatório individual de frequência</h2><p><b>Irmão:</b> ${h(i.nome)} · <b>Grau atual:</b> ${h(i.grau)} · <b>Período:</b> ${brData(f.inicio)} a ${brData(f.fim)}${f.periodo12?'':' · sem alerta Art. 76'}</p><p><b>Presença real:</b> ${f.pct}% (${f.presente}) · <b>Falta justificada:</b> ${f.justificada} · <b>Falta:</b> ${f.pctFalta}% (${f.falta})</p><table><thead><tr><th>Data</th><th>Tipo</th><th>Identificação</th><th>Status e justificativa</th></tr></thead><tbody>${rows}</tbody></table>`}
+function corpoRelatorioGeral(){const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório coletivo de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>';return `<h2>Relatório coletivo de frequência</h2><p>Critério: período RGF ${per.texto}. Falta justificada é ausência com justa causa: não soma presença real e não entra no cálculo do Art. 76.${per.completo12?' Alertas administrativos habilitados, pois o período completou 12 meses.':' Período em andamento ou inferior a 12 meses: relatório sem alerta do Art. 76.'}</p><table><thead><tr><th>Irmão</th><th>Grau</th><th>Presença real</th><th>Falta justificada</th><th>Falta</th><th>Total</th></tr></thead><tbody>${getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td>${h(grauSimbolo(i.grau))}</td><td>${f.pct}% (${f.presente})</td><td>${f.justificada}</td><td>${f.pctFalta}% (${f.falta})</td><td>${f.total}</td></tr>`}).join('')}</tbody></table>`}
+function corpoRelatorioIndividual(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<h2>Relatório individual de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>`;const rows=getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>a.data.localeCompare(b.data)).map(s=>{const r=(getPresencas()[s.id]||{})[i.id]||'F';return `<tr><td>${brData(s.data)}</td><td>${tipoSessao(s.tipo)}</td><td>${h(s.numero||'')} ${h(grauSimbolo(grauNaData(i,s.data)))}</td><td>${h(statusTexto(r))}</td></tr>`}).join('');return `<h2>Relatório individual de frequência</h2><p><b>Irmão:</b> ${h(i.nome)} · <b>Grau atual:</b> ${h(grauSimbolo(i.grau))} · <b>Período:</b> ${brData(f.inicio)} a ${brData(f.fim)}${f.periodo12?'':' · sem alerta Art. 76'}</p><p><b>Presença real:</b> ${f.pct}% (${f.presente}) · <b>Falta justificada:</b> ${f.justificada} · <b>Falta:</b> ${f.pctFalta}% (${f.falta})</p><table><thead><tr><th>Data</th><th>Tipo</th><th>Identificação</th><th>Status e justificativa</th></tr></thead><tbody>${rows}</tbody></table>`}
 function codificarBase64UrlUtf8(valor){
   const bytes=new TextEncoder().encode(valor);let bin='';
   for(let i=0;i<bytes.length;i+=32768)bin+=String.fromCharCode(...bytes.subarray(i,i+32768));
   return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
-function urlRelatorioParaImpressao(titulo,corpo){
+function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false){
   const payload={titulo,corpo,geradoEm:new Date().toISOString()};
-  return new URL('print.html',location.href).href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
+  const url=new URL('print.html',location.href);
+  if(modoImpressao)url.searchParams.set('print','1');
+  return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
 }
 function abrirPrint(titulo,corpo){
-  const url=urlRelatorioParaImpressao(titulo,corpo);
+  pendingPrintPayload={titulo,corpo};
+  previewRelatorioTitulo.textContent=titulo;
+  previewRelatorioConteudo.innerHTML=corpo;
+  abrirModal('modalPreviewRelatorio');
+  document.querySelector('#modalPreviewRelatorio .report-preview-scroll')?.scrollTo({top:0});
+}
+function fecharPreviewRelatorio(){pendingPrintPayload=null;fecharModal('modalPreviewRelatorio')}
+function imprimirPreviewRelatorio(){
+  if(!pendingPrintPayload){toast('Gere o relatório novamente');return}
+  const url=urlRelatorioParaImpressao(pendingPrintPayload.titulo,pendingPrintPayload.corpo,true);
   if(enviarAcaoNativa('P',url)){toast('Abrindo impressão e PDF');return}
   iniciarAcaoExterna();
   const w=window.open(url,'_blank','noopener');
   if(!w)window.location.href=url;
 }
 function imprimirIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}abrirPrint('Relatório individual',corpoRelatorioIndividual(i))}
-function imprimirGeral(){abrirPrint('Relatório geral',corpoRelatorioGeral())}
+function imprimirGeral(){abrirPrint('Relatório coletivo',corpoRelatorioGeral())}
 function mensagemFrequenciaIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}mensagemFalta(i.id)}
 function mensagemFrequenciaGeral(){const per=periodoRGFDatas();if(!per.ativo){toast('Cadastre uma sessão para iniciar a contagem de frequência');return}const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta);const linhas=arr.map(i=>{const f=calcFreq(i);return `${i.nome}: presença real ${f.pct}%, falta justificada ${f.justificada}, falta ${f.pctFalta}%`}).join('\n');abrirMensagem('Resumo de frequência',`Meus Irmãos, segue resumo de frequência registrado pela Chancelaria no período RGF ${per.texto}.
 
@@ -1465,103 +1505,6 @@ function alterarTempoBloqueio(v){const n=Math.max(1,Number(v)||5);setSettings({l
 function renderCentralSeguranca(){const s=getSettings(),b=getBackupInfo();securityTimeoutSelect.value=String(s.lockMinutes||5);securityTimeoutInfo.textContent=`${s.lockMinutes||5} minuto(s)`;securityAttemptsInfo.textContent=`${failedAttempts} nesta abertura`;securityBackupInfo.textContent=b.at?`${brData(String(b.at).slice(0,10))} às ${new Date(b.at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`:'Nunca realizado';installInfo.textContent=location.protocol==='file:'?'Para instalar como aplicativo, use o pacote PWA em endereço HTTPS. Este HTML continua funcionando diretamente no Chrome.':'Use o botão Instalar no celular. Caso o Chrome não mostre a instalação, abra o menu e escolha Adicionar à tela inicial.'}
 function registrarPWA(){window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;const b=document.getElementById('installAppButton');if(b)b.style.display='inline-flex'});if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{})}
 async function instalarAplicativo(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;return}toast(location.protocol==='file:'?'Abra a versão PWA por HTTPS para instalar':'Abra o menu do Chrome e toque em Adicionar à tela inicial')}
-function configurarRelatorioAvancado(){const t=relAvTipo.value;relAvPeriodoBox.style.display=['mensal','anual'].includes(t)?'block':'none';relAvPeriodo.type=t==='anual'?'number':'month';if(t==='anual'){relAvPeriodo.min='2000';relAvPeriodo.max='2100';if(!/^\d{4}$/.test(relAvPeriodo.value))relAvPeriodo.value=String(new Date().getFullYear())}else if(!/^\d{4}-\d{2}$/.test(relAvPeriodo.value))relAvPeriodo.value=mesAtualISO();relAvIrmaoBox.style.display=t==='historico'?'block':'none';renderRelatorioAvancado()}
-function resumoIrmaoSessoes(i,ss){const p=getPresencas();let pres=0,just=0,falta=0;for(const s of ss.filter(x=>contaParaIrmao(i,x))){const r=(p[s.id]||{})[i.id];if(!Object.prototype.hasOwnProperty.call(p[s.id]||{},i.id)){falta++;continue}if(statusPresencaReal(r))pres++;else if(statusFaltaJustificada(r))just++;else falta++}const total=pres+just+falta;return {total,pres,just,falta,pct:total?Math.round(pres*100/total):0}}
-function montarTabelaRelatorio(cols,rows){currentAdvancedRows=rows;const th=cols.map(c=>`<th>${h(c.label)}</th>`).join('');const body=rows.map(r=>`<tr>${cols.map(c=>`<td>${h(r[c.key]??'')}</td>`).join('')}</tr>`).join('');return rows.length?`<div class=\"report-table-wrap\"><table class=\"report-table\"><thead><tr>${th}</tr></thead><tbody>${body}</tbody></table></div>`:'<div class=\"empty\"><p>Nenhum registro encontrado.</p></div>'}
-function renderRelatorioAvancado(){const t=relAvTipo.value,ss=getSessoes(),ir=getIrmaos(),p=getPresencas();let cols=[],rows=[],titulo='';if(t==='ranking'){titulo='Ranking de frequência';rows=ir.map(i=>{const f=calcFreq(i);return {Irmao:i.nome,Grau:i.grau,Presenca:`${f.pct}%`,Justificadas:f.justificada,Faltas:`${f.pctFalta}%`}}).sort((a,b)=>parseInt(b.Presenca)-parseInt(a.Presenca));cols=[['Irmao','Irmão'],['Grau','Grau'],['Presenca','Presença'],['Justificadas','Justificadas'],['Faltas','Faltas']]}else if(t==='mensal'||t==='anual'){const per=String(relAvPeriodo.value||'');const filtro=ss.filter(s=>t==='mensal'?s.data.startsWith(per):s.data.startsWith(per.slice(0,4)));titulo=`Resumo ${t==='mensal'?'mensal':'anual'} ${per}`;rows=ir.map(i=>{const r=resumoIrmaoSessoes(i,filtro);return {Irmao:i.nome,Sessoes:r.total,Presentes:r.pres,Justificadas:r.just,Faltas:r.falta,Percentual:`${r.pct}%`}});cols=[['Irmao','Irmão'],['Sessoes','Sessões'],['Presentes','Presentes'],['Justificadas','Justificadas'],['Faltas','Faltas'],['Percentual','Presença']]}else if(t==='grau'){titulo='Resumo por grau';rows=['A','C','M','MI'].map(g=>{const grupo=ir.filter(i=>i.grau===g),media=grupo.length?Math.round(grupo.reduce((n,i)=>n+calcFreq(i).pct,0)/grupo.length):0;return {Grau:g,Irmaos:grupo.length,Media:`${media}%`}});cols=[['Grau','Grau'],['Irmaos','Irmãos'],['Media','Média de presença']]}else if(t==='tipo'){titulo='Resumo por tipo de sessão';const tipos=[...new Set(ss.map(s=>s.tipo))];rows=tipos.map(tipo=>{const sx=ss.filter(s=>s.tipo===tipo);let convocados=0,presentes=0;for(const s of sx){const aptos=ir.filter(i=>contaParaIrmao(i,s));convocados+=aptos.length;for(const i of aptos)if(statusPresencaReal((p[s.id]||{})[i.id]))presentes++}return {Tipo:tipoSessao(tipo),Sessoes:sx.length,Presenca:convocados?`${Math.round(presentes*100/convocados)}%`:'0%'}});cols=[['Tipo','Tipo de sessão'],['Sessoes','Sessões'],['Presenca','Presença média']]}else if(t==='justificadas'){titulo='Faltas justificadas';for(const s of ss.slice().sort((a,b)=>b.data.localeCompare(a.data)))for(const i of ir){const r=(p[s.id]||{})[i.id];if(statusFaltaJustificada(r))rows.push({Data:brData(s.data),Sessao:s.numero||tipoSessao(s.tipo),Irmao:i.nome,Justificativa:justificativaPresenca(r)||'Sem texto'})}cols=[['Data','Data'],['Sessao','Sessão'],['Irmao','Irmão'],['Justificativa','Justificativa']]}else if(t==='pendentes'){titulo='Chamadas incompletas';rows=chamadasIncompletas().map(x=>({Data:brData(x.sessao.data),Sessao:x.sessao.numero||tipoSessao(x.sessao.tipo),Pendentes:x.faltantes.length,Nomes:x.faltantes.map(i=>i.nome).join(', ')}));cols=[['Data','Data'],['Sessao','Sessão'],['Pendentes','Pendentes'],['Nomes','Irmãos sem registro']]}else if(t==='historico'){titulo='Histórico individual';const i=ir.find(x=>x.id===relAvIrmao.value);if(i){for(const s of ss.filter(x=>contaParaIrmao(i,x)).sort((a,b)=>b.data.localeCompare(a.data))){const regs=p[s.id]||{},tem=Object.prototype.hasOwnProperty.call(regs,i.id),r=regs[i.id];rows.push({Data:brData(s.data),Sessao:s.numero||tipoSessao(s.tipo),Grau:grauNaData(i,s.data),Status:tem?statusTexto(r):'Sem registro'})}}cols=[['Data','Data'],['Sessao','Sessão'],['Grau','Grau'],['Status','Status']]}const c=cols.map(x=>({key:x[0],label:x[1]}));currentAdvancedTitle=titulo;relAvResultado.innerHTML=`<div class=\"small\" style=\"margin-bottom:8px\">${h(titulo)}</div>${montarTabelaRelatorio(c,rows)}`}
-function imprimirRelatorioAvancado(){if(!currentAdvancedRows.length){renderRelatorioAvancado();if(!currentAdvancedRows.length){toast('Nenhum dado para imprimir');return}}const keys=Object.keys(currentAdvancedRows[0]||{}),head=keys.map(k=>`<th>${h(k)}</th>`).join(''),body=currentAdvancedRows.map(r=>`<tr>${keys.map(k=>`<td>${h(r[k])}</td>`).join('')}</tr>`).join('');abrirPrint(currentAdvancedTitle,`<h2>${h(currentAdvancedTitle)}</h2><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`)}
-function csvCampo(v){const s=String(v??'').replace(/\r?\n/g,' ');return `\"${s.replace(/\"/g,'\"\"')}\"`}
-function arquivoCsvAtual(){
-  if(!pendingCsvExport)throw new Error('Nenhuma planilha foi preparada.');
-  return new File([pendingCsvExport.csv],pendingCsvExport.nome,{type:'text/csv;charset=utf-8'});
-}
-function prepararExportacaoPlanilha(nome,csv,quantidade){
-  pendingCsvExport={nome,csv,titulo:currentAdvancedTitle,quantidade};
-  document.getElementById('csvExportNome').textContent=nome;
-  document.getElementById('csvExportResumo').textContent=`${quantidade} registro(s) · CSV compatível com Excel`;
-  const status=document.getElementById('csvExportStatus');
-  status.className='export-status';
-  status.textContent='Escolha uma ação abaixo.';
-  const shareButton=document.getElementById('csvShareButton');
-  shareButton.style.display='none';
-  try{
-    const file=arquivoCsvAtual();
-    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}))shareButton.style.display='inline-flex';
-  }catch(e){}
-  abrirModal('modalExportarPlanilha');
-}
-function fecharExportacaoPlanilha(){
-  pendingCsvExport=null;
-  fecharModal('modalExportarPlanilha');
-}
-function baixarPlanilhaCSV(){
-  const status=document.getElementById('csvExportStatus');
-  try{
-    const file=arquivoCsvAtual();
-    const url=URL.createObjectURL(file);
-    const a=document.createElement('a');
-    a.href=url;
-    a.download=file.name;
-    a.rel='noopener';
-    a.style.display='none';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),4000);
-    status.className='export-status ok';
-    status.textContent='Download solicitado. Consulte a notificação ou a pasta Downloads.';
-    audit('Relatório exportado',pendingCsvExport?.titulo||currentAdvancedTitle);
-    toast('Planilha enviada para Downloads');
-  }catch(e){
-    status.className='export-status error';
-    status.textContent='Não foi possível iniciar o download. Use Compartilhar arquivo ou Copiar dados.';
-    toast('Falha ao gerar a planilha');
-  }
-}
-async function compartilharPlanilhaCSV(){
-  const status=document.getElementById('csvExportStatus');
-  try{
-    const file=arquivoCsvAtual();
-    if(!navigator.share||!navigator.canShare||!navigator.canShare({files:[file]}))throw new Error('Compartilhamento de arquivo indisponível.');
-    await navigator.share({title:'Planilha da Chancelaria 1997',text:pendingCsvExport?.titulo||'Relatório',files:[file]});
-    status.className='export-status ok';
-    status.textContent='Arquivo compartilhado.';
-    audit('Planilha compartilhada',pendingCsvExport?.titulo||currentAdvancedTitle);
-  }catch(e){
-    if(String(e?.name||'')==='AbortError')return;
-    status.className='export-status error';
-    status.textContent='O compartilhamento de arquivo não está disponível neste aparelho.';
-  }
-}
-async function copiarPlanilhaCSV(){
-  const status=document.getElementById('csvExportStatus');
-  try{
-    if(!pendingCsvExport)throw new Error();
-    if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(pendingCsvExport.csv);
-    else{
-      const area=document.createElement('textarea');
-      area.value=pendingCsvExport.csv;
-      area.style.position='fixed';area.style.opacity='0';
-      document.body.appendChild(area);area.select();
-      if(!document.execCommand('copy'))throw new Error();
-      area.remove();
-    }
-    status.className='export-status ok';
-    status.textContent='Dados copiados. Cole no Excel ou Google Planilhas.';
-    toast('Dados da planilha copiados');
-  }catch(e){
-    status.className='export-status error';
-    status.textContent='Não foi possível copiar os dados.';
-  }
-}
-function exportarRelatorioCSV(){
-  if(!currentAdvancedRows.length){renderRelatorioAvancado();if(!currentAdvancedRows.length){toast('Nenhum dado para exportar');return}}
-  const keys=Object.keys(currentAdvancedRows[0]);
-  const linhas=[keys.map(csvCampo).join(';'),...currentAdvancedRows.map(r=>keys.map(k=>csvCampo(r[k])).join(';'))];
-  const csv='\ufeff'+linhas.join('\n');
-  const nome=`${nomeNormalizado(currentAdvancedTitle)||'relatorio'}.csv`;
-  prepararExportacaoPlanilha(nome,csv,currentAdvancedRows.length);
-}
 function renderBackupStatus(){const b=getBackupInfo(),el=document.getElementById('backupStatus');if(!el)return;const dias=b.at?Math.floor((Date.now()-new Date(b.at).getTime())/86400000):9999;el.className= `install-note ${dias<=7?'backup-good':dias<=14?'backup-warn':'backup-bad'}`;el.innerHTML=b.at?`<b>Último backup: ${brData(String(b.at).slice(0,10))}</b><br>${b.irmaos||0} Irmãos, ${b.sessoes||0} sessões. ${dias>7?'Faça uma nova cópia.':'Backup atualizado.'}`:'<b>Nenhum backup registrado.</b><br>Crie uma cópia protegida antes de inserir mais dados.';btnRestaurarRecuperacao.style.display=localStorage.getItem(SEC_RECOVERY_KEY)?'inline-flex':'none'}
 function renderLixeira(){const el=document.getElementById('listaLixeira');if(!el)return;const arr=limparLixeiraExpirada();el.innerHTML=arr.length?arr.map(x=>`<div class=\"trash-item\"><div class=\"trash-item-head\"><b>${h(x.nome)}</b><span class=\"badge b-warn\">${h(x.tipo)}</span></div><small>Excluído em ${new Date(x.deletedAt).toLocaleString('pt-BR')}</small><div class=\"toolbar\" style=\"margin-top:8px;margin-bottom:0\"><button class=\"btn btn-success btn-sm\" onclick=\"restaurarItemLixeira('${x.id}')\">Restaurar</button><button class=\"btn btn-danger btn-sm\" onclick=\"apagarItemLixeira('${x.id}')\">Apagar</button></div></div>`).join(''):'<div class=\"empty\"><p>A lixeira está vazia.</p></div>'}
 function restaurarItemLixeira(id){const arr=limparLixeiraExpirada(),idx=arr.findIndex(x=>x.id===id);if(idx<0){toast('Item não encontrado na lixeira');return}const x=arr[idx];if(x.tipo==='irmao'){const ir=getIrmaos();if(!ir.some(i=>i.id===x.dados.id))ir.push(x.dados);setIrmaos(ir);const p=getPresencas();for(const [sid,r] of Object.entries(x.relacionados?.presencas||{})){p[sid]=p[sid]||{};p[sid][x.dados.id]=r}setPresencas(p)}else if(x.tipo==='sessao'){const ss=getSessoes();if(!ss.some(s=>s.id===x.dados.id))ss.push(x.dados);setSessoes(ss);const p=getPresencas();p[x.dados.id]=x.relacionados?.presencas||{};setPresencas(p)}else if(x.tipo==='data'){const ds=getDatas();if(!ds.some(d=>d.id===x.dados.id))ds.push(x.dados);setDatas(ds)}arr.splice(idx,1);setTrash(arr);audit('Item restaurado da lixeira',`${x.tipo}: ${x.nome}`);renderAtual();renderLixeira();toast('Item restaurado')}

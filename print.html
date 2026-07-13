@@ -29,19 +29,19 @@ tr{break-inside:avoid}th,td{border:1px solid #aaa;padding:2.2mm;text-align:left;
 <body>
 <div class="toolbar">
   <button class="primary" onclick="window.print()">Imprimir ou salvar em PDF</button>
-  <button class="secondary" onclick="voltarAoAplicativo()">Voltar ao aplicativo</button>
+  <button class="secondary" onclick="voltarAoAplicativo()">Fechar e voltar</button>
 </div>
 <main id="app"></main>
 <script>
 (function(){
   const app=document.getElementById('app');
   function decodeBase64UrlUtf8(raw){raw=raw.replace(/-/g,'+').replace(/_/g,'/');while(raw.length%4)raw+='=';const bin=atob(raw),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
-  window.voltarAoAplicativo=function(){if(history.length>1)history.back();else window.close()};
+  window.voltarAoAplicativo=function(){try{window.close()}catch(e){}setTimeout(()=>{if(history.length>1)history.back()},120)};
   try{
     const raw=location.hash.slice(1);if(!raw)throw new Error('Relatório não recebido.');
-    const data=JSON.parse(decodeBase64UrlUtf8(raw));history.replaceState(null,'',location.pathname);document.title=(data.titulo||'Relatório')+' · Chancelaria 1997';
+    const data=JSON.parse(decodeBase64UrlUtf8(raw));history.replaceState(null,'',location.pathname+location.search);document.title=(data.titulo||'Relatório')+' · Chancelaria 1997';
     app.innerHTML=`<article class="page"><header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header>${data.corpo||''}<div class="assinatura">____________________________________<br>Chancelaria</div><div class="footer">Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.</div></article>`;
-    const img=app.querySelector('img');const imprimir=()=>setTimeout(()=>{try{window.print()}catch(e){}},700);if(img&&!img.complete)img.addEventListener('load',imprimir,{once:true});else imprimir();
+    const deveImprimir=new URLSearchParams(location.search).get('print')==='1';if(deveImprimir){const img=app.querySelector('img');const imprimir=()=>setTimeout(()=>{try{window.print()}catch(e){}},700);if(img&&!img.complete)img.addEventListener('load',imprimir,{once:true});else imprimir()}
   }catch(e){app.innerHTML=`<div class="error"><h2>Não foi possível abrir o relatório</h2><p>${String(e.message||e)}</p><p>Volte ao aplicativo e gere o relatório novamente.</p></div>`}
 })();
 </script>
