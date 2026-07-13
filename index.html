@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#152541">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="2.3.0-relatorios-essenciais-navegacao-interna">
+<meta name="application-version" content="2.4.0-sessao-persistente-manual">
 <style>
 :root{
   --azul:#152541;
@@ -399,10 +399,10 @@ main{padding-top:16px}
         <div class="sec-status">
           <div class="sec-box"><b>Criptografia</b><span>AES GCM ativa neste navegador ou aplicativo.</span></div>
           <div class="sec-box"><b>Tentativas incorretas</b><span id="securityAttemptsInfo">0 nesta abertura</span></div>
-          <div class="sec-box"><b>Bloqueio automático</b><span id="securityTimeoutInfo">5 minutos</span></div>
+          <div class="sec-box"><b>Bloqueio automático</b><span id="securityTimeoutInfo">Desativado</span></div>
           <div class="sec-box"><b>Último backup</b><span id="securityBackupInfo">Nunca realizado</span></div>
         </div>
-        <div class="field"><label>Tempo para bloqueio</label><select id="securityTimeoutSelect" onchange="alterarTempoBloqueio(this.value)"><option value="1">1 minuto</option><option value="3">3 minutos</option><option value="5">5 minutos</option><option value="10">10 minutos</option><option value="15">15 minutos</option><option value="30">30 minutos</option></select></div>
+        <div class="alert"><div class="name">Sessão persistente</div><div class="txt">O aplicativo permanece aberto ao minimizar ou alternar para outro aplicativo. Use Bloquear agora para exigir a senha novamente, ou Sair para fechar.</div></div>
         <div class="toolbar">
           <button class="btn btn-warning" onclick="abrirModal('modalTrocarSenha')">Alterar senha</button>
           <button class="btn btn-light" onclick="bloquearAplicativo('Aplicativo bloqueado.')">Bloquear agora</button>
@@ -807,9 +807,8 @@ async function bloquearAplicativo(message='Aplicativo bloqueado por segurança.'
   configureSecurityGate('unlock',message);
 }
 function resetInactivityTimer(){
-  if(!vaultKey)return;
   clearTimeout(inactivityTimer);
-  const minutos=Math.max(1,Number(getSettings().lockMinutes)||5);inactivityTimer=setTimeout(()=>bloquearAplicativo(`Bloqueado após ${minutos} minuto(s) sem uso.`),minutos*60*1000);
+  inactivityTimer=null;
 }
 function iniciarSelecaoArquivo(){
   seletorArquivoAtivo=true;
@@ -817,8 +816,7 @@ function iniciarSelecaoArquivo(){
   clearTimeout(seletorArquivoTimer);
   seletorArquivoTimer=setTimeout(()=>{
     seletorArquivoAtivo=false;
-    if(document.hidden&&vaultKey)bloquearAplicativo('Bloqueado por segurança.');
-    else if(vaultKey)resetInactivityTimer();
+    if(vaultKey)resetInactivityTimer();
   },180000);
 }
 function finalizarSelecaoArquivo(){
@@ -851,14 +849,15 @@ function iniciarSeguranca(){
   });
   window.addEventListener('focus',()=>{if(seletorArquivoAtivo)setTimeout(finalizarSelecaoArquivo,1600)});
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden&&vaultKey&&!seletorArquivoAtivo){
-      if(acaoExternaAtiva()){acaoExternaOcultouPagina=true;return}
-      bloquearAplicativo('Bloqueado ao sair do aplicativo.');
+    if(document.hidden&&vaultKey){
+      persistQueue.catch(()=>{});
+      if(acaoExternaAtiva())acaoExternaOcultouPagina=true;
       return;
     }
-    if(!document.hidden&&vaultKey&&!seletorArquivoAtivo){
+    if(!document.hidden&&vaultKey){
       if(acaoExternaAtiva()&&acaoExternaOcultouPagina)finalizarAcaoExterna();
       else resetInactivityTimer();
+      renderAtual();
     }
   });
   document.getElementById('securityPassword').addEventListener('keydown',e=>{if(e.key==='Enter')enviarSenha()});
@@ -1501,8 +1500,8 @@ Critério: falta justificada é ausência com justa causa: não soma presença r
 Fraternalmente,
 Chancelaria da A.R.L.S. Razão e Força Nº 1997.`)}
 
-function alterarTempoBloqueio(v){const n=Math.max(1,Number(v)||5);setSettings({lockMinutes:n});audit('Tempo de bloqueio alterado',`${n} minuto(s)`);resetInactivityTimer();renderCentralSeguranca();toast('Tempo de bloqueio atualizado')}
-function renderCentralSeguranca(){const s=getSettings(),b=getBackupInfo();securityTimeoutSelect.value=String(s.lockMinutes||5);securityTimeoutInfo.textContent=`${s.lockMinutes||5} minuto(s)`;securityAttemptsInfo.textContent=`${failedAttempts} nesta abertura`;securityBackupInfo.textContent=b.at?`${brData(String(b.at).slice(0,10))} às ${new Date(b.at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`:'Nunca realizado';installInfo.textContent=location.protocol==='file:'?'Para instalar como aplicativo, use o pacote PWA em endereço HTTPS. Este HTML continua funcionando diretamente no Chrome.':'Use o botão Instalar no celular. Caso o Chrome não mostre a instalação, abra o menu e escolha Adicionar à tela inicial.'}
+function alterarTempoBloqueio(){resetInactivityTimer();renderCentralSeguranca();toast('O bloqueio automático está desativado')}
+function renderCentralSeguranca(){const b=getBackupInfo(),timeoutSelect=document.getElementById('securityTimeoutSelect');if(timeoutSelect)timeoutSelect.value='';securityTimeoutInfo.textContent='Desativado';securityAttemptsInfo.textContent=`${failedAttempts} nesta abertura`;securityBackupInfo.textContent=b.at?`${brData(String(b.at).slice(0,10))} às ${new Date(b.at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`:'Nunca realizado';installInfo.textContent=location.protocol==='file:'?'Para instalar como aplicativo, use o pacote PWA em endereço HTTPS. Este HTML continua funcionando diretamente no Chrome.':'Use o botão Instalar no celular. Caso o Chrome não mostre a instalação, abra o menu e escolha Adicionar à tela inicial.'}
 function registrarPWA(){window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;const b=document.getElementById('installAppButton');if(b)b.style.display='inline-flex'});if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{})}
 async function instalarAplicativo(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;return}toast(location.protocol==='file:'?'Abra a versão PWA por HTTPS para instalar':'Abra o menu do Chrome e toque em Adicionar à tela inicial')}
 function renderBackupStatus(){const b=getBackupInfo(),el=document.getElementById('backupStatus');if(!el)return;const dias=b.at?Math.floor((Date.now()-new Date(b.at).getTime())/86400000):9999;el.className= `install-note ${dias<=7?'backup-good':dias<=14?'backup-warn':'backup-bad'}`;el.innerHTML=b.at?`<b>Último backup: ${brData(String(b.at).slice(0,10))}</b><br>${b.irmaos||0} Irmãos, ${b.sessoes||0} sessões. ${dias>7?'Faça uma nova cópia.':'Backup atualizado.'}`:'<b>Nenhum backup registrado.</b><br>Crie uma cópia protegida antes de inserir mais dados.';btnRestaurarRecuperacao.style.display=localStorage.getItem(SEC_RECOVERY_KEY)?'inline-flex':'none'}
