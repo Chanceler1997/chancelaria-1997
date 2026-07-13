@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v6-retorno-planilha-cabecalho";
+const CACHE_NAME = "chancelaria-1997-v7-exportacao-interna-profissional";
 const APP_FILES = [
   "./",
   "./index.html",

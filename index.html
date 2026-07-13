@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#152541">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="2.1.0-retorno-planilha-cabecalho">
+<meta name="application-version" content="2.2.0-exportacao-interna-profissional">
 <style>
 :root{
   --azul:#152541;
@@ -186,6 +186,23 @@ main{padding-top:16px}
 .settings-now svg,.lock-now svg{width:20px;height:20px}
 @media(max-width:430px){.header{padding:5px 5px 6px}.app-official-header{border-radius:10px}.header-actions{padding-top:5px}.settings-now,.lock-now{width:34px;height:34px}}
 
+/* Exportação interna, sem sair do aplicativo */
+.report-toolbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.report-toolbar .btn{width:100%;padding:10px 8px;white-space:nowrap}
+.export-summary{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+.export-summary .sec-box{min-height:72px}
+.export-file-name{font-weight:900;color:var(--azul);overflow-wrap:anywhere}
+.export-help{background:#fffaf0;border:1px solid rgba(201,168,76,.38);border-radius:12px;padding:11px 12px;color:#5f574a;font-size:12px;line-height:1.45}
+.export-status{min-height:20px;margin-top:10px;font-size:12px;font-weight:700;color:var(--muted)}
+.export-status.ok{color:var(--verde)}
+.export-status.error{color:var(--vermelho)}
+@media(max-width:430px){
+  .report-toolbar{grid-template-columns:1fr 1fr}
+  .report-toolbar .btn:last-child{grid-column:1/-1}
+  .export-summary{grid-template-columns:1fr}
+  #modalExportarPlanilha .modal-foot .btn{flex:1 1 100%}
+}
+
 </style>
 </head>
 <body class="app-locked">
@@ -343,7 +360,7 @@ main{padding-top:16px}
     <div class="card">
       <div class="card-head">📊 Relatório geral</div>
       <div class="card-body">
-        <div class="toolbar">
+        <div class="toolbar report-toolbar">
           <button class="btn btn-info" onclick="renderRelatorioGeral()">Ver todos</button>
           <button class="btn btn-success" onclick="imprimirGeral()">Imprimir/PDF</button>
           <button class="btn btn-warning" onclick="mensagemFrequenciaGeral()">Mensagem</button>
@@ -359,7 +376,7 @@ main{padding-top:16px}
           <div class="field" id="relAvPeriodoBox"><label>Período</label><input id="relAvPeriodo" type="month" onchange="renderRelatorioAvancado()"></div>
         </div>
         <div class="field" id="relAvIrmaoBox" style="display:none"><label>Irmão</label><select id="relAvIrmao" onchange="renderRelatorioAvancado()"></select></div>
-        <div class="toolbar">
+        <div class="toolbar report-toolbar">
           <button class="btn btn-info" onclick="renderRelatorioAvancado()">Gerar</button>
           <button class="btn btn-success" onclick="imprimirRelatorioAvancado()">Imprimir/PDF</button>
           <button class="btn btn-light" onclick="exportarRelatorioCSV()">Exportar planilha</button>
@@ -581,6 +598,27 @@ main{padding-top:16px}
   </div>
 </div>
 
+
+<div class="modal-back" id="modalExportarPlanilha" role="dialog" aria-modal="true" aria-labelledby="csvExportTitulo">
+  <div class="modal">
+    <div class="modal-head"><span id="csvExportTitulo">Exportar planilha</span><button class="modal-close" type="button" onclick="fecharExportacaoPlanilha()" aria-label="Fechar">×</button></div>
+    <div class="modal-body">
+      <div class="export-summary">
+        <div class="sec-box"><b>Arquivo</b><span id="csvExportNome" class="export-file-name">relatorio.csv</span></div>
+        <div class="sec-box"><b>Conteúdo</b><span id="csvExportResumo">0 registros</span></div>
+      </div>
+      <div class="export-help">O arquivo usa CSV com separador por ponto e vírgula e codificação UTF 8. Excel e Google Planilhas abrem esse formato. O download começa após seu toque no botão.</div>
+      <div id="csvExportStatus" class="export-status" aria-live="polite">Escolha uma ação abaixo.</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-light" type="button" onclick="fecharExportacaoPlanilha()">Fechar</button>
+      <button class="btn btn-outline" type="button" onclick="copiarPlanilhaCSV()">Copiar dados</button>
+      <button class="btn btn-info" id="csvShareButton" type="button" onclick="compartilharPlanilhaCSV()" style="display:none">Compartilhar arquivo</button>
+      <button class="btn btn-primary" type="button" onclick="baixarPlanilhaCSV()">Baixar planilha</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast" style="position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:#111;color:white;padding:10px 16px;border-radius:999px;z-index:200;opacity:0;pointer-events:none;transition:.25s;font-size:13px"><span id="toastText"></span><button id="toastAction" type="button"></button></div>
 
 <script>
@@ -618,6 +656,7 @@ let pendingBackupMode='';
 let deferredInstallPrompt=null;
 let currentAdvancedRows=[];
 let currentAdvancedTitle='Relatório';
+let pendingCsvExport=null;
 let lastUndoAction=null;
 let toastTimer=null;
 
@@ -1424,7 +1463,7 @@ Chancelaria da A.R.L.S. Razão e Força Nº 1997.`)}
 
 function alterarTempoBloqueio(v){const n=Math.max(1,Number(v)||5);setSettings({lockMinutes:n});audit('Tempo de bloqueio alterado',`${n} minuto(s)`);resetInactivityTimer();renderCentralSeguranca();toast('Tempo de bloqueio atualizado')}
 function renderCentralSeguranca(){const s=getSettings(),b=getBackupInfo();securityTimeoutSelect.value=String(s.lockMinutes||5);securityTimeoutInfo.textContent=`${s.lockMinutes||5} minuto(s)`;securityAttemptsInfo.textContent=`${failedAttempts} nesta abertura`;securityBackupInfo.textContent=b.at?`${brData(String(b.at).slice(0,10))} às ${new Date(b.at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`:'Nunca realizado';installInfo.textContent=location.protocol==='file:'?'Para instalar como aplicativo, use o pacote PWA em endereço HTTPS. Este HTML continua funcionando diretamente no Chrome.':'Use o botão Instalar no celular. Caso o Chrome não mostre a instalação, abra o menu e escolha Adicionar à tela inicial.'}
-function registrarPWA(){window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;const b=document.getElementById('installAppButton');if(b)b.style.display='inline-flex'});if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./service-worker.js').catch(()=>{})}
+function registrarPWA(){window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;const b=document.getElementById('installAppButton');if(b)b.style.display='inline-flex'});if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{})}
 async function instalarAplicativo(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;return}toast(location.protocol==='file:'?'Abra a versão PWA por HTTPS para instalar':'Abra o menu do Chrome e toque em Adicionar à tela inicial')}
 function configurarRelatorioAvancado(){const t=relAvTipo.value;relAvPeriodoBox.style.display=['mensal','anual'].includes(t)?'block':'none';relAvPeriodo.type=t==='anual'?'number':'month';if(t==='anual'){relAvPeriodo.min='2000';relAvPeriodo.max='2100';if(!/^\d{4}$/.test(relAvPeriodo.value))relAvPeriodo.value=String(new Date().getFullYear())}else if(!/^\d{4}-\d{2}$/.test(relAvPeriodo.value))relAvPeriodo.value=mesAtualISO();relAvIrmaoBox.style.display=t==='historico'?'block':'none';renderRelatorioAvancado()}
 function resumoIrmaoSessoes(i,ss){const p=getPresencas();let pres=0,just=0,falta=0;for(const s of ss.filter(x=>contaParaIrmao(i,x))){const r=(p[s.id]||{})[i.id];if(!Object.prototype.hasOwnProperty.call(p[s.id]||{},i.id)){falta++;continue}if(statusPresencaReal(r))pres++;else if(statusFaltaJustificada(r))just++;else falta++}const total=pres+just+falta;return {total,pres,just,falta,pct:total?Math.round(pres*100/total):0}}
@@ -1432,9 +1471,88 @@ function montarTabelaRelatorio(cols,rows){currentAdvancedRows=rows;const th=cols
 function renderRelatorioAvancado(){const t=relAvTipo.value,ss=getSessoes(),ir=getIrmaos(),p=getPresencas();let cols=[],rows=[],titulo='';if(t==='ranking'){titulo='Ranking de frequência';rows=ir.map(i=>{const f=calcFreq(i);return {Irmao:i.nome,Grau:i.grau,Presenca:`${f.pct}%`,Justificadas:f.justificada,Faltas:`${f.pctFalta}%`}}).sort((a,b)=>parseInt(b.Presenca)-parseInt(a.Presenca));cols=[['Irmao','Irmão'],['Grau','Grau'],['Presenca','Presença'],['Justificadas','Justificadas'],['Faltas','Faltas']]}else if(t==='mensal'||t==='anual'){const per=String(relAvPeriodo.value||'');const filtro=ss.filter(s=>t==='mensal'?s.data.startsWith(per):s.data.startsWith(per.slice(0,4)));titulo=`Resumo ${t==='mensal'?'mensal':'anual'} ${per}`;rows=ir.map(i=>{const r=resumoIrmaoSessoes(i,filtro);return {Irmao:i.nome,Sessoes:r.total,Presentes:r.pres,Justificadas:r.just,Faltas:r.falta,Percentual:`${r.pct}%`}});cols=[['Irmao','Irmão'],['Sessoes','Sessões'],['Presentes','Presentes'],['Justificadas','Justificadas'],['Faltas','Faltas'],['Percentual','Presença']]}else if(t==='grau'){titulo='Resumo por grau';rows=['A','C','M','MI'].map(g=>{const grupo=ir.filter(i=>i.grau===g),media=grupo.length?Math.round(grupo.reduce((n,i)=>n+calcFreq(i).pct,0)/grupo.length):0;return {Grau:g,Irmaos:grupo.length,Media:`${media}%`}});cols=[['Grau','Grau'],['Irmaos','Irmãos'],['Media','Média de presença']]}else if(t==='tipo'){titulo='Resumo por tipo de sessão';const tipos=[...new Set(ss.map(s=>s.tipo))];rows=tipos.map(tipo=>{const sx=ss.filter(s=>s.tipo===tipo);let convocados=0,presentes=0;for(const s of sx){const aptos=ir.filter(i=>contaParaIrmao(i,s));convocados+=aptos.length;for(const i of aptos)if(statusPresencaReal((p[s.id]||{})[i.id]))presentes++}return {Tipo:tipoSessao(tipo),Sessoes:sx.length,Presenca:convocados?`${Math.round(presentes*100/convocados)}%`:'0%'}});cols=[['Tipo','Tipo de sessão'],['Sessoes','Sessões'],['Presenca','Presença média']]}else if(t==='justificadas'){titulo='Faltas justificadas';for(const s of ss.slice().sort((a,b)=>b.data.localeCompare(a.data)))for(const i of ir){const r=(p[s.id]||{})[i.id];if(statusFaltaJustificada(r))rows.push({Data:brData(s.data),Sessao:s.numero||tipoSessao(s.tipo),Irmao:i.nome,Justificativa:justificativaPresenca(r)||'Sem texto'})}cols=[['Data','Data'],['Sessao','Sessão'],['Irmao','Irmão'],['Justificativa','Justificativa']]}else if(t==='pendentes'){titulo='Chamadas incompletas';rows=chamadasIncompletas().map(x=>({Data:brData(x.sessao.data),Sessao:x.sessao.numero||tipoSessao(x.sessao.tipo),Pendentes:x.faltantes.length,Nomes:x.faltantes.map(i=>i.nome).join(', ')}));cols=[['Data','Data'],['Sessao','Sessão'],['Pendentes','Pendentes'],['Nomes','Irmãos sem registro']]}else if(t==='historico'){titulo='Histórico individual';const i=ir.find(x=>x.id===relAvIrmao.value);if(i){for(const s of ss.filter(x=>contaParaIrmao(i,x)).sort((a,b)=>b.data.localeCompare(a.data))){const regs=p[s.id]||{},tem=Object.prototype.hasOwnProperty.call(regs,i.id),r=regs[i.id];rows.push({Data:brData(s.data),Sessao:s.numero||tipoSessao(s.tipo),Grau:grauNaData(i,s.data),Status:tem?statusTexto(r):'Sem registro'})}}cols=[['Data','Data'],['Sessao','Sessão'],['Grau','Grau'],['Status','Status']]}const c=cols.map(x=>({key:x[0],label:x[1]}));currentAdvancedTitle=titulo;relAvResultado.innerHTML=`<div class=\"small\" style=\"margin-bottom:8px\">${h(titulo)}</div>${montarTabelaRelatorio(c,rows)}`}
 function imprimirRelatorioAvancado(){if(!currentAdvancedRows.length){renderRelatorioAvancado();if(!currentAdvancedRows.length){toast('Nenhum dado para imprimir');return}}const keys=Object.keys(currentAdvancedRows[0]||{}),head=keys.map(k=>`<th>${h(k)}</th>`).join(''),body=currentAdvancedRows.map(r=>`<tr>${keys.map(k=>`<td>${h(r[k])}</td>`).join('')}</tr>`).join('');abrirPrint(currentAdvancedTitle,`<h2>${h(currentAdvancedTitle)}</h2><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`)}
 function csvCampo(v){const s=String(v??'').replace(/\r?\n/g,' ');return `\"${s.replace(/\"/g,'\"\"')}\"`}
-function urlPlanilhaParaExportacao(nome,csv){
-  const payload={nome,csv,geradoEm:new Date().toISOString()};
-  return new URL('export.html',location.href).href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
+function arquivoCsvAtual(){
+  if(!pendingCsvExport)throw new Error('Nenhuma planilha foi preparada.');
+  return new File([pendingCsvExport.csv],pendingCsvExport.nome,{type:'text/csv;charset=utf-8'});
+}
+function prepararExportacaoPlanilha(nome,csv,quantidade){
+  pendingCsvExport={nome,csv,titulo:currentAdvancedTitle,quantidade};
+  document.getElementById('csvExportNome').textContent=nome;
+  document.getElementById('csvExportResumo').textContent=`${quantidade} registro(s) · CSV compatível com Excel`;
+  const status=document.getElementById('csvExportStatus');
+  status.className='export-status';
+  status.textContent='Escolha uma ação abaixo.';
+  const shareButton=document.getElementById('csvShareButton');
+  shareButton.style.display='none';
+  try{
+    const file=arquivoCsvAtual();
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]}))shareButton.style.display='inline-flex';
+  }catch(e){}
+  abrirModal('modalExportarPlanilha');
+}
+function fecharExportacaoPlanilha(){
+  pendingCsvExport=null;
+  fecharModal('modalExportarPlanilha');
+}
+function baixarPlanilhaCSV(){
+  const status=document.getElementById('csvExportStatus');
+  try{
+    const file=arquivoCsvAtual();
+    const url=URL.createObjectURL(file);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=file.name;
+    a.rel='noopener';
+    a.style.display='none';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+    status.className='export-status ok';
+    status.textContent='Download solicitado. Consulte a notificação ou a pasta Downloads.';
+    audit('Relatório exportado',pendingCsvExport?.titulo||currentAdvancedTitle);
+    toast('Planilha enviada para Downloads');
+  }catch(e){
+    status.className='export-status error';
+    status.textContent='Não foi possível iniciar o download. Use Compartilhar arquivo ou Copiar dados.';
+    toast('Falha ao gerar a planilha');
+  }
+}
+async function compartilharPlanilhaCSV(){
+  const status=document.getElementById('csvExportStatus');
+  try{
+    const file=arquivoCsvAtual();
+    if(!navigator.share||!navigator.canShare||!navigator.canShare({files:[file]}))throw new Error('Compartilhamento de arquivo indisponível.');
+    await navigator.share({title:'Planilha da Chancelaria 1997',text:pendingCsvExport?.titulo||'Relatório',files:[file]});
+    status.className='export-status ok';
+    status.textContent='Arquivo compartilhado.';
+    audit('Planilha compartilhada',pendingCsvExport?.titulo||currentAdvancedTitle);
+  }catch(e){
+    if(String(e?.name||'')==='AbortError')return;
+    status.className='export-status error';
+    status.textContent='O compartilhamento de arquivo não está disponível neste aparelho.';
+  }
+}
+async function copiarPlanilhaCSV(){
+  const status=document.getElementById('csvExportStatus');
+  try{
+    if(!pendingCsvExport)throw new Error();
+    if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(pendingCsvExport.csv);
+    else{
+      const area=document.createElement('textarea');
+      area.value=pendingCsvExport.csv;
+      area.style.position='fixed';area.style.opacity='0';
+      document.body.appendChild(area);area.select();
+      if(!document.execCommand('copy'))throw new Error();
+      area.remove();
+    }
+    status.className='export-status ok';
+    status.textContent='Dados copiados. Cole no Excel ou Google Planilhas.';
+    toast('Dados da planilha copiados');
+  }catch(e){
+    status.className='export-status error';
+    status.textContent='Não foi possível copiar os dados.';
+  }
 }
 function exportarRelatorioCSV(){
   if(!currentAdvancedRows.length){renderRelatorioAvancado();if(!currentAdvancedRows.length){toast('Nenhum dado para exportar');return}}
@@ -1442,12 +1560,7 @@ function exportarRelatorioCSV(){
   const linhas=[keys.map(csvCampo).join(';'),...currentAdvancedRows.map(r=>keys.map(k=>csvCampo(r[k])).join(';'))];
   const csv='\ufeff'+linhas.join('\n');
   const nome=`${nomeNormalizado(currentAdvancedTitle)||'relatorio'}.csv`;
-  const url=urlPlanilhaParaExportacao(nome,csv);
-  audit('Relatório exportado',currentAdvancedTitle);
-  if(enviarAcaoNativa('P',url)){toast('Abrindo planilha');return}
-  iniciarAcaoExterna();
-  const w=window.open(url,'_blank','noopener');
-  if(!w)window.location.href=url;
+  prepararExportacaoPlanilha(nome,csv,currentAdvancedRows.length);
 }
 function renderBackupStatus(){const b=getBackupInfo(),el=document.getElementById('backupStatus');if(!el)return;const dias=b.at?Math.floor((Date.now()-new Date(b.at).getTime())/86400000):9999;el.className= `install-note ${dias<=7?'backup-good':dias<=14?'backup-warn':'backup-bad'}`;el.innerHTML=b.at?`<b>Último backup: ${brData(String(b.at).slice(0,10))}</b><br>${b.irmaos||0} Irmãos, ${b.sessoes||0} sessões. ${dias>7?'Faça uma nova cópia.':'Backup atualizado.'}`:'<b>Nenhum backup registrado.</b><br>Crie uma cópia protegida antes de inserir mais dados.';btnRestaurarRecuperacao.style.display=localStorage.getItem(SEC_RECOVERY_KEY)?'inline-flex':'none'}
 function renderLixeira(){const el=document.getElementById('listaLixeira');if(!el)return;const arr=limparLixeiraExpirada();el.innerHTML=arr.length?arr.map(x=>`<div class=\"trash-item\"><div class=\"trash-item-head\"><b>${h(x.nome)}</b><span class=\"badge b-warn\">${h(x.tipo)}</span></div><small>Excluído em ${new Date(x.deletedAt).toLocaleString('pt-BR')}</small><div class=\"toolbar\" style=\"margin-top:8px;margin-bottom:0\"><button class=\"btn btn-success btn-sm\" onclick=\"restaurarItemLixeira('${x.id}')\">Restaurar</button><button class=\"btn btn-danger btn-sm\" onclick=\"apagarItemLixeira('${x.id}')\">Apagar</button></div></div>`).join(''):'<div class=\"empty\"><p>A lixeira está vazia.</p></div>'}

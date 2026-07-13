@@ -13,19 +13,19 @@ main{max-width:760px;margin:0 auto;padding:18px 12px}.panel{background:#f7f1e6;b
 </style>
 </head>
 <body>
-<main><section class="panel"><div class="header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></div><div class="body"><h1>Planilha pronta</h1><p id="description">Toque no botão abaixo para salvar o arquivo CSV. O Excel, Google Planilhas e LibreOffice abrem este formato.</p><div class="actions"><a id="download" class="btn primary" href="#">Baixar planilha</a><button class="btn secondary" onclick="voltarAoAplicativo()">Voltar ao aplicativo</button></div><div id="status" class="status"></div></div></section></main>
+<main><section class="panel"><div class="header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></div><div class="body"><h1>Planilha pronta</h1><p id="description">Toque no botão abaixo para salvar o arquivo CSV. O Excel, Google Planilhas e LibreOffice abrem este formato.</p><div class="actions"><a id="download" class="btn primary" href="#">Baixar planilha</a><button class="btn secondary" onclick="fecharPagina()">Fechar esta página</button></div><div id="status" class="status"></div></div></section></main>
 <script>
 (function(){
   const link=document.getElementById('download'),status=document.getElementById('status'),description=document.getElementById('description');
   function decodeBase64UrlUtf8(raw){raw=raw.replace(/-/g,'+').replace(/_/g,'/');while(raw.length%4)raw+='=';const bin=atob(raw),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
-  window.voltarAoAplicativo=function(){if(history.length>1)history.back();else window.close()};
+  window.fecharPagina=function(){window.close();setTimeout(()=>{status.textContent='Use o botão Voltar do celular para retornar ao aplicativo.'},250)};
   try{
     const raw=location.hash.slice(1);if(!raw)throw new Error('Dados da planilha não recebidos.');
     const data=JSON.parse(decodeBase64UrlUtf8(raw));history.replaceState(null,'',location.pathname);
     const nome=String(data.nome||'relatorio.csv').replace(/[\/:*?"<>|]+/g,'_');
     const blob=new Blob([String(data.csv||'')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob);
-    link.href=url;link.download=nome;description.textContent=`Arquivo: ${nome}`;status.textContent='O download deve iniciar. Caso não inicie, toque em Baixar planilha.';
-    setTimeout(()=>{try{link.click()}catch(e){}},600);window.addEventListener('pagehide',()=>URL.revokeObjectURL(url),{once:true});
+    link.href=url;link.download=nome;description.textContent=`Arquivo: ${nome}`;status.textContent='Toque em Baixar planilha para iniciar o download.';
+    window.addEventListener('pagehide',()=>URL.revokeObjectURL(url),{once:true});
   }catch(e){link.style.display='none';description.textContent='Não foi possível gerar a planilha.';status.className='status error';status.textContent=String(e.message||e)}
 })();
 </script>

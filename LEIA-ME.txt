@@ -1,18 +1,35 @@
-CHANCELARIA 1997 · PACOTE PROFISSIONAL
+CHANCELARIA 1997 · ATUALIZAÇÃO PROFISSIONAL 2.2
 
-Arquivos para enviar ao GitHub:
-1. index.html
-2. manifest.json
-3. service-worker.js
-4. icon-192.png
-5. icon-512.png
+CORREÇÕES
+1. Exportar planilha não abre mais o Chrome.
+2. O download não começa sozinho.
+3. A exportação abre em uma janela interna do aplicativo.
+4. Fechar a janela retorna ao relatório sem pedir a senha.
+5. O arquivo CSV é compatível com Excel e Google Planilhas.
+6. Foram adicionadas opções para copiar os dados e compartilhar o arquivo, quando o aparelho oferecer suporte.
+7. Os botões de relatórios foram reorganizados para telas pequenas.
+8. O service worker força a busca da versão nova e remove o cache anterior.
 
-O index.html reúne o estilo e o código do aplicativo. Assim, a aparência não depende de styles.css ou app.js separados.
+ARQUIVOS PARA O GITHUB
+Substitua todos os arquivos existentes pelos arquivos desta pasta:
+index.html
+export.html
+print.html
+service-worker.js
+manifest.json
+cabecalho-oficial.jpg
+icon-192.png
+icon-512.png
 
-Não envie ao GitHub:
-• backups
-• planilhas
-• listas de Irmãos
-• arquivos JSON com cadastros
+KODULAR
+Não altere os blocos atuais. A planilha deixa de usar o comando P e passa a funcionar dentro do WebViewer.
 
-Emblema fornecido pelo usuário e aplicado como identidade visual e ícone do aplicativo.
+APÓS PUBLICAR
+1. Aguarde o GitHub Pages ficar verde.
+2. Feche o aplicativo pela lista de recentes.
+3. Abra com internet.
+4. Entre em Relatórios.
+5. Toque em Exportar planilha.
+6. Confira a janela interna.
+7. Toque em Baixar planilha.
+8. Toque em Fechar para voltar ao relatório.
