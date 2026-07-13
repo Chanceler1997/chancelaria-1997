@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v15-relatorios-historico";
+const CACHE_NAME = "chancelaria-1997-v16-margens-impressao";
 const APP_FILES = [
   "./",
   "./index.html",
