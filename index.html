@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#152541">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="2.4.0-sessao-persistente-manual">
+<meta name="application-version" content="2.7.0-revisao-frequencia-pdf-whatsapp">
 <style>
 :root{
   --azul:#152541;
@@ -210,6 +210,24 @@ main{padding-top:16px}
 .report-toolbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .report-toolbar .btn{width:100%;padding:10px 8px}
 @media(max-width:430px){.report-toolbar{grid-template-columns:1fr}.report-toolbar .btn{width:100%}}
+
+/* Revisão individual de frequência e compartilhamento de PDF */
+.report-session-item{width:100%;text-align:left;appearance:none;-webkit-appearance:none;color:inherit;cursor:pointer;position:relative;padding-right:42px}
+.report-session-item:after{content:"Editar";position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:900;color:var(--azul);background:#f4e6b6;border:1px solid rgba(201,168,76,.45);border-radius:999px;padding:4px 7px}
+.report-session-item:active{transform:scale(.995)}
+.report-edit-hint{color:#6d5620;font-weight:700}
+.review-summary{background:#fffdf8;border:1px solid var(--linha);border-radius:14px;padding:12px;margin-bottom:12px}
+.review-summary b{color:var(--azul)}
+.review-current{margin-top:8px;padding-top:8px;border-top:1px solid var(--linha);font-size:12px;color:var(--muted);line-height:1.45}
+.review-status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.review-status-grid .status-btn{min-height:46px}
+.btn:disabled{opacity:.58;cursor:not-allowed}
+.pdf-share-note{font-size:11px;color:var(--muted);line-height:1.4;margin-top:8px;text-align:center}
+@media(max-width:600px){
+  .report-preview-actions{grid-template-columns:1fr 1fr}
+  .report-preview-actions .pdf-share-button{grid-column:1/-1}
+  .review-status-grid{grid-template-columns:1fr}
+}
 
 </style>
 </head>
@@ -551,11 +569,43 @@ main{padding-top:16px}
   </div>
 </div>
 
+<div class="modal-back" id="modalRevisaoFrequencia" role="dialog" aria-modal="true" aria-labelledby="revisaoFrequenciaTitulo">
+  <div class="modal">
+    <div class="modal-head"><span id="revisaoFrequenciaTitulo">Revisar frequência individual</span><button class="modal-close" type="button" onclick="fecharModal('modalRevisaoFrequencia')" aria-label="Fechar revisão">×</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="revisaoIrmaoId">
+      <input type="hidden" id="revisaoSessaoId">
+      <div id="revisaoResumo" class="review-summary"></div>
+      <div class="alert">
+        <div class="name">Correção restrita ao Irmão selecionado</div>
+        <div class="txt">Esta revisão altera somente o registro individual desta sessão. Use Falta justificada quando houver contestação aceita e descreva o motivo.</div>
+      </div>
+      <div class="field"><label>Status da sessão</label>
+        <div class="review-status-grid">
+          <button id="revisaoStatusP" class="status-btn" type="button" onclick="selecionarStatusRevisao('P')">Presença</button>
+          <button id="revisaoStatusF" class="status-btn" type="button" onclick="selecionarStatusRevisao('F')">Falta</button>
+          <button id="revisaoStatusJ" class="status-btn" type="button" onclick="selecionarStatusRevisao('J')">Falta justificada</button>
+        </div>
+      </div>
+      <div id="revisaoJustificativaBox" class="field" style="display:none">
+        <label>Justificativa da contestação</label>
+        <textarea id="revisaoJustificativa" placeholder="Registre o motivo apresentado pelo Irmão e aceito pela Chancelaria."></textarea>
+        <div class="small" style="margin-top:6px">A justificativa ficará registrada no relatório individual e no histórico da sessão.</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-light" type="button" onclick="fecharModal('modalRevisaoFrequencia')">Cancelar</button>
+      <button class="btn btn-primary" type="button" onclick="salvarRevisaoFrequencia()">Salvar revisão</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-back report-preview-back" id="modalPreviewRelatorio" role="dialog" aria-modal="true" aria-labelledby="previewRelatorioTitulo">
   <div class="modal report-preview-modal">
     <div class="modal-head"><span id="previewRelatorioTitulo">Relatório</span><button class="modal-close" type="button" onclick="fecharPreviewRelatorio()" aria-label="Fechar relatório">×</button></div>
     <div class="report-preview-actions">
       <button class="btn btn-success" type="button" onclick="imprimirPreviewRelatorio()">Imprimir ou salvar em PDF</button>
+      <button id="btnCompartilharPdf" class="btn btn-warning pdf-share-button" type="button" onclick="compartilharPdfWhatsApp()" style="display:none">Enviar PDF via WhatsApp</button>
       <button class="btn btn-light" type="button" onclick="fecharPreviewRelatorio()">Voltar ao relatório</button>
     </div>
     <div class="report-preview-scroll">
@@ -576,7 +626,7 @@ main{padding-top:16px}
     <div class="modal-foot">
       <button class="btn btn-light" onclick="fecharModal('modalMensagem')">Fechar</button>
       <button class="btn btn-primary" onclick="copiarMensagem()">Copiar</button>
-      <button class="btn btn-success" onclick="compartilharMensagem()">WhatsApp</button>
+      <button id="msgWhatsButton" class="btn btn-success" onclick="compartilharMensagem()">WhatsApp</button>
     </div>
   </div>
 </div>
@@ -612,6 +662,7 @@ main{padding-top:16px}
 
 <div id="toast" style="position:fixed;left:50%;bottom:78px;transform:translateX(-50%);background:#111;color:white;padding:10px 16px;border-radius:999px;z-index:200;opacity:0;pointer-events:none;transition:.25s;font-size:13px"><span id="toastText"></span><button id="toastAction" type="button"></button></div>
 
+<script src="jspdf.umd.min.js"></script>
 <script>
 const PFX='arls1997_';
 const SEC_META_KEY=PFX+'security_v1';
@@ -627,6 +678,11 @@ let aba='inicio';
 let appHistoryDepth=0;
 let navigationReady=false;
 let pendingPrintPayload=null;
+let mensagemDestinoIrmaoId='';
+let revisaoStatus='F';
+let revisaoStatusAlterado=false;
+let revisaoRegistroOriginal=null;
+let cabecalhoPdfPromise=null;
 let filtroGrau='';
 let filhosTemp=[];
 let chamadaTemp={};
@@ -1275,21 +1331,18 @@ function htmlHistoricoGraus(i){
   const linhas=hist.map(x=>`${x.data==='1900-01-01'?'Início do histórico':brData(x.data)}: ${grauBadge(x.grau)}`).join(' ');
   return `<div class="alert"><div class="name">Histórico de grau</div><div class="txt">${linhas}</div></div>`;
 }
-function htmlFreqDetalhe(i){const ss=getSessoes().filter(s=>contaParaIrmao(i,s)).sort((a,b)=>b.data.localeCompare(a.data));const pres=getPresencas();return `${linhaFreq(i)}${htmlHistoricoGraus(i)}<div class="divider"></div>${ss.length?ss.map(s=>{const r=(pres[s.id]||{})[i.id]||'F';const g=grauNaData(i,s.data);const detalhe=statusTexto(r);const extra=detalhe&&statusPresenca(r)!=='F'?`<div class="item-sub"><b>Registro:</b> ${h(detalhe)}</div>`:'';return `<div class="list-item"><div class="item-main"><div class="item-title">${brData(s.data)} · ${tipoSessao(s.tipo)}</div><div class="item-sub">${h(s.numero||'')} ${grauBadge(g)}</div>${extra}</div>${badgeStatus(r)}</div>`}).join(''):'<div class="empty"><p>Nenhuma sessão válida para o histórico de grau.</p></div>'}`}
-function abrirSubidaGrau(id){
-  const i=getIrmaos().find(x=>x.id===id);if(!i)return;
-  gIrmaoId.value=id;gData.value=hojeISO();gIrmaoNome.innerHTML=`${h(i.nome)} ${grauBadge(i.grau)}`;
-  const prox={A:'C',C:'M',M:'MI',MI:'MI'}[i.grau]||'C';gNovoGrau.value=prox;
-  abrirModal('modalGrau');
-}
-function salvarSubidaGrau(){
-  const id=gIrmaoId.value;const arr=getIrmaos();const idx=arr.findIndex(x=>x.id===id);if(idx<0)return;
-  const i=arr[idx];const novo=gNovoGrau.value;const data=gData.value||hojeISO();
-  if(!grauValido(novo)){toast('Informe o novo grau');return}
-  if(novo===i.grau){toast('O irmão já possui este grau');return}
-  if(ordemGrau(novo)<ordemGrau(i.grau)&&!confirm('O novo grau é inferior ao grau atual. Registrar mesmo assim?'))return;
-  i.historicoGraus=adicionarHistoricoGrau(i,novo,data);i.grau=novo;arr[idx]=i;setIrmaos(arr);audit('Grau atualizado',`${i.nome}: ${grauSimbolo(novo)} em ${brData(data)}`);fecharModal('modalGrau');renderAtual();toast('Subida registrada sem alterar frequência antiga');
-}
+function htmlFreqDetalhe(i,editavel=false){
+  const ss=getSessoes().filter(s=>contaParaIrmao(i,s)).sort((a,b)=>b.data.localeCompare(a.data));
+  const pres=getPresencas();
+  return `${linhaFreq(i)}${htmlHistoricoGraus(i)}<div class="divider"></div>${ss.length?ss.map(s=>{
+    const r=(pres[s.id]||{})[i.id]||'F';
+    const g=grauNaData(i,s.data);
+    const detalhe=statusTexto(r);
+    const extra=detalhe&&statusPresenca(r)!=='F'?`<div class="item-sub"><b>Registro:</b> ${h(detalhe)}</div>`:'';
+    const conteudo=`<div class="item-main"><div class="item-title">${brData(s.data)} · ${tipoSessao(s.tipo)}</div><div class="item-sub">${h(s.numero||'')} ${grauBadge(g)}</div>${extra}${editavel?'<div class="item-sub report-edit-hint">Toque para revisar este registro individual.</div>':''}</div>${badgeStatus(r)}`;
+    return editavel?`<button type="button" class="list-item report-session-item" onclick="abrirRevisaoFrequencia('${jsArg(i.id)}','${jsArg(s.id)}')">${conteudo}</button>`:`<div class="list-item">${conteudo}</div>`;
+  }).join(''):'<div class="empty"><p>Nenhuma sessão válida para o histórico de grau.</p></div>'}`}
+
 function badgeStatus(r){const st=statusPresenca(r);const m={P:['Presença real','b-ok'],F:['Falta','b-bad'],J:['Falta justificada','b-warn'],V:['Presença em outra Loja','b-ok'],L:['Falta justificada','b-warn'],E:['Falta justificada','b-warn']};const x=m[st]||m.F;return `<span class="badge ${x[1]}">${x[0]}</span>`}
 
 function renderSessoes(){renderPeriodoRGF();const arr=getSessoes().slice().sort((a,b)=>b.data.localeCompare(a.data));document.getElementById('listaSessoes').innerHTML=arr.length?arr.map(s=>{const regs=Object.keys(getPresencas()[s.id]||{}).length;return `<div class="list-item" onclick="editarSessao('${s.id}')"><div class="avatar">📋</div><div class="item-main"><div class="item-title">${h(s.numero||tipoSessao(s.tipo))}</div><div class="item-sub">${brData(s.data)} · ${tipoSessao(s.tipo)} · ${regs} registro(s)</div></div><button class="btn btn-primary btn-sm" onclick="event.stopPropagation();abrirPresenca('${s.id}')">Chamada</button></div>`}).join(''):'<div class="empty"><div class="icon">📋</div><p>Nenhuma sessão cadastrada.</p></div>'}
@@ -1441,8 +1494,15 @@ Esta é uma mensagem fraternal de acompanhamento. Ela não gera alerta do Art. 7
 A Chancelaria solicita, de forma fraterna, que o Irmão informe eventuais justificativas pendentes ou reorganize sua frequência nas próximas sessões.
 
 Fraternalmente,
-Chancelaria da A.R.L.S. Razão e Força Nº 1997.`;abrirMensagem(titulo,texto)}
-function abrirMensagem(titulo,texto){msgTitulo.textContent=titulo;msgTexto.value=texto;abrirModal('modalMensagem')}
+Chancelaria da A.R.L.S. Razão e Força Nº 1997.`;abrirMensagem(titulo,texto,i.id)}
+function abrirMensagem(titulo,texto,irmaoId=''){
+  mensagemDestinoIrmaoId=irmaoId||'';
+  msgTitulo.textContent=titulo;
+  msgTexto.value=texto;
+  const btn=document.getElementById('msgWhatsButton');
+  if(btn){btn.textContent=mensagemDestinoIrmaoId?'WhatsApp do Irmão':'WhatsApp';btn.title=mensagemDestinoIrmaoId?'Abrir a conversa do Irmão selecionado':'Compartilhar mensagem'}
+  abrirModal('modalMensagem')
+}
 function copiarMensagem(){msgTexto.select();document.execCommand('copy');if(navigator.clipboard)navigator.clipboard.writeText(msgTexto.value).catch(()=>{});toast('Mensagem copiada')}
 function obterPonteKodular(){
   if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -1495,14 +1555,75 @@ function publicarResumoNotificacao(){
 function compartilharMensagem(){
   const texto=msgTexto.value.trim();
   if(!texto){toast('A mensagem está vazia');return}
+  if(mensagemDestinoIrmaoId){
+    const i=getIrmaos().find(x=>x.id===mensagemDestinoIrmaoId);
+    if(!i){toast('Irmão não encontrado');return}
+    const numero=numeroWhatsApp(i.telefone);
+    if(!numero){toast('Cadastre um telefone válido para este Irmão');return}
+    const appUrl=`whatsapp://send?phone=${numero}&text=${encodeURIComponent(texto)}`;
+    const webUrl=`https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+    if(enviarAcaoNativa('T',appUrl)){toast(`Abrindo WhatsApp de ${primeiroNome(i.nome)}`);return}
+    iniciarAcaoExterna();
+    window.location.href=webUrl;
+    return
+  }
   if(enviarAcaoNativa('W',texto)){toast('Abrindo WhatsApp');return}
   const abrirWhatsApp=()=>{iniciarAcaoExterna();window.location.href='https://wa.me/?text='+encodeURIComponent(texto)};
   if(navigator.share){iniciarAcaoExterna();navigator.share({text:texto}).then(finalizarAcaoExterna).catch(()=>{finalizarAcaoExterna();abrirWhatsApp()})}else abrirWhatsApp()
 }
 
+
 function initRelatorios(){const arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome));relIrmao.innerHTML='<option value="">Selecione</option>'+arr.map(i=>`<option value="${i.id}">${h(i.nome)}</option>`).join('');renderBackupStatus();renderLixeira();renderAuditoria();renderCentralSeguranca()}
-function renderRelatorioIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);relIndividual.innerHTML=i?htmlRelatorioIndividual(i):'<div class="empty"><p>Selecione um irmão.</p></div>'}
-function htmlRelatorioIndividual(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<div class="empty"><p>Cadastre uma sessão para iniciar a contagem de frequência.</p></div>`;return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)} · presença real ${f.pct}% · falta ${f.pctFalta}% · período ${f.periodoTexto}${f.periodo12?'':' · sem alerta Art. 76'}</div></div></div>${htmlFreqDetalhe(i)}`}
+function renderRelatorioIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);relIndividual.innerHTML=i?htmlRelatorioIndividual(i,true):'<div class="empty"><p>Selecione um irmão.</p></div>'}
+function htmlRelatorioIndividual(i,editavel=false){const f=calcFreq(i);if(!f.periodoAtivo)return `<div class="empty"><p>Cadastre uma sessão para iniciar a contagem de frequência.</p></div>`;return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)} · presença real ${f.pct}% · falta ${f.pctFalta}% · período ${f.periodoTexto}${f.periodo12?'':' · sem alerta Art. 76'}</div></div></div>${htmlFreqDetalhe(i,editavel)}`}
+function abrirRevisaoFrequencia(irmaoId,sessaoId){
+  const i=getIrmaos().find(x=>x.id===irmaoId);
+  const s=getSessoes().find(x=>x.id===sessaoId);
+  if(!i||!s){toast('Registro não encontrado');return}
+  const registro=(getPresencas()[sessaoId]||{})[irmaoId]||'F';
+  revisaoRegistroOriginal=registro&&typeof registro==='object'?{...registro}:registro;
+  revisaoStatus=statusPresencaReal(registro)?'P':statusFaltaJustificada(registro)?'J':'F';
+  revisaoStatusAlterado=false;
+  document.getElementById('revisaoIrmaoId').value=irmaoId;
+  document.getElementById('revisaoSessaoId').value=sessaoId;
+  document.getElementById('revisaoJustificativa').value=revisaoStatus==='J'?justificativaPresenca(registro):'';
+  document.getElementById('revisaoResumo').innerHTML=`<b>${h(i.nome)}</b> ${grauBadge(grauNaData(i,s.data))}<div class="item-sub">${brData(s.data)} · ${h(tipoSessao(s.tipo))}${s.numero?' · '+h(s.numero):''}</div><div class="review-current"><b>Registro atual:</b> ${h(statusTexto(registro))}</div>`;
+  atualizarStatusRevisao();
+  abrirModal('modalRevisaoFrequencia')
+}
+function selecionarStatusRevisao(status){
+  revisaoStatus=['P','F','J'].includes(status)?status:'F';
+  revisaoStatusAlterado=true;
+  atualizarStatusRevisao()
+}
+function atualizarStatusRevisao(){
+  [['P','p'],['F','f'],['J','j']].forEach(([st,cl])=>{const b=document.getElementById('revisaoStatus'+st);if(b)b.className=`status-btn ${revisaoStatus===st?'active '+cl:''}`});
+  const box=document.getElementById('revisaoJustificativaBox');
+  if(box)box.style.display=revisaoStatus==='J'?'block':'none';
+  if(revisaoStatus==='J')setTimeout(()=>document.getElementById('revisaoJustificativa')?.focus(),60)
+}
+function salvarRevisaoFrequencia(){
+  const irmaoId=document.getElementById('revisaoIrmaoId').value;
+  const sessaoId=document.getElementById('revisaoSessaoId').value;
+  const i=getIrmaos().find(x=>x.id===irmaoId);
+  const s=getSessoes().find(x=>x.id===sessaoId);
+  if(!i||!s){toast('Registro não encontrado');return}
+  const justificativa=document.getElementById('revisaoJustificativa').value.trim();
+  if(revisaoStatus==='J'&&!justificativa){toast('Informe a justificativa da falta');return}
+  let novoRegistro;
+  if(revisaoStatus==='P'&&!revisaoStatusAlterado&&statusPresenca(revisaoRegistroOriginal)==='V')novoRegistro=revisaoRegistroOriginal;
+  else novoRegistro=registroPresenca(revisaoStatus,justificativa);
+  const pres=getPresencas();
+  pres[sessaoId]=pres[sessaoId]||{};
+  const anterior=pres[sessaoId][irmaoId]||'F';
+  pres[sessaoId][irmaoId]=novoRegistro;
+  setPresencas(pres);
+  audit('Frequência individual revisada',`${i.nome} · ${brData(s.data)} · ${statusTexto(anterior)} → ${statusTexto(novoRegistro)}`);
+  fecharModal('modalRevisaoFrequencia');
+  renderRelatorioIndividual();
+  renderInicio();
+  toast('Registro individual atualizado')
+}
 function renderRelatorioGeral(){const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta);relGeral.innerHTML=arr.length?arr.map(linhaFreq).join(''):'<div class="empty"><p>Nenhum irmão cadastrado.</p></div>'}
 function corpoRelatorioGeral(){const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório coletivo de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>';return `<h2>Relatório coletivo de frequência</h2><p>Critério: período RGF ${per.texto}. Falta justificada é ausência com justa causa: não soma presença real e não entra no cálculo do Art. 76.${per.completo12?' Alertas administrativos habilitados, pois o período completou 12 meses.':' Período em andamento ou inferior a 12 meses: relatório sem alerta do Art. 76.'}</p><table><thead><tr><th>Irmão</th><th>Grau</th><th>Presença real</th><th>Falta justificada</th><th>Falta</th><th>Total</th></tr></thead><tbody>${getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td>${h(grauSimbolo(i.grau))}</td><td>${f.pct}% (${f.presente})</td><td>${f.justificada}</td><td>${f.pctFalta}% (${f.falta})</td><td>${f.total}</td></tr>`}).join('')}</tbody></table>`}
 function corpoRelatorioIndividual(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<h2>Relatório individual de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>`;const rows=getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>a.data.localeCompare(b.data)).map(s=>{const r=(getPresencas()[s.id]||{})[i.id]||'F';return `<tr><td>${brData(s.data)}</td><td>${tipoSessao(s.tipo)}</td><td>${h(s.numero||'')} ${h(grauSimbolo(grauNaData(i,s.data)))}</td><td>${h(statusTexto(r))}</td></tr>`}).join('');return `<h2>Relatório individual de frequência</h2><p><b>Irmão:</b> ${h(i.nome)} · <b>Grau atual:</b> ${h(grauSimbolo(i.grau))} · <b>Período:</b> ${brData(f.inicio)} a ${brData(f.fim)}${f.periodo12?'':' · sem alerta Art. 76'}</p><p><b>Presença real:</b> ${f.pct}% (${f.presente}) · <b>Falta justificada:</b> ${f.justificada} · <b>Falta:</b> ${f.pctFalta}% (${f.falta})</p><table><thead><tr><th>Data</th><th>Tipo</th><th>Identificação</th><th>Status e justificativa</th></tr></thead><tbody>${rows}</tbody></table>`}
@@ -1517,12 +1638,14 @@ function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false){
   if(modoImpressao)url.searchParams.set('print','1');
   return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
 }
-function abrirPrint(titulo,corpo){
-  pendingPrintPayload={titulo,corpo};
+function abrirPrint(titulo,corpo,meta={}){
+  pendingPrintPayload={titulo,corpo,...meta};
   previewRelatorioTitulo.textContent=titulo;
   previewRelatorioConteudo.innerHTML=corpo;
+  const shareBtn=document.getElementById('btnCompartilharPdf');
+  if(shareBtn){shareBtn.style.display=meta.tipo==='individual'?'inline-flex':'none';shareBtn.disabled=false;shareBtn.textContent='Enviar PDF via WhatsApp'}
   abrirModal('modalPreviewRelatorio');
-  document.querySelector('#modalPreviewRelatorio .report-preview-scroll')?.scrollTo({top:0});
+  document.querySelector('#modalPreviewRelatorio .report-preview-scroll')?.scrollTo({top:0})
 }
 function fecharPreviewRelatorio(){pendingPrintPayload=null;fecharModal('modalPreviewRelatorio')}
 function imprimirPreviewRelatorio(){
@@ -1531,9 +1654,105 @@ function imprimirPreviewRelatorio(){
   if(enviarAcaoNativa('P',url)){toast('Abrindo impressão e PDF');return}
   iniciarAcaoExterna();
   const w=window.open(url,'_blank','noopener');
-  if(!w)window.location.href=url;
+  if(!w)window.location.href=url
 }
-function imprimirIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}abrirPrint('Relatório individual',corpoRelatorioIndividual(i))}
+function imprimirIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}abrirPrint('Relatório individual',corpoRelatorioIndividual(i),{tipo:'individual',irmaoId:i.id})}
+
+function nomeArquivoSeguro(v){return String(v||'relatorio').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'_').replace(/^_+|_+$/g,'').toLowerCase()||'relatorio'}
+function blobParaDataUrl(blob){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result||''));r.onerror=reject;r.readAsDataURL(blob)})}
+async function carregarCabecalhoPdf(){
+  if(!cabecalhoPdfPromise)cabecalhoPdfPromise=fetch('cabecalho-oficial.jpg',{cache:'force-cache'}).then(r=>{if(!r.ok)throw new Error('Cabeçalho indisponível');return r.blob()}).then(blobParaDataUrl);
+  return cabecalhoPdfPromise
+}
+function desenharSimboloMaconico(doc,simbolo,x,y,tamanho=10){
+  const partes=String(simbolo||'').split('∴');
+  let px=x;
+  doc.setFont('helvetica','bold');doc.setFontSize(tamanho);
+  partes.forEach((parte,idx)=>{
+    if(parte){doc.text(parte,px,y);px+=doc.getTextWidth(parte)}
+    if(idx<partes.length-1){
+      const r=.45,baseY=y-1.15;
+      doc.circle(px+1.25,baseY-1.45,r,'F');doc.circle(px+.55,baseY,r,'F');doc.circle(px+1.95,baseY,r,'F');
+      px+=3.1
+    }
+  });
+  return px
+}
+function desenharCabecalhoTabelaPdf(doc,y,colunas){
+  doc.setFillColor(236,232,223);doc.setDrawColor(160);doc.setTextColor(21,37,65);doc.setFont('helvetica','bold');doc.setFontSize(8.5);
+  let x=12;
+  for(const c of colunas){doc.rect(x,y,c.w,10,'FD');doc.text(c.t,x+2,y+6.3,{maxWidth:c.w-4});x+=c.w}
+  doc.setTextColor(25);return y+10
+}
+function adicionarPaginaPdf(doc,cabecalhoData,tituloCurto){
+  doc.addPage();
+  doc.setDrawColor(201,168,76);doc.roundedRect(12,9,186,37,2,2,'S');doc.addImage(cabecalhoData,'JPEG',13,10,184,35);
+  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(21,37,65);doc.text(tituloCurto,105,54,{align:'center'});doc.setTextColor(25);
+  return 61
+}
+async function gerarPdfIndividualBlob(i){
+  if(!window.jspdf?.jsPDF)throw new Error('Gerador de PDF indisponível');
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+  const cabecalho=await carregarCabecalhoPdf();
+  const f=calcFreq(i);
+  doc.setProperties({title:`Relatório individual de frequência - ${i.nome}`,subject:'Chancelaria 1997',author:'A.R.L.S. Razão e Força Nº 1997',creator:'Chancelaria 1997'});
+  doc.setDrawColor(201,168,76);doc.roundedRect(12,9,186,37,2,2,'S');doc.addImage(cabecalho,'JPEG',13,10,184,35);
+  doc.setTextColor(21,37,65);doc.setFont('helvetica','bold');doc.setFontSize(14);doc.text('RELATÓRIO INDIVIDUAL DE FREQUÊNCIA',105,56,{align:'center'});
+  doc.setTextColor(25);doc.setFontSize(10.5);doc.setFont('helvetica','bold');doc.text('Irmão:',12,67);doc.setFont('helvetica','normal');doc.text(i.nome,29,67,{maxWidth:169});
+  doc.setFont('helvetica','bold');doc.text('Grau atual:',12,74);desenharSimboloMaconico(doc,grauSimbolo(i.grau),34,74,10.5);
+  doc.setFont('helvetica','bold');doc.text('Período:',68,74);doc.setFont('helvetica','normal');doc.text(`${brData(f.inicio)} a ${brData(f.fim)}${f.periodo12?'':' · sem alerta Art. 76'}`,86,74,{maxWidth:112});
+  doc.setFont('helvetica','bold');doc.text('Presença real:',12,82);doc.setFont('helvetica','normal');doc.text(`${f.pct}% (${f.presente})`,42,82);
+  doc.setFont('helvetica','bold');doc.text('Falta justificada:',72,82);doc.setFont('helvetica','normal');doc.text(String(f.justificada),108,82);
+  doc.setFont('helvetica','bold');doc.text('Falta:',126,82);doc.setFont('helvetica','normal');doc.text(`${f.pctFalta}% (${f.falta})`,139,82);
+  const colunas=[{t:'Data',w:27},{t:'Tipo',w:45},{t:'Identificação',w:36},{t:'Status e justificativa',w:78}];
+  let y=89;y=desenharCabecalhoTabelaPdf(doc,y,colunas);
+  const sessoes=getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>a.data.localeCompare(b.data));
+  for(const s of sessoes){
+    const r=(getPresencas()[s.id]||{})[i.id]||'F';
+    const dados=[brData(s.data),tipoSessao(s.tipo),String(s.numero||''),statusTexto(r)];
+    const linhas=[doc.splitTextToSize(dados[0],23),doc.splitTextToSize(dados[1],41),doc.splitTextToSize(dados[2],32),doc.splitTextToSize(dados[3],74)];
+    const hIdentificacao=linhas[2].length*4.1+8;
+    const hRow=Math.max(10,hIdentificacao,...linhas.map(a=>a.length*4.1+4));
+    if(y+hRow>274){y=adicionarPaginaPdf(doc,cabecalho,'RELATÓRIO INDIVIDUAL DE FREQUÊNCIA');y=desenharCabecalhoTabelaPdf(doc,y,colunas)}
+    let x=12;doc.setDrawColor(175);doc.setFontSize(8.4);doc.setFont('helvetica','normal');
+    for(let c=0;c<colunas.length;c++){
+      doc.rect(x,y,colunas[c].w,hRow);
+      doc.text(linhas[c],x+2,y+5,{lineHeightFactor:1.15,maxWidth:colunas[c].w-4});
+      x+=colunas[c].w
+    }
+    const g=grauSimbolo(grauNaData(i,s.data));
+    if(g){doc.setFontSize(7.5);desenharSimboloMaconico(doc,g,12+27+45+2,y+5+(linhas[2].length*4.1),7.5)}
+    y+=hRow
+  }
+  if(!sessoes.length){doc.setFont('helvetica','italic');doc.setFontSize(9);doc.text('Nenhuma sessão registrada no período.',14,y+8);y+=14}
+  if(y+43>280){y=adicionarPaginaPdf(doc,cabecalho,'RELATÓRIO INDIVIDUAL DE FREQUÊNCIA')}
+  doc.setFont('helvetica','normal');doc.setFontSize(10);doc.text('____________________________________',105,y+20,{align:'center'});doc.text('Chancelaria',105,y+26,{align:'center'});
+  doc.setDrawColor(150);doc.line(12,y+35,198,y+35);doc.setFontSize(7.3);doc.setTextColor(65);const rodape='Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';doc.text(doc.splitTextToSize(rodape,186),12,y+40,{lineHeightFactor:1.25});
+  return doc.output('blob')
+}
+function baixarBlobPdf(blob,nome){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=nome;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+async function compartilharPdfWhatsApp(){
+  const irmaoId=pendingPrintPayload?.irmaoId;
+  const i=getIrmaos().find(x=>x.id===irmaoId);
+  if(!i){toast('Abra primeiro um relatório individual');return}
+  const btn=document.getElementById('btnCompartilharPdf');
+  const textoOriginal=btn?.textContent||'';
+  if(btn){btn.disabled=true;btn.textContent='Gerando PDF...'}
+  try{
+    const blob=await gerarPdfIndividualBlob(i);
+    const nome=`relatorio_frequencia_${nomeArquivoSeguro(i.nome)}.pdf`;
+    const arquivo=new File([blob],nome,{type:'application/pdf'});
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[arquivo]})){
+      iniciarAcaoExterna();
+      try{await navigator.share({files:[arquivo],title:`Relatório de frequência - ${i.nome}`,text:`Relatório individual de frequência de ${i.nome}.`});toast('Escolha o WhatsApp e o destinatário')}catch(e){if(e?.name!=='AbortError')throw e}finally{finalizarAcaoExterna()}
+    }else{
+      baixarBlobPdf(blob,nome);
+      toast('PDF salvo. Abra Downloads e compartilhe pelo WhatsApp')
+    }
+  }catch(e){console.error(e);toast('Não foi possível gerar ou compartilhar o PDF')}
+  finally{if(btn){btn.disabled=false;btn.textContent=textoOriginal||'Enviar PDF via WhatsApp'}}
+}
 function imprimirGeral(){abrirPrint('Relatório coletivo',corpoRelatorioGeral())}
 function mensagemFrequenciaIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}mensagemFalta(i.id)}
 function mensagemFrequenciaGeral(){const per=periodoRGFDatas();if(!per.ativo){toast('Cadastre uma sessão para iniciar a contagem de frequência');return}const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta);const linhas=arr.map(i=>{const f=calcFreq(i);return `${i.nome}: presença real ${f.pct}%, falta justificada ${f.justificada}, falta ${f.pctFalta}%`}).join('\n');abrirMensagem('Resumo de frequência',`Meus Irmãos, segue resumo de frequência registrado pela Chancelaria no período RGF ${per.texto}.
