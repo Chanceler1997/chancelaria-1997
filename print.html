@@ -5,69 +5,44 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Relatório · Chancelaria 1997</title>
 <style>
-:root{--azul:#152541;--ouro:#c9a84c;--papel:#fffdf8;--texto:#171717}
+:root{--azul:#152541;--ouro:#c9a84c;--texto:#171717}
 *{box-sizing:border-box}
 html,body{margin:0;background:#e9e9e9;color:var(--texto);font-family:Arial,"Segoe UI",sans-serif}
 .toolbar{position:sticky;top:0;z-index:5;display:flex;gap:10px;justify-content:center;padding:12px;background:var(--azul);box-shadow:0 3px 12px rgba(0,0,0,.25)}
 .toolbar button{border:0;border-radius:10px;padding:12px 16px;font-size:15px;font-weight:800;cursor:pointer}
-.primary{background:var(--ouro);color:var(--azul)}
-.secondary{background:#fff;color:var(--azul)}
-.page{width:210mm;min-height:297mm;margin:14px auto;background:#fff;padding:12mm 12mm 20mm;box-shadow:0 4px 22px rgba(0,0,0,.18);position:relative}
-.official-header{display:grid;grid-template-columns:25mm 1fr;gap:6mm;align-items:center;border:1.5px solid var(--ouro);border-radius:12px;padding:5mm 6mm;margin-bottom:7mm;background:linear-gradient(135deg,#fffdf8,#f6edda)}
-.official-header img{width:25mm;height:25mm;object-fit:contain;border-radius:50%}
-.eyebrow{font-size:9pt;font-weight:800;letter-spacing:.7px;color:#8b6d20;text-transform:uppercase}
-.official-header h1{font-family:Georgia,serif;color:var(--azul);font-size:20pt;margin:1mm 0}
-.official-header p{margin:0;font-size:9.5pt;color:#4e4a43}
+.primary{background:var(--ouro);color:var(--azul)}.secondary{background:#fff;color:var(--azul)}
+.page{width:210mm;min-height:297mm;margin:14px auto;background:#fff;padding:10mm 12mm 20mm;box-shadow:0 4px 22px rgba(0,0,0,.18);position:relative}
+.official-header{margin-bottom:7mm;border:1.5px solid var(--ouro);border-radius:10px;overflow:hidden;background:#fff}
+.official-header img{display:block;width:100%;height:auto}
 h2{font-size:13pt;margin:0 0 5mm;text-align:center;text-transform:uppercase;color:var(--azul)}
 p{font-size:10pt;line-height:1.45;margin:2mm 0}
 table{width:100%;border-collapse:collapse;font-size:8.8pt;margin-top:3mm;break-inside:auto}
-tr{break-inside:avoid}
-th,td{border:1px solid #aaa;padding:2.2mm;text-align:left;vertical-align:top}
-th{background:#ece8df;color:var(--azul);font-weight:800}
+tr{break-inside:avoid}th,td{border:1px solid #aaa;padding:2.2mm;text-align:left;vertical-align:top}th{background:#ece8df;color:var(--azul);font-weight:800}
 .assinatura{margin-top:14mm;text-align:center;font-size:10pt}
 .footer{position:absolute;left:12mm;right:12mm;bottom:7mm;border-top:1px solid #999;padding-top:2mm;font-size:7.5pt;line-height:1.3;text-align:justify;color:#333}
 .error{max-width:680px;margin:30px auto;background:#fff;padding:24px;border-radius:12px;border:1px solid #b13b33}
 @page{size:A4;margin:0}
-@media(max-width:800px){.page{width:100%;min-height:0;margin:0;box-shadow:none;padding:16px 14px 90px}.official-header{grid-template-columns:72px 1fr}.official-header img{width:72px;height:72px}.official-header h1{font-size:24px}.footer{position:static;margin-top:28px}.toolbar{position:relative}}
-@media print{html,body{background:#fff}.toolbar{display:none!important}.page{width:auto;min-height:297mm;margin:0;box-shadow:none;padding:12mm 12mm 20mm}.footer{position:fixed;left:12mm;right:12mm;bottom:7mm}}
+@media(max-width:800px){.page{width:100%;min-height:0;margin:0;box-shadow:none;padding:14px 12px 90px}.footer{position:static;margin-top:28px}.toolbar{position:relative}}
+@media print{html,body{background:#fff}.toolbar{display:none!important}.page{width:auto;min-height:297mm;margin:0;box-shadow:none;padding:10mm 12mm 20mm}.footer{position:fixed;left:12mm;right:12mm;bottom:7mm}}
 </style>
 </head>
 <body>
 <div class="toolbar">
   <button class="primary" onclick="window.print()">Imprimir ou salvar em PDF</button>
-  <button class="secondary" onclick="history.back()">Voltar</button>
+  <button class="secondary" onclick="voltarAoAplicativo()">Voltar ao aplicativo</button>
 </div>
 <main id="app"></main>
 <script>
 (function(){
   const app=document.getElementById('app');
-  function decodeBase64UrlUtf8(raw){
-    raw=raw.replace(/-/g,'+').replace(/_/g,'/');
-    while(raw.length%4)raw+='=';
-    const bin=atob(raw),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
-    return new TextDecoder().decode(bytes);
-  }
+  function decodeBase64UrlUtf8(raw){raw=raw.replace(/-/g,'+').replace(/_/g,'/');while(raw.length%4)raw+='=';const bin=atob(raw),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+  window.voltarAoAplicativo=function(){if(history.length>1)history.back();else window.close()};
   try{
-    const raw=location.hash.slice(1);
-    if(!raw)throw new Error('Relatório não recebido.');
-    const data=JSON.parse(decodeBase64UrlUtf8(raw));
-    history.replaceState(null,'',location.pathname);
-    document.title=(data.titulo||'Relatório')+' · Chancelaria 1997';
-    app.innerHTML=`<article class="page">
-      <header class="official-header">
-        <img src="icon-512.png" alt="Emblema Razão e Força">
-        <div><div class="eyebrow">Sistema de Gestão da Chancelaria</div><h1>Chancelaria 1997</h1><p>A.R.L.S. Razão e Força nº 1997 · Porto Murtinho, Mato Grosso do Sul</p></div>
-      </header>
-      ${data.corpo||''}
-      <div class="assinatura">____________________________________<br>Chancelaria</div>
-      <div class="footer">Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.</div>
-    </article>`;
-    const img=app.querySelector('img');
-    const imprimir=()=>setTimeout(()=>{try{window.print()}catch(e){}},700);
-    if(img&&!img.complete)img.addEventListener('load',imprimir,{once:true});else imprimir();
-  }catch(e){
-    app.innerHTML=`<div class="error"><h2>Não foi possível abrir o relatório</h2><p>${String(e.message||e)}</p><p>Volte ao aplicativo e gere o relatório novamente.</p></div>`;
-  }
+    const raw=location.hash.slice(1);if(!raw)throw new Error('Relatório não recebido.');
+    const data=JSON.parse(decodeBase64UrlUtf8(raw));history.replaceState(null,'',location.pathname);document.title=(data.titulo||'Relatório')+' · Chancelaria 1997';
+    app.innerHTML=`<article class="page"><header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header>${data.corpo||''}<div class="assinatura">____________________________________<br>Chancelaria</div><div class="footer">Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.</div></article>`;
+    const img=app.querySelector('img');const imprimir=()=>setTimeout(()=>{try{window.print()}catch(e){}},700);if(img&&!img.complete)img.addEventListener('load',imprimir,{once:true});else imprimir();
+  }catch(e){app.innerHTML=`<div class="error"><h2>Não foi possível abrir o relatório</h2><p>${String(e.message||e)}</p><p>Volte ao aplicativo e gere o relatório novamente.</p></div>`}
 })();
 </script>
 </body>
