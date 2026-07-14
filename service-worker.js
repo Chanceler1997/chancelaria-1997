@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v17-periodo-rgf-movel";
+const CACHE_NAME = "chancelaria-1997-v18-periodo-individual-ingresso";
 const APP_FILES = [
   "./",
   "./index.html",
