@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#152541">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="3.0.0-relatorios-historico">
+<meta name="application-version" content="3.2.0-periodo-rgf-movel">
 <style>
 :root{
   --azul:#152541;
@@ -337,15 +337,11 @@ main{padding-top:16px}
 
   <section id="sessoes" class="section">
     <div class="card">
-      <div class="card-head">📆 Período de apuração RGF</div>
+      <div class="card-head">📆 Período regulamentar de frequência</div>
       <div class="card-body">
         <div class="row">
-          <div class="field"><label>Início da contagem automático</label><input id="pInicio" type="date" onchange="salvarPeriodoRGF()"></div>
-          <div class="field"><label>Fim da contagem opcional</label><input id="pFim" type="date" onchange="salvarPeriodoRGF()"></div>
-        </div>
-        <div class="toolbar" style="margin-bottom:8px">
-          <button class="btn btn-light btn-sm" onclick="completarPeriodoRGF()">Completar 12 meses</button>
-          <button class="btn btn-light btn-sm" onclick="limparPeriodoRGF()">Limpar fim</button>
+          <div class="field"><label>Início automático, 12 meses anteriores</label><input id="pInicio" type="date" readonly></div>
+          <div class="field"><label>Data final automática</label><input id="pFim" type="date" readonly></div>
         </div>
         <div class="small" id="pResumo"></div>
       </div>
@@ -962,9 +958,13 @@ function iniciarSeguranca(){
 function h(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function attr(v){return h(v)}
 function jsArg(v){return h(String(v??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n'))}
-function hojeISO(){return new Date().toISOString().slice(0,10)}
-function mesAtualISO(){return new Date().toISOString().slice(0,7)}
-function periodoPadraoRGF(){return {inicio:'',fim:''}}
+function dataLocalISO(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function hojeISO(){return dataLocalISO(new Date())}
+function mesAtualISO(){return hojeISO().slice(0,7)}
+function periodoPadraoRGF(){
+  const fim=hojeISO();
+  return {inicio:addMesesData(fim,-12),fim};
+}
 function dataValida(d){return /^\d{4}-\d{2}-\d{2}$/.test(String(d||''))}
 function mesValido(m){return /^\d{4}-\d{2}$/.test(String(m||''))}
 function addMesesMes(m,qtd){const [a,mes]=String(m).split('-').map(Number);const d=new Date(a,mes-1+qtd,1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`}
@@ -973,7 +973,7 @@ function addMesesData(data,qtd){
   const [a,m,dia]=data.split('-').map(Number);
   const ultimo=new Date(a,m-1+qtd+1,0).getDate();
   const d=new Date(a,m-1+qtd,Math.min(dia,ultimo));
-  return d.toISOString().slice(0,10);
+  return dataLocalISO(d);
 }
 function mesesEntreDatas(inicio,fim){
   if(!dataValida(inicio)||!dataValida(fim)||fim<inicio)return 0;
@@ -997,36 +997,36 @@ function menorDataSessao(){
   return datas[0]||'';
 }
 function sincronizarInicioPeriodoRGF(){
-  const antiga=menorDataSessao();
-  const atual=dbGet('periodoFreqRGF',periodoPadraoRGF())||periodoPadraoRGF();
-  const inicio=antiga||normalizarDataPeriodo(atual.inicio,'inicio');
-  const fim=normalizarDataPeriodo(atual.fim,'fim');
-  const novo={inicio,fim};
+  const novo=periodoPadraoRGF();
+  const atual=dbGet('periodoFreqRGF',{})||{};
   if(atual.inicio!==novo.inicio||atual.fim!==novo.fim)dbSet('periodoFreqRGF',novo);
   return novo;
 }
-function menosUmDiaISO(d){const [a,m,dd]=String(d).slice(0,10).split('-').map(Number);const x=new Date(a,m-1,dd);x.setDate(x.getDate()-1);return x.toISOString().slice(0,10)}
+function menosUmDiaISO(d){const [a,m,dd]=String(d).slice(0,10).split('-').map(Number);const x=new Date(a,m-1,dd);x.setDate(x.getDate()-1);return dataLocalISO(x)}
 function minData(a,b){if(!dataValida(a))return b;if(!dataValida(b))return a;return a<b?a:b}
-function getPeriodoRGF(){
-  const p=sincronizarInicioPeriodoRGF();
-  return {inicio:dataValida(p.inicio)?p.inicio:'',fim:dataValida(p.fim)?p.fim:''};
-}
-function setPeriodoRGF(p){dbSet('periodoFreqRGF',{inicio:normalizarDataPeriodo(p.inicio,'inicio'),fim:normalizarDataPeriodo(p.fim,'fim')})}
+function getPeriodoRGF(){return sincronizarInicioPeriodoRGF()}
+function setPeriodoRGF(){return sincronizarInicioPeriodoRGF()}
 function periodoRGFDatas(){
-  const p=getPeriodoRGF();
-  const inicio=dataValida(p.inicio)?p.inicio:'';
-  if(!inicio)return {...p,ativo:false,temFim:false,completo12:false,meses:0,inicio:'',fim:'',fimCalculo:'',texto:'período não definido'};
-  const temFim=dataValida(p.fim);
-  const hoje=hojeISO();
-  const fimInformado=temFim?p.fim:'';
-  const fimCalculo=temFim?minData(fimInformado,hoje):hoje;
-  if(fimCalculo<inicio)return {...p,ativo:false,temFim,completo12:false,meses:0,inicio:'',fim:'',fimCalculo:'',texto:'período inválido'};
-  const meses=mesesEntreDatas(inicio,temFim?fimInformado:fimCalculo);
-  const data12=addMesesData(inicio,12);
-  const completo12=temFim&&fimInformado<=hoje&&fimInformado>=data12;
-  const texto=temFim?`${brData(inicio)} a ${brData(fimInformado)}`:`${brData(inicio)} a hoje`;
-  const parcial=temFim&&fimInformado>hoje;
-  return {...p,ativo:true,temFim,parcial,completo12,meses,inicio,fim:fimCalculo,fimInformado,fimCalculo,texto,data12};
+  const p=periodoPadraoRGF();
+  const antiga=menorDataSessao();
+  const coberturaCompleta=!!antiga&&antiga<=p.inicio;
+  const texto=`${brData(p.inicio)} a ${brData(p.fim)}`;
+  return {
+    ...p,
+    ativo:true,
+    temFim:true,
+    parcial:!coberturaCompleta,
+    completo12:coberturaCompleta,
+    coberturaCompleta,
+    meses:12,
+    inicio:p.inicio,
+    fim:p.fim,
+    fimInformado:p.fim,
+    fimCalculo:p.fim,
+    texto,
+    data12:p.fim,
+    primeiraSessao:antiga
+  };
 }
 function brMes(m){const nomes=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];if(dataValida(m))return brData(m).slice(3);if(!mesValido(m))return h(m);const [a,mm]=m.split('-');return `${nomes[Number(mm)-1]}/${a}`}
 function renderPeriodoRGF(){
@@ -1034,39 +1034,23 @@ function renderPeriodoRGF(){
   const elFim=document.getElementById('pFim');
   const elResumo=document.getElementById('pResumo');
   if(!elInicio||!elFim)return;
-  const p=getPeriodoRGF();const d=periodoRGFDatas();const antiga=menorDataSessao();
-  elInicio.value=p.inicio;elFim.value=p.fim;
+  const d=periodoRGFDatas();
+  elInicio.value=d.inicio;
+  elFim.value=d.fim;
   if(!elResumo)return;
-  if(!antiga){elResumo.innerHTML='Cadastre a primeira sessão. O início da contagem será preenchido automaticamente pela sessão mais antiga.';return}
-  if(!d.ativo){elResumo.innerHTML='Período inválido. Verifique as datas de início e fim da contagem.';return}
-  if(!d.temFim){elResumo.innerHTML=`Contagem em andamento desde ${brData(d.inicio)}, definida pela sessão mais antiga cadastrada. O app calcula presença e falta até hoje, mas não gera alerta do Art. 76 sem data final.`;return}
-  if(d.parcial){elResumo.innerHTML=`Período escolhido: ${d.texto}. Como o fim ainda não chegou, o relatório usa sessões lançadas até hoje e não gera alerta do Art. 76.`;return}
-  if(d.completo12)elResumo.innerHTML=`Cálculo do Art. 76: ${d.texto}. O período completou 12 meses ou mais. Alertas administrativos ativos.`;
-  else elResumo.innerHTML=`Relatório habilitado para ${d.texto}. Período com ${d.meses} mês(es) completos. O app calcula presença e falta, mas não gera alerta do Art. 76 porque a contagem não completou 12 meses.`;
+  if(!d.primeiraSessao){
+    elResumo.innerHTML=`Período RGF automático: <b>${d.texto}</b>. Cadastre sessões para iniciar a apuração.`;
+    return;
+  }
+  if(d.coberturaCompleta){
+    elResumo.innerHTML=`Período RGF automático e móvel: <b>${d.texto}</b>. A cada dia, a janela avança um dia. A base cadastrada cobre integralmente os 12 meses e os alertas administrativos estão habilitados.`;
+    return;
+  }
+  elResumo.innerHTML=`Período RGF automático e móvel: <b>${d.texto}</b>. A base histórica cadastrada começa em ${brData(d.primeiraSessao)}. O relatório calcula as sessões disponíveis, mas não emite alerta do Art. 76 até haver cobertura integral dos 12 meses.`;
 }
-function completarPeriodoRGF(){
-  const elInicio=document.getElementById('pInicio');const elFim=document.getElementById('pFim');
-  if(!elInicio||!elFim||!dataValida(elInicio.value)){toast('Cadastre uma sessão para definir o início da contagem');return}
-  elFim.value=addMesesData(elInicio.value,12);
-  salvarPeriodoRGF();
-}
-function limparPeriodoRGF(){
-  const elFim=document.getElementById('pFim');
-  if(elFim)elFim.value='';
-  const antiga=menorDataSessao();
-  setPeriodoRGF({inicio:antiga,fim:''});
-  renderPeriodoRGF();renderAtual();
-}
-function salvarPeriodoRGF(){
-  const elInicio=document.getElementById('pInicio');const elFim=document.getElementById('pFim');
-  if(!elInicio||!elFim)return;
-  const antiga=menorDataSessao();
-  const inicio=antiga||normalizarDataPeriodo(elInicio.value,'inicio');
-  const fim=normalizarDataPeriodo(elFim.value,'fim');
-  setPeriodoRGF({inicio,fim});
-  renderPeriodoRGF();
-  renderAtual();
-}
+function completarPeriodoRGF(){toast('O período RGF agora é automático e sempre considera os últimos 12 meses')}
+function limparPeriodoRGF(){toast('O período RGF automático não possui data final manual')}
+function salvarPeriodoRGF(){renderPeriodoRGF();renderAtual()}
 function brData(d){if(!d)return '-';const p=String(d).slice(0,10).split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:h(d)}
 function anivISO(v){
   v=String(v||'').trim();
@@ -1315,11 +1299,11 @@ function renderInicio(){
   const an=aniversarios(7);document.getElementById('inicio-aniversarios').innerHTML=an.length?`<div class="card"><div class="card-head">🎂 Aniversários nos próximos 7 dias</div><div class="card-body">${an.map(cardAniv).join('')}</div></div>`:'';
   document.getElementById('inicio-proxima-sessao').innerHTML=proxSess?`<div class="card"><div class="card-head">📋 ${proxSess.data>=hojeISO()?'Próxima sessão':'Última sessão'}</div><div class="card-body"><div class="item-title">${h(proxSess.numero||tipoSessao(proxSess.tipo))}</div><div class="item-sub">${brData(proxSess.data)} · ${tipoSessao(proxSess.tipo)}</div><div class="toolbar" style="margin-top:10px;margin-bottom:0"><button class="btn btn-primary btn-sm" onclick="abrirPresenca('${proxSess.id}')">Fazer chamada</button><button class="btn btn-light btn-sm" onclick="editarSessao('${proxSess.id}')">Editar</button></div></div></div>`:'';
   const pd=datasProximas(365)[0];document.getElementById('inicio-proxima-data').innerHTML=pd?cardData(pd,true):'';
-  document.getElementById('inicio-alertas').innerHTML=alertas.length?`<div class="card"><div class="card-head">⚠️ Art. 76 do RGF</div><div class="card-body">${alertas.map(i=>{const f=calcFreq(i);return `<div class="alert"><div class="name">${h(i.nome)} ${grauBadge(i.grau)}</div><div class="txt">Falta: ${f.pctFalta}% · ${f.falta} de ${f.total} sessões no período RGF ${f.periodoTexto}. Atingiu o limite administrativo de 50% previsto no RGF. Gerar notificação não declara irregularidade automática.</div><button class="btn btn-warning btn-sm" style="margin-top:8px" onclick="mensagemFalta('${i.id}')">Gerar notificação</button></div>`}).join('')}</div></div>`:'';
+  document.getElementById('inicio-alertas').innerHTML=alertas.length?`<div class="card"><div class="card-head">⚠️ Art. 76 do RGF</div><div class="card-body">${alertas.map(i=>{const f=calcFreq(i);return `<div class="alert"><div class="name">${h(i.nome)} ${grauBadge(i.grau)}</div><div class="txt">Falta: ${f.pctFalta}% · ${f.falta} de ${f.total} sessões na janela móvel RGF ${f.periodoTexto}. Atingiu o limite administrativo de 50% previsto no RGF. Gerar notificação não declara irregularidade automática.</div><button class="btn btn-warning btn-sm" style="margin-top:8px" onclick="mensagemFalta('${i.id}')">Gerar notificação</button></div>`}).join('')}</div></div>`:'';
   document.getElementById('inicio-frequencia').innerHTML=ir.length?ir.slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta).map(i=>linhaFreq(i)).join(''):'<div class="empty"><div class="icon">👤</div><p>Nenhum irmão cadastrado.</p></div>';
 }
 
-function linhaFreq(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:900;color:var(--azul);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h(i.nome)}</span><span class="badge b-warn">sem contagem</span></div><div class="small">Cadastre uma sessão. A contagem começa na sessão mais antiga cadastrada.</div></div>`;return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:900;color:var(--azul);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h(i.nome)}</span><span class="badge ${classeFreq(f)}">${f.pctFalta}% falta</span></div><div class="progress"><div class="bar" style="width:${f.pct}%;background:${corPct(f.pct)}"></div></div><div class="small">Período RGF ${f.periodoTexto}: ${f.presente} presença real · ${f.justificada} falta justificada · ${f.falta} falta · presença real ${f.pct}% · falta ${f.pctFalta}%${f.periodo12?'':' · sem alerta Art. 76'}${f.periodoParcial?' · contagem parcial até hoje':''}</div></div>`}
+function linhaFreq(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:900;color:var(--azul);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h(i.nome)}</span><span class="badge b-warn">sem contagem</span></div><div class="small">Cadastre sessões para iniciar a apuração na janela móvel dos últimos 12 meses.</div></div>`;return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:900;color:var(--azul);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h(i.nome)}</span><span class="badge ${classeFreq(f)}">${f.pctFalta}% falta</span></div><div class="progress"><div class="bar" style="width:${f.pct}%;background:${corPct(f.pct)}"></div></div><div class="small">Período RGF ${f.periodoTexto}: ${f.presente} presença real · ${f.justificada} falta justificada · ${f.falta} falta · presença real ${f.pct}% · falta ${f.pctFalta}%${f.periodo12?'':' · base histórica parcial, sem alerta Art. 76'}</div></div>`}
 function renderIrmaos(){
   const busca=(document.getElementById('buscaIrmao')?.value||'').toLowerCase();let arr=getIrmaos();if(filtroGrau)arr=arr.filter(i=>i.grau===filtroGrau);if(busca)arr=arr.filter(i=>i.nome.toLowerCase().includes(busca)||String(i.cargo||'').toLowerCase().includes(busca)||String(i.cim||'').toLowerCase().includes(busca));arr.sort((a,b)=>a.nome.localeCompare(b.nome));
   document.getElementById('listaIrmaos').innerHTML=arr.length?arr.map(i=>{const f=calcFreq(i);const qtdFilhos=(i.familia?.filhos||[]).length;const fam=[i.familia?.esposa?.nome?'1 esposa':'',qtdFilhos?`${qtdFilhos} filho(s)`:'' ].filter(Boolean).join(' · ');return `<div class="list-item" onclick="verIrmao('${i.id}')"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''}${i.cargo?' · '+h(i.cargo):''}${fam?' · '+h(fam):''}</div><div class="progress"><div class="bar" style="width:${f.pct}%;background:${corPct(f.pct)}"></div></div><div class="small">Presença real ${f.pct}% · falta ${f.pctFalta}%</div></div><div class="item-side">${i.telefone?`<button class="btn btn-success btn-sm" type="button" onclick="event.stopPropagation();abrirWhatsAppTelefone('${i.id}')">Whats</button>`:''}</div></div>`}).join(''):'<div class="empty"><div class="icon">👤</div><p>Nenhum irmão encontrado. Use o botão Novo irmão.</p></div>';
@@ -1519,7 +1503,7 @@ A∴R∴L∴S∴ Razão e Força Nº 1997
 Benfeitora da Ordem.`;abrirMensagem('Mensagem para o grupo',txt)}
 function mensagemFalta(id){const i=getIrmaos().find(x=>x.id===id);if(!i)return;const f=calcFreq(i);if(!f.periodoAtivo){toast('Cadastre uma sessão para iniciar a contagem de frequência');return}const titulo=(f.periodo12&&f.pctFalta>=50&&f.total>0)?'Notificação administrativa de frequência':'Mensagem fraternal de frequência';let texto=`Meu Irmão ${primeiroNome(i.nome)}, saúde e alegria.
 
-A Chancelaria registra ${f.pctFalta}% de faltas no período ${f.periodoTexto}, correspondente a ${f.falta} falta(s) em ${f.total} sessão(ões) apurada(s).
+A Chancelaria registra ${f.pctFalta}% de faltas na janela móvel ${f.periodoTexto}, correspondente a ${f.falta} falta(s) em ${f.total} sessão(ões) apurada(s).
 
 Também constam ${f.presente} presença(s) real(is) e ${f.justificada} falta(s) justificada(s).
 
@@ -1531,7 +1515,7 @@ Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos 
 
 Art. 77 do RGF: o Maçom infrequente deve ser notificado para justificar suas faltas no prazo de trinta dias, contado do recebimento da notificação. A notificação não o torna irregular.`}else{texto+=`
 
-Esta é uma mensagem fraternal de acompanhamento. Ela não gera alerta do Art. 76 porque o período ainda não completou 12 meses, ou porque a apuração ainda está em andamento.`}texto+=`
+Esta é uma mensagem fraternal de acompanhamento. Ela não gera alerta do Art. 76 porque a base histórica cadastrada ainda não cobre integralmente os últimos 12 meses.`}texto+=`
 
 A Chancelaria solicita, de forma fraterna, que o Irmão informe eventuais justificativas pendentes ou reorganize sua frequência nas próximas sessões.
 
@@ -1694,7 +1678,7 @@ function salvarRevisaoFrequencia(){
 function linhaRelatorioColetivo(i){const f=calcFreq(i);const resumo=f.periodoAtivo?`Presença real ${f.pct}% · falta justificada ${f.justificada} · falta ${f.pctFalta}%`:'Sem período de apuração';return `<button type="button" class="collective-person-card" onclick="abrirIrmaoDoRelatorioColetivo('${i.id}')"><span class="avatar">${h(iniciais(i.nome))}</span><span><span class="collective-name">${h(i.nome)}</span><span class="collective-meta">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''}<br>${h(resumo)}</span>${f.periodoAtivo?`<span class="progress"><span class="bar" style="display:block;width:${f.pct}%;background:${corPct(f.pct)}"></span></span>`:''}</span><span class="collective-action"><span class="badge ${f.periodoAtivo?classeFreq(f):'b-warn'}">${f.periodoAtivo?f.pctFalta+'% falta':'sem contagem'}</span><span class="collective-link">Revisar</span><span class="collective-arrow">›</span></span></button>`}
 function abrirIrmaoDoRelatorioColetivo(id){const i=getIrmaos().find(x=>x.id===id);if(!i){toast('Irmão não encontrado');return}relIrmao.value=id;renderRelatorioIndividual(true);requestAnimationFrame(()=>document.getElementById('relIndividual')?.scrollIntoView({behavior:'smooth',block:'start'}));toast('Relatório individual aberto para revisão')}
 function renderRelatorioGeral(){const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta||a.nome.localeCompare(b.nome));relGeral.innerHTML=arr.length?`<div class="small" style="margin-bottom:10px">Toque em um Irmão para abrir o relatório individual e revisar as frequências.</div>${arr.map(linhaRelatorioColetivo).join('')}`:'<div class="empty"><p>Nenhum irmão cadastrado.</p></div>'}
-function corpoRelatorioGeral(){const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório coletivo de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>';return `<h2>Relatório coletivo de frequência</h2><p>Critério: período RGF ${per.texto}. Falta justificada é ausência com justa causa: não soma presença real e não entra no cálculo do Art. 76.${per.completo12?' Alertas administrativos habilitados, pois o período completou 12 meses.':' Período em andamento ou inferior a 12 meses: relatório sem alerta do Art. 76.'}</p><table class="collective-table"><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Presença real</th><th>Falta justificada</th><th>Falta</th><th>Total</th></tr></thead><tbody>${getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td>${i.cim?h(i.cim):'Não informado'}</td><td>${h(grauSimbolo(i.grau))}</td><td>${f.pct}% (${f.presente})</td><td>${f.justificada}</td><td>${f.pctFalta}% (${f.falta})</td><td>${f.total}</td></tr>`}).join('')}</tbody></table>`}
+function corpoRelatorioGeral(){const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório coletivo de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>';return `<h2>Relatório coletivo de frequência</h2><p>Critério: janela móvel RGF dos últimos 12 meses, ${per.texto}. Falta justificada é ausência com justa causa: não soma presença real e não entra no cálculo do Art. 76.${per.completo12?' A base cadastrada cobre integralmente a janela móvel de 12 meses e os alertas administrativos estão habilitados.':' A base histórica cadastrada é parcial: o relatório exibe os dados disponíveis, sem alerta do Art. 76.'}</p><table class="collective-table"><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Presença real</th><th>Falta justificada</th><th>Falta</th><th>Total</th></tr></thead><tbody>${getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td>${i.cim?h(i.cim):'Não informado'}</td><td>${h(grauSimbolo(i.grau))}</td><td>${f.pct}% (${f.presente})</td><td>${f.justificada}</td><td>${f.pctFalta}% (${f.falta})</td><td>${f.total}</td></tr>`}).join('')}</tbody></table>`}
 function corpoRelatorioIndividual(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<h2>Relatório individual de frequência</h2><p>Cadastre uma sessão para iniciar a contagem de frequência.</p>`;const rows=getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>a.data.localeCompare(b.data)).map(s=>{const r=(getPresencas()[s.id]||{})[i.id]||'F';return `<tr><td>${brData(s.data)}</td><td>${tipoSessao(s.tipo)}</td><td>${h(s.numero||'')} ${h(grauSimbolo(grauNaData(i,s.data)))}</td><td>${h(statusTexto(r))}</td></tr>`}).join('');return `<h2>Relatório individual de frequência</h2><p><b>Irmão:</b> ${h(i.nome)} · <b>CIM:</b> ${i.cim?h(i.cim):'Não informado'} · <b>Grau atual:</b> ${h(grauSimbolo(i.grau))} · <b>Período:</b> ${brData(f.inicio)} a ${brData(f.fim)}${f.periodo12?'':' · sem alerta Art. 76'}</p><p><b>Presença real:</b> ${f.pct}% (${f.presente}) · <b>Falta justificada:</b> ${f.justificada} · <b>Falta:</b> ${f.pctFalta}% (${f.falta})</p><table class="individual-table"><thead><tr><th>Data</th><th>Tipo</th><th>Identificação</th><th>Status e justificativa</th></tr></thead><tbody>${rows}</tbody></table>`}
 function codificarBase64UrlUtf8(valor){
   const bytes=new TextEncoder().encode(valor);let bin='';
@@ -1727,11 +1711,11 @@ function imprimirIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value)
 
 function imprimirGeral(){abrirPrint('Relatório coletivo',corpoRelatorioGeral())}
 function mensagemFrequenciaIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}mensagemFalta(i.id)}
-function mensagemFrequenciaGeral(){const per=periodoRGFDatas();if(!per.ativo){toast('Cadastre uma sessão para iniciar a contagem de frequência');return}const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta);const linhas=arr.map(i=>{const f=calcFreq(i);return `${i.nome}: presença real ${f.pct}%, falta justificada ${f.justificada}, falta ${f.pctFalta}%`}).join('\n');abrirMensagem('Resumo de frequência',`Meus Irmãos, segue resumo de frequência registrado pela Chancelaria no período RGF ${per.texto}.
+function mensagemFrequenciaGeral(){const per=periodoRGFDatas();if(!per.ativo){toast('Cadastre uma sessão para iniciar a contagem de frequência');return}const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta);const linhas=arr.map(i=>{const f=calcFreq(i);return `${i.nome}: presença real ${f.pct}%, falta justificada ${f.justificada}, falta ${f.pctFalta}%`}).join('\n');abrirMensagem('Resumo de frequência',`Meus Irmãos, segue resumo de frequência registrado pela Chancelaria na janela móvel RGF ${per.texto}.
 
 ${linhas}
 
-Critério: falta justificada é ausência com justa causa: não soma presença real e não entra no cálculo do Art. 76.${per.completo12?'':' Este período não completa 12 meses, por isso não gera alerta administrativo.'}
+Critério: falta justificada é ausência com justa causa: não soma presença real e não entra no cálculo do Art. 76.${per.completo12?'':' A base histórica cadastrada ainda não cobre integralmente os últimos 12 meses, por isso não gera alerta administrativo.'}
 
 Fraternalmente,
 Chancelaria da A.R.L.S. Razão e Força Nº 1997.`)}
