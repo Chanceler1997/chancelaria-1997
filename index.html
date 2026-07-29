@@ -247,6 +247,68 @@ main{padding-top:16px}
   .report-session-actions{width:100%;justify-content:space-between}
 }
 
+
+
+/* Consulta profissional de sessão */
+.session-list-card{cursor:pointer;align-items:flex-start;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+.session-list-card:active{transform:scale(.993);border-color:rgba(201,168,76,.62)}
+.session-card-side{display:flex;flex-direction:column;align-items:flex-end;gap:7px;min-width:116px}
+.session-card-summary{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.session-consult-chip{display:inline-flex;align-items:center;gap:5px;color:#745817;background:#fff4ce;border:1px solid rgba(201,168,76,.55);border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;white-space:nowrap}
+.session-detail-hero{background:linear-gradient(145deg,#fffefb,#f2e7d3);border:1px solid rgba(201,168,76,.34);border-radius:16px;padding:14px;margin-bottom:12px}
+.session-detail-title{font-family:Georgia,"Times New Roman",serif;font-size:18px;font-weight:800;color:var(--azul);line-height:1.25}
+.session-detail-meta{font-size:12px;color:var(--muted);line-height:1.55;margin-top:6px}
+.session-detail-note{font-size:12px;color:#5f5546;line-height:1.45;margin-top:9px;padding-top:9px;border-top:1px solid rgba(201,168,76,.22)}
+.session-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.session-stat{background:#fffdf8;border:1px solid var(--linha);border-radius:13px;padding:10px 6px;text-align:center}
+.session-stat b{display:block;font-size:20px;line-height:1;color:var(--azul)}
+.session-stat span{display:block;margin-top:5px;font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.25px;color:var(--muted)}
+.session-present-list{display:grid;gap:8px}
+.session-present-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;background:#fffdf8;border:1px solid var(--linha);border-radius:13px;padding:10px}
+.session-present-number{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:#152541;color:#e4c774;font-size:11px;font-weight:900}
+.session-present-name{font-size:13px;font-weight:900;color:var(--azul);line-height:1.3}
+.session-present-meta{font-size:10px;color:var(--muted);line-height:1.4;margin-top:3px}
+.session-present-type{font-size:9px;font-weight:900;border-radius:999px;padding:5px 8px;white-space:nowrap;background:#dff3e8;color:#145c34}
+.session-present-type.visit{background:#eaf2fb;color:#1f537e}
+.session-modal-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+.session-modal-actions .btn{width:100%;padding-left:8px;padding-right:8px}
+.report-preview-page .session-report-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5mm;margin:4mm 0}
+.report-preview-page .session-report-box{border:1px solid #b8b0a2;border-radius:2mm;padding:2.5mm;text-align:center;background:#faf8f3}
+.report-preview-page .session-report-box b{display:block;font-size:13pt;color:#152541}
+.report-preview-page .session-report-box span{display:block;font-size:7.5pt;margin-top:1mm;text-transform:uppercase;font-weight:800;color:#5d574e}
+.report-preview-page .session-attendance-table th:nth-child(1){width:7%}.report-preview-page .session-attendance-table th:nth-child(2){width:35%}.report-preview-page .session-attendance-table th:nth-child(3){width:16%}.report-preview-page .session-attendance-table th:nth-child(4){width:14%}.report-preview-page .session-attendance-table th:nth-child(5){width:28%}
+.report-preview-signature.dual-signature{display:grid;grid-template-columns:1fr 1fr;gap:18mm;align-items:end}
+@media(max-width:600px){
+  .session-list-card{align-items:center}.session-card-side{min-width:0}.session-stat-grid{grid-template-columns:repeat(2,1fr)}
+  .session-present-row{grid-template-columns:34px minmax(0,1fr)}.session-present-type{grid-column:2;justify-self:start}
+  .session-modal-actions{grid-template-columns:1fr}.report-preview-page .session-report-summary{grid-template-columns:repeat(2,1fr)}
+  .report-preview-signature.dual-signature{grid-template-columns:1fr;gap:10mm}
+}
+
+
+/* Fluxo profissional de frequência e abono */
+.review-status-two{grid-template-columns:repeat(2,1fr)}
+.processo-modal{max-width:720px}
+.processo-notice{display:grid;gap:5px;background:#eef3fa;border:1px solid #99b2d1;border-radius:14px;padding:12px;margin-bottom:12px;color:#183659}
+.processo-notice b{font-size:13px}.processo-notice span{font-size:11px;line-height:1.5}
+.processo-section{background:rgba(255,253,248,.82);border:1px solid rgba(201,168,76,.28);border-radius:15px;padding:12px;margin-top:12px}
+.processo-section-title{display:flex;align-items:center;gap:8px;color:var(--azul);font-family:Georgia,"Times New Roman",serif;font-weight:900;margin-bottom:10px}
+.processo-section-title span{width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:var(--azul);color:var(--ouro);font-family:Arial,sans-serif;font-size:12px}
+.processo-toolbar{margin:4px 0 0}.processo-toolbar .btn{flex:1}
+.processo-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:10px}
+.processo-summary-box{background:#fffdf8;border:1px solid var(--linha);border-radius:12px;text-align:center;padding:9px 5px}
+.processo-summary-box b{display:block;color:var(--azul);font-size:18px}.processo-summary-box span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;font-weight:900;margin-top:3px}
+.processo-status{border-radius:12px;padding:10px 11px;margin-bottom:10px;font-size:12px;line-height:1.45;border:1px solid var(--linha);background:#fffdf8}
+.processo-status.good{border-color:#76b88e;background:#e7f5ec;color:#145c34}.processo-status.warn{border-color:#e0a044;background:#fff4d9;color:#743b0e}.processo-status.bad{border-color:#cf786f;background:#ffe8e5;color:#812b24}.processo-status.info{border-color:#8bb6dc;background:#eaf2fb;color:#1f537e}
+.falta-processo-item{width:100%;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;background:#fffdf8;border:1px solid var(--linha);border-radius:13px;padding:11px;margin-bottom:8px;color:var(--texto)}
+.falta-processo-item:hover{border-color:var(--ouro)}.falta-processo-item b{display:block;color:var(--azul);font-size:13px}.falta-processo-item small{display:block;color:var(--muted);font-size:11px;line-height:1.4;margin-top:4px}
+.abono-chip{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:10px;font-weight:900;white-space:nowrap}.abono-chip.accepted{background:#dff3e8;color:#145c34}.abono-chip.pending{background:#fff0d8;color:#87450e}.abono-chip.rejected{background:#ffe2df;color:#8c271f}.abono-chip.none{background:#ece7dd;color:#5f584e}
+.processo-panel{background:linear-gradient(180deg,#fff9e9,#f5ead0);border:1px solid rgba(201,168,76,.48);border-radius:15px;padding:12px;margin:10px 0}
+.processo-panel-head{display:flex;align-items:flex-start;gap:10px}.processo-panel-head>div{flex:1}.processo-panel h3{font-family:Georgia,"Times New Roman",serif;color:var(--azul);font-size:15px;margin:0 0 4px}.processo-panel p{font-size:11px;color:var(--muted);line-height:1.45;margin:0}
+.call-summary{grid-template-columns:repeat(3,1fr)}
+.session-stat-grid.two-status{grid-template-columns:repeat(2,1fr)}
+@media(max-width:430px){.processo-summary{grid-template-columns:repeat(2,1fr)}.processo-toolbar{display:grid;grid-template-columns:1fr}.falta-processo-item{grid-template-columns:1fr}.review-status-two{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body class="app-locked">
@@ -297,7 +359,7 @@ main{padding-top:16px}
       <div class="action-grid">
         <button class="action" onclick="abrirAba('irmaos'); abrirModalIrmao()"><b>🤝 Cadastrar irmão</b><small>Inclua grau, telefone, esposa e filhos.</small></button>
         <button class="action" onclick="abrirAba('sessoes'); abrirModalSessao()"><b>📜 Nova sessão</b><small>Cadastre sessões antigas e futuras.</small></button>
-        <button class="action" onclick="abrirAba('presenca')"><b>⚒️ Fazer chamada</b><small>Presença, falta e falta justificada.</small></button>
+        <button class="action" onclick="abrirAba('presenca')"><b>⚒️ Fazer chamada</b><small>Registre apenas presença ou falta.</small></button>
         <button class="action" onclick="abrirAba('datas'); abrirModalData()"><b>✨ Nova data</b><small>Inclua datas maçônicas e da Loja.</small></button>
       </div>
     </div>
@@ -543,6 +605,23 @@ main{padding-top:16px}
   </div>
 </div>
 
+<div class="modal-back" id="modalConsultaSessao" role="dialog" aria-modal="true" aria-labelledby="consultaSessaoTitulo">
+  <div class="modal">
+    <div class="modal-head"><span id="consultaSessaoTitulo">Consulta da sessão</span><button class="modal-close" type="button" onclick="fecharModal('modalConsultaSessao')" aria-label="Fechar consulta">×</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="consultaSessaoId">
+      <div id="consultaSessaoBody"></div>
+    </div>
+    <div class="modal-foot">
+      <div class="session-modal-actions">
+        <button class="btn btn-light" type="button" onclick="editarSessaoConsultada()">Editar sessão</button>
+        <button class="btn btn-info" type="button" onclick="abrirChamadaSessaoConsultada()">Abrir chamada</button>
+        <button class="btn btn-success" type="button" onclick="imprimirSessaoConsultada()">Imprimir/PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-back" id="modalData">
   <div class="modal">
     <div class="modal-head"><span>Data importante</span><button class="modal-close" onclick="fecharModal('modalData')">×</button></div>
@@ -588,7 +667,7 @@ main{padding-top:16px}
         <div class="field"><label>Novo grau</label><select id="gNovoGrau"><option value="C">C∴ M∴ - Companheiro Maçom</option><option value="M">M∴ M∴ - Mestre Maçom</option><option value="MI">M∴ I∴ - Mestre Instalado</option></select></div>
         <div class="field"><label>Data da mudança</label><input id="gData" type="date"></div>
       </div>
-      <p class="small">A nova graduação vale a partir da data escolhida. Sessões anteriores seguem com o grau registrado na época. Para elevação ou exaltação, use o índice de presença real; falta justificada não soma presença real.</p>
+      <p class="small">A nova graduação vale a partir da data escolhida. Sessões anteriores seguem com o grau registrado na época. Para elevação ou exaltação, use o índice de presença efetiva. Eventuais abonos são tratados no procedimento de frequência, sem alterar a chamada original.</p>
     </div>
     <div class="modal-foot">
       <button class="btn btn-light" onclick="fecharModal('modalGrau')">Cancelar</button>
@@ -599,49 +678,74 @@ main{padding-top:16px}
 
 <div class="modal-back" id="modalRevisaoFrequencia" role="dialog" aria-modal="true" aria-labelledby="revisaoFrequenciaTitulo">
   <div class="modal">
-    <div class="modal-head"><span id="revisaoFrequenciaTitulo">Revisar frequência individual</span><button class="modal-close" type="button" onclick="fecharModal('modalRevisaoFrequencia')" aria-label="Fechar revisão">×</button></div>
+    <div class="modal-head"><span id="revisaoFrequenciaTitulo">Corrigir registro individual</span><button class="modal-close" type="button" onclick="fecharModal('modalRevisaoFrequencia')" aria-label="Fechar revisão">×</button></div>
     <div class="modal-body">
       <input type="hidden" id="revisaoIrmaoId">
       <input type="hidden" id="revisaoSessaoId">
       <div id="revisaoResumo" class="review-summary"></div>
       <div class="alert">
-        <div class="name">Correção restrita ao Irmão selecionado</div>
-        <div class="txt">Esta revisão altera somente o registro individual desta sessão. Use Falta justificada quando houver contestação aceita e descreva o motivo.</div>
+        <div class="name">Correção da chamada original</div>
+        <div class="txt">Escolha apenas Presença ou Falta. Justificativas posteriores são analisadas no Procedimento de Frequência e, quando aceitas, geram abono sem apagar a falta registrada na sessão.</div>
       </div>
       <div class="field"><label>Status da sessão</label>
-        <div class="review-status-grid">
+        <div class="review-status-grid review-status-two">
           <button id="revisaoStatusP" class="status-btn" type="button" onclick="selecionarStatusRevisao('P')">Presença</button>
           <button id="revisaoStatusF" class="status-btn" type="button" onclick="selecionarStatusRevisao('F')">Falta</button>
-          <button id="revisaoStatusJ" class="status-btn" type="button" onclick="selecionarStatusRevisao('J')">Falta justificada</button>
         </div>
-      </div>
-      <div id="revisaoTipoPresencaBox" class="review-presence-box" style="display:none">
-        <label for="revisaoTipoPresenca">Tipo de presença</label>
-        <select id="revisaoTipoPresenca" onchange="atualizarTipoPresencaRevisao()">
-          <option value="P">Presença na Loja</option>
-          <option value="V">Presença em outra Loja com atestado</option>
-        </select>
-        <div id="revisaoVisitaBox" style="display:none;margin-top:10px">
-          <div class="row-3">
-            <div><label for="revisaoDataVisita">Data da visita</label><input id="revisaoDataVisita" type="date"></div>
-            <div><label for="revisaoLojaVisita">Loja visitada</label><input id="revisaoLojaVisita" placeholder="Nome da Loja"></div>
-            <div><label for="revisaoOrienteVisita">Oriente</label><input id="revisaoOrienteVisita" placeholder="Oriente"></div>
-          </div>
-          <label for="revisaoAtestadoVisita" style="margin-top:10px">Atestado ou registro</label>
-          <textarea id="revisaoAtestadoVisita" placeholder="Informe o atestado, número do documento ou observação do registro."></textarea>
-          <div class="small" style="margin-top:6px">A presença em outra Loja exige data, Loja, Oriente e atestado ou registro.</div>
-        </div>
-      </div>
-      <div id="revisaoJustificativaBox" class="field" style="display:none">
-        <label>Justificativa da contestação</label>
-        <textarea id="revisaoJustificativa" placeholder="Registre o motivo apresentado pelo Irmão e aceito pela Chancelaria."></textarea>
-        <div class="small" style="margin-top:6px">A justificativa ficará registrada no relatório individual e no histórico da sessão.</div>
       </div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-light" type="button" onclick="fecharModal('modalRevisaoFrequencia')">Cancelar</button>
-      <button class="btn btn-primary" type="button" onclick="salvarRevisaoFrequencia()">Salvar revisão</button>
+      <button class="btn btn-primary" type="button" onclick="salvarRevisaoFrequencia()">Salvar correção</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-back" id="modalProcessoFrequencia" role="dialog" aria-modal="true" aria-labelledby="processoFrequenciaTitulo">
+  <div class="modal processo-modal">
+    <div class="modal-head"><span id="processoFrequenciaTitulo">Procedimento de frequência</span><button class="modal-close" type="button" onclick="fecharModal('modalProcessoFrequencia')" aria-label="Fechar procedimento">×</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="processoFrequenciaId">
+      <input type="hidden" id="processoIrmaoId">
+      <input type="hidden" id="processoSessaoId">
+      <div id="processoResumo"></div>
+      <div class="processo-notice">
+        <b>Fluxo administrativo</b>
+        <span>A chamada permanece com Presença ou Falta. Após a apuração de 12 meses e o alcance do limite do Art. 76, registre a notificação do Art. 77. O prazo de 30 dias começa no recebimento. A Chancelaria registra a justificativa e a decisão da Loja. O sistema não suspende direitos automaticamente.</span>
+      </div>
+      <div class="processo-section">
+        <div class="processo-section-title"><span>1</span> Notificação do Irmão</div>
+        <div class="row">
+          <div class="field"><label>Data de emissão</label><input id="procDataEmissao" type="date"></div>
+          <div class="field"><label>Data de recebimento</label><input id="procDataRecebimento" type="date" onchange="atualizarPrazoProcesso()"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Prazo final, 30 dias</label><input id="procPrazoFinal" type="date" readonly></div>
+          <div class="field"><label>Meio de envio</label><select id="procMeio"><option value="WhatsApp">WhatsApp</option><option value="E-mail">E-mail</option><option value="Pessoalmente">Pessoalmente</option><option value="Carta com comprovação">Carta com comprovação</option><option value="Outro">Outro</option></select></div>
+        </div>
+        <div class="field"><label>Protocolo ou prova de recebimento</label><input id="procProtocolo" placeholder="Ex.: confirmação no WhatsApp, AR, assinatura ou número do documento"></div>
+        <div class="field"><label>Observação administrativa</label><textarea id="procObservacao" placeholder="Registre informações relevantes sobre a notificação."></textarea></div>
+        <div class="toolbar processo-toolbar"><button class="btn btn-primary" type="button" onclick="salvarNotificacaoFrequencia()">Salvar notificação</button><button class="btn btn-warning" type="button" onclick="gerarTextoNotificacaoProcesso()">Gerar texto</button></div>
+      </div>
+      <div class="processo-section">
+        <div class="processo-section-title"><span>2</span> Faltas do período</div>
+        <div class="small" style="margin-bottom:10px">Toque em uma falta para registrar a justificativa apresentada e a decisão. O abono não transforma a falta em presença.</div>
+        <div id="processoListaFaltas"></div>
+      </div>
+      <div class="processo-section" id="processoAnaliseBox" style="display:none">
+        <div class="processo-section-title"><span>3</span> Análise da justificativa</div>
+        <div id="processoSessaoResumo" class="review-summary"></div>
+        <div class="field"><label>Justificativa apresentada pelo Irmão</label><textarea id="procJustificativa" placeholder="Registre de forma objetiva o motivo apresentado."></textarea></div>
+        <div class="row">
+          <div class="field"><label>Data da apresentação</label><input id="procDataApresentacao" type="date"></div>
+          <div class="field"><label>Decisão registrada</label><select id="procDecisao"><option value="pendente">Pendente de decisão</option><option value="aceita">Aceita, falta abonada</option><option value="recusada">Recusada, falta mantida</option></select></div>
+        </div>
+        <div class="field"><label>Referência da decisão</label><input id="procReferenciaDecisao" placeholder="Ex.: Ata nº 123, deliberação de 10/08/2026"></div>
+        <div class="field"><label>Fundamentação ou observação</label><textarea id="procNotaDecisao" placeholder="Registre a decisão da Loja e os elementos considerados."></textarea></div>
+        <div class="toolbar processo-toolbar"><button class="btn btn-light" type="button" onclick="cancelarAnaliseFalta()">Cancelar análise</button><button class="btn btn-primary" type="button" onclick="salvarAnaliseFalta()">Salvar análise</button></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-light" type="button" onclick="fecharModal('modalProcessoFrequencia')">Fechar</button></div>
   </div>
 </div>
 
@@ -655,8 +759,8 @@ main{padding-top:16px}
       <article class="report-preview-page">
         <header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header>
         <div id="previewRelatorioConteudo"></div>
-        <div class="report-preview-signature">____________________________________<br>Chancelaria</div>
-        <div class="report-preview-footer">Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.</div>
+        <div id="previewRelatorioAssinatura" class="report-preview-signature">____________________________________<br>Chancelaria</div>
+        <div id="previewRelatorioRodape" class="report-preview-footer">Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.</div>
       </article>
     </div>
   </div>
@@ -712,7 +816,7 @@ const SEC_VAULT_KEY=PFX+'vault_v1';
 const SEC_BACKUP_TYPE='CHANCELARIA1997_BACKUP_CRIPTOGRAFADO';
 const SEC_ITERATIONS=600000;
 const SEC_AAD='A.R.L.S. Razao e Forca 1997 | Cofre local v1';
-const SEC_DATA_KEYS=['irmaos','sessoes','presencas','festivas','periodoFreqRGF','settings','trash','audit','backupInfo'];
+const SEC_DATA_KEYS=['irmaos','sessoes','presencas','processosFreq','festivas','periodoFreqRGF','settings','trash','audit','backupInfo'];
 const SEC_RECOVERY_KEY=PFX+'recovery_v1';
 const TRASH_DAYS=30;
 const EXTERNAL_ACTION_GRACE_MS=15*60*1000;
@@ -1180,7 +1284,7 @@ function repararHistoricosGrausPendentes(){
   }
   if(alterados){setIrmaos(arr);audit('Histórico de grau sincronizado',`${alterados} cadastro(s) corrigido(s) para a lista de presença`)}
 }
-function migrar(){setIrmaos(getIrmaos());repararHistoricosGrausPendentes();setDatas(getDatas())}
+function migrar(){setIrmaos(getIrmaos());repararHistoricosGrausPendentes();setDatas(getDatas());migrarFluxoFrequencia()}
 
 function grauSimbolo(g){return {MI:'M∴ I∴',M:'M∴ M∴',C:'C∴ M∴',A:'Apr∴'}[g]||String(g||'')}
 function grauNome(g){return {MI:'Mestre Instalado',M:'Mestre Maçom',C:'Companheiro Maçom',A:'Aprendiz'}[g]||''}
@@ -1358,7 +1462,7 @@ function renderInicio(){
   const an=aniversarios(7);document.getElementById('inicio-aniversarios').innerHTML=an.length?`<div class="card"><div class="card-head">🎂 Aniversários nos próximos 7 dias</div><div class="card-body">${an.map(cardAniv).join('')}</div></div>`:'';
   document.getElementById('inicio-proxima-sessao').innerHTML=proxSess?`<div class="card"><div class="card-head">📋 ${proxSess.data>=hojeISO()?'Próxima sessão':'Última sessão'}</div><div class="card-body"><div class="item-title">${h(proxSess.numero||descricaoSessao(proxSess))}</div><div class="item-sub">${brData(proxSess.data)} · ${descricaoSessao(proxSess)}</div><div class="toolbar" style="margin-top:10px;margin-bottom:0"><button class="btn btn-primary btn-sm" onclick="abrirPresenca('${proxSess.id}')">Fazer chamada</button><button class="btn btn-light btn-sm" onclick="editarSessao('${proxSess.id}')">Editar</button></div></div></div>`:'';
   const pd=datasProximas(365)[0];document.getElementById('inicio-proxima-data').innerHTML=pd?cardData(pd,true):'';
-  document.getElementById('inicio-alertas').innerHTML=alertas.length?`<div class="card"><div class="card-head">⚠️ Art. 76 do RGF</div><div class="card-body">${alertas.map(i=>{const f=calcFreq(i);return `<div class="alert"><div class="name">${h(i.nome)} ${grauBadge(i.grau)}</div><div class="txt">Falta: ${f.pctFalta}% · ${f.falta} de ${f.total} sessões na janela móvel RGF ${f.periodoTexto}. Atingiu o limite administrativo de 50% previsto no RGF. Gerar notificação não declara irregularidade automática.</div><button class="btn btn-warning btn-sm" style="margin-top:8px" onclick="mensagemFalta('${i.id}')">Gerar notificação</button></div>`}).join('')}</div></div>`:'';
+  document.getElementById('inicio-alertas').innerHTML=alertas.length?`<div class="card"><div class="card-head">⚠️ Art. 76 do RGF</div><div class="card-body">${alertas.map(i=>{const f=calcFreq(i);return `<div class="alert"><div class="name">${h(i.nome)} ${grauBadge(i.grau)}</div><div class="txt">Falta: ${f.pctFalta}% · ${f.falta} de ${f.total} sessões na janela móvel RGF ${f.periodoTexto}. Atingiu o limite administrativo de 50% previsto no RGF. Gerar notificação não declara irregularidade automática.</div><button class="btn btn-warning btn-sm" style="margin-top:8px" onclick="abrirProcessoFrequencia('${i.id}')">Abrir procedimento</button></div>`}).join('')}</div></div>`:'';
   document.getElementById('inicio-frequencia').innerHTML=ir.length?ir.slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta).map(i=>linhaFreq(i)).join(''):'<div class="empty"><div class="icon">👤</div><p>Nenhum irmão cadastrado.</p></div>';
 }
 
@@ -1491,7 +1595,35 @@ function htmlFreqDetalhe(i,editavel=false){
 
 function badgeStatus(r){const st=statusPresenca(r);const m={P:['Presença real','b-ok'],F:['Falta','b-bad'],J:['Falta justificada','b-warn'],V:['Presença em outra Loja','b-ok'],L:['Falta justificada','b-warn'],E:['Falta justificada','b-warn']};const x=m[st]||m.F;return `<span class="badge ${x[1]}">${x[0]}</span>`}
 
-function renderSessoes(){renderPeriodoRGF();const arr=getSessoes().slice().sort((a,b)=>b.data.localeCompare(a.data));document.getElementById('listaSessoes').innerHTML=arr.length?arr.map(s=>{const regs=Object.keys(getPresencas()[s.id]||{}).length;return `<div class="list-item" onclick="editarSessao('${s.id}')"><div class="avatar">📋</div><div class="item-main"><div class="item-title">${h(s.numero||descricaoSessao(s))}</div><div class="item-sub">${brData(s.data)} · ${descricaoSessao(s)} · ${regs} registro(s)</div></div><button class="btn btn-primary btn-sm" onclick="event.stopPropagation();abrirPresenca('${s.id}')">Chamada</button></div>`}).join(''):'<div class="empty"><div class="icon">📋</div><p>Nenhuma sessão cadastrada.</p></div>'}
+function resumoChamadaSessao(s){
+  const regs=getPresencas()[s.id]||{};let presentesLoja=0,presentesOutra=0,justificadas=0,faltas=0;
+  Object.values(regs).forEach(r=>{const st=statusPresenca(r);if(st==='P')presentesLoja++;else if(st==='V')presentesOutra++;else if(statusFaltaJustificada(r))justificadas++;else faltas++});
+  return {regs,total:Object.keys(regs).length,presentesLoja,presentesOutra,presentes:presentesLoja+presentesOutra,justificadas,faltas};
+}
+function participantesPresentesSessao(s){
+  const regs=getPresencas()[s.id]||{};
+  return getIrmaos().filter(i=>statusPresencaReal(regs[i.id])).map(i=>({irmao:i,registro:regs[i.id],grau:grauNaData(i,s.data)})).sort((a,b)=>a.irmao.nome.localeCompare(b.irmao.nome));
+}
+function renderSessoes(){
+  renderPeriodoRGF();const arr=getSessoes().slice().sort((a,b)=>b.data.localeCompare(a.data));
+  document.getElementById('listaSessoes').innerHTML=arr.length?arr.map(s=>{const r=resumoChamadaSessao(s);return `<div class="list-item session-list-card" onclick="abrirConsultaSessao('${s.id}')"><div class="avatar">📋</div><div class="item-main"><div class="item-title">${h(s.numero||descricaoSessao(s))}</div><div class="item-sub">${brData(s.data)} · ${h(descricaoSessao(s))}</div>${s.obs?`<div class="item-sub">${h(s.obs)}</div>`:''}</div><div class="session-card-side"><div class="session-card-summary"><span class="badge b-ok">${r.presentes} presente(s)</span>${r.total?`<span class="badge b-warn">${r.total} registro(s)</span>`:'<span class="badge b-warn">sem chamada</span>'}</div><span class="session-consult-chip">Consultar ›</span><button class="btn btn-primary btn-sm" type="button" onclick="event.stopPropagation();abrirPresenca('${s.id}')">Chamada</button></div></div>`}).join(''):'<div class="empty"><div class="icon">📋</div><p>Nenhuma sessão cadastrada.</p></div>'
+}
+function abrirConsultaSessao(id){
+  const s=getSessoes().find(x=>x.id===id);if(!s){toast('Sessão não encontrada');return}
+  consultaSessaoId.value=id;consultaSessaoTitulo.textContent=s.numero||descricaoSessao(s);const r=resumoChamadaSessao(s),presentes=participantesPresentesSessao(s);
+  const lista=presentes.length?`<div class="session-present-list">${presentes.map((x,n)=>{const i=x.irmao,st=statusPresenca(x.registro),tipo=st==='V'?'Outra Loja':'Na Loja';return `<div class="session-present-row"><span class="session-present-number">${n+1}</span><span><span class="session-present-name">${h(i.nome)}</span><span class="session-present-meta">${h(grauSimbolo(x.grau))}${i.cim?' · CIM '+h(i.cim):' · CIM não informada'}${st==='V'&&textoVisita(x.registro)?'<br>'+h(textoVisita(x.registro)):''}</span></span><span class="session-present-type ${st==='V'?'visit':''}">${tipo}</span></div>`}).join('')}</div>`:'<div class="empty"><p>Nenhum participante presente foi registrado nesta chamada.</p></div>';
+  consultaSessaoBody.innerHTML=`<div class="session-detail-hero"><div class="session-detail-title">${h(s.numero||descricaoSessao(s))}</div><div class="session-detail-meta"><b>Data:</b> ${brData(s.data)}<br><b>Tipo:</b> ${h(descricaoSessao(s))}${s.tipo==='magna'&&s.magnaTipo?`<br><b>Regra:</b> ${h(regraMagnaTexto(s.magnaTipo))}`:''}</div>${s.obs?`<div class="session-detail-note"><b>Pauta ou observação:</b><br>${h(s.obs)}</div>`:''}</div><div class="session-stat-grid"><div class="session-stat"><b>${r.presentesLoja}</b><span>Na Loja</span></div><div class="session-stat"><b>${r.presentesOutra}</b><span>Outra Loja</span></div><div class="session-stat"><b>${r.justificadas}</b><span>Justificadas</span></div><div class="session-stat"><b>${r.faltas}</b><span>Faltas</span></div></div><div class="card-head" style="border-radius:12px;margin-bottom:9px">Participantes presentes · ${r.presentes}</div>${lista}`;
+  abrirModal('modalConsultaSessao')
+}
+function sessaoConsultada(){return getSessoes().find(x=>x.id===consultaSessaoId.value)}
+function editarSessaoConsultada(){const s=sessaoConsultada();if(!s){toast('Sessão não encontrada');return}fecharModal('modalConsultaSessao');abrirModalSessao(s.id)}
+function abrirChamadaSessaoConsultada(){const s=sessaoConsultada();if(!s){toast('Sessão não encontrada');return}fecharModal('modalConsultaSessao');abrirPresenca(s.id)}
+function corpoRelatorioSessao(s){
+  const r=resumoChamadaSessao(s),presentes=participantesPresentesSessao(s);const linhas=presentes.length?presentes.map((x,n)=>{const i=x.irmao,st=statusPresenca(x.registro);return `<tr><td>${n+1}</td><td>${h(i.nome)}</td><td>${i.cim?h(i.cim):'Não informado'}</td><td>${h(grauSimbolo(x.grau))}</td><td>${st==='V'?`Presença em outra Loja${textoVisita(x.registro)?' · '+h(textoVisita(x.registro)):''}`:'Presença na Loja'}</td></tr>`}).join(''):'<tr><td colspan="5">Nenhum participante presente registrado.</td></tr>';
+  return `<h2>Relação de participantes presentes</h2><p><b>Sessão:</b> ${h(s.numero||descricaoSessao(s))}<br><b>Data:</b> ${brData(s.data)} · <b>Tipo:</b> ${h(descricaoSessao(s))}${s.obs?`<br><b>Pauta ou observação:</b> ${h(s.obs)}`:''}</p><div class="session-report-summary"><div class="session-report-box"><b>${r.presentes}</b><span>Total presente</span></div><div class="session-report-box"><b>${r.presentesLoja}</b><span>Na Loja</span></div><div class="session-report-box"><b>${r.presentesOutra}</b><span>Outra Loja</span></div><div class="session-report-box"><b>${r.total}</b><span>Registros</span></div></div><table class="session-attendance-table"><thead><tr><th>Nº</th><th>Irmão</th><th>CIM</th><th>Grau</th><th>Tipo de presença</th></tr></thead><tbody>${linhas}</tbody></table>`
+}
+function imprimirSessaoConsultada(){const s=sessaoConsultada();if(!s){toast('Sessão não encontrada');return}fecharModal('modalConsultaSessao');abrirPrint('Participantes da sessão',corpoRelatorioSessao(s),{tipo:'sessao',sessaoId:s.id,assinatura:'<div>____________________________________<br>Chanceler</div><div>____________________________________<br>Venerável Mestre</div>',assinaturaClasse:'dual-signature',rodape:`Documento emitido pela Chancelaria da A∴R∴L∴S∴ Razão e Força Nº 1997 em ${new Date().toLocaleString('pt-BR')}. A relação considera os registros de presença gravados para esta sessão.`})}
+
 function abrirModalSessao(id=''){sId.value=id;btnExcluirSessao.style.display=id?'inline-flex':'none';if(id){const s=getSessoes().find(x=>x.id===id);if(!s)return;sData.value=s.data;sTipo.value=s.tipo;sMagnaTipo.value=s.magnaTipo||'';sNumero.value=s.numero||'';sObs.value=s.obs||''}else{sData.value=hojeISO();sTipo.value='ordinaria-aprendiz';sMagnaTipo.value='';sNumero.value='';sObs.value=''}atualizarCamposSessao();abrirModal('modalSessao')}
 function editarSessao(id){abrirModalSessao(id)}
 function salvarSessao(){if(!sData.value){toast('Informe a data');return}const magnaTipo=sTipo.value==='magna'?sMagnaTipo.value:'';if(sTipo.value==='magna'&&!MAGNA_TIPOS.includes(magnaTipo)){toast('Selecione a modalidade da Sessão Magna');return}const arr=getSessoes();const id=sId.value||uid();const duplicada=arr.find(x=>x.id!==id&&x.data===sData.value&&x.tipo===sTipo.value&&String(x.magnaTipo||'')===magnaTipo&&nomeNormalizado(x.numero||'')===nomeNormalizado(sNumero.value||''));if(duplicada){toast('Já existe uma sessão igual nesta data');return}const obj={id,data:sData.value,tipo:sTipo.value,magnaTipo,numero:sNumero.value,obs:sObs.value};const idx=arr.findIndex(x=>x.id===id);if(idx>=0)arr[idx]=obj;else arr.push(obj);setSessoes(arr);audit(idx>=0?'Sessão atualizada':'Sessão cadastrada',`${brData(obj.data)} · ${descricaoSessao(obj)}`);fecharModal('modalSessao');renderAtual();toast('Sessão salva')}
@@ -1805,8 +1937,8 @@ function codificarBase64UrlUtf8(valor){
   for(let i=0;i<bytes.length;i+=32768)bin+=String.fromCharCode(...bytes.subarray(i,i+32768));
   return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
-function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false){
-  const payload={titulo,corpo,geradoEm:new Date().toISOString()};
+function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false,opcoes={}){
+  const payload={titulo,corpo,geradoEm:new Date().toISOString(),assinatura:opcoes.assinatura||'',assinaturaClasse:opcoes.assinaturaClasse||'',rodape:opcoes.rodape||''};
   const url=new URL('print.html',location.href);
   if(modoImpressao)url.searchParams.set('print','1');
   return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
@@ -1815,13 +1947,18 @@ function abrirPrint(titulo,corpo,meta={}){
   pendingPrintPayload={titulo,corpo,...meta};
   previewRelatorioTitulo.textContent=titulo;
   previewRelatorioConteudo.innerHTML=corpo;
+  const assinaturaPadrao='____________________________________<br>Chancelaria';
+  const rodapePadrao='Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';
+  previewRelatorioAssinatura.innerHTML=meta.assinatura||assinaturaPadrao;
+  previewRelatorioAssinatura.className='report-preview-signature'+(meta.assinaturaClasse?' '+meta.assinaturaClasse:'');
+  previewRelatorioRodape.innerHTML=meta.rodape||rodapePadrao;
   abrirModal('modalPreviewRelatorio');
   document.querySelector('#modalPreviewRelatorio .report-preview-scroll')?.scrollTo({top:0})
 }
 function fecharPreviewRelatorio(){pendingPrintPayload=null;fecharModal('modalPreviewRelatorio')}
 function imprimirPreviewRelatorio(){
   if(!pendingPrintPayload){toast('Gere o relatório novamente');return}
-  const url=urlRelatorioParaImpressao(pendingPrintPayload.titulo,pendingPrintPayload.corpo,true);
+  const url=urlRelatorioParaImpressao(pendingPrintPayload.titulo,pendingPrintPayload.corpo,true,pendingPrintPayload);
   if(enviarAcaoNativa('P',url)){toast('Abrindo impressão e PDF');return}
   iniciarAcaoExterna();
   const w=window.open(url,'_blank','noopener');
@@ -1935,6 +2072,7 @@ async function importarBackupLegado(d){
   setIrmaos(limpo.irmaos);
   setSessoes(limpo.sessoes);
   setPresencas(limpo.presencas);
+  migrarFluxoFrequencia(true);
   setDatas(limpo.festivas.length?limpo.festivas:datasPadrao());
   setPeriodoRGF(limpo.periodoFreqRGF);
   await persistQueue;
@@ -1965,6 +2103,133 @@ function importarBackup(ev){
   r.onerror=()=>{toast('Não foi possível ler o arquivo');input.value=''};
   r.readAsText(file);
 }
+
+
+
+/* ===== Chancelaria 1997 v3.8: chamada P/F e procedimento de abono ===== */
+let processoAnaliseAtual='';
+
+function getProcessosFreq(){return normalizarProcessosFreq(dbGet('processosFreq',[]))}
+function setProcessosFreq(v){dbSet('processosFreq',normalizarProcessosFreq(v))}
+function normalizarProcessosFreq(lista){
+  return (Array.isArray(lista)?lista:[]).map(p=>({
+    id:String(p?.id||uid()),irmaoId:String(p?.irmaoId||''),periodoInicio:String(p?.periodoInicio||''),periodoFim:String(p?.periodoFim||''),
+    createdAt:String(p?.createdAt||new Date().toISOString()),updatedAt:String(p?.updatedAt||p?.createdAt||new Date().toISOString()),origem:String(p?.origem||'procedimento'),
+    notificacao:{emissao:String(p?.notificacao?.emissao||''),recebimento:String(p?.notificacao?.recebimento||''),prazo:String(p?.notificacao?.prazo||''),meio:String(p?.notificacao?.meio||'WhatsApp'),protocolo:String(p?.notificacao?.protocolo||''),observacao:String(p?.notificacao?.observacao||'')},
+    itens:Object.fromEntries(Object.entries(p?.itens&&typeof p.itens==='object'?p.itens:{}).map(([sid,x])=>[String(sid),{justificativa:String(x?.justificativa||''),apresentadaEm:String(x?.apresentadaEm||''),decisao:['pendente','aceita','recusada'].includes(x?.decisao)?x.decisao:'pendente',decididaEm:String(x?.decididaEm||''),referencia:String(x?.referencia||''),nota:String(x?.nota||''),migrado:!!x?.migrado}]))
+  })).filter(p=>p.irmaoId)
+}
+function statusLegadoPresenca(v){const st=v&&typeof v==='object'?String(v.status||''):String(v||'');return ['P','F','J','V','L','E'].includes(st)?st:'F'}
+function migrarFluxoFrequencia(forcar=false){
+  const settings=dbGet('settings',{})||{};
+  if(settings.fluxoAbonoV1&&!forcar)return;
+  const pres=dbGet('presencas',{})||{},processos=getProcessosFreq();let alterou=false,migrados=0;
+  const porIrmao=new Map();
+  for(const [sid,regs] of Object.entries(pres)){
+    if(!regs||typeof regs!=='object')continue;
+    for(const [iid,reg] of Object.entries(regs)){
+      const st=statusLegadoPresenca(reg);
+      if(st==='V'){regs[iid]='P';alterou=true;continue}
+      if(['J','L','E'].includes(st)){
+        regs[iid]='F';alterou=true;
+        if(!porIrmao.has(iid))porIrmao.set(iid,{});
+        porIrmao.get(iid)[sid]={justificativa:justificativaPresenca(reg)||'Justificativa aceita em versão anterior do aplicativo.',apresentadaEm:'',decisao:'aceita',decididaEm:new Date().toISOString(),referencia:'Migração do registro anterior',nota:'Abono preservado durante a migração para o fluxo Presença/Falta.',migrado:true};
+        migrados++;
+      }else if(st!=='P'&&reg!=='F'){regs[iid]='F';alterou=true}
+    }
+  }
+  if(alterou)setPresencas(pres);
+  for(const [irmaoId,itens] of porIrmao.entries()){
+    processos.push({id:uid(),irmaoId,periodoInicio:'',periodoFim:'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),origem:'migracao',notificacao:{emissao:'',recebimento:'',prazo:'',meio:'',protocolo:'',observacao:'Registros aceitos em versão anterior.'},itens});
+  }
+  if(porIrmao.size)setProcessosFreq(processos);
+  settings.fluxoAbonoV1=true;dbSet('settings',settings);
+  if(migrados)audit('Frequências migradas',`${migrados} falta(s) justificada(s) convertida(s) em falta abonada, sem alterar o resultado da apuração`)
+}
+function statusPresenca(v){const st=statusLegadoPresenca(v);return (st==='P'||st==='V')?'P':'F'}
+function registroPresenca(st){return st==='P'?'P':'F'}
+function statusPresencaReal(v){return statusPresenca(v)==='P'}
+function statusFaltaJustificada(){return false}
+function statusFaltaSemJusta(v){return statusPresenca(v)==='F'}
+function statusTexto(v){return statusPresenca(v)==='P'?'Presença':'Falta'}
+function visitaCompleta(){return true}
+function textoVisita(){return ''}
+function clonarRegistrosPresenca(regs){const out={};Object.keys(regs||{}).forEach(k=>out[k]=registroPresenca(statusPresenca(regs[k])));return out}
+function decisaoAbonoSessao(irmaoId,sessaoId){
+  const processos=getProcessosFreq().filter(p=>p.irmaoId===irmaoId&&p.itens?.[sessaoId]).sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)));
+  if(!processos.length)return null;return {...processos[0].itens[sessaoId],processoId:processos[0].id}
+}
+function abonoAceito(irmaoId,sessaoId){return decisaoAbonoSessao(irmaoId,sessaoId)?.decisao==='aceita'}
+function textoDecisaoAbono(d){if(!d)return 'Sem justificativa apresentada';if(d.decisao==='aceita')return 'Falta abonada';if(d.decisao==='recusada')return 'Justificativa recusada';return 'Justificativa em análise'}
+function statusSessaoIrmao(i,s,r){
+  if(statusPresenca(r)==='P')return 'Presença';
+  const d=decisaoAbonoSessao(i.id,s.id);if(!d)return 'Falta';
+  const base=textoDecisaoAbono(d);return d.justificativa?`${base}: ${d.justificativa}`:base
+}
+function badgeStatusSessao(i,s,r){
+  if(statusPresenca(r)==='P')return '<span class="badge b-ok">Presença</span>';
+  const d=decisaoAbonoSessao(i.id,s.id);if(!d)return '<span class="badge b-bad">Falta</span>';
+  if(d.decisao==='aceita')return '<span class="abono-chip accepted">Falta abonada</span>';
+  if(d.decisao==='recusada')return '<span class="abono-chip rejected">Falta mantida</span>';
+  return '<span class="abono-chip pending">Em análise</span>'
+}
+function badgeStatus(r){return statusPresenca(r)==='P'?'<span class="badge b-ok">Presença</span>':'<span class="badge b-bad">Falta</span>'}
+function calcFreq(i){
+  const per=periodoRGFDatas();
+  if(!per.ativo)return{total:0,presente:0,abonado:0,justificada:0,pendente:0,recusada:0,faltasRegistradas:0,falta:0,pct:0,pctPresenca:0,pctAbonada:0,pctFalta:0,pctFaltaBruta:0,inicio:'',fim:'',periodoTexto:per.texto,periodoMeses:0,periodoAtivo:false,periodo12:false,periodoParcial:false,temFim:false,ingressoRecente:false,motivoParcial:''};
+  const ingresso=dataIngressoIrmao(i),ingressoRecente=!!ingresso&&ingresso>per.inicio,inicio=ingressoRecente?ingresso:per.inicio,fim=per.fimCalculo,ingressoFuturo=!!ingresso&&ingresso>fim;
+  const sessoes=ingressoFuturo?[]:getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=inicio&&s.data<=fim&&contaParaIrmao(i,s));
+  const pres=getPresencas();let presente=0,abonado=0,pendente=0,recusada=0,faltasRegistradas=0;
+  for(const s of sessoes){const r=(pres[s.id]||{})[i.id];if(statusPresenca(r)==='P'){presente++;continue}faltasRegistradas++;const d=decisaoAbonoSessao(i.id,s.id);if(d?.decisao==='aceita')abonado++;else if(d?.decisao==='pendente')pendente++;else if(d?.decisao==='recusada')recusada++}
+  const total=sessoes.length,falta=Math.max(0,faltasRegistradas-abonado),pctPresenca=total?Math.round(presente/total*100):0,pctAbonada=total?Math.round(abonado/total*100):0,pctFalta=total?Math.round(falta/total*100):0,pctFaltaBruta=total?Math.round(faltasRegistradas/total*100):0;
+  const periodo12=per.completo12&&!ingressoRecente&&!ingressoFuturo,motivoParcial=ingressoFuturo?'Ingresso cadastrado para data futura':ingressoRecente?`Período parcial desde a ${tipoIngressoNome(i.tipoIngresso).toLowerCase()}`:!per.completo12?'Base histórica cadastrada ainda não cobre os últimos 12 meses':'',periodoTexto=`${brData(inicio)} a ${brData(fim)}`;
+  return{total,presente,abonado,justificada:abonado,pendente,recusada,faltasRegistradas,falta,pct:pctPresenca,pctPresenca,pctAbonada,pctFalta,pctFaltaBruta,pctFaltaSemJusta:pctFalta,inicio,fim,periodoTexto,periodoMeses:mesesEntreDatas(inicio,fim),periodoAtivo:!ingressoFuturo,periodo12,periodoParcial:!periodo12,temFim:per.temFim,ingressoRecente,ingressoFuturo,motivoParcial,descricaoIngresso:descricaoIngresso(i)}
+}
+function classeFreq(f){return f.pctFalta>=50?'b-bad':f.pctFalta>=35?'b-warn':'b-ok'}
+function linhaFreq(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:900;color:var(--azul)">${h(i.nome)}</span><span class="badge b-warn">sem contagem</span></div><div class="small">${h(f.motivoParcial||'Cadastre sessões para iniciar a apuração.')}</div></div>`;return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:12px;font-weight:900;color:var(--azul);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h(i.nome)}</span><span class="badge ${classeFreq(f)}">${f.pctFalta}% sem justa causa</span></div><div class="progress"><div class="bar" style="width:${f.pctPresenca}%;background:${corPct(f.pctPresenca)}"></div></div><div class="small">Período ${f.periodoTexto}: ${f.presente} presença(s) · ${f.faltasRegistradas} falta(s) registrada(s) · ${f.abonado} abonada(s) · ${f.falta} sem justa causa${f.periodo12?'':` · ${h(f.motivoParcial||'período parcial')}, sem alerta Art. 76`}</div></div>`}
+function linhaChamada(i,reg,s){
+  const semRegistro=reg===null||reg===undefined||reg==='',st=semRegistro?'':statusPresenca(reg),g=grauNaData(i,s.data),opts=[['P','Presença','p'],['F','Falta','f']];
+  return `<div class="pres-row" data-name="${attr(nomeNormalizado(i.nome))}"><div class="pres-top"><div class="pres-name">${h(i.nome)}</div>${grauBadge(g)}</div><div class="status-grid" style="grid-template-columns:repeat(2,1fr)">${opts.map(o=>`<button class="status-btn ${semRegistro?'unset':st===o[0]?'active '+o[2]:''}" onclick="setStatusChamada('${i.id}','${o[0]}')">${o[1]}</button>`).join('')}</div></div>`
+}
+function setStatusChamada(id,st){chamadaTemp[id]=registroPresenca(st);carregarChamadaComEstado()}
+function setTipoPresencaChamada(){}
+function setVisitaChamada(){}
+function setAtestadoChamada(){}
+function setJustificativaChamada(){}
+function atualizarResumoChamada(){let p=0,f=0,u=0;for(const i of irmaosDaChamadaAtual()){if(!Object.prototype.hasOwnProperty.call(chamadaTemp,i.id)){u++;continue}statusPresenca(chamadaTemp[i.id])==='P'?p++:f++}contadoresChamada.innerHTML=`<div class="call-count"><b>${p}</b><span>Presentes</span></div><div class="call-count"><b>${f}</b><span>Faltas</span></div><div class="call-count"><b>${u}</b><span>Sem registro</span></div>`}
+function salvarChamada(){const id=presSessao.value;if(!id)return;const faltantes=irmaosDaChamadaAtual().filter(i=>!Object.prototype.hasOwnProperty.call(chamadaTemp,i.id));if(faltantes.length){toast(`Ainda faltam ${faltantes.length} registro(s) na chamada`);return}const normal={};Object.entries(chamadaTemp).forEach(([iid,r])=>normal[iid]=registroPresenca(statusPresenca(r)));const p=getPresencas();p[id]=normal;setPresencas(p);const s=getSessoes().find(x=>x.id===id);audit('Chamada salva',s?`${brData(s.data)} · ${descricaoSessao(s)} · apenas Presença/Falta`:id);toast('Chamada salva');renderAtual()}
+function resumoChamadaSessao(s){const regs=getPresencas()[s.id]||{};let presentes=0,faltas=0;Object.values(regs).forEach(r=>statusPresenca(r)==='P'?presentes++:faltas++);return{regs,total:Object.keys(regs).length,presentesLoja:presentes,presentesOutra:0,presentes,justificadas:0,faltas}}
+function participantesPresentesSessao(s){const regs=getPresencas()[s.id]||{};return getIrmaos().filter(i=>statusPresenca(regs[i.id])==='P').map(i=>({irmao:i,registro:'P',grau:grauNaData(i,s.data)})).sort((a,b)=>a.irmao.nome.localeCompare(b.irmao.nome))}
+function abrirConsultaSessao(id){const s=getSessoes().find(x=>x.id===id);if(!s){toast('Sessão não encontrada');return}consultaSessaoId.value=id;consultaSessaoTitulo.textContent=s.numero||descricaoSessao(s);const r=resumoChamadaSessao(s),presentes=participantesPresentesSessao(s),lista=presentes.length?`<div class="session-present-list">${presentes.map((x,n)=>{const i=x.irmao;return `<div class="session-present-row"><span class="session-present-number">${n+1}</span><span><span class="session-present-name">${h(i.nome)}</span><span class="session-present-meta">${h(grauSimbolo(x.grau))}${i.cim?' · CIM '+h(i.cim):' · CIM não informada'}</span></span><span class="session-present-type">Presença</span></div>`}).join('')}</div>`:'<div class="empty"><p>Nenhum participante presente foi registrado nesta chamada.</p></div>';consultaSessaoBody.innerHTML=`<div class="session-detail-hero"><div class="session-detail-title">${h(s.numero||descricaoSessao(s))}</div><div class="session-detail-meta"><b>Data:</b> ${brData(s.data)}<br><b>Tipo:</b> ${h(descricaoSessao(s))}</div>${s.obs?`<div class="session-detail-note"><b>Pauta ou observação:</b><br>${h(s.obs)}</div>`:''}</div><div class="session-stat-grid two-status"><div class="session-stat"><b>${r.presentes}</b><span>Presentes</span></div><div class="session-stat"><b>${r.faltas}</b><span>Faltas</span></div></div><div class="card-head" style="border-radius:12px;margin-bottom:9px">Participantes presentes · ${r.presentes}</div>${lista}`;abrirModal('modalConsultaSessao')}
+function corpoRelatorioSessao(s){const r=resumoChamadaSessao(s),presentes=participantesPresentesSessao(s),linhas=presentes.length?presentes.map((x,n)=>{const i=x.irmao;return `<tr><td>${n+1}</td><td>${h(i.nome)}</td><td>${i.cim?h(i.cim):'Não informado'}</td><td>${h(grauSimbolo(x.grau))}</td><td>Presença</td></tr>`}).join(''):'<tr><td colspan="5">Nenhum participante presente registrado.</td></tr>';return `<h2>Relação de participantes presentes</h2><p><b>Sessão:</b> ${h(s.numero||descricaoSessao(s))}<br><b>Data:</b> ${brData(s.data)} · <b>Tipo:</b> ${h(descricaoSessao(s))}${s.obs?`<br><b>Pauta ou observação:</b> ${h(s.obs)}`:''}</p><div class="session-report-summary"><div class="session-report-box"><b>${r.presentes}</b><span>Presentes</span></div><div class="session-report-box"><b>${r.faltas}</b><span>Faltas</span></div><div class="session-report-box"><b>${r.total}</b><span>Registros</span></div></div><table class="session-attendance-table"><thead><tr><th>Nº</th><th>Irmão</th><th>CIM</th><th>Grau</th><th>Status</th></tr></thead><tbody>${linhas}</tbody></table>`}
+function abrirRevisaoFrequencia(irmaoId,sessaoId){const i=getIrmaos().find(x=>x.id===irmaoId),s=getSessoes().find(x=>x.id===sessaoId);if(!i||!s){toast('Registro não encontrado');return}const registro=(getPresencas()[sessaoId]||{})[irmaoId]||'F';revisaoRegistroOriginal=registro;revisaoStatus=statusPresenca(registro);document.getElementById('revisaoIrmaoId').value=irmaoId;document.getElementById('revisaoSessaoId').value=sessaoId;document.getElementById('revisaoResumo').innerHTML=`<b>${h(i.nome)}</b> ${grauBadge(grauNaData(i,s.data))}<div class="item-sub">${brData(s.data)} · ${h(descricaoSessao(s))}${s.numero?' · '+h(s.numero):''}</div><div class="review-current"><b>Registro atual:</b> ${h(statusTexto(registro))}</div>`;atualizarStatusRevisao();abrirModal('modalRevisaoFrequencia')}
+function selecionarStatusRevisao(status){revisaoStatus=status==='P'?'P':'F';atualizarStatusRevisao()}
+function atualizarTipoPresencaRevisao(){}
+function atualizarStatusRevisao(){[['P','p'],['F','f']].forEach(([st,cl])=>{const b=document.getElementById('revisaoStatus'+st);if(b)b.className=`status-btn ${revisaoStatus===st?'active '+cl:''}`})}
+function salvarRevisaoFrequencia(){const irmaoId=document.getElementById('revisaoIrmaoId').value,sessaoId=document.getElementById('revisaoSessaoId').value,i=getIrmaos().find(x=>x.id===irmaoId),s=getSessoes().find(x=>x.id===sessaoId);if(!i||!s){toast('Registro não encontrado');return}const pres=getPresencas();pres[sessaoId]=pres[sessaoId]||{};const anterior=pres[sessaoId][irmaoId]||'F',novo=registroPresenca(revisaoStatus);pres[sessaoId][irmaoId]=novo;setPresencas(pres);audit('Registro individual corrigido',`${i.nome} · ${brData(s.data)} · ${statusTexto(anterior)} → ${statusTexto(novo)}`);fecharModal('modalRevisaoFrequencia');renderRelatorioIndividual(false);renderInicio();toast('Registro individual atualizado')}
+function processoMaisRecenteIrmao(irmaoId){return getProcessosFreq().filter(p=>p.irmaoId===irmaoId&&p.origem!=='migracao').sort((a,b)=>String(b.updatedAt).localeCompare(String(a.updatedAt)))[0]||null}
+function obterOuCriarProcesso(i,f){let p=processoMaisRecenteIrmao(i.id);if(p&&p.periodoInicio===f.inicio&&p.periodoFim===f.fim)return p;const elegivel=f.periodo12&&f.pctFalta>=50&&f.total>0;if(!p||elegivel){p={id:uid(),irmaoId:i.id,periodoInicio:f.inicio,periodoFim:f.fim,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),origem:'procedimento',notificacao:{emissao:'',recebimento:'',prazo:'',meio:'WhatsApp',protocolo:'',observacao:''},itens:{}};const arr=getProcessosFreq();arr.push(p);setProcessosFreq(arr)}return p}
+function salvarProcessoObjeto(p){const arr=getProcessosFreq(),idx=arr.findIndex(x=>x.id===p.id);p.updatedAt=new Date().toISOString();if(idx>=0)arr[idx]=p;else arr.push(p);setProcessosFreq(arr)}
+function somarDiasISO(data,dias){if(!data)return '';const d=new Date(data+'T12:00:00');d.setDate(d.getDate()+dias);return d.toISOString().slice(0,10)}
+function atualizarPrazoProcesso(){const r=document.getElementById('procDataRecebimento')?.value||'';document.getElementById('procPrazoFinal').value=r?somarDiasISO(r,30):''}
+function estadoProcesso(i,f,p){if(!p)return f.periodo12&&f.pctFalta>=50?'Notificação necessária':'Acompanhamento sem procedimento';if(f.pctFalta<50&&Object.values(p.itens||{}).some(x=>x.decisao==='aceita'))return 'Regularizado após abono';if(!p.notificacao?.emissao)return 'Procedimento em preparação';if(!p.notificacao?.recebimento)return 'Notificação emitida, aguardando recebimento';if(Object.values(p.itens||{}).some(x=>x.decisao==='pendente'))return 'Justificativas em análise';if(p.notificacao.prazo&&hojeISO()<=p.notificacao.prazo)return `Prazo aberto até ${brData(p.notificacao.prazo)}`;return f.pctFalta>=50?'Mantém índice de infrequência':'Índice ajustado abaixo de 50%'}
+function classeEstadoProcesso(estado){if(/Regularizado|abaixo/.test(estado))return 'good';if(/Mantém|necessária/.test(estado))return 'bad';if(/Prazo|análise|preparação/.test(estado))return 'warn';return 'info'}
+function htmlPainelProcessoFrequencia(i,f){const p=processoMaisRecenteIrmao(i.id),mostrar=!!p||(f.periodo12&&f.pctFalta>=50&&f.total>0);if(!mostrar)return '';const estado=estadoProcesso(i,f,p);return `<div class="processo-panel"><div class="processo-panel-head"><div><h3>Procedimento de frequência</h3><p>${h(estado)}. A chamada original não é alterada. Justificativas aceitas geram abono e reduzem apenas as faltas sem justa causa.</p></div><button class="btn btn-warning btn-sm" type="button" onclick="abrirProcessoFrequencia('${i.id}')">Abrir</button></div></div>`}
+function htmlFreqDetalhe(i,editavel=false){const f=calcFreq(i),ss=f.periodoAtivo?getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>b.data.localeCompare(a.data)):[],pres=getPresencas();return `${linhaFreq(i)}${htmlPainelProcessoFrequencia(i,f)}${htmlHistoricoGraus(i)}<div class="divider"></div>${ss.length?ss.map(s=>{const r=(pres[s.id]||{})[i.id]||'F',g=grauNaData(i,s.data),d=decisaoAbonoSessao(i.id,s.id),extra=statusPresenca(r)==='F'&&d?`<div class="item-sub"><b>${h(textoDecisaoAbono(d))}:</b> ${h(d.justificativa||'Sem descrição')}${d.referencia?' · '+h(d.referencia):''}</div>`:'',conteudo=`<div class="item-main"><div class="item-title">${brData(s.data)} · ${descricaoSessao(s)}</div><div class="item-sub">${h(s.numero||'')} ${grauBadge(g)}</div>${extra}${editavel?'<div class="item-sub report-edit-hint">Toque para corrigir Presença ou Falta.</div>':''}</div><div class="report-session-actions">${badgeStatusSessao(i,s,r)}${editavel?'<span class="report-edit-chip">Editar</span>':''}</div>`;return editavel?`<button type="button" class="list-item report-session-item" onclick="abrirRevisaoFrequencia('${jsArg(i.id)}','${jsArg(s.id)}')">${conteudo}</button>`:`<div class="list-item report-session-item">${conteudo}</div>`}).join(''):'<div class="empty"><p>Nenhuma sessão válida no período individual de apuração.</p></div>'}`}
+function abrirProcessoFrequencia(irmaoId){const i=getIrmaos().find(x=>x.id===irmaoId);if(!i){toast('Irmão não encontrado');return}const f=calcFreq(i);if(!f.periodo12&&!processoMaisRecenteIrmao(i.id)){toast('O procedimento formal exige 12 meses completos de apuração');return}const p=obterOuCriarProcesso(i,f);processoFrequenciaId.value=p.id;processoIrmaoId.value=i.id;procDataEmissao.value=p.notificacao.emissao||hojeISO();procDataRecebimento.value=p.notificacao.recebimento||'';procPrazoFinal.value=p.notificacao.prazo||'';procMeio.value=p.notificacao.meio||'WhatsApp';procProtocolo.value=p.notificacao.protocolo||'';procObservacao.value=p.notificacao.observacao||'';cancelarAnaliseFalta();renderProcessoFrequencia();abrirModal('modalProcessoFrequencia')}
+function processoModalAtual(){return getProcessosFreq().find(p=>p.id===processoFrequenciaId.value)}
+function renderProcessoFrequencia(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;const f=calcFreq(i),estado=estadoProcesso(i,f,p),faltas=getSessoes().filter(s=>s.data&&s.data>=f.inicio&&s.data<=f.fim&&s.data<=hojeISO()&&contaParaIrmao(i,s)&&statusPresenca((getPresencas()[s.id]||{})[i.id])==='F').sort((a,b)=>b.data.localeCompare(a.data));processoResumo.innerHTML=`<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''} · período ${f.periodoTexto}</div></div></div><div class="processo-summary"><div class="processo-summary-box"><b>${f.pctFaltaBruta}%</b><span>Falta registrada</span></div><div class="processo-summary-box"><b>${f.abonado}</b><span>Abonadas</span></div><div class="processo-summary-box"><b>${f.pctFalta}%</b><span>Sem justa causa</span></div><div class="processo-summary-box"><b>${f.total}</b><span>Sessões</span></div></div><div class="processo-status ${classeEstadoProcesso(estado)}"><b>${h(estado)}</b><br>A notificação não torna o Irmão irregular e o aplicativo não aplica suspensão automática.</div>`;processoListaFaltas.innerHTML=faltas.length?faltas.map(s=>{const d=decisaoAbonoSessao(i.id,s.id),cl=d?.decisao==='aceita'?'accepted':d?.decisao==='recusada'?'rejected':d?'pending':'none';return `<button type="button" class="falta-processo-item" onclick="selecionarFaltaProcesso('${s.id}')"><span><b>${brData(s.data)} · ${h(descricaoSessao(s))}</b><small>${h(s.numero||'Sem identificação')}${d?.justificativa?' · '+h(d.justificativa):''}</small></span><span class="abono-chip ${cl}">${h(textoDecisaoAbono(d))}</span></button>`}).join(''):'<div class="empty"><p>Nenhuma falta registrada no período.</p></div>'}
+function salvarNotificacaoFrequencia(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;const emissao=procDataEmissao.value,recebimento=procDataRecebimento.value;if(!emissao){toast('Informe a data de emissão');return}if(recebimento&&recebimento<emissao){toast('O recebimento não pode ser anterior à emissão');return}if(recebimento&&!procProtocolo.value.trim()){toast('Informe a prova ou protocolo de recebimento');return}p.notificacao={emissao,recebimento,prazo:recebimento?somarDiasISO(recebimento,30):'',meio:procMeio.value,protocolo:procProtocolo.value.trim(),observacao:procObservacao.value.trim()};salvarProcessoObjeto(p);audit('Notificação de frequência registrada',`${i.nome} · emitida em ${brData(emissao)}${recebimento?' · recebida em '+brData(recebimento)+' · prazo até '+brData(p.notificacao.prazo):''}`);renderProcessoFrequencia();renderInicio();toast('Notificação registrada')}
+function gerarTextoNotificacaoProcesso(){const i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(i)mensagemFalta(i.id)}
+function selecionarFaltaProcesso(sessaoId){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value),s=getSessoes().find(x=>x.id===sessaoId);if(!p||!i||!s)return;if(!p.notificacao?.recebimento){toast('Registre primeiro a data de recebimento da notificação');return}const d=p.itens?.[sessaoId]||{};processoSessaoId.value=sessaoId;processoAnaliseAtual=sessaoId;processoSessaoResumo.innerHTML=`<b>${h(i.nome)}</b><div class="item-sub">${brData(s.data)} · ${h(descricaoSessao(s))}${s.numero?' · '+h(s.numero):''}</div>`;procJustificativa.value=d.justificativa||'';procDataApresentacao.value=d.apresentadaEm||hojeISO();procDecisao.value=d.decisao||'pendente';procReferenciaDecisao.value=d.referencia||'';procNotaDecisao.value=d.nota||'';processoAnaliseBox.style.display='block';setTimeout(()=>processoAnaliseBox.scrollIntoView({behavior:'smooth',block:'start'}),60)}
+function cancelarAnaliseFalta(){processoAnaliseAtual='';if(document.getElementById('processoSessaoId'))processoSessaoId.value='';if(document.getElementById('processoAnaliseBox'))processoAnaliseBox.style.display='none'}
+function salvarAnaliseFalta(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value),sid=processoSessaoId.value,s=getSessoes().find(x=>x.id===sid);if(!p||!i||!s)return;const justificativa=procJustificativa.value.trim(),apresentadaEm=procDataApresentacao.value,decisao=procDecisao.value,referencia=procReferenciaDecisao.value.trim(),nota=procNotaDecisao.value.trim();if(!justificativa){toast('Informe a justificativa apresentada');return}if(!apresentadaEm){toast('Informe a data da apresentação');return}if(p.notificacao.prazo&&apresentadaEm>p.notificacao.prazo&&!confirm('A justificativa foi apresentada após o prazo de 30 dias. Deseja registrar mesmo assim?'))return;if(['aceita','recusada'].includes(decisao)&&!referencia){toast('Informe a referência da decisão ou da ata');return}p.itens=p.itens||{};p.itens[sid]={justificativa,apresentadaEm,decisao,decididaEm:decisao==='pendente'?'':new Date().toISOString(),referencia,nota,migrado:false};salvarProcessoObjeto(p);audit(decisao==='aceita'?'Falta abonada':decisao==='recusada'?'Justificativa recusada':'Justificativa registrada',`${i.nome} · ${brData(s.data)} · ${referencia||'decisão pendente'}`);cancelarAnaliseFalta();renderProcessoFrequencia();renderRelatorioIndividual(false);renderRelatorioGeral();renderInicio();toast(decisao==='aceita'?'Falta abonada':'Análise registrada')}
+function linhaRelatorioColetivo(i){const f=calcFreq(i),p=processoMaisRecenteIrmao(i.id),estado=p?estadoProcesso(i,f,p):'';const resumo=f.periodoAtivo?`Período ${f.periodoTexto} · presença ${f.pctPresenca}% · ${f.faltasRegistradas} falta(s) · ${f.abonado} abonada(s) · ${f.pctFalta}% sem justa causa${estado?' · '+estado:''}`:'Sem período de apuração';return `<button type="button" class="collective-person-card" onclick="abrirIrmaoDoRelatorioColetivo('${i.id}')"><span class="avatar">${h(iniciais(i.nome))}</span><span><span class="collective-name">${h(i.nome)}</span><span class="collective-meta">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''}<br>${h(resumo)}</span><span class="progress"><span class="bar" style="display:block;width:${f.pctPresenca}%;background:${corPct(f.pctPresenca)}"></span></span></span><span class="collective-action"><span class="badge ${classeFreq(f)}">${f.pctFalta}% sem justa causa</span><span class="collective-link">Revisar</span><span class="collective-arrow">›</span></span></button>`}
+function corpoRelatorioGeral(){const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório coletivo de frequência</h2><p>Cadastre uma sessão para iniciar a contagem.</p>';return `<h2>Relatório coletivo de frequência</h2><p>Critério: janela móvel dos últimos 12 meses, ${per.texto}. A chamada registra apenas Presença ou Falta. Justificativas aceitas em procedimento próprio geram abono, preservando a falta original e retirando-a do total de faltas sem justa causa para o Art. 76.</p><table class="collective-table"><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Presença</th><th>Faltas registradas</th><th>Abonadas</th><th>Sem justa causa</th><th>Total</th></tr></thead><tbody>${getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td>${i.cim?h(i.cim):'Não informado'}</td><td>${h(grauSimbolo(i.grau))}</td><td>${f.pctPresenca}% (${f.presente})</td><td>${f.pctFaltaBruta}% (${f.faltasRegistradas})</td><td>${f.abonado}</td><td>${f.pctFalta}% (${f.falta})</td><td>${f.total}</td></tr>`}).join('')}</tbody></table>`}
+function corpoRelatorioIndividual(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<h2>Relatório individual de frequência</h2><p>Cadastre uma sessão para iniciar a contagem.</p>`;const rows=getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>a.data.localeCompare(b.data)).map(s=>{const r=(getPresencas()[s.id]||{})[i.id]||'F',d=decisaoAbonoSessao(i.id,s.id);return `<tr><td>${brData(s.data)}</td><td>${h(descricaoSessao(s))}</td><td>${h(s.numero||'')} ${h(grauSimbolo(grauNaData(i,s.data)))}</td><td>${h(statusSessaoIrmao(i,s,r))}${d?.referencia?` · ${h(d.referencia)}`:''}</td></tr>`}).join('');const p=processoMaisRecenteIrmao(i.id),estado=p?estadoProcesso(i,f,p):'';return `<h2>Relatório individual de frequência</h2><p><b>Irmão:</b> ${h(i.nome)} · <b>CIM:</b> ${i.cim?h(i.cim):'Não informado'} · <b>Grau atual:</b> ${h(grauSimbolo(i.grau))}${i.dataIngresso?` · <b>Ingresso:</b> ${h(descricaoIngresso(i))}`:''} · <b>Período:</b> ${brData(f.inicio)} a ${brData(f.fim)}</p><p><b>Presença:</b> ${f.pctPresenca}% (${f.presente}) · <b>Faltas registradas:</b> ${f.pctFaltaBruta}% (${f.faltasRegistradas}) · <b>Faltas abonadas:</b> ${f.abonado} · <b>Faltas sem justa causa:</b> ${f.pctFalta}% (${f.falta})${estado?` · <b>Procedimento:</b> ${h(estado)}`:''}</p><table class="individual-table"><thead><tr><th>Data</th><th>Tipo</th><th>Identificação</th><th>Status administrativo</th></tr></thead><tbody>${rows}</tbody></table>`}
+function htmlRelatorioIndividual(i,editavel=false){const f=calcFreq(i);if(!f.periodoAtivo)return `<div class="empty"><p>${h(f.motivoParcial||'Cadastre uma sessão para iniciar a contagem.')}</p></div>`;return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''}${i.dataIngresso?' · '+h(descricaoIngresso(i)):''} · presença ${f.pctPresenca}% · falta sem justa causa ${f.pctFalta}% · período ${f.periodoTexto}</div></div></div>${htmlFreqDetalhe(i,editavel)}`}
+function mensagemFalta(id){const i=getIrmaos().find(x=>x.id===id);if(!i)return;const f=calcFreq(i);if(!f.periodoAtivo){toast('Cadastre uma sessão para iniciar a contagem');return}const formal=f.periodo12&&f.pctFalta>=50&&f.total>0,titulo=formal?'Notificação administrativa de frequência':'Mensagem fraternal de frequência';let texto=`Meu Irmão ${primeiroNome(i.nome)}, saúde e alegria.\n\nA Chancelaria apurou, no período ${f.periodoTexto}, ${f.faltasRegistradas} falta(s) em ${f.total} sessão(ões), correspondentes a ${f.pctFaltaBruta}% de faltas registradas. Após os abonos já aceitos, permanecem ${f.falta} falta(s) sem justa causa, equivalentes a ${f.pctFalta}%.\n\nA chamada original registra apenas Presença ou Falta. A apresentação e a análise de justificativas ocorrem em procedimento administrativo separado.`;if(formal)texto+=`\n\nNos termos dos arts. 76 e 77 do RGF, fica o Irmão notificado a apresentar justificativa no prazo de 30 dias contado do recebimento. Esta notificação não o torna irregular. As justificativas serão registradas e submetidas à decisão da Loja.`;else texto+=`\n\nEsta mensagem possui caráter fraternal de acompanhamento e não inicia procedimento formal, pois ${f.motivoParcial?f.motivoParcial.toLowerCase():'o limite formal não foi alcançado'}.`;texto+=`\n\nFraternalmente,\nChancelaria da A∴R∴L∴S∴ Razão e Força Nº 1997.`;abrirMensagem(titulo,texto,i.id)}
+function mensagemFrequenciaGeral(){const per=periodoRGFDatas();if(!per.ativo){toast('Cadastre uma sessão para iniciar a contagem');return}const linhas=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta).map(i=>{const f=calcFreq(i);return `${i.nome}: presença ${f.pctPresenca}%, faltas registradas ${f.pctFaltaBruta}%, abonadas ${f.abonado}, sem justa causa ${f.pctFalta}%`}).join('\n');abrirMensagem('Resumo de frequência',`Meus Irmãos, segue o resumo da Chancelaria para a janela móvel ${per.texto}.\n\n${linhas}\n\nA chamada registra apenas Presença ou Falta. Justificativas aceitas geram abono em procedimento separado e não transformam a falta em presença.\n\nFraternalmente,\nChancelaria da A∴R∴L∴S∴ Razão e Força Nº 1997.`)}
 
 function renderAtual(){if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
 iniciarSeguranca();
