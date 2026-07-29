@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v19-modalidades-sessao-magna";
+const CACHE_NAME = "chancelaria-1997-v20-correcao-grau-chamada";
 const APP_FILES = [
   "./",
   "./index.html",

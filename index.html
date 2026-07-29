@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#152541">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="3.4.0-modalidades-sessao-magna">
+<meta name="application-version" content="3.5.0-correcao-grau-chamada">
 <style>
 :root{
   --azul:#152541;
@@ -496,7 +496,7 @@ main{padding-top:16px}
         <div id="boxGrauData" class="alert" style="display:none">
           <div class="name">Mudança de grau detectada</div>
           <div class="txt" style="margin-bottom:8px">Informe a data em que o novo grau começa a valer. O sistema manterá a frequência anterior no grau antigo.</div>
-          <div class="field" style="margin-bottom:0"><label>Data da mudança de grau</label><input id="iGrauData" type="date"></div>
+          <div class="field" style="margin-bottom:0"><label id="labelGrauData">Data da mudança de grau</label><input id="iGrauData" type="date"></div>
         </div>
         <div class="field"><label>WhatsApp</label><input id="iTel" type="tel" placeholder="(67) 9 9999-9999"></div>
         <div class="field"><label>Cargo ou função</label><input id="iCargo" placeholder="Ex.: Venerável Mestre"></div>
@@ -1138,6 +1138,7 @@ function normalizarIrmaos(lista){
     return {
       id:i.id||uid(),nome:i.nome||'',cim:String(i.cim||'').trim(),grau:grauAtual,nascimento:anivISO(i.nascimento||''),telefone:i.telefone||'',cargo:i.cargo||'',obs:i.obs||'',
       tipoIngresso:['I','F','R'].includes(i.tipoIngresso)?i.tipoIngresso:'I',dataIngresso:dataValida(String(i.dataIngresso||'').slice(0,10))?String(i.dataIngresso).slice(0,10):'',
+      dataGrauAtual:dataValida(String(i.dataGrauAtual||'').slice(0,10))?String(i.dataGrauAtual).slice(0,10):'',
       historicoGraus:normalizarHistoricoGraus(i,grauAtual),
       familia:{
         esposa:{nome:i.familia?.esposa?.nome||'',nasc:anivISO(i.familia?.esposa?.nasc||i.familia?.esposa?.nascimento||'')},
@@ -1160,7 +1161,26 @@ function datasPadrao(){return[
 ]}
 function getDatas(){return (dbGet('festivas',datasPadrao())||[]).map(d=>({id:d.id||uid(),nome:d.nome||'',data:d.data||'',icone:d.icone||'🏛️',recorrente:String(d.recorrente??'1'),categoria:d.categoria||'Loja',msg:d.msg||''}))}
 function setDatas(v){dbSet('festivas',v)}
-function migrar(){setIrmaos(getIrmaos());setDatas(getDatas())}
+function dataSugeridaMudancaGrau(novoGrau){
+  const modalidades=novoGrau==='C'?['elevacao']:novoGrau==='M'?['exaltacao']:novoGrau==='MI'?['instalacao','reinstalacao']:[];
+  const candidatas=getSessoes().filter(s=>s.tipo==='magna'&&modalidades.includes(s.magnaTipo)&&s.data&&s.data<=hojeISO()).sort((a,b)=>b.data.localeCompare(a.data));
+  return candidatas[0]?.data||hojeISO();
+}
+function repararHistoricosGrausPendentes(){
+  const arr=getIrmaos();let alterados=0;
+  for(const i of arr){
+    const hist=normalizarHistoricoGraus(i,i.grau);
+    const ultimo=hist[hist.length-1];
+    if(ultimo&&ultimo.grau!==i.grau){
+      let data=i.dataGrauAtual||dataSugeridaMudancaGrau(i.grau);
+      const ingresso=dataIngressoIrmao(i);if(ingresso&&data<ingresso)data=ingresso;
+      i.historicoGraus=adicionarHistoricoGrau({...i,historicoGraus:hist,grau:ultimo.grau},i.grau,data);
+      i.dataGrauAtual=data;alterados++;
+    }else if(!i.dataGrauAtual&&ultimo?.data&&ultimo.data!=='1900-01-01')i.dataGrauAtual=ultimo.data;
+  }
+  if(alterados){setIrmaos(arr);audit('Histórico de grau sincronizado',`${alterados} cadastro(s) corrigido(s) para a lista de presença`)}
+}
+function migrar(){setIrmaos(getIrmaos());repararHistoricosGrausPendentes();setDatas(getDatas())}
 
 function grauSimbolo(g){return {MI:'M∴ I∴',M:'M∴ M∴',C:'C∴ M∴',A:'Apr∴'}[g]||String(g||'')}
 function grauNome(g){return {MI:'Mestre Instalado',M:'Mestre Maçom',C:'Companheiro Maçom',A:'Aprendiz'}[g]||''}
@@ -1339,12 +1359,14 @@ function abrirModalIrmao(id=''){
   filhosTemp=[];document.getElementById('iId').value=id;document.getElementById('btnExcluirIrmao').style.display=id?'inline-flex':'none';subIrmao('dados');
   if(id){const i=getIrmaos().find(x=>x.id===id);if(!i)return;document.getElementById('tituloIrmao').textContent='Editar irmão';iNome.value=i.nome;iCim.value=i.cim||'';iTipoIngresso.value=i.tipoIngresso||'I';iDataIngresso.value=i.dataIngresso||'';iGrau.value=i.grau;iNasc.value=anivValor(i.nascimento)||'';iTel.value=i.telefone||'';iCargo.value=i.cargo||'';iObs.value=i.obs||'';cNome.value=i.familia?.esposa?.nome||'';cNasc.value=anivValor(i.familia?.esposa?.nasc)||'';filhosTemp=(i.familia?.filhos||[]).map(f=>({...f}))}
   else{document.getElementById('tituloIrmao').textContent='Novo irmão';['iNome','iCim','iNasc','iTel','iCargo','iObs','cNome','cNasc'].forEach(x=>document.getElementById(x).value='');iTipoIngresso.value='I';iDataIngresso.value='';iGrau.value='A'}
-  iGrauData.value=hojeISO();atualizarAvisoGrau();renderFilhos();abrirModal('modalIrmao')
+  iGrauData.value=id?(getIrmaos().find(x=>x.id===id)?.dataGrauAtual||hojeISO()):hojeISO();atualizarAvisoGrau();renderFilhos();abrirModal('modalIrmao')
 }
 function atualizarAvisoGrau(){
-  const id=iId.value;const i=getIrmaos().find(x=>x.id===id);const mudou=!!(i&&i.grau!==iGrau.value);
-  boxGrauData.style.display=mudou?'block':'none';
-  if(mudou&&!iGrauData.value)iGrauData.value=hojeISO();
+  const id=iId.value;const i=getIrmaos().find(x=>x.id===id);const mudou=!!(i&&i.grau!==iGrau.value);const mostrar=!!(i&&(mudou||iGrau.value!=='A'));
+  boxGrauData.style.display=mostrar?'block':'none';
+  const label=document.getElementById('labelGrauData');if(label)label.textContent=mudou?'Data da mudança de grau':'Data de início do grau atual';
+  if(mudou)iGrauData.value=dataSugeridaMudancaGrau(iGrau.value);
+  else if(i&&iGrau.value!=='A'&&!iGrauData.value){const hist=normalizarHistoricoGraus(i,i.grau);const atual=[...hist].reverse().find(x=>x.grau===i.grau);iGrauData.value=i.dataGrauAtual||atual?.data||''}
 }
 function subIrmao(t){
   document.getElementById('iDados').style.display=t==='dados'?'block':'none';document.getElementById('iFamilia').style.display=t==='familia'?'block':'none';document.getElementById('iFreq').style.display=t==='freq'?'block':'none';
@@ -1363,6 +1385,37 @@ function adicionarHistoricoGrau(i,novoGrau,data){
   const limpo=[];
   for(const x of hist){const u=limpo[limpo.length-1];if(!u||u.grau!==x.grau)limpo.push(x)}
   return limpo;
+}
+function corrigirDataGrauAtual(i,data){
+  let hist=normalizarHistoricoGraus(i,i.grau).map(x=>({...x}));
+  const atual=i.grau;let idx=-1;for(let n=hist.length-1;n>=0;n--){if(hist[n].grau===atual){idx=n;break}}
+  if(idx>=0)hist[idx].data=data;else hist.push({data,grau:atual});
+  hist.sort((a,b)=>a.data.localeCompare(b.data));
+  const limpo=[];for(const x of hist){const u=limpo[limpo.length-1];if(u&&u.data===x.data)u.grau=x.grau;else if(!u||u.grau!==x.grau)limpo.push(x)}
+  return limpo;
+}
+function proximoGrau(g){return {A:'C',C:'M',M:'MI'}[g]||''}
+function abrirSubidaGrau(id){
+  const i=getIrmaos().find(x=>x.id===id);if(!i)return;
+  const novo=proximoGrau(i.grau);if(!novo){toast('O Irmão já está no grau máximo cadastrado');return}
+  gIrmaoId.value=i.id;gIrmaoNome.innerHTML=`${h(i.nome)} ${grauBadge(i.grau)} → ${grauBadge(novo)}`;
+  gNovoGrau.innerHTML=`<option value="${novo}">${grauSimbolo(novo)} - ${grauNome(novo)}</option>`;
+  gNovoGrau.value=novo;gData.value=dataSugeridaMudancaGrau(novo);abrirModal('modalGrau')
+}
+function salvarSubidaGrau(){
+  const id=gIrmaoId.value,novo=gNovoGrau.value,data=String(gData.value||'').slice(0,10);
+  const arr=getIrmaos(),idx=arr.findIndex(x=>x.id===id);if(idx<0){toast('Irmão não encontrado');return}
+  const i=arr[idx],esperado=proximoGrau(i.grau);
+  if(!esperado||novo!==esperado){toast('A subida deve respeitar a sequência dos graus');return}
+  if(!dataValida(data)||data>hojeISO()){toast('Informe uma data válida, sem usar data futura');return}
+  const ingresso=dataIngressoIrmao(i);if(ingresso&&data<ingresso){toast('A data do novo grau não pode ser anterior ao ingresso');return}
+  i.historicoGraus=adicionarHistoricoGrau(i,novo,data);i.grau=novo;i.dataGrauAtual=data;arr[idx]=i;setIrmaos(arr);
+  audit('Subida de grau registrada',`${i.nome}: ${grauSimbolo(novo)} a partir de ${brData(data)}`);
+  fecharModal('modalGrau');
+  const sessaoSelecionada=document.getElementById('presSessao')?.value||'';
+  if(aba==='presenca'){initPresenca();if(sessaoSelecionada){presSessao.value=sessaoSelecionada;carregarChamada()}}
+  else renderAtual();
+  toast(`Grau atualizado. O Irmão aparece nas sessões compatíveis a partir de ${brData(data)}`)
 }
 function salvarIrmao(){
   const nome=iNome.value.trim();
@@ -1383,13 +1436,17 @@ function salvarIrmao(){
   if(duplicado){toast(`Possível cadastro duplicado: ${duplicado.nome}`);return}
   const antigo=idx>=0?arr[idx]:null;
   let historico=antigo?normalizarHistoricoGraus(antigo,antigo.grau):[{data:dataIngresso||'1900-01-01',grau:iGrau.value}];
-  if(antigo&&antigo.grau!==iGrau.value)historico=adicionarHistoricoGrau(antigo,iGrau.value,iGrauData.value||hojeISO());
-  const obj={id,nome,cim,grau:iGrau.value,nascimento:anivISO(iNasc.value),telefone:iTel.value,cargo:iCargo.value,obs:iObs.value,tipoIngresso,dataIngresso,historicoGraus:historico,familia:{esposa:{nome:cNome.value,nasc:anivISO(cNasc.value)},filhos:filhosTemp.filter(f=>f.nome.trim()).map(f=>({nome:f.nome.trim(),nasc:anivISO(f.nasc),sexo:f.sexo}))}};
+  const mudouGrau=!!(antigo&&antigo.grau!==iGrau.value);const dataMudanca=mudouGrau?String(iGrauData.value||dataSugeridaMudancaGrau(iGrau.value)).slice(0,10):'';
+  if(mudouGrau){if(ordemGrau(iGrau.value)!==ordemGrau(antigo.grau)+1){toast('A mudança deve respeitar a sequência dos graus');return}if(!dataValida(dataMudanca)||dataMudanca>hojeISO()){toast('Informe uma data válida para a mudança de grau');return}if(dataIngresso&&dataMudanca<dataIngresso){toast('A mudança de grau não pode ser anterior ao ingresso');return}historico=adicionarHistoricoGrau(antigo,iGrau.value,dataMudanca)}
+  let dataGrauAtual=mudouGrau?dataMudanca:(antigo?.dataGrauAtual||historico[historico.length-1]?.data||dataIngresso||'');
+  let corrigiuDataGrau=false;
+  if(antigo&&!mudouGrau&&iGrau.value!=='A'&&iGrauData.value){const corrigida=String(iGrauData.value).slice(0,10);const anteriores=historico.filter(x=>ordemGrau(x.grau)<ordemGrau(iGrau.value));const limite=anteriores.length?anteriores.sort((a,b)=>b.data.localeCompare(a.data))[0].data:(dataIngresso||'');if(!dataValida(corrigida)||corrigida>hojeISO()){toast('Informe uma data válida para o grau atual');return}if(limite&&corrigida<limite){toast('A data do grau atual não pode ser anterior ao grau precedente');return}if(corrigida!==dataGrauAtual){historico=corrigirDataGrauAtual({...antigo,historicoGraus:historico},corrigida);dataGrauAtual=corrigida;corrigiuDataGrau=true}}
+  const obj={id,nome,cim,grau:iGrau.value,nascimento:anivISO(iNasc.value),telefone:iTel.value,cargo:iCargo.value,obs:iObs.value,tipoIngresso,dataIngresso,dataGrauAtual,historicoGraus:historico,familia:{esposa:{nome:cNome.value,nasc:anivISO(cNasc.value)},filhos:filhosTemp.filter(f=>f.nome.trim()).map(f=>({nome:f.nome.trim(),nasc:anivISO(f.nasc),sexo:f.sexo}))}};
   if(idx>=0)arr[idx]=obj;else arr.push(obj);
   setIrmaos(arr);
   audit(idx>=0?'Cadastro de Irmão atualizado':'Irmão cadastrado',`${nome}${cim?' · CIM '+cim:''}${dataIngresso?' · '+tipoIngressoNome(tipoIngresso)+' '+brData(dataIngresso):''}`);
   fecharModal('modalIrmao');renderAtual();
-  toast(antigo&&antigo.grau!==iGrau.value?'Grau atualizado sem alterar frequência antiga':'Cadastro salvo')
+  toast(mudouGrau?`Grau atualizado a partir de ${brData(dataMudanca)}. A lista de presença foi sincronizada.`:corrigiuDataGrau?`Data do grau corrigida para ${brData(dataGrauAtual)}. A lista de presença foi sincronizada.`:'Cadastro salvo')
 }
 function excluirIrmao(){const id=iId.value;if(!id)return;const i=getIrmaos().find(x=>x.id===id);if(!i||!confirm('Mover este irmão para a lixeira?'))return;const p=getPresencas(),rel={presencas:{}};for(const [sid,regs] of Object.entries(p)){if(Object.prototype.hasOwnProperty.call(regs,id)){rel.presencas[sid]=cloneValue(regs[id]);delete regs[id]}}const lid=enviarParaLixeira('irmao',i.nome,i,rel);setIrmaos(getIrmaos().filter(x=>x.id!==id));setPresencas(p);fecharModal('modalIrmao');renderAtual();toast('Irmão movido para a lixeira','Desfazer',()=>restaurarItemLixeira(lid))}
 function verIrmao(id){
@@ -1822,6 +1879,7 @@ function limparBackupLegado(d){
     const antigo=String(i?.id||'');const novo=idImportadoSeguro(antigo);if(antigo)mapaIrmaos.set(antigo,novo);
     return {
       id:novo,nome:textoSeguro(i?.nome,140),cim:textoSeguro(i?.cim,30),grau:grauValido(i?.grau)?i.grau:'M',nascimento:anivISO(i?.nascimento||''),telefone:textoSeguro(i?.telefone,40),cargo:textoSeguro(i?.cargo,120),obs:textoSeguro(i?.obs,3000),
+      dataGrauAtual:dataValida(String(i?.dataGrauAtual||'').slice(0,10))?String(i.dataGrauAtual).slice(0,10):'',
       historicoGraus:Array.isArray(i?.historicoGraus)?i.historicoGraus.slice(0,30).map(x=>({data:textoSeguro(x?.data,10),grau:grauValido(x?.grau)?x.grau:'M'})):[],
       familia:{
         esposa:{nome:textoSeguro(i?.familia?.esposa?.nome,140),nasc:anivISO(i?.familia?.esposa?.nasc||i?.familia?.esposa?.nascimento||'')},
