@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#152541">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="3.5.0-correcao-grau-chamada">
+<meta name="application-version" content="3.6.0-hierarquia-sessoes-ordinarias">
 <style>
 :root{
   --azul:#152541;
@@ -1191,7 +1191,22 @@ function tipoSessao(t){return {'ordinaria-aprendiz':'Ordinária de Aprendiz','or
 function descricaoSessao(s){if(!s)return '';if(s.tipo!=='magna')return tipoSessao(s.tipo);const nome=tipoMagnaNome(s.magnaTipo);return nome?`Magna de ${nome}`:'Magna · modalidade não informada'}
 function regraMagnaTexto(t){return {iniciacao:'Válida para a frequência de Apr∴, C∴ M∴, M∴ M∴ e M∴ I∴.',instalacao:'Válida para a frequência de Apr∴, C∴ M∴, M∴ M∴ e M∴ I∴.',reinstalacao:'Válida para a frequência de Apr∴, C∴ M∴, M∴ M∴ e M∴ I∴.',elevacao:'Válida para a frequência de C∴ M∴, M∴ M∴ e M∴ I∴. Apr∴ não entra na chamada.',exaltacao:'Válida para a frequência de M∴ M∴ e M∴ I∴. Apr∴ e C∴ M∴ não entram na chamada.'}[t]||'Escolha a modalidade para definir os Irmãos convocados e a regra de frequência.'}
 function atualizarCamposSessao(){const box=document.getElementById('sMagnaBox'),regra=document.getElementById('sMagnaRegra'),sel=document.getElementById('sMagnaTipo');if(!box||!regra||!sel)return;const magna=document.getElementById('sTipo')?.value==='magna';box.style.display=magna?'block':'none';regra.textContent=regraMagnaTexto(magna?sel.value:'')}
-function contaPara(g,t,magnaTipo=''){if(t==='magna'){if(magnaTipo==='elevacao')return ['C','M','MI'].includes(g);if(magnaTipo==='exaltacao')return ['M','MI'].includes(g);return ['A','C','M','MI'].includes(g)}if(g==='MI'||g==='M')return true;if(g==='C')return ['ordinaria-companheiro','especial'].includes(t);if(g==='A')return ['ordinaria-aprendiz','especial'].includes(t);return false}
+function contaPara(g,t,magnaTipo=''){
+  // Sessões Magnas seguem a modalidade cadastrada.
+  if(t==='magna'){
+    if(magnaTipo==='elevacao')return ['C','M','MI'].includes(g);
+    if(magnaTipo==='exaltacao')return ['M','MI'].includes(g);
+    return ['A','C','M','MI'].includes(g);
+  }
+  // Hierarquia das Sessões Ordinárias:
+  // Apr∴ participa da Ordinária de Aprendiz.
+  // C∴ M∴ participa das Ordinárias de Aprendiz e Companheiro.
+  // M∴ M∴ e M∴ I∴ participam de todas as Sessões Ordinárias.
+  if(g==='MI'||g==='M')return ['ordinaria-aprendiz','ordinaria-companheiro','ordinaria-mestre','especial'].includes(t);
+  if(g==='C')return ['ordinaria-aprendiz','ordinaria-companheiro','especial'].includes(t);
+  if(g==='A')return ['ordinaria-aprendiz','especial'].includes(t);
+  return false;
+}
 function grauNaData(i,data){
   const hist=normalizarHistoricoGraus(i,grauValido(i.grau)?i.grau:'M');
   const d=String(data||hojeISO()).slice(0,10);
