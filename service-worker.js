@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-profissional-v19-fluxo-abono-rgf";
+const CACHE_NAME = "chancelaria-1997-profissional-v21-justificativa-abono";
 const APP_FILES = [
   "./",
   "./index.html",
