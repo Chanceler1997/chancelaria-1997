@@ -24,6 +24,7 @@ th,td{border:1px solid #aaa;padding:1.8mm;text-align:left;vertical-align:top;ove
 th{background:#ece8df;color:var(--azul);font-weight:800}
 .collective-table th:nth-child(1){width:23%}.collective-table th:nth-child(2){width:16%}.collective-table th:nth-child(3){width:9%}.collective-table th:nth-child(4){width:15%}.collective-table th:nth-child(5){width:17%}.collective-table th:nth-child(6){width:12%}.collective-table th:nth-child(7){width:8%}
 .individual-table th:nth-child(1){width:23%}.individual-table th:nth-child(2){width:25%}.individual-table th:nth-child(3){width:24%}.individual-table th:nth-child(4){width:28%}
+.session-report-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5mm;margin:4mm 0}.session-report-box{border:1px solid #b8b0a2;border-radius:2mm;padding:2.5mm;text-align:center;background:#faf8f3}.session-report-box b{display:block;font-size:13pt;color:var(--azul)}.session-report-box span{display:block;font-size:7.5pt;margin-top:1mm;text-transform:uppercase;font-weight:800;color:#5d574e}.session-attendance-table th:nth-child(1){width:7%}.session-attendance-table th:nth-child(2){width:35%}.session-attendance-table th:nth-child(3){width:16%}.session-attendance-table th:nth-child(4){width:14%}.session-attendance-table th:nth-child(5){width:28%}.assinatura.dual-signature{display:grid;grid-template-columns:1fr 1fr;gap:18mm;align-items:end}
 .continued-table{margin-top:0}
 .assinatura{margin-top:12mm;text-align:center;font-size:10pt;break-inside:avoid;page-break-inside:avoid}
 .footer{position:static;margin-top:6mm;border-top:1px solid #999;padding-top:1.5mm;font-size:7pt;line-height:1.25;text-align:justify;color:#333;break-inside:avoid;page-break-inside:avoid}
@@ -35,7 +36,7 @@ th{background:#ece8df;color:var(--azul);font-weight:800}
   .toolbar{display:none!important}
   .page{width:auto;min-height:0;margin:0;box-shadow:none;padding:0}
   .official-header{margin-bottom:6mm}
-  .continued-table{break-before:page;page-break-before:always;margin-top:0}
+  .continued-table{margin-top:0}
   h2{font-size:12.5pt;margin-bottom:4mm}
   p{font-size:9.4pt;line-height:1.35}
   table{font-size:8.5pt;margin-top:2.5mm}
@@ -59,26 +60,9 @@ th{background:#ece8df;color:var(--azul);font-weight:800}
   try{
     const raw=location.hash.slice(1);if(!raw)throw new Error('Relatório não recebido.');
     const data=JSON.parse(decodeBase64UrlUtf8(raw));history.replaceState(null,'',location.pathname+location.search);document.title=(data.titulo||'Relatório')+' · Chancelaria 1997';
-    app.innerHTML=`<article class="page"><header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header>${data.corpo||''}<div class="assinatura">____________________________________<br>Chancelaria</div><div class="footer">Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.</div></article>`;
-    const coletiva=app.querySelector('table.collective-table');
-    if(coletiva&&coletiva.tBodies[0]){
-      const linhas=[...coletiva.tBodies[0].rows];
-      const limite=20;
-      if(linhas.length>limite){
-        linhas.slice(limite).forEach(l=>l.remove());
-        let referencia=coletiva;
-        for(let inicio=limite;inicio<linhas.length;inicio+=limite){
-          const nova=coletiva.cloneNode(false);
-          nova.className=coletiva.className+' continued-table';
-          if(coletiva.tHead)nova.appendChild(coletiva.tHead.cloneNode(true));
-          const corpo=document.createElement('tbody');
-          linhas.slice(inicio,inicio+limite).forEach(l=>corpo.appendChild(l));
-          nova.appendChild(corpo);
-          referencia.after(nova);
-          referencia=nova;
-        }
-      }
-    }
+    const assinatura=data.assinatura||'____________________________________<br>Chancelaria';const rodape=data.rodape||'Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';app.innerHTML=`<article class="page"><header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header>${data.corpo||''}<div class="assinatura${data.assinaturaClasse?' '+data.assinaturaClasse:''}">${assinatura}</div><div class="footer">${rodape}</div></article>`;
+    // A paginação fica a cargo do motor de impressão do navegador.
+    // thead é repetido automaticamente e cada linha evita quebra interna.
     const deveImprimir=new URLSearchParams(location.search).get('print')==='1';if(deveImprimir){const img=app.querySelector('img');const imprimir=()=>setTimeout(()=>{try{window.print()}catch(e){}},700);if(img&&!img.complete)img.addEventListener('load',imprimir,{once:true});else imprimir()}
   }catch(e){app.innerHTML=`<div class="error"><h2>Não foi possível abrir o relatório</h2><p>${String(e.message||e)}</p><p>Volte ao aplicativo e gere o relatório novamente.</p></div>`}
 })();

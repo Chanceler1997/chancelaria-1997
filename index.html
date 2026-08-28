@@ -11,9 +11,9 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#152541">
+<meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="4.0.0-justificativa-abono">
+<meta name="application-version" content="5.0.1-modern-gob">
 <style>
 :root{
   --azul:#152541;
@@ -330,6 +330,111 @@ main{padding-top:16px}
 .procedure-print-table th:nth-child(1){width:14%}.procedure-print-table th:nth-child(2){width:28%}.procedure-print-table th:nth-child(3){width:18%}.procedure-print-table th:nth-child(4){width:40%}
 @media(max-width:600px){.procedure-dashboard-summary{grid-template-columns:repeat(2,1fr)}.procedure-filterbar{grid-template-columns:1fr}.procedure-card{grid-template-columns:42px minmax(0,1fr)}.procedure-card-side{grid-column:2;align-items:flex-start;flex-direction:row;flex-wrap:wrap}.procedure-timeline{grid-template-columns:repeat(2,1fr)}.procedure-modal-footer{grid-template-columns:1fr 1fr}}
 
+
+/* v5.0.1 — linguagem visual institucional contemporânea */
+:root{
+  --azul:#0b1729;
+  --azul-2:#122641;
+  --azul-3:#1d385e;
+  --ouro:#c8a64b;
+  --ouro-2:#e0c36f;
+  --papel:#f4f0e7;
+  --branco:#fffdfa;
+  --linha:#ddd6c7;
+  --texto:#172033;
+  --muted:#6f7480;
+  --verde:#23704a;
+  --vermelho:#9f3d38;
+  --laranja:#a96723;
+  --roxo:#5f4a82;
+  --sombra:0 14px 34px rgba(5,14,28,.13);
+  --surface:rgba(255,253,250,.97);
+  --surface-soft:#f8f5ee;
+}
+html{background:#0b1729}
+body{
+  color:var(--texto);
+  background:
+    radial-gradient(circle at 12% 0%,rgba(200,166,75,.12),transparent 24rem),
+    radial-gradient(circle at 94% 32%,rgba(29,56,94,.20),transparent 28rem),
+    linear-gradient(180deg,#0a1526 0,#0e1c31 30%,#10223b 100%);
+  background-attachment:fixed;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;z-index:-1;
+  background-image:linear-gradient(30deg,rgba(255,255,255,.035) 12%,transparent 12.5%,transparent 87%,rgba(255,255,255,.035) 87.5%),linear-gradient(150deg,rgba(255,255,255,.035) 12%,transparent 12.5%,transparent 87%,rgba(255,255,255,.035) 87.5%);
+  background-size:42px 72px;
+}
+.header{
+  background:rgba(9,21,38,.88);backdrop-filter:blur(18px) saturate(1.15);-webkit-backdrop-filter:blur(18px) saturate(1.15);
+  border-bottom:1px solid rgba(200,166,75,.34);box-shadow:0 10px 30px rgba(0,0,0,.20);padding:8px 10px 9px;
+}
+.header-top{max-width:760px}
+.app-official-header{background:#fffdfa;border:1px solid rgba(200,166,75,.62);border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.app-official-header .official-banner{filter:saturate(.92) contrast(1.02)}
+.header-actions{padding-top:8px;gap:8px}
+.settings-now,.lock-now,.back-now{
+  background:rgba(255,255,255,.08)!important;color:var(--ouro-2)!important;border:1px solid rgba(200,166,75,.44)!important;
+  box-shadow:none!important;border-radius:13px!important;transition:transform .18s ease,background .18s ease,border-color .18s ease;
+}
+.settings-now:active,.lock-now:active,.back-now:active{transform:scale(.94);background:rgba(200,166,75,.14)!important}
+main{max-width:720px;padding:18px 14px 104px}
+.hero,.card,.list-item,.today-panel,.action,.stat,.procedure-card,.procedure-dashboard-box{
+  background:var(--surface);border-color:rgba(200,166,75,.22);box-shadow:var(--sombra);
+}
+.hero{border-radius:24px;padding:18px;overflow:hidden}
+.hero:before{content:"";position:absolute;width:190px;height:190px;border:1px solid rgba(200,166,75,.16);transform:rotate(45deg);right:-112px;top:-112px;border-radius:30px}
+.card{border-radius:22px;overflow:hidden;margin-bottom:16px}
+.card-head{
+  background:linear-gradient(115deg,#0c1a2d 0%,#132a48 72%,#19375e 100%);color:#ecd58f;
+  font-family:Georgia,"Times New Roman",serif;font-size:15px;letter-spacing:.35px;padding:14px 16px;border-bottom:1px solid rgba(200,166,75,.28);
+}
+.card-body{padding:16px}
+.stat{border-radius:18px;padding:15px 10px;box-shadow:none;background:linear-gradient(180deg,#fffdfa,#f7f3ea)}
+.stat strong{font-size:30px;color:#10213b}.stat span{color:#747881;letter-spacing:.55px}
+.action-grid{gap:12px}.action{border-radius:18px;padding:15px;min-height:88px;box-shadow:0 8px 22px rgba(10,24,45,.08);transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+.action:active{transform:scale(.985);border-color:rgba(200,166,75,.58)}
+.action b{font-size:15px;color:#10213b}.action small{color:#6f7480}
+.btn{border-radius:13px;padding:11px 14px;min-height:42px;transition:transform .15s ease,filter .15s ease,box-shadow .15s ease}
+.btn:active{transform:scale(.975)}
+.btn-primary{background:linear-gradient(180deg,#d4b35b,#bd9636);color:#0c1a2d;box-shadow:0 6px 16px rgba(126,91,15,.22)}
+.btn-outline{color:#173153;border-color:#c8a64b;background:#fffdfa}.btn-light{background:#fffdfa;border-color:#dcd6c9;color:#173153}
+.field label{color:#233a5b;letter-spacing:.4px}
+.field input,.field select,.field textarea,.search input,.procedure-filterbar input,.procedure-filterbar select{
+  background:#fffdfa;border-color:#d8d2c7;border-radius:14px;box-shadow:0 2px 7px rgba(10,24,45,.03);min-height:46px;
+}
+.field input:focus,.field select:focus,.field textarea:focus,.search input:focus{border-color:#c8a64b;box-shadow:0 0 0 4px rgba(200,166,75,.14)}
+.list-item{border-radius:18px;padding:13px;box-shadow:0 6px 18px rgba(10,24,45,.07)}
+.avatar{border-radius:15px;background:linear-gradient(145deg,#10213b,#1e3d66);color:#e4c774;box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 6px 14px rgba(10,24,45,.16)}
+.badge{padding:4px 9px}.tabs{border-radius:15px;background:#f7f3ea;border-color:#ded7ca;box-shadow:none}.tabs button{background:#f7f3ea}.tabs button.active{background:linear-gradient(180deg,#122641,#0d1d32);color:#e4c774}
+.alert{background:#fff7e6;border-color:#ddb967;border-radius:16px}.progress{background:#e8e2d7}
+.modal-back{background:rgba(3,9,17,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.modal{background:#f8f5ee;border-radius:24px;border-color:rgba(200,166,75,.32);box-shadow:0 30px 90px rgba(0,0,0,.45)}
+.modal-head{background:linear-gradient(110deg,#0c1a2d,#173153);color:#ecd58f;padding:15px 17px}
+.modal-body{padding:17px}.modal-foot{background:#f4f0e7;border-top-color:#ddd6c7}
+.nav{
+  left:10px;right:10px;bottom:10px;border:1px solid rgba(200,166,75,.38);border-radius:22px;
+  background:rgba(8,20,36,.95);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  box-shadow:0 16px 42px rgba(0,0,0,.38);overflow:hidden;padding:4px;grid-template-columns:repeat(6,1fr);
+}
+.nav button{min-height:62px;border-radius:16px;color:#aeb9c8;font-size:10px;font-weight:750;position:relative}
+.nav button span.nav-symbol{margin-bottom:2px}.nav button.active{color:#ead181;background:linear-gradient(180deg,rgba(200,166,75,.15),rgba(200,166,75,.07));box-shadow:none}
+.nav button.active:after{content:"";position:absolute;left:28%;right:28%;bottom:4px;height:2px;border-radius:999px;background:#d6b65e}
+.security-gate{background:radial-gradient(circle at 50% 5%,rgba(200,166,75,.16),transparent 26rem),linear-gradient(180deg,#07111f,#0d2038)}
+.security-panel{background:rgba(255,253,250,.98);border-color:rgba(200,166,75,.55);border-radius:28px;box-shadow:0 30px 90px rgba(0,0,0,.5)}
+.security-brand-seal{border-color:rgba(200,166,75,.62);box-shadow:0 12px 28px rgba(10,24,45,.16)}
+.security-panel h1{color:#10213b;font-size:27px}.security-kicker{color:#8a6a1d}.security-sub{color:#6d7280}
+.security-submit{background:linear-gradient(180deg,#d4b35b,#bd9636);color:#0b1729;border-radius:14px;box-shadow:0 8px 20px rgba(126,91,15,.22)}
+.norm-chip{background:#eef1f5;border-color:#d4dbe4;color:#273e5f}.norm-chip.cancel{background:#f8e9e8;border-color:#e5c0bd;color:#8a3030}.norm-chip.future{background:#fff5df;border-color:#e8cf94;color:#775816}
+.processo-panel{background:linear-gradient(180deg,#fffaf0,#f5eddd);border-color:rgba(200,166,75,.42)}
+.report-preview-back{background:#07111f}.report-preview-actions{background:#0b1729}.report-preview-page{box-shadow:0 10px 40px rgba(0,0,0,.24)}
+@media(max-width:430px){
+  .header{padding:6px 7px 7px}.app-official-header{border-radius:14px}.header-actions{padding-top:6px}
+  main{padding:14px 10px 98px}.card{border-radius:19px}.card-head{padding:12px 13px}.card-body{padding:13px}.hero{border-radius:20px}
+  .nav{left:6px;right:6px;bottom:6px;border-radius:19px;padding:3px}.nav button{min-height:59px;font-size:9px;padding-left:0;padding-right:0}.nav button span.nav-symbol svg{width:20px;height:20px}
+  .modal{border-radius:20px}.action-grid{gap:9px}.action{min-height:80px;padding:12px}
+}
+
 </style>
 </head>
 <body class="app-locked">
@@ -376,12 +481,12 @@ main{padding-top:16px}
 
 <main>
   <section id="inicio" class="section active">
-    <div class="hero">
+    <div class="hero"><div class="install-note" style="margin-bottom:12px"><b>Chancelaria 1997 · Versão 5.0.1</b><br>Gestão institucional, frequência e conformidade normativa da A∴R∴L∴S∴ Razão e Força nº 1997.</div>
       <div class="action-grid">
-        <button class="action" onclick="abrirAba('irmaos'); abrirModalIrmao()"><b>🤝 Cadastrar irmão</b><small>Inclua grau, telefone, esposa e filhos.</small></button>
-        <button class="action" onclick="abrirAba('sessoes'); abrirModalSessao()"><b>📜 Nova sessão</b><small>Cadastre sessões antigas e futuras.</small></button>
-        <button class="action" onclick="abrirAba('presenca')"><b>⚒️ Fazer chamada</b><small>Registre apenas presença ou falta.</small></button>
-        <button class="action" onclick="abrirAba('datas'); abrirModalData()"><b>✨ Nova data</b><small>Inclua datas maçônicas e da Loja.</small></button>
+        <button class="action" onclick="abrirAba('irmaos'); abrirModalIrmao()"><b>Cadastrar Irmão</b><small>Inclua grau, telefone, esposa e filhos.</small></button>
+        <button class="action" onclick="abrirAba('sessoes'); abrirModalSessao()"><b>Nova sessão</b><small>Cadastre sessões antigas e futuras.</small></button>
+        <button class="action" onclick="abrirAba('presenca')"><b>Fazer chamada</b><small>Registre apenas presença ou falta.</small></button>
+        <button class="action" onclick="abrirAba('datas'); abrirModalData()"><b>Nova data</b><small>Inclua datas maçônicas e da Loja.</small></button>
       </div>
     </div>
 
@@ -508,16 +613,28 @@ main{padding-top:16px}
         <div id="backupVerifyResult"></div>
       </div>
     </div>
-    <div class="card" id="centralSeguranca">
+    <div class="card" id="conformidadeV5">
+      <div class="card-head">⚖️ Conformidade e registros auxiliares</div>
+      <div class="card-body">
+        <div class="action-grid">
+          <button class="action" type="button" onclick="abrirVisitantesV5()"><b>Visitantes</b><small>Identificação, presença e certificado.</small></button>
+          <button class="action" type="button" onclick="abrirExternaV5()"><b>Frequência externa</b><small>Atestados de Irmãos em outras Lojas do GOB.</small></button>
+          <button class="action" type="button" onclick="abrirEleitoralV5()"><b>Qualificação eleitoral</b><small>Cálculo separado do art. 76.</small></button>
+          <button class="action" type="button" onclick="abrirPendenciasV5()"><b>Pendências normativas</b><small>Procedimentos, comunicações e cadastros.</small></button>
+        </div>
+      </div>
+    </div>
+
+<div class="card" id="centralSeguranca">
       <div class="card-head">🔐 Central de segurança</div>
       <div class="card-body">
         <div class="sec-status">
           <div class="sec-box"><b>Criptografia</b><span>AES GCM ativa neste navegador ou aplicativo.</span></div>
           <div class="sec-box"><b>Tentativas incorretas</b><span id="securityAttemptsInfo">0 nesta abertura</span></div>
-          <div class="sec-box"><b>Bloqueio automático</b><span id="securityTimeoutInfo">Desativado</span></div>
+          <div class="sec-box"><b>Bloqueio automático</b><span id="securityTimeoutInfo">10 minutos</span></div>
           <div class="sec-box"><b>Último backup</b><span id="securityBackupInfo">Nunca realizado</span></div>
         </div>
-        <div class="alert"><div class="name">Sessão persistente</div><div class="txt">O aplicativo permanece aberto ao minimizar ou alternar para outro aplicativo. Use Bloquear agora para exigir a senha novamente, ou Sair para fechar.</div></div>
+        <div class="alert"><div class="name">Proteção de sessão</div><div class="txt">O aplicativo bloqueia após 10 minutos sem atividade. Ao usar impressão, WhatsApp ou seleção de arquivo, o bloqueio é temporariamente suspenso para não interromper a ação.</div></div>
         <div class="toolbar">
           <button class="btn btn-warning" onclick="abrirModal('modalTrocarSenha')">Alterar senha</button>
           <button class="btn btn-light" onclick="bloquearAplicativo('Aplicativo bloqueado.')">Bloquear agora</button>
@@ -551,7 +668,7 @@ main{padding-top:16px}
   <button id="nav-sessoes" onclick="abrirAba('sessoes')"><span class="nav-symbol"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></span>Sessões</button>
   <button id="nav-presenca" onclick="abrirAba('presenca')"><span class="nav-symbol"><svg viewBox="0 0 24 24"><path d="M4 12.5 9.2 18 20 6"/></svg></span>Presença</button>
   <button id="nav-datas" onclick="abrirAba('datas')"><span class="nav-symbol"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 9h18M7 13h3M14 13h3M7 17h3"/></svg></span>Datas</button>
-  <button id="nav-relatorios" onclick="abrirAba('relatorios')"><span class="nav-symbol"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/><path d="M3 20h18"/></svg></span>Relatórios</button>
+  <button id="nav-relatorios" onclick="abrirAba('relatorios')"><span class="nav-symbol"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/><path d="M3 20h18"/></svg></span>Mais</button>
 </nav>
 
 <div class="modal-back" id="modalIrmao">
@@ -583,6 +700,19 @@ main{padding-top:16px}
         </div>
         <div class="field"><label>WhatsApp</label><input id="iTel" type="tel" placeholder="(67) 9 9999-9999"></div>
         <div class="field"><label>Cargo ou função</label><input id="iCargo" placeholder="Ex.: Venerável Mestre"></div>
+        <div class="row">
+          <div class="field"><label>Condição maçônica para frequência</label><select id="iCondicao"><option value="normal">Ativo — regime normal</option><option value="emerito">Emérito</option><option value="remido">Remido</option></select></div>
+          <div class="field"><label>Situação dos direitos</label><select id="iDireitos"><option value="pleno">Em pleno gozo</option><option value="suspenso">Direitos suspensos — decisão registrada</option><option value="restabelecido">Direitos restabelecidos</option></select></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Regime de frequência</label><select id="iRegimeFreq"><option value="normal">Normal</option><option value="isencao_loja">Isenção concedida pela Loja</option><option value="dispensa_legal">Dispensa legal/normativa</option></select></div>
+          <div class="field"><label>Referência normativa/ata</label><input id="iRegimeRef" placeholder="Ex.: Ata nº 12/2026 ou cargo/função"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Início do regime especial</label><input id="iRegimeInicio" type="date"></div>
+          <div class="field"><label>Fim do regime especial</label><input id="iRegimeFim" type="date"></div>
+        </div>
+        <div class="field"><label>Referência da situação dos direitos</label><input id="iDireitosRef" placeholder="Somente quando houver decisão formal registrada"></div>
         <div class="field"><label>Observações</label><textarea id="iObs" placeholder="Notas úteis para o Chanceler"></textarea></div>
       </div>
       <div id="iFamilia" style="display:none">
@@ -609,11 +739,18 @@ main{padding-top:16px}
       <input type="hidden" id="sId">
       <div class="row">
         <div class="field"><label>Data</label><input id="sData" type="date"></div>
-        <div class="field"><label>Tipo</label><select id="sTipo" onchange="atualizarCamposSessao()"><option value="ordinaria-aprendiz">Ordinária de Aprendiz</option><option value="ordinaria-companheiro">Ordinária de Companheiro</option><option value="ordinaria-mestre">Ordinária de Mestre</option><option value="magna">Magna</option><option value="especial">Especial</option></select></div>
+        <div class="field"><label>Classe normativa</label><select id="sTipo" onchange="atualizarCamposSessao()"><option value="ordinaria">Ordinária</option><option value="magna">Magna</option><option value="extraordinaria">Extraordinária</option></select></div>
       </div>
-      <div id="sMagnaBox" style="display:none">
-        <div class="field"><label>Modalidade da Sessão Magna</label><select id="sMagnaTipo" onchange="atualizarCamposSessao()"><option value="">Selecione a modalidade</option><option value="iniciacao">Iniciação</option><option value="instalacao">Instalação</option><option value="reinstalacao">Reinstalação</option><option value="elevacao">Elevação</option><option value="exaltacao">Exaltação</option></select></div>
-        <div class="install-note" id="sMagnaRegra">Escolha a modalidade para definir os Irmãos convocados e a regra de frequência.</div>
+      <div class="row">
+        <div class="field"><label>Modalidade (RGF art. 108)</label><select id="sMagnaTipo" onchange="atualizarCamposSessao()"></select></div>
+        <div class="field"><label>Grau em que a sessão foi realizada</label><select id="sGrau"><option value="A">Grau I — Aprendiz</option><option value="C">Grau II — Companheiro</option><option value="M">Grau III — Mestre</option></select></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Situação</label><select id="sStatus"><option value="realizada">Realizada</option><option value="agendada">Agendada</option><option value="cancelada">Cancelada</option></select></div>
+        <div class="field"><label>Natureza de acesso</label><input id="sAcesso" readonly value="Privativa de Maçons"></div>
+      </div>
+      <div id="sMagnaBox">
+        <div class="install-note" id="sMagnaRegra">A classificação é aplicada automaticamente conforme o art. 108 do RGF. Não existe opção manual de “conta/não conta”.</div>
       </div>
       <div class="field"><label>Número ou identificação</label><input id="sNumero" placeholder="Ex.: 1ª Sessão Ordinária 2026"></div>
       <div class="field"><label>Pauta ou observação</label><textarea id="sObs" placeholder="Resumo da sessão"></textarea></div>
@@ -784,6 +921,41 @@ main{padding-top:16px}
   </div>
 </div>
 
+
+<div class="modal-back" id="modalVisitantesV5" role="dialog" aria-modal="true">
+  <div class="modal"><div class="modal-head"><span>Visitantes</span><button class="modal-close" onclick="fecharModal('modalVisitantesV5')">×</button></div><div class="modal-body">
+    <input type="hidden" id="v5VisId"><div class="row"><div class="field"><label>Sessão</label><select id="v5VisSessao"></select></div><div class="field"><label>Nome completo</label><input id="v5VisNome"></div></div>
+    <div class="row"><div class="field"><label>CIM</label><input id="v5VisCim"></div><div class="field"><label>Grau</label><select id="v5VisGrau"><option value="A">Aprendiz</option><option value="C">Companheiro</option><option value="M">Mestre</option><option value="MI">Mestre Instalado</option></select></div></div>
+    <div class="row"><div class="field"><label>Loja de origem</label><input id="v5VisLoja"></div><div class="field"><label>Número</label><input id="v5VisNumero"></div></div>
+    <div class="row"><div class="field"><label>Oriente</label><input id="v5VisOriente"></div><div class="field"><label>Identificação</label><select id="v5VisIdent"><option value="credencial">Credencial</option><option value="exame">Exame de praxe</option><option value="apresentacao">Apresentado por membro do Quadro</option></select></div></div>
+    <div class="field"><label>Apresentado por / observação</label><input id="v5VisObs"></div>
+    <div class="toolbar"><button class="btn btn-primary" onclick="salvarVisitanteV5()">Salvar visitante</button><button class="btn btn-success" onclick="certificadoVisitanteV5()">Certificado</button></div>
+    <div class="divider"></div><div id="v5VisLista"></div>
+  </div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalVisitantesV5')">Fechar</button></div></div>
+</div>
+
+<div class="modal-back" id="modalExternaV5" role="dialog" aria-modal="true">
+  <div class="modal"><div class="modal-head"><span>Frequência em outra Loja</span><button class="modal-close" onclick="fecharModal('modalExternaV5')">×</button></div><div class="modal-body">
+    <input type="hidden" id="v5ExtId"><div class="row"><div class="field"><label>Irmão</label><select id="v5ExtIrmao"></select></div><div class="field"><label>Data</label><input id="v5ExtData" type="date"></div></div>
+    <div class="row"><div class="field"><label>Loja visitada</label><input id="v5ExtLoja"></div><div class="field"><label>Número</label><input id="v5ExtNumero"></div></div>
+    <div class="row"><div class="field"><label>Oriente</label><input id="v5ExtOriente"></div><div class="field"><label>Grau da sessão</label><select id="v5ExtGrau"><option value="A">Grau I</option><option value="C">Grau II</option><option value="M">Grau III</option></select></div></div>
+    <div class="field"><label>Atestado / referência</label><input id="v5ExtAtestado" placeholder="Número, protocolo ou descrição do atestado"></div>
+    <div class="toolbar"><button class="btn btn-primary" onclick="salvarExternaV5()">Registrar frequência</button></div><div class="divider"></div><div id="v5ExtLista"></div>
+  </div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalExternaV5')">Fechar</button></div></div>
+</div>
+
+<div class="modal-back" id="modalEleitoralV5" role="dialog" aria-modal="true">
+  <div class="modal processo-modal"><div class="modal-head"><span>Qualificação eleitoral</span><button class="modal-close" onclick="fecharModal('modalEleitoralV5')">×</button></div><div class="modal-body">
+    <div class="row"><div class="field"><label>Data da eleição</label><input id="v5EleData" type="date" onchange="renderEleitoralV5()"></div><div class="field"><label>Finalidade</label><select id="v5EleTipo"><option value="loja">Administração/Orador/Deputados</option><option value="geral">Grão-Mestre / eleições gerais</option></select></div></div>
+    <div class="install-note">Cálculo eleitoral independente do art. 76. A situação financeira é anotada separadamente e não é presumida pelo aplicativo.</div>
+    <div id="v5EleLista"></div>
+  </div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalEleitoralV5')">Fechar</button><button class="btn btn-success" onclick="imprimirEleitoralV5()">Imprimir relação</button></div></div>
+</div>
+
+<div class="modal-back" id="modalPendenciasV5" role="dialog" aria-modal="true">
+  <div class="modal"><div class="modal-head"><span>Pendências normativas</span><button class="modal-close" onclick="fecharModal('modalPendenciasV5')">×</button></div><div class="modal-body"><div id="v5PendLista"></div></div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalPendenciasV5')">Fechar</button></div></div>
+</div>
+
 <div class="modal-back report-preview-back" id="modalPreviewRelatorio" role="dialog" aria-modal="true" aria-labelledby="previewRelatorioTitulo">
   <div class="modal report-preview-modal">
     <div class="modal-head report-preview-head"><button class="report-preview-back-button" type="button" onclick="fecharPreviewRelatorio()" aria-label="Voltar ao relatório">‹</button><span id="previewRelatorioTitulo">Relatório</span></div>
@@ -851,7 +1023,7 @@ const SEC_VAULT_KEY=PFX+'vault_v1';
 const SEC_BACKUP_TYPE='CHANCELARIA1997_BACKUP_CRIPTOGRAFADO';
 const SEC_ITERATIONS=600000;
 const SEC_AAD='A.R.L.S. Razao e Forca 1997 | Cofre local v1';
-const SEC_DATA_KEYS=['irmaos','sessoes','presencas','processosFreq','festivas','periodoFreqRGF','settings','trash','audit','backupInfo'];
+const SEC_DATA_KEYS=['irmaos','sessoes','presencas','processosFreq','festivas','periodoFreqRGF','settings','trash','audit','backupInfo','visitantes','freqExterna','eleicoes'];
 const SEC_RECOVERY_KEY=PFX+'recovery_v1';
 const TRASH_DAYS=30;
 const EXTERNAL_ACTION_GRACE_MS=15*60*1000;
@@ -1046,6 +1218,7 @@ async function bloquearAplicativo(message='Aplicativo bloqueado por segurança.'
 function resetInactivityTimer(){
   clearTimeout(inactivityTimer);
   inactivityTimer=null;
+  if(vaultKey&&!seletorArquivoAtivo&&!acaoExternaAtiva())inactivityTimer=setTimeout(()=>bloquearAplicativo('Aplicativo bloqueado após 10 minutos sem atividade.'),10*60*1000);
 }
 function iniciarSelecaoArquivo(){
   seletorArquivoAtivo=true;
@@ -1511,8 +1684,8 @@ function filtrarGrau(g){filtroGrau=g;renderIrmaos()}
 
 function abrirModalIrmao(id=''){
   filhosTemp=[];document.getElementById('iId').value=id;document.getElementById('btnExcluirIrmao').style.display=id?'inline-flex':'none';subIrmao('dados');
-  if(id){const i=getIrmaos().find(x=>x.id===id);if(!i)return;document.getElementById('tituloIrmao').textContent='Editar irmão';iNome.value=i.nome;iCim.value=i.cim||'';iTipoIngresso.value=i.tipoIngresso||'I';iDataIngresso.value=i.dataIngresso||'';iGrau.value=i.grau;iNasc.value=anivValor(i.nascimento)||'';iTel.value=i.telefone||'';iCargo.value=i.cargo||'';iObs.value=i.obs||'';cNome.value=i.familia?.esposa?.nome||'';cNasc.value=anivValor(i.familia?.esposa?.nasc)||'';filhosTemp=(i.familia?.filhos||[]).map(f=>({...f}))}
-  else{document.getElementById('tituloIrmao').textContent='Novo irmão';['iNome','iCim','iNasc','iTel','iCargo','iObs','cNome','cNasc'].forEach(x=>document.getElementById(x).value='');iTipoIngresso.value='I';iDataIngresso.value='';iGrau.value='A'}
+  if(id){const i=getIrmaos().find(x=>x.id===id);if(!i)return;document.getElementById('tituloIrmao').textContent='Editar irmão';iNome.value=i.nome;iCim.value=i.cim||'';iTipoIngresso.value=i.tipoIngresso||'I';iDataIngresso.value=i.dataIngresso||'';iGrau.value=i.grau;iNasc.value=anivValor(i.nascimento)||'';iTel.value=i.telefone||'';iCargo.value=i.cargo||'';iCondicao.value=i.condicao||'normal';iDireitos.value=i.direitos||'pleno';iDireitosRef.value=i.direitosRef||'';iRegimeFreq.value=i.regimeFreq||'normal';iRegimeRef.value=i.regimeRef||'';iRegimeInicio.value=i.regimeInicio||'';iRegimeFim.value=i.regimeFim||'';iObs.value=i.obs||'';cNome.value=i.familia?.esposa?.nome||'';cNasc.value=anivValor(i.familia?.esposa?.nasc)||'';filhosTemp=(i.familia?.filhos||[]).map(f=>({...f}))}
+  else{document.getElementById('tituloIrmao').textContent='Novo irmão';['iNome','iCim','iNasc','iTel','iCargo','iObs','iDireitosRef','iRegimeRef','iRegimeInicio','iRegimeFim','cNome','cNasc'].forEach(x=>document.getElementById(x).value='');iTipoIngresso.value='I';iDataIngresso.value='';iGrau.value='A';iCondicao.value='normal';iDireitos.value='pleno';iRegimeFreq.value='normal'}
   iGrauData.value=id?(getIrmaos().find(x=>x.id===id)?.dataGrauAtual||hojeISO()):hojeISO();atualizarAvisoGrau();renderFilhos();abrirModal('modalIrmao')
 }
 function atualizarAvisoGrau(){
@@ -1595,7 +1768,7 @@ function salvarIrmao(){
   let dataGrauAtual=mudouGrau?dataMudanca:(antigo?.dataGrauAtual||historico[historico.length-1]?.data||dataIngresso||'');
   let corrigiuDataGrau=false;
   if(antigo&&!mudouGrau&&iGrau.value!=='A'&&iGrauData.value){const corrigida=String(iGrauData.value).slice(0,10);const anteriores=historico.filter(x=>ordemGrau(x.grau)<ordemGrau(iGrau.value));const limite=anteriores.length?anteriores.sort((a,b)=>b.data.localeCompare(a.data))[0].data:(dataIngresso||'');if(!dataValida(corrigida)||corrigida>hojeISO()){toast('Informe uma data válida para o grau atual');return}if(limite&&corrigida<limite){toast('A data do grau atual não pode ser anterior ao grau precedente');return}if(corrigida!==dataGrauAtual){historico=corrigirDataGrauAtual({...antigo,historicoGraus:historico},corrigida);dataGrauAtual=corrigida;corrigiuDataGrau=true}}
-  const obj={id,nome,cim,grau:iGrau.value,nascimento:anivISO(iNasc.value),telefone:iTel.value,cargo:iCargo.value,obs:iObs.value,tipoIngresso,dataIngresso,dataGrauAtual,historicoGraus:historico,familia:{esposa:{nome:cNome.value,nasc:anivISO(cNasc.value)},filhos:filhosTemp.filter(f=>f.nome.trim()).map(f=>({nome:f.nome.trim(),nasc:anivISO(f.nasc),sexo:f.sexo}))}};
+  const obj={id,nome,cim,grau:iGrau.value,nascimento:anivISO(iNasc.value),telefone:iTel.value,cargo:iCargo.value,condicao:iCondicao.value||'normal',direitos:iDireitos.value||'pleno',direitosRef:iDireitosRef.value.trim(),regimeFreq:iRegimeFreq.value||'normal',regimeRef:iRegimeRef.value.trim(),regimeInicio:iRegimeInicio.value||'',regimeFim:iRegimeFim.value||'',obs:iObs.value,tipoIngresso,dataIngresso,dataGrauAtual,historicoGraus:historico,familia:{esposa:{nome:cNome.value,nasc:anivISO(cNasc.value)},filhos:filhosTemp.filter(f=>f.nome.trim()).map(f=>({nome:f.nome.trim(),nasc:anivISO(f.nasc),sexo:f.sexo}))}};
   if(idx>=0)arr[idx]=obj;else arr.push(obj);
   setIrmaos(arr);
   audit(idx>=0?'Cadastro de Irmão atualizado':'Irmão cadastrado',`${nome}${cim?' · CIM '+cim:''}${dataIngresso?' · '+tipoIngressoNome(tipoIngresso)+' '+brData(dataIngresso):''}`);
@@ -2012,8 +2185,8 @@ Critério: falta justificada é ausência com justa causa: não soma presença r
 Fraternalmente,
 Chancelaria da A.R.L.S. Razão e Força Nº 1997.`)}
 
-function alterarTempoBloqueio(){resetInactivityTimer();renderCentralSeguranca();toast('O bloqueio automático está desativado')}
-function renderCentralSeguranca(){const b=getBackupInfo(),timeoutSelect=document.getElementById('securityTimeoutSelect');if(timeoutSelect)timeoutSelect.value='';securityTimeoutInfo.textContent='Desativado';securityAttemptsInfo.textContent=`${failedAttempts} nesta abertura`;securityBackupInfo.textContent=b.at?`${brData(String(b.at).slice(0,10))} às ${new Date(b.at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`:'Nunca realizado';installInfo.textContent=location.protocol==='file:'?'Para instalar como aplicativo, use o pacote PWA em endereço HTTPS. Este HTML continua funcionando diretamente no Chrome.':'Use o botão Instalar no celular. Caso o Chrome não mostre a instalação, abra o menu e escolha Adicionar à tela inicial.'}
+function alterarTempoBloqueio(){resetInactivityTimer();renderCentralSeguranca();toast('Bloqueio automático: 10 minutos')}
+function renderCentralSeguranca(){const b=getBackupInfo(),timeoutSelect=document.getElementById('securityTimeoutSelect');if(timeoutSelect)timeoutSelect.value='10';securityTimeoutInfo.textContent='10 minutos';securityAttemptsInfo.textContent=`${failedAttempts} nesta abertura`;securityBackupInfo.textContent=b.at?`${brData(String(b.at).slice(0,10))} às ${new Date(b.at).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`:'Nunca realizado';installInfo.textContent=location.protocol==='file:'?'Para instalar como aplicativo, use o pacote PWA em endereço HTTPS. Este HTML continua funcionando diretamente no Chrome.':'Use o botão Instalar no celular. Caso o Chrome não mostre a instalação, abra o menu e escolha Adicionar à tela inicial.'}
 function registrarPWA(){window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;const b=document.getElementById('installAppButton');if(b)b.style.display='inline-flex'});if('serviceWorker' in navigator&&location.protocol!=='file:')navigator.serviceWorker.register('./service-worker.js',{updateViaCache:'none'}).then(reg=>reg.update()).catch(()=>{})}
 async function instalarAplicativo(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;return}toast(location.protocol==='file:'?'Abra a versão PWA por HTTPS para instalar':'Abra o menu do Chrome e toque em Adicionar à tela inicial')}
 function renderBackupStatus(){const b=getBackupInfo(),el=document.getElementById('backupStatus');if(!el)return;const dias=b.at?Math.floor((Date.now()-new Date(b.at).getTime())/86400000):9999;el.className= `install-note ${dias<=7?'backup-good':dias<=14?'backup-warn':'backup-bad'}`;el.innerHTML=b.at?`<b>Último backup: ${brData(String(b.at).slice(0,10))}</b><br>${b.irmaos||0} Irmãos, ${b.sessoes||0} sessões. ${dias>7?'Faça uma nova cópia.':'Backup atualizado.'}`:'<b>Nenhum backup registrado.</b><br>Crie uma cópia protegida antes de inserir mais dados.';btnRestaurarRecuperacao.style.display=localStorage.getItem(SEC_RECOVERY_KEY)?'inline-flex':'none'}
@@ -2421,7 +2594,204 @@ function mensagemFrequenciaGeral(){const per=periodoRGFDatas();if(!per.ativo){to
 })();
 
 
-function renderAtual(){if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
+/* ============================================================
+   CHANCELARIA 1997 — VERSÃO 5.0 / CONFORMIDADE GOB
+   Motor normativo de sessões e frequência.
+   RGF arts. 76, 108, 109 e 126 + Código Eleitoral arts. 9-12.
+   ============================================================ */
+const V5_SESSOES={
+  ordinaria:{label:'Ordinária',acesso:'Privativa de Maçons',modalidades:[
+    ['regular','Regular'],['instrucao','Instrução'],['administrativa','Administrativa'],['financas','Finanças'],
+    ['filiacao_regularizacao','Filiação e regularização'],['eleicao_administracao_mp','Eleição da Administração / Ministério Público'],
+    ['eleicao_deputados','Eleição de Deputados e Suplentes'],['banquete_ritualistico','Banquete Ritualístico'],['honorarios','Admissão de membros honorários']
+  ]},
+  magna:{label:'Magna',acesso:'Privativa de Maçons',modalidades:[
+    ['iniciacao','Iniciação'],['colacao_graus','Colação de graus'],['posse','Posse'],['instalacao','Instalação'],
+    ['sagracao_estandarte','Sagração de estandarte'],['regularizacao_loja','Regularização de Loja'],['sagracao_templo','Sagração de Templo'],
+    ['adocao_lowtons','Adoção de Lowtons'],['matrimonial','Consagração / exaltação matrimonial'],['pompas_funebres','Pompas fúnebres'],
+    ['conferencia_festiva','Conferência, palestra ou festiva'],['civico_cultural','Caráter cívico-cultural']
+  ]},
+  extraordinaria:{label:'Extraordinária',acesso:'Privativa de Maçons',modalidades:[
+    ['eleicao_grao_mestrado','Eleição de Grão-Mestre / Adjunto'],['conselho_familia','Conselho de Família'],['placet_ex_officio','Concessão de placet ex-officio'],
+    ['alteracao_estatutos','Alteração de estatutos'],['mudanca_rito','Mudança de Rito'],['mudanca_oriente','Mudança de Oriente'],
+    ['mudanca_titulo','Mudança de Título Distintivo'],['fusao_incorporacao','Fusão ou incorporação de Lojas']
+  ]}
+};
+const V5_MAGNAS_PUBLICAS=new Set(['adocao_lowtons','matrimonial','pompas_funebres','conferencia_festiva','civico_cultural']);
+function v5LegacySession(s){
+  if(!s)return s;
+  const x={...s};
+  if(['ordinaria-aprendiz','ordinaria-companheiro','ordinaria-mestre'].includes(x.tipo)){
+    const old=x.tipo;x.tipo='ordinaria';x.modalidade=x.modalidade||'regular';x.grauSessao=x.grauSessao||({"ordinaria-aprendiz":'A',"ordinaria-companheiro":'C',"ordinaria-mestre":'M'}[old]);
+  }else if(x.tipo==='especial'){
+    x.tipo='ordinaria';x.modalidade=x.modalidade||'administrativa';x.grauSessao=x.grauSessao||'A';
+  }else if(x.tipo==='magna'){
+    const mapa={iniciacao:'iniciacao',instalacao:'instalacao',reinstalacao:'instalacao',elevacao:'colacao_graus',exaltacao:'colacao_graus'};
+    x.modalidade=x.modalidade||mapa[x.magnaTipo]||'iniciacao';
+    if(!x.grauSessao){x.grauSessao=x.magnaTipo==='exaltacao'?'M':x.magnaTipo==='elevacao'?'C':'A'}
+  }
+  x.status=x.status||((x.data||'')>hojeISO()?'agendada':'realizada');
+  x.modalidade=x.modalidade||'regular';x.grauSessao=x.grauSessao||'A';
+  return x;
+}
+const _getSessoesV4=getSessoes;
+getSessoes=function(){return _getSessoesV4().map(v5LegacySession)};
+function v5ModalidadeNome(s){const cfg=V5_SESSOES[s?.tipo];return cfg?.modalidades.find(x=>x[0]===s?.modalidade)?.[1]||String(s?.modalidade||'')}
+tipoSessao=function(t){return V5_SESSOES[t]?.label||({'ordinaria-aprendiz':'Ordinária','ordinaria-companheiro':'Ordinária','ordinaria-mestre':'Ordinária'}[t]||t)};
+descricaoSessao=function(s){if(!s)return '';const x=v5LegacySession(s),m=v5ModalidadeNome(x);return `${V5_SESSOES[x.tipo]?.label||tipoSessao(x.tipo)}${m?' · '+m:''}`};
+regraMagnaTexto=function(){return 'Art. 108 do RGF: a sessão é classificada como ordinária, magna ou extraordinária. Para o art. 76, o aplicativo considera as sessões efetivamente realizadas às quais o Irmão estava habilitado a comparecer.'};
+function atualizarCamposSessao(){
+  const tipo=document.getElementById('sTipo')?.value||'ordinaria',sel=document.getElementById('sMagnaTipo'),cfg=V5_SESSOES[tipo]||V5_SESSOES.ordinaria;
+  if(sel){const atual=sel.value;sel.innerHTML=cfg.modalidades.map(([v,n])=>`<option value="${v}">${n}</option>`).join('');if(cfg.modalidades.some(x=>x[0]===atual))sel.value=atual}
+  const modalidade=sel?.value||cfg.modalidades[0][0],publica=tipo==='magna'&&V5_MAGNAS_PUBLICAS.has(modalidade),acesso=document.getElementById('sAcesso');if(acesso)acesso.value=publica?'Admite não-maçons':'Privativa de Maçons';
+  const regra=document.getElementById('sMagnaRegra');if(regra)regra.innerHTML=`<b>${cfg.label} · ${v5ModalidadeNome({tipo,modalidade})}</b><br>${publica?'Sessão Magna que admite presença de não-maçons. ':''}A frequência é calculada automaticamente; sessão cancelada ou apenas agendada não entra no art. 76.`;
+  const grau=document.getElementById('sGrau');if(grau&&publica)grau.value='A';
+}
+function v5GrauNivel(g){return {A:1,C:2,M:3,MI:3}[g]||0}
+contaPara=function(g,t,modalidade='',grauSessao='A',status='realizada'){
+  if(status!=='realizada')return false;
+  const tipo=['ordinaria-aprendiz','ordinaria-companheiro','ordinaria-mestre','especial'].includes(t)?'ordinaria':t;
+  if(!V5_SESSOES[tipo])return false;
+  return v5GrauNivel(g)>=v5GrauNivel(grauSessao||'A');
+};
+contaParaIrmao=function(i,s){const x=v5LegacySession(s),ingresso=dataIngressoIrmao(i);if(ingresso&&String(x.data||'').slice(0,10)<ingresso)return false;if(x.status!=='realizada')return false;return contaPara(grauNaData(i,x.data),x.tipo,x.modalidade,x.grauSessao,x.status)};
+const _abrirModalSessaoV4=abrirModalSessao;
+abrirModalSessao=function(id=''){
+  sId.value=id;btnExcluirSessao.style.display=id?'inline-flex':'none';
+  if(id){const s=getSessoes().find(x=>x.id===id);if(!s)return;sData.value=s.data;sTipo.value=s.tipo||'ordinaria';atualizarCamposSessao();sMagnaTipo.value=s.modalidade||'regular';sGrau.value=s.grauSessao||'A';sStatus.value=s.status||'realizada';sNumero.value=s.numero||'';sObs.value=s.obs||'';atualizarCamposSessao();sMagnaTipo.value=s.modalidade||sMagnaTipo.value;atualizarCamposSessao()}
+  else{sData.value=hojeISO();sTipo.value='ordinaria';atualizarCamposSessao();sMagnaTipo.value='regular';sGrau.value='A';sStatus.value='realizada';sNumero.value='';sObs.value='';atualizarCamposSessao()}
+  abrirModal('modalSessao')
+};
+salvarSessao=function(){
+  if(!sData.value){toast('Informe a data');return}
+  const tipo=sTipo.value,modalidade=sMagnaTipo.value,grauSessao=sGrau.value,status=sStatus.value;
+  if(!V5_SESSOES[tipo]||!V5_SESSOES[tipo].modalidades.some(x=>x[0]===modalidade)){toast('Selecione uma modalidade válida do art. 108');return}
+  if(!['A','C','M'].includes(grauSessao)){toast('Informe o grau da sessão');return}
+  if(!['realizada','agendada','cancelada'].includes(status)){toast('Informe a situação da sessão');return}
+  if(status==='realizada'&&sData.value>hojeISO()&&!confirm('A data é futura, mas a sessão foi marcada como realizada. Deseja salvar assim mesmo?'))return;
+  const arr=getSessoes(),id=sId.value||uid();
+  const duplicada=arr.find(x=>x.id!==id&&x.data===sData.value&&x.tipo===tipo&&x.modalidade===modalidade&&nomeNormalizado(x.numero||'')===nomeNormalizado(sNumero.value||''));if(duplicada){toast('Já existe uma sessão igual nesta data');return}
+  const obj={id,data:sData.value,tipo,modalidade,grauSessao,status,magnaTipo:'',numero:sNumero.value,obs:sObs.value,norma:'RGF art. 108'};
+  const idx=arr.findIndex(x=>x.id===id);if(idx>=0)arr[idx]=obj;else arr.push(obj);setSessoes(arr);audit(idx>=0?'Sessão atualizada':'Sessão cadastrada',`${brData(obj.data)} · ${descricaoSessao(obj)} · ${status}`);fecharModal('modalSessao');renderAtual();toast('Sessão salva conforme classificação do RGF')
+};
+const _renderSessoesV4=renderSessoes;
+renderSessoes=function(){
+  _renderSessoesV4();
+  document.querySelectorAll('#listaSessoes .session-list-card').forEach((el,idx)=>{});
+};
+const _carregarChamadaV4=carregarChamada;
+carregarChamada=function(){const id=presSessao.value,s=getSessoes().find(x=>x.id===id);if(s&&s.status!=='realizada'){listaChamada.innerHTML=`<div class="empty"><p>${s.status==='cancelada'?'Sessão cancelada: não gera chamada nem frequência.':'Sessão ainda agendada: marque como realizada após sua ocorrência para abrir a chamada.'}</p></div>`;acoesChamada.style.display='none';atalhosChamada.style.display='none';buscaChamadaBox.style.display='none';contadoresChamada.style.display='none';infoChamada.innerHTML=`${brData(s.data)} · ${descricaoSessao(s)} · <span class="norm-chip ${s.status==='cancelada'?'cancel':'future'}">${s.status}</span>`;return}_carregarChamadaV4()};
+const _abrirConsultaSessaoV4=abrirConsultaSessao;
+abrirConsultaSessao=function(id){_abrirConsultaSessaoV4(id);const s=getSessoes().find(x=>x.id===id);if(!s)return;const meta=document.querySelector('#consultaSessaoBody .session-detail-meta');if(meta)meta.insertAdjacentHTML('beforeend',`<br><b>Classe:</b> ${h(V5_SESSOES[s.tipo]?.label||s.tipo)} · <b>Modalidade:</b> ${h(v5ModalidadeNome(s))}<br><b>Grau:</b> ${h(grauSimbolo(s.grauSessao))} · <b>Situação:</b> ${h(s.status)}`)};
+function v5SessoesArt76(i,inicio,fim){return getSessoes().filter(s=>s.data&&s.data>=inicio&&s.data<=fim&&s.data<=hojeISO()&&contaParaIrmao(i,s))}
+function v5ResumoNormativoSessao(s){const x=v5LegacySession(s);return {classe:V5_SESSOES[x.tipo]?.label||x.tipo,modalidade:v5ModalidadeNome(x),grau:grauSimbolo(x.grauSessao),status:x.status}}
+// Marca de versão para diagnóstico e backup.
+window.CHANCELARIA_VERSION='5.0.0-conformidade-gob';
+
+
+
+/* ============================================================
+   V5.0.1 — COMPLEMENTOS DE CONFORMIDADE E VERIFICAÇÃO FUNCIONAL
+   Visitantes, frequência externa, qualificação eleitoral,
+   regimes de frequência e fluxo completo do art. 77.
+   ============================================================ */
+function v51Get(key){return dbGet(key,[])||[]}
+function v51Set(key,val){dbSet(key,val)}
+function v51EmRegimeEspecial(i,data){
+  const r=i?.regimeFreq||'normal'; if(r==='normal')return false;
+  const d=String(data||'').slice(0,10),ini=i?.regimeInicio||'',fim=i?.regimeFim||'';
+  if(ini&&d<ini)return false;if(fim&&d>fim)return false;return true
+}
+const _contaParaIrmaoV50=contaParaIrmao;
+contaParaIrmao=function(i,s){if(v51EmRegimeEspecial(i,s?.data))return false;return _contaParaIrmaoV50(i,s)};
+
+function migrarV51Normativo(){
+  const st=dbGet('settings',{})||{};if(st.v51Normativo)return;
+  const pres=getPresencas(),ext=v51Get('freqExterna');let mudou=false,convertidos=0;
+  for(const [sid,regs] of Object.entries(pres||{})){
+    const sess=getSessoes().find(x=>x.id===sid);if(!regs||!sess)continue;
+    for(const [iid,reg] of Object.entries(regs)){
+      const raw=reg&&typeof reg==='object'?String(reg.status||''):String(reg||'');
+      if(raw!=='V')continue;
+      const det=reg&&typeof reg==='object'?reg:{};
+      if(!ext.some(x=>x.legacySessaoId===sid&&x.irmaoId===iid))ext.push({id:uid(),irmaoId:iid,data:det.dataVisita||sess.data||'',loja:det.lojaVisita||'Registro legado',numero:'',oriente:det.orienteVisita||'',grau:sess.grauSessao||'A',atestado:det.justificativa||'Migrado de presença externa registrada em versão anterior',legacySessaoId:sid,createdAt:new Date().toISOString()});
+      regs[iid]='F';mudou=true;convertidos++;
+    }
+  }
+  if(mudou){setPresencas(pres);v51Set('freqExterna',ext);audit('Migração normativa v5.0.1',`${convertidos} presença(s) externa(s) separada(s) da chamada da própria Loja; registros preservados no módulo Frequência Externa.`)}
+  st.v51Normativo=true;dbSet('settings',st)
+}
+
+function getVisitantesV5(){return v51Get('visitantes')}
+function setVisitantesV5(v){v51Set('visitantes',v)}
+function getExternasV5(){return v51Get('freqExterna')}
+function setExternasV5(v){v51Set('freqExterna',v)}
+function getEleicoesV5(){return v51Get('eleicoes')}
+function setEleicoesV5(v){v51Set('eleicoes',v)}
+function sessoesRealizadasV5(){return getSessoes().filter(s=>s.status==='realizada'&&s.data<=hojeISO()).sort((a,b)=>b.data.localeCompare(a.data))}
+
+function abrirVisitantesV5(){
+  const ss=sessoesRealizadasV5();v5VisSessao.innerHTML=ss.map(s=>`<option value="${s.id}">${brData(s.data)} · ${h(descricaoSessao(s))}${s.numero?' · '+h(s.numero):''}</option>`).join('');
+  v5VisId.value='';['v5VisNome','v5VisCim','v5VisLoja','v5VisNumero','v5VisOriente','v5VisObs'].forEach(id=>document.getElementById(id).value='');v5VisGrau.value='M';v5VisIdent.value='credencial';renderVisitantesV5();abrirModal('modalVisitantesV5')
+}
+function salvarVisitanteV5(){
+  if(!v5VisSessao.value){toast('Cadastre uma sessão realizada');return}if(!v5VisNome.value.trim()){toast('Informe o nome do visitante');return}if(!v5VisLoja.value.trim()||!v5VisOriente.value.trim()){toast('Informe Loja e Oriente de origem');return}
+  const arr=getVisitantesV5(),id=v5VisId.value||uid(),obj={id,sessaoId:v5VisSessao.value,nome:v5VisNome.value.trim(),cim:v5VisCim.value.trim(),grau:v5VisGrau.value,loja:v5VisLoja.value.trim(),numero:v5VisNumero.value.trim(),oriente:v5VisOriente.value.trim(),identificacao:v5VisIdent.value,obs:v5VisObs.value.trim(),createdAt:new Date().toISOString()};
+  const ix=arr.findIndex(x=>x.id===id);if(ix>=0)arr[ix]={...arr[ix],...obj};else arr.push(obj);setVisitantesV5(arr);audit(ix>=0?'Visitante atualizado':'Visitante registrado',`${obj.nome} · ${obj.loja} · ${obj.oriente}`);v5VisId.value='';v5VisNome.value='';v5VisCim.value='';renderVisitantesV5();toast('Visitante registrado')
+}
+function renderVisitantesV5(){
+  const arr=getVisitantesV5().slice().sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));v5VisLista.innerHTML=arr.length?arr.map(x=>{const s=getSessoes().find(z=>z.id===x.sessaoId);return `<div class="list-item"><div class="avatar">${h(iniciais(x.nome))}</div><div class="item-main"><div class="item-title">${h(x.nome)}</div><div class="item-sub">${h(x.loja)}${x.numero?' nº '+h(x.numero):''} · ${h(x.oriente)}${s?' · '+brData(s.data):''}<br>Identificação: ${h(x.identificacao)}</div></div><div class="item-side"><button class="btn btn-light btn-sm" onclick="editarVisitanteV5('${x.id}')">Editar</button><button class="btn btn-danger btn-sm" onclick="excluirVisitanteV5('${x.id}')">Excluir</button></div></div>`}).join(''):'<div class="empty"><p>Nenhum visitante registrado.</p></div>'
+}
+function editarVisitanteV5(id){const x=getVisitantesV5().find(z=>z.id===id);if(!x)return;v5VisId.value=id;v5VisSessao.value=x.sessaoId;v5VisNome.value=x.nome;v5VisCim.value=x.cim||'';v5VisGrau.value=x.grau||'M';v5VisLoja.value=x.loja||'';v5VisNumero.value=x.numero||'';v5VisOriente.value=x.oriente||'';v5VisIdent.value=x.identificacao||'credencial';v5VisObs.value=x.obs||''}
+function excluirVisitanteV5(id){const x=getVisitantesV5().find(z=>z.id===id);if(!x||!confirm('Excluir este registro de visitante?'))return;setVisitantesV5(getVisitantesV5().filter(z=>z.id!==id));audit('Visitante excluído',x.nome);renderVisitantesV5()}
+function certificadoVisitanteV5(){const id=v5VisId.value;let x=id?getVisitantesV5().find(z=>z.id===id):null;if(!x&&v5VisNome.value.trim())x={nome:v5VisNome.value.trim(),cim:v5VisCim.value.trim(),grau:v5VisGrau.value,loja:v5VisLoja.value.trim(),numero:v5VisNumero.value.trim(),oriente:v5VisOriente.value.trim(),sessaoId:v5VisSessao.value};if(!x){toast('Selecione ou informe um visitante');return}const s=getSessoes().find(z=>z.id===x.sessaoId);abrirPrint('Atestado de frequência',`<h2>Atestado de frequência</h2><p>Atestamos, para os fins maçônicos cabíveis, que o Irmão <b>${h(x.nome)}</b>${x.cim?' — CIM '+h(x.cim):''}, da Loja <b>${h(x.loja)}${x.numero?' nº '+h(x.numero):''}</b>, Oriente de ${h(x.oriente)}, esteve presente à sessão desta Loja${s?` em <b>${brData(s.data)}</b>, ${h(descricaoSessao(s))}`:''}.</p>`,{assinatura:'____________________________________<br>Chanceler',rodape:'Certificado expedido pela Chancelaria da A∴R∴L∴S∴ Razão e Força nº 1997.'})}
+
+function abrirExternaV5(){v5ExtIrmao.innerHTML=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>`<option value="${i.id}">${h(i.nome)}${i.cim?' · '+h(i.cim):''}</option>`).join('');v5ExtId.value='';v5ExtData.value=hojeISO();['v5ExtLoja','v5ExtNumero','v5ExtOriente','v5ExtAtestado'].forEach(id=>document.getElementById(id).value='');v5ExtGrau.value='A';renderExternasV5();abrirModal('modalExternaV5')}
+function salvarExternaV5(){if(!v5ExtIrmao.value||!v5ExtData.value||!v5ExtLoja.value.trim()||!v5ExtOriente.value.trim()||!v5ExtAtestado.value.trim()){toast('Informe Irmão, data, Loja, Oriente e atestado');return}if(v5ExtData.value>hojeISO()){toast('A data não pode estar no futuro');return}const arr=getExternasV5(),id=v5ExtId.value||uid(),obj={id,irmaoId:v5ExtIrmao.value,data:v5ExtData.value,loja:v5ExtLoja.value.trim(),numero:v5ExtNumero.value.trim(),oriente:v5ExtOriente.value.trim(),grau:v5ExtGrau.value,atestado:v5ExtAtestado.value.trim(),createdAt:new Date().toISOString()};const ix=arr.findIndex(x=>x.id===id);if(ix>=0)arr[ix]={...arr[ix],...obj};else arr.push(obj);setExternasV5(arr);audit(ix>=0?'Frequência externa atualizada':'Frequência externa registrada',`${getIrmaos().find(i=>i.id===obj.irmaoId)?.nome||obj.irmaoId} · ${brData(obj.data)} · ${obj.loja}`);v5ExtId.value='';renderExternasV5();toast('Frequência externa registrada separadamente')}
+function renderExternasV5(){const arr=getExternasV5().slice().sort((a,b)=>b.data.localeCompare(a.data));v5ExtLista.innerHTML=arr.length?arr.map(x=>{const i=getIrmaos().find(z=>z.id===x.irmaoId);return `<div class="list-item"><div class="avatar">${h(iniciais(i?.nome||'?'))}</div><div class="item-main"><div class="item-title">${h(i?.nome||'Irmão não localizado')}</div><div class="item-sub">${brData(x.data)} · ${h(x.loja)}${x.numero?' nº '+h(x.numero):''} · ${h(x.oriente)}<br>Atestado: ${h(x.atestado)}</div></div><button class="btn btn-danger btn-sm" onclick="excluirExternaV5('${x.id}')">Excluir</button></div>`}).join(''):'<div class="empty"><p>Nenhuma frequência externa registrada.</p></div>'}
+function excluirExternaV5(id){const x=getExternasV5().find(z=>z.id===id);if(!x||!confirm('Excluir este atestado de frequência externa?'))return;setExternasV5(getExternasV5().filter(z=>z.id!==id));audit('Frequência externa excluída',`${brData(x.data)} · ${x.loja}`);renderExternasV5()}
+
+function mesesAntesISO(data,meses){const [y,m,d]=data.split('-').map(Number),dt=new Date(y,m-1,d);dt.setMonth(dt.getMonth()-meses);return dt.toISOString().slice(0,10)}
+function calcEleitoralV5(i,dataEleicao){
+  const fim=dataEleicao||hojeISO(),cond=i.condicao||'normal',meses=(cond==='emerito'||cond==='remido')?24:12,inicio=mesesAntesISO(fim,meses);
+  if(!['M','MI'].includes(i.grau))return {apto:false,status:'Não apto',motivo:'Não é Mestre Maçom',pct:0,total:0,pres:0};
+  if((i.direitos||'pleno')==='suspenso')return {apto:false,status:'Não apto',motivo:'Direitos maçônicos registrados como suspensos',pct:0,total:0,pres:0};
+  const admit=i.dataIngresso||'';if(admit&&admit>inicio){const dias=Math.floor((new Date(fim)-new Date(admit))/86400000);if(dias<=183)return {apto:false,status:'Não apto',motivo:'Admissão na Loja há seis meses ou menos',pct:0,total:0,pres:0}}
+  const dispEleitoral=i.regimeFreq==='dispensa_legal'&&v51EmRegimeEspecial(i,fim)&&!!i.regimeRef;
+  let total=0,pres=0;
+  if(cond==='emerito'||cond==='remido'){
+    const proprias=getSessoes().filter(s=>s.status==='realizada'&&s.data>=inicio&&s.data<=fim&&_contaParaIrmaoV50(i,s));total=proprias.length;pres=proprias.filter(s=>statusPresenca((getPresencas()[s.id]||{})[i.id])==='P').length;pres+=getExternasV5().filter(x=>x.irmaoId===i.id&&x.data>=inicio&&x.data<=fim).length;pres=Math.min(pres,total);
+  }else{
+    const ss=getSessoes().filter(s=>s.status==='realizada'&&s.data>=inicio&&s.data<=fim&&_contaParaIrmaoV50(i,s));total=ss.length;pres=ss.filter(s=>statusPresenca((getPresencas()[s.id]||{})[i.id])==='P').length;
+  }
+  const pct=total?Math.round(pres/total*100):0,req=(cond==='emerito'||cond==='remido')?30:50;
+  if(i.regimeFreq==='isencao_loja'&&v51EmRegimeEspecial(i,fim))return {apto:false,status:'Não apto',motivo:'Isenção de frequência concedida pela Loja não habilita a votar/ser votado',pct,total,pres,req};
+  if(dispEleitoral)return {apto:null,status:'Pendente de Tesouraria',motivo:'Dispensado da exigência de frequência mediante comprovação; verificar quitação',pct,total,pres,req,dispensa:true};
+  return {apto:pct>=req?null:false,status:pct>=req?'Pendente de Tesouraria':'Não apto',motivo:pct>=req?`Frequência atingida; falta confirmar quitação`:`Frequência inferior a ${req}%`,pct,total,pres,req}
+}
+function eleKeyV5(){return v5EleData.value||hojeISO()}
+function estadoFinanceiroV5(data,iid){return getEleicoesV5().find(x=>x.data===data&&x.irmaoId===iid)?.financeiro||'pendente'}
+function setFinanceiroV5(iid,val){const data=eleKeyV5(),arr=getEleicoesV5();let x=arr.find(z=>z.data===data&&z.irmaoId===iid);if(!x){x={id:uid(),data,irmaoId:iid,financeiro:val};arr.push(x)}else x.financeiro=val;setEleicoesV5(arr);renderEleitoralV5()}
+function abrirEleitoralV5(){v5EleData.value=v5EleData.value||hojeISO();renderEleitoralV5();abrirModal('modalEleitoralV5')}
+function renderEleitoralV5(){const data=v5EleData.value||hojeISO();const rows=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const r=calcEleitoralV5(i,data),fin=estadoFinanceiroV5(data,i.id),apto=r.apto===false?false:(fin==='quite'&&(r.dispensa||r.pct>=r.req));const status=apto?'Apto':r.apto===false?'Não apto':fin==='devedor'?'Não apto — financeiro':'Pendente';return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${h(grauSimbolo(i.grau))} · frequência ${r.pct}% (${r.pres}/${r.total}) · requisito ${r.req||'-'}%<br>${h(r.motivo)} · <b>${status}</b></div></div><div class="item-side"><select onchange="setFinanceiroV5('${i.id}',this.value)" aria-label="Situação financeira"><option value="pendente" ${fin==='pendente'?'selected':''}>Tesouraria pendente</option><option value="quite" ${fin==='quite'?'selected':''}>Quite</option><option value="devedor" ${fin==='devedor'?'selected':''}>Com pendência</option></select></div></div>`}).join('');v5EleLista.innerHTML=rows||'<div class="empty"><p>Nenhum Irmão cadastrado.</p></div>'}
+function imprimirEleitoralV5(){const data=v5EleData.value||hojeISO();const rows=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const r=calcEleitoralV5(i,data),fin=estadoFinanceiroV5(data,i.id),apto=r.apto!==false&&fin==='quite'&&(r.dispensa||r.pct>=r.req);return `<tr><td>${h(i.nome)}</td><td>${h(i.cim||'')}</td><td>${h(grauSimbolo(i.grau))}</td><td>${r.pct}%</td><td>${h(fin)}</td><td>${apto?'Apto':r.apto===false?'Não apto':'Pendente'}</td></tr>`}).join('');abrirPrint('Relação de qualificação eleitoral',`<h2>Relação de qualificação eleitoral</h2><p><b>Data de referência:</b> ${brData(data)}. Cálculo independente do art. 76; situação financeira anotada pela Tesouraria.</p><table><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Frequência</th><th>Tesouraria</th><th>Situação</th></tr></thead><tbody>${rows}</tbody></table>`,{assinatura:'<div>____________________________________<br>Chanceler</div><div>____________________________________<br>Tesoureiro</div>',assinaturaClasse:'dual-signature',rodape:'Relação auxiliar de qualificação eleitoral. A autoridade competente e os registros oficiais prevalecem.'})}
+
+function abrirPendenciasV5(){renderPendenciasV5();abrirModal('modalPendenciasV5')}
+function renderPendenciasV5(){const itens=[];getIrmaos().forEach(i=>{const f=calcFreq(i);if(f.periodo12&&f.pctFalta>=50&&f.total>0&&!processoMaisRecenteIrmao(i.id))itens.push({t:'Art. 76',x:`${i.nome}: limite de faltas sem justa causa atingido, sem procedimento registrado.`});if(i.regimeFreq!=='normal'&&!i.regimeRef)itens.push({t:'Cadastro',x:`${i.nome}: regime especial sem referência/ata.`});if((i.direitos||'pleno')!=='pleno'&&!i.direitosRef)itens.push({t:'Direitos',x:`${i.nome}: situação de direitos sem referência formal.`})});getProcessosFreq().filter(p=>!processoFechado(p)).forEach(p=>{const i=getIrmaos().find(x=>x.id===p.irmaoId);if(p.notificacao?.recebimento&&p.notificacao?.prazo&&hojeISO()>p.notificacao.prazo&&!p.extraordinaria?.dataSessao)itens.push({t:'Art. 77',x:`${i?.nome||'Irmão'}: prazo de justificativa encerrado; verificar leitura do relatório e sessão extraordinária.`});if(p.extraordinaria?.dataSessao&&p.extraordinaria?.recebimento){const dif=Math.floor((new Date(p.extraordinaria.dataSessao)-new Date(p.extraordinaria.recebimento))/86400000);if(dif<15)itens.push({t:'Art. 77',x:`${i?.nome||'Irmão'}: antecedência da notificação da sessão extraordinária inferior a 15 dias.`})}if(p.decisao?.suspensao&&(!p.comunicacoes?.irmaoData||!p.comunicacoes?.guardaData))itens.push({t:'72 horas',x:`${i?.nome||'Irmão'}: suspensão registrada com comunicações pendentes.`})});v5PendLista.innerHTML=itens.length?itens.map(a=>`<div class="alert"><div class="name">${h(a.t)}</div><div class="txt">${h(a.x)}</div></div>`).join(''):'<div class="empty"><p>Nenhuma pendência normativa detectada pelos dados cadastrados.</p></div>'}
+
+/* Fluxo ampliado do art. 77: sessão extraordinária, decisão e comunicações. */
+const _normalizarProcV50=normalizarProcessosFreq;
+normalizarProcessosFreq=function(lista){return _normalizarProcV50(lista).map(p=>({...p,extraordinaria:{leituraRelatorio:String(p?.extraordinaria?.leituraRelatorio||''),dataSessao:String(p?.extraordinaria?.dataSessao||''),notificacao:String(p?.extraordinaria?.notificacao||''),recebimento:String(p?.extraordinaria?.recebimento||''),prova:String(p?.extraordinaria?.prova||''),manifestacao:!!p?.extraordinaria?.manifestacao,ata:String(p?.extraordinaria?.ata||'')},decisao:{data:String(p?.decisao?.data||''),suspensao:!!p?.decisao?.suspensao,resultado:String(p?.decisao?.resultado||''),ata:String(p?.decisao?.ata||'')},comunicacoes:{irmaoData:String(p?.comunicacoes?.irmaoData||''),irmaoProva:String(p?.comunicacoes?.irmaoProva||''),guardaData:String(p?.comunicacoes?.guardaData||''),guardaProtocolo:String(p?.comunicacoes?.guardaProtocolo||'')}}))};
+const _prepProcV50=prepararInterfaceProcessos;
+prepararInterfaceProcessos=function(){_prepProcV50();const box=document.getElementById('processoConclusaoBox');if(box&&!document.getElementById('processoExtraV51'))box.insertAdjacentHTML('beforebegin',`<div class="processo-section" id="processoExtraV51"><div class="processo-section-title"><span>4</span> Sessão extraordinária e decisão</div><div class="row"><div class="field"><label>Leitura do relatório de faltas</label><input id="procLeituraRelatorio" type="date"></div><div class="field"><label>Data da sessão extraordinária</label><input id="procExtraSessao" type="date"></div></div><div class="row"><div class="field"><label>Notificação da sessão</label><input id="procExtraNotif" type="date"></div><div class="field"><label>Recebimento inequívoco</label><input id="procExtraReceb" type="date"></div></div><div class="field"><label>Prova de recebimento</label><input id="procExtraProva" placeholder="AR, confirmação eletrônica, assinatura etc."></div><div class="row"><div class="field"><label>O Irmão teve oportunidade de se manifestar?</label><select id="procExtraManifest"><option value="1">Sim</option><option value="0">Não / não compareceu</option></select></div><div class="field"><label>Referência da ata</label><input id="procExtraAta"></div></div><div class="row"><div class="field"><label>Data da decisão</label><input id="procDecisaoDataV51" type="date"></div><div class="field"><label>Resultado</label><select id="procDecisaoResultadoV51"><option value="">Selecione</option><option value="sem_suspensao">Sem suspensão</option><option value="suspensao">Suspensão declarada pela autoridade competente</option></select></div></div><div class="field"><label>Ata/referência da decisão</label><input id="procDecisaoAtaV51"></div><button class="btn btn-primary" type="button" onclick="salvarEtapaExtraV51()">Salvar sessão e decisão</button></div><div class="processo-section" id="processoComV51"><div class="processo-section-title"><span>5</span> Comunicações após suspensão</div><div class="row"><div class="field"><label>Comunicação ao Irmão</label><input id="procComIrmaoData" type="date"></div><div class="field"><label>Prova/referência</label><input id="procComIrmaoProva"></div></div><div class="row"><div class="field"><label>Comunicação à Guarda dos Selos</label><input id="procComGuardaData" type="date"></div><div class="field"><label>Protocolo</label><input id="procComGuardaProt"></div></div><button class="btn btn-primary" type="button" onclick="salvarComunicacoesV51()">Salvar comunicações</button></div>`);const cb=document.getElementById('processoConclusaoBox');if(cb){const t=cb.querySelector('.processo-section-title');if(t)t.innerHTML='<span>6</span> Encerramento administrativo'}};
+const _abrirProcV50=abrirProcessoFrequencia;
+abrirProcessoFrequencia=function(id){_abrirProcV50(id);const p=processoModalAtual();if(!p)return;prepararInterfaceProcessos();procLeituraRelatorio.value=p.extraordinaria?.leituraRelatorio||'';procExtraSessao.value=p.extraordinaria?.dataSessao||'';procExtraNotif.value=p.extraordinaria?.notificacao||'';procExtraReceb.value=p.extraordinaria?.recebimento||'';procExtraProva.value=p.extraordinaria?.prova||'';procExtraManifest.value=p.extraordinaria?.manifestacao?'1':'0';procExtraAta.value=p.extraordinaria?.ata||'';procDecisaoDataV51.value=p.decisao?.data||'';procDecisaoResultadoV51.value=p.decisao?.suspensao?'suspensao':(p.decisao?.resultado?'sem_suspensao':'');procDecisaoAtaV51.value=p.decisao?.ata||'';procComIrmaoData.value=p.comunicacoes?.irmaoData||'';procComIrmaoProva.value=p.comunicacoes?.irmaoProva||'';procComGuardaData.value=p.comunicacoes?.guardaData||'';procComGuardaProt.value=p.comunicacoes?.guardaProtocolo||''}
+function salvarEtapaExtraV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(p.notificacao?.prazo&&hojeISO()<=p.notificacao.prazo&&!confirm('O prazo de 30 dias ainda não terminou. Salvar mesmo assim?'))return;const ex={leituraRelatorio:procLeituraRelatorio.value,dataSessao:procExtraSessao.value,notificacao:procExtraNotif.value,recebimento:procExtraReceb.value,prova:procExtraProva.value.trim(),manifestacao:procExtraManifest.value==='1',ata:procExtraAta.value.trim()};if(ex.dataSessao&&(!ex.leituraRelatorio||!ex.recebimento||!ex.prova)){toast('Informe leitura do relatório, recebimento e prova da notificação');return}if(ex.dataSessao&&ex.recebimento){const dif=Math.floor((new Date(ex.dataSessao)-new Date(ex.recebimento))/86400000);if(dif<15&&!confirm('A antecedência registrada é inferior a 15 dias. Deseja manter o registro para correção/documentação?'))return}const res=procDecisaoResultadoV51.value,dec={data:procDecisaoDataV51.value,suspensao:res==='suspensao',resultado:res,ata:procDecisaoAtaV51.value.trim()};if(res&&(!dec.data||!dec.ata)){toast('Informe data e referência da decisão');return}p.extraordinaria=ex;p.decisao=dec;salvarProcessoObjeto(p);audit('Etapa extraordinária registrada',`${i.nome}${ex.dataSessao?' · sessão '+brData(ex.dataSessao):''}${res?' · '+res:''}`);renderProcessoFrequencia();toast('Sessão extraordinária e decisão registradas')}
+function salvarComunicacoesV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(!p.decisao?.suspensao){toast('As comunicações de 72 horas são exigidas aqui quando houver suspensão declarada registrada');return}const c={irmaoData:procComIrmaoData.value,irmaoProva:procComIrmaoProva.value.trim(),guardaData:procComGuardaData.value,guardaProtocolo:procComGuardaProt.value.trim()};if(!c.irmaoData||!c.irmaoProva||!c.guardaData||!c.guardaProtocolo){toast('Preencha as duas comunicações e respectivas provas');return}const base=p.decisao.data;if(base){const limite=somarDiasISO(base,3);if((c.irmaoData>limite||c.guardaData>limite)&&!confirm('Uma comunicação está além de 72 horas da decisão registrada. Manter para documentação?'))return}p.comunicacoes=c;salvarProcessoObjeto(p);audit('Comunicações da suspensão registradas',`${i.nome} · Irmão ${brData(c.irmaoData)} · Guarda dos Selos ${brData(c.guardaData)}`);toast('Comunicações registradas')}
+
+window.CHANCELARIA_VERSION='5.0.1-modern-conformidade-gob';
+
+function renderAtual(){migrarV51Normativo();if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
 iniciarSeguranca();
 </script>
 </body>

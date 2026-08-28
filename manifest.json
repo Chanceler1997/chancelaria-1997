@@ -1,5 +1,5 @@
 {
-  "name": "Chancelaria 1997 · Razão e Força",
+  "name": "Chancelaria 1997 — Conformidade GOB",
   "short_name": "Chancelaria 1997",
   "description": "Sistema privativo de gestão da Chancelaria da A.R.L.S. Razão e Força nº 1997.",
   "lang": "pt-BR",
@@ -8,8 +8,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0a1424",
-  "theme_color": "#152541",
+  "background_color": "#0b1729",
+  "theme_color": "#0b1729",
   "icons": [
     {
       "src": "icon-192.png",
