@@ -1,10 +1,11 @@
-const CACHE_NAME = "chancelaria-1997-v510-operacao-sessao";
+const CACHE_NAME = "chancelaria-1997-v520-documentos-assinatura";
 const APP_FILES = [
   "./",
   "./index.html",
   "./print.html",
   "./manifest.json",
   "./cabecalho-oficial.jpg",
+  "./assinatura-chanceler.png",
   "./icon-192.png",
   "./icon-512.png"
 ];

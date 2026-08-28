@@ -436,11 +436,23 @@ main{max-width:720px;padding:18px 14px 104px}
 }
 
 
-/* v5.1 — operação de sessão */
+/* v5.2 — operação, documentos e assinatura */
 #atalhosChamada.quick-call{grid-template-columns:repeat(4,1fr)}
 .today-item .today-icon{font-family:Arial,sans-serif;font-weight:900;color:var(--ouro);border:1px solid rgba(201,168,76,.38);border-radius:10px;width:34px;height:34px;display:grid;place-items:center;font-size:16px;background:#101c33}
 .certificate{padding:4mm 2mm}.certificate h2{letter-spacing:.5px}
 @media(max-width:430px){#atalhosChamada.quick-call{grid-template-columns:1fr 1fr}}
+
+/* v5.2 — documentos institucionais e assinatura do Chanceler */
+.report-preview-signature .signature-person{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-height:34mm;text-align:center;break-inside:avoid}
+.report-preview-signature .signature-image{display:block;width:72mm;max-width:92%;height:auto;max-height:24mm;object-fit:contain;margin:0 auto -1mm}
+.report-preview-signature .signature-role{font-weight:800;color:#152541;line-height:1.25}
+.report-preview-signature .signature-lodge{font-size:9px;color:#5d574e;margin-top:1mm}
+.report-preview-signature .signature-line{width:72mm;border-top:1px solid #333;margin:22mm auto 2mm}
+.report-preview-page .certificate{font-family:Arial,"Segoe UI",sans-serif;color:#111}
+.report-preview-page .certificate h2{font-size:14pt;letter-spacing:.15px;margin-bottom:12mm}
+.report-preview-page .certificate .certificate-body{font-size:12pt;line-height:1.5;text-align:justify;text-indent:12.5mm;margin:0}
+.report-preview-page .certificate .certificate-date{font-size:12pt;line-height:1.5;text-align:right;margin-top:12mm;text-indent:0}
+
 </style>
 </head>
 <body class="app-locked">
@@ -487,7 +499,7 @@ main{max-width:720px;padding:18px 14px 104px}
 
 <main>
   <section id="inicio" class="section active">
-    <div class="hero"><div class="install-note" style="margin-bottom:12px"><b>Chancelaria 1997 · Versão 5.1.0</b><br>Gestão institucional, frequência e conformidade normativa da A∴R∴L∴S∴ Razão e Força nº 1997.</div>
+    <div class="hero"><div class="install-note" style="margin-bottom:12px"><b>Chancelaria 1997 · Versão 5.2.0</b><br>Gestão institucional, frequência e conformidade normativa da A∴R∴L∴S∴ Razão e Força nº 1997.</div>
       <div class="action-grid">
         <button class="action" onclick="abrirAba('irmaos'); abrirModalIrmao()"><b>Cadastrar Irmão</b><small>Inclua grau, telefone, esposa e filhos.</small></button>
         <button class="action" onclick="abrirAba('sessoes'); abrirModalSessao()"><b>Nova sessão</b><small>Cadastre sessões antigas e futuras.</small></button>
@@ -1838,7 +1850,7 @@ function corpoRelatorioSessao(s){
   const r=resumoChamadaSessao(s),presentes=participantesPresentesSessao(s);const linhas=presentes.length?presentes.map((x,n)=>{const i=x.irmao,st=statusPresenca(x.registro);return `<tr><td>${n+1}</td><td>${h(i.nome)}</td><td>${i.cim?h(i.cim):'Não informado'}</td><td>${h(grauSimbolo(x.grau))}</td><td>${st==='V'?`Presença em outra Loja${textoVisita(x.registro)?' · '+h(textoVisita(x.registro)):''}`:'Presença na Loja'}</td></tr>`}).join(''):'<tr><td colspan="5">Nenhum participante presente registrado.</td></tr>';
   return `<h2>Relação de participantes presentes</h2><p><b>Sessão:</b> ${h(s.numero||descricaoSessao(s))}<br><b>Data:</b> ${brData(s.data)} · <b>Tipo:</b> ${h(descricaoSessao(s))}${s.obs?`<br><b>Pauta ou observação:</b> ${h(s.obs)}`:''}</p><div class="session-report-summary"><div class="session-report-box"><b>${r.presentes}</b><span>Total presente</span></div><div class="session-report-box"><b>${r.presentesLoja}</b><span>Na Loja</span></div><div class="session-report-box"><b>${r.presentesOutra}</b><span>Outra Loja</span></div><div class="session-report-box"><b>${r.total}</b><span>Registros</span></div></div><table class="session-attendance-table"><thead><tr><th>Nº</th><th>Irmão</th><th>CIM</th><th>Grau</th><th>Tipo de presença</th></tr></thead><tbody>${linhas}</tbody></table>`
 }
-function imprimirSessaoConsultada(){const s=sessaoConsultada();if(!s){toast('Sessão não encontrada');return}fecharModal('modalConsultaSessao');abrirPrint('Participantes da sessão',corpoRelatorioSessao(s),{tipo:'sessao',sessaoId:s.id,assinatura:'<div>____________________________________<br>Chanceler</div><div>____________________________________<br>Venerável Mestre</div>',assinaturaClasse:'dual-signature',rodape:`Documento emitido pela Chancelaria da A∴R∴L∴S∴ Razão e Força Nº 1997 em ${new Date().toLocaleString('pt-BR')}. A relação considera os registros de presença gravados para esta sessão.`})}
+function imprimirSessaoConsultada(){const s=sessaoConsultada();if(!s){toast('Sessão não encontrada');return}fecharModal('modalConsultaSessao');abrirPrint('Participantes da sessão',corpoRelatorioSessao(s),{tipo:'sessao',sessaoId:s.id,assinatura:assinaturaDuplaHTML('Venerável Mestre'),assinaturaClasse:'dual-signature',rodape:`Documento emitido pela Chancelaria da A∴R∴L∴S∴ Razão e Força Nº 1997 em ${new Date().toLocaleString('pt-BR')}. A relação considera os registros de presença gravados para esta sessão.`})}
 
 function abrirModalSessao(id=''){sId.value=id;btnExcluirSessao.style.display=id?'inline-flex':'none';if(id){const s=getSessoes().find(x=>x.id===id);if(!s)return;sData.value=s.data;sTipo.value=s.tipo;sMagnaTipo.value=s.magnaTipo||'';sNumero.value=s.numero||'';sObs.value=s.obs||''}else{sData.value=hojeISO();sTipo.value='ordinaria-aprendiz';sMagnaTipo.value='';sNumero.value='';sObs.value=''}atualizarCamposSessao();abrirModal('modalSessao')}
 function editarSessao(id){abrirModalSessao(id)}
@@ -1850,13 +1862,13 @@ function initPresenca(){const ss=getSessoes().slice().sort((a,b)=>b.data.localeC
 function carregarChamada(){const id=presSessao.value;const s=getSessoes().find(x=>x.id===id);if(!s){listaChamada.innerHTML='';acoesChamada.style.display='none';atalhosChamada.style.display='none';buscaChamadaBox.style.display='none';contadoresChamada.style.display='none';return}const ir=getIrmaos().filter(i=>contaParaIrmao(i,s)).sort((a,b)=>a.nome.localeCompare(b.nome));const regs=getPresencas()[id]||{};chamadaTemp=clonarRegistrosPresenca(regs);infoChamada.innerHTML=`${brData(s.data)} · ${descricaoSessao(s)} · ${ir.length} irmão(s) convocado(s)`;listaChamada.innerHTML=ir.length?ir.map(i=>linhaChamada(i,Object.prototype.hasOwnProperty.call(chamadaTemp,i.id)?chamadaTemp[i.id]:null,s)).join(''):'<div class="empty"><p>Nenhum irmão apto para esta sessão.</p></div>';acoesChamada.style.display=ir.length?'block':'none';atalhosChamada.style.display=ir.length?'grid':'none';buscaChamadaBox.style.display=ir.length?'block':'none';contadoresChamada.style.display=ir.length?'grid':'none';atualizarResumoChamada()}
 function linhaChamada(i,reg,s){
   const semRegistro=reg===null||reg===undefined||reg==='';const st=semRegistro?'':statusPresenca(reg);const just=semRegistro?'':justificativaPresenca(reg);
-  const opts=[['P','Presença','p'],['F','Falta','f'],['J','Falta justificada','j']];
+  const opts=[['P','Presença','p'],['F','Falta','f']];
   const g=s?grauNaData(i,s.data):i.grau;
   const real=!semRegistro&&statusPresencaReal(reg);
   const det=detalhesVisitaPresenca(reg);
   const dataVisita=det.dataVisita||s?.data||hojeISO();
   const boxPresenca=real?`<div class="just-box"><label>Tipo de presença</label><select onchange="setTipoPresencaChamada('${i.id}',this.value)"><option value="P" ${st==='P'?'selected':''}>Presença na Loja</option><option value="V" ${st==='V'?'selected':''}>Presença em outra Loja com atestado</option></select>${st==='V'?`<div class="row-3" style="margin-top:8px"><div><label>Data da visita</label><input type="date" value="${attr(dataVisita)}" onchange="setVisitaChamada('${i.id}','dataVisita',this.value)"></div><div><label>Loja visitada</label><input placeholder="Nome da Loja" value="${attr(det.lojaVisita)}" oninput="setVisitaChamada('${i.id}','lojaVisita',this.value)"></div><div><label>Oriente</label><input placeholder="Oriente" value="${attr(det.orienteVisita)}" oninput="setVisitaChamada('${i.id}','orienteVisita',this.value)"></div></div><label style="margin-top:8px">Atestado ou registro</label><textarea placeholder="Ex.: atestado recebido, número do documento ou observação de registro" oninput="setVisitaChamada('${i.id}','justificativa',this.value)">${h(det.justificativa)}</textarea>`:''}</div>`:'';
-  const boxJust=st==='J'?`<div class="just-box"><label>Justificativa obrigatória</label><textarea placeholder="Ex.: doença, trabalho, viagem, luto ou força maior" oninput="setJustificativaChamada('${i.id}',this.value)">${h(just)}</textarea></div>`:'';
+  const boxJust='';
   return `<div class="pres-row" data-name="${attr(nomeNormalizado(i.nome))}"><div class="pres-top"><div class="pres-name">${h(i.nome)}</div>${grauBadge(g)}</div><div class="status-grid">${opts.map(o=>{const ativo=o[0]==='P'?real:st===o[0];return `<button class="status-btn ${semRegistro?'unset':ativo?'active '+o[2]:''}" onclick="setStatusChamada('${i.id}','${o[0]}')">${o[1]}</button>`}).join('')}</div>${boxPresenca}${boxJust}</div>`
 }
 function setStatusChamada(id,st){
@@ -1885,7 +1897,7 @@ function carregarChamadaComEstado(){const id=presSessao.value;const s=getSessoes
 function irmaosDaChamadaAtual(){const s=getSessoes().find(x=>x.id===presSessao.value);return s?getIrmaos().filter(i=>contaParaIrmao(i,s)):[]}
 function marcarTodosChamada(st){for(const i of irmaosDaChamadaAtual())chamadaTemp[i.id]=registroPresenca(st);carregarChamadaComEstado()}
 function limparChamada(){if(!confirm('Limpar todas as marcações desta chamada?'))return;chamadaTemp={};carregarChamadaComEstado()}
-function atualizarResumoChamada(){const ir=irmaosDaChamadaAtual();let p=0,f=0,j=0,u=0;for(const i of ir){if(!Object.prototype.hasOwnProperty.call(chamadaTemp,i.id)){u++;continue}const st=statusPresenca(chamadaTemp[i.id]);if(['P','V'].includes(st))p++;else if(st==='J')j++;else f++}contadoresChamada.innerHTML=`<div class=\"call-count\"><b>${p}</b><span>Presentes</span></div><div class=\"call-count\"><b>${j}</b><span>Justificadas</span></div><div class=\"call-count\"><b>${f}</b><span>Faltas</span></div><div class=\"call-count\"><b>${u}</b><span>Sem registro</span></div>`}
+function atualizarResumoChamada(){const ir=irmaosDaChamadaAtual();let p=0,f=0,u=0;for(const i of ir){if(!Object.prototype.hasOwnProperty.call(chamadaTemp,i.id)){u++;continue}if(statusPresenca(chamadaTemp[i.id])==='P')p++;else f++}contadoresChamada.innerHTML=`<div class=\"call-count\"><b>${p}</b><span>Presentes</span></div><div class=\"call-count\"><b>${f}</b><span>Faltas</span></div><div class=\"call-count\"><b>${u}</b><span>Sem registro</span></div>`}
 function filtrarListaChamada(){const q=nomeNormalizado(document.getElementById('buscaChamada')?.value||'');document.querySelectorAll('#listaChamada .pres-row').forEach(el=>el.classList.toggle('hidden-call',q&&!String(el.dataset.name||'').includes(q)))}
 function chamadasIncompletas(){const hoje=hojeISO(),p=getPresencas();return getSessoes().filter(s=>s.data<=hoje).map(s=>{const aptos=getIrmaos().filter(i=>contaParaIrmao(i,s));const regs=p[s.id]||{};const faltantes=aptos.filter(i=>!Object.prototype.hasOwnProperty.call(regs,i.id));return {sessao:s,faltantes}}).filter(x=>x.faltantes.length)}
 function resumoChamadasIncompletas(lista=chamadasIncompletas()){if(!lista.length)return 'Nenhuma chamada pendente.';const x=lista.slice().sort((a,b)=>b.sessao.data.localeCompare(a.sessao.data))[0];return `${brData(x.sessao.data)} · ${descricaoSessao(x.sessao)} · ${x.faltantes.length} Irmão(s) sem registro${lista.length>1?' · toque para escolher':''}.`}
@@ -2079,7 +2091,7 @@ function abrirRevisaoFrequencia(irmaoId,sessaoId){
   if(!i||!s){toast('Registro não encontrado');return}
   const registro=(getPresencas()[sessaoId]||{})[irmaoId]||'F';
   revisaoRegistroOriginal=registro&&typeof registro==='object'?{...registro}:registro;
-  revisaoStatus=statusPresencaReal(registro)?'P':statusFaltaJustificada(registro)?'J':'F';
+  revisaoStatus=statusPresencaReal(registro)?'P':'F';
   revisaoStatusAlterado=false;
   const visita=detalhesVisitaPresenca(registro);
   document.getElementById('revisaoIrmaoId').value=irmaoId;
@@ -2095,7 +2107,7 @@ function abrirRevisaoFrequencia(irmaoId,sessaoId){
   abrirModal('modalRevisaoFrequencia')
 }
 function selecionarStatusRevisao(status){
-  revisaoStatus=['P','F','J'].includes(status)?status:'F';
+  revisaoStatus=['P','F'].includes(status)?status:'F';
   revisaoStatusAlterado=true;
   atualizarStatusRevisao()
 }
@@ -2105,13 +2117,13 @@ function atualizarTipoPresencaRevisao(){
   if(box)box.style.display=tipo==='V'?'block':'none'
 }
 function atualizarStatusRevisao(){
-  [['P','p'],['F','f'],['J','j']].forEach(([st,cl])=>{const b=document.getElementById('revisaoStatus'+st);if(b)b.className=`status-btn ${revisaoStatus===st?'active '+cl:''}`});
+  [['P','p'],['F','f']].forEach(([st,cl])=>{const b=document.getElementById('revisaoStatus'+st);if(b)b.className=`status-btn ${revisaoStatus===st?'active '+cl:''}`});
   const justBox=document.getElementById('revisaoJustificativaBox');
   const presBox=document.getElementById('revisaoTipoPresencaBox');
-  if(justBox)justBox.style.display=revisaoStatus==='J'?'block':'none';
+  if(justBox)justBox.style.display='none';
   if(presBox)presBox.style.display=revisaoStatus==='P'?'block':'none';
   atualizarTipoPresencaRevisao();
-  if(revisaoStatus==='J')setTimeout(()=>document.getElementById('revisaoJustificativa')?.focus(),60)
+  
 }
 function salvarRevisaoFrequencia(){
   const irmaoId=document.getElementById('revisaoIrmaoId').value;
@@ -2120,8 +2132,7 @@ function salvarRevisaoFrequencia(){
   const s=getSessoes().find(x=>x.id===sessaoId);
   if(!i||!s){toast('Registro não encontrado');return}
   const justificativa=document.getElementById('revisaoJustificativa').value.trim();
-  if(revisaoStatus==='J'&&!justificativa){toast('Informe a justificativa da falta');return}
-  let novoRegistro;
+    let novoRegistro;
   if(revisaoStatus==='P'){
     const tipo=document.getElementById('revisaoTipoPresenca').value;
     if(tipo==='V'){
@@ -2134,7 +2145,7 @@ function salvarRevisaoFrequencia(){
       novoRegistro=registroPresenca('V',visita.justificativa,visita);
       if(!visitaCompleta(novoRegistro)){toast('Informe data, Loja, Oriente e atestado da presença em outra Loja');return}
     }else novoRegistro=registroPresenca('P');
-  }else novoRegistro=registroPresenca(revisaoStatus,justificativa);
+  }else novoRegistro=registroPresenca('F');
   const pres=getPresencas();
   pres[sessaoId]=pres[sessaoId]||{};
   const anterior=pres[sessaoId][irmaoId]||'F';
@@ -2162,11 +2173,15 @@ function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false,opcoes={}){
   if(modoImpressao)url.searchParams.set('print','1');
   return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
 }
+function assinaturaChancelerHTML(){return `<div class="signature-person signature-chanceler"><img class="signature-image" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="signature-role">Chanceler</div><div class="signature-lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div></div>`}
+function assinaturaLinhaHTML(cargo){return `<div class="signature-person signature-line-person"><div class="signature-line"></div><div class="signature-role">${h(cargo)}</div></div>`}
+function assinaturaDuplaHTML(outroCargo){return `<div>${assinaturaChancelerHTML()}</div><div>${assinaturaLinhaHTML(outroCargo)}</div>`}
+
 function abrirPrint(titulo,corpo,meta={}){
   pendingPrintPayload={titulo,corpo,...meta};
   previewRelatorioTitulo.textContent=titulo;
   previewRelatorioConteudo.innerHTML=corpo;
-  const assinaturaPadrao='____________________________________<br>Chancelaria';
+  const assinaturaPadrao=assinaturaChancelerHTML();
   const rodapePadrao='Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';
   previewRelatorioAssinatura.innerHTML=meta.assinatura||assinaturaPadrao;
   previewRelatorioAssinatura.className='report-preview-signature'+(meta.assinaturaClasse?' '+meta.assinaturaClasse:'');
@@ -2596,7 +2611,7 @@ function mensagemFrequenciaGeral(){const per=periodoRGFDatas();if(!per.ativo){to
   function corpoProcedimento(p,i){
     const r=resumoProcesso(p,i),linhas=r.sessoes.filter(s=>statusPresenca((getPresencas()[s.id]||{})[i.id]||'F')==='F').map(s=>{const d=p.itens?.[s.id]||decisaoAbonoSessao(i.id,s.id);return `<tr><td>${brData(s.data)}</td><td>${h(descricaoSessao(s))}${s.numero?' · '+h(s.numero):''}</td><td>${h(textoDecisaoAbono(d))}</td><td>${d?`${h(d.justificativa||'')}${d.apresentadaEm?' · apresentada em '+brData(d.apresentadaEm):''}${d.decididaEm?' · decisão em '+brData(dataDecisaoProcesso(d.decididaEm)):''}${d.referencia?' · '+h(d.referencia):''}${d.nota?' · '+h(d.nota):''}`:'Sem justificativa registrada'}</td></tr>`}).join('');return `<h2>Procedimento de frequência</h2><p><b>Irmão:</b> ${h(i.nome)} · <b>CIM:</b> ${i.cim?h(i.cim):'Não informado'} · <b>Grau:</b> ${h(grauSimbolo(i.grau))}<br><b>Período preservado:</b> ${brData(p.periodoInicio)} a ${brData(p.periodoFim)} · <b>Sessões:</b> ${r.total}</p><p><b>Faltas registradas:</b> ${r.pctFaltaBruta}% (${r.faltasRegistradas}) · <b>Abonadas:</b> ${r.abonadas} · <b>Sem justa causa:</b> ${r.pctFalta}% (${r.falta})</p><h3>Notificação</h3><p><b>Emissão:</b> ${p.notificacao.emissao?brData(p.notificacao.emissao):'Não registrada'} · <b>Recebimento:</b> ${p.notificacao.recebimento?brData(p.notificacao.recebimento):'Não registrado'} · <b>Prazo:</b> ${p.notificacao.prazo?brData(p.notificacao.prazo):'Não calculado'}<br><b>Meio:</b> ${h(p.notificacao.meio||'Não informado')} · <b>Protocolo:</b> ${h(p.notificacao.protocolo||'Não informado')}</p><table class="procedure-print-table"><thead><tr><th>Data</th><th>Sessão</th><th>Decisão</th><th>Justificativa e referência</th></tr></thead><tbody>${linhas||'<tr><td colspan="4">Nenhuma falta registrada.</td></tr>'}</tbody></table>${processoFechado(p)?`<h3>Conclusão</h3><p><b>Data:</b> ${brData(p.conclusao.data)} · <b>Resultado:</b> ${h(resultadoNome(p.conclusao.resultado))} · <b>Referência:</b> ${h(p.conclusao.referencia)}<br>${h(p.conclusao.observacao||'')}</p>`:''}`
   }
-  window.imprimirProcessoFrequencia=function(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;fecharModal('modalProcessoFrequencia');abrirPrint('Procedimento de frequência',corpoProcedimento(p,i),{assinatura:'<div>____________________________________<br>Chanceler</div><div>____________________________________<br>Venerável Mestre</div>',assinaturaClasse:'dual-signature',rodape:`Documento administrativo emitido pela Chancelaria da A∴R∴L∴S∴ Razão e Força Nº 1997 em ${new Date().toLocaleString('pt-BR')}. A chamada original permanece preservada.`})};
+  window.imprimirProcessoFrequencia=function(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;fecharModal('modalProcessoFrequencia');abrirPrint('Procedimento de frequência',corpoProcedimento(p,i),{assinatura:assinaturaDuplaHTML('Venerável Mestre'),assinaturaClasse:'dual-signature',rodape:`Documento administrativo emitido pela Chancelaria da A∴R∴L∴S∴ Razão e Força Nº 1997 em ${new Date().toLocaleString('pt-BR')}. A chamada original permanece preservada.`})};
 
   const initRelatoriosAnterior=initRelatorios;initRelatorios=function(){initRelatoriosAnterior();prepararInterfaceProcessos();renderPainelProcedimentos()};
   const renderInicioAnterior=renderInicio;renderInicio=function(){renderInicioAnterior();const acao=candidatosProcedimentos().filter(x=>estadoDetalhado(x.p,x.i).categoria==='acao').length;if(acao){const painel=document.getElementById('inicio-painel');if(painel&&!document.getElementById('atalhoProcedimentosInicio'))painel.insertAdjacentHTML('beforeend',`<button id="atalhoProcedimentosInicio" class="today-item" onclick="abrirAba('relatorios');setTimeout(()=>document.getElementById('gestaoProcedimentosCard')?.scrollIntoView({behavior:'smooth'}),120)"><span class="today-icon">📋</span><span class="today-main"><b>${acao} procedimento(s) requer(em) ação</b><small>Revise notificações, prazos ou conclusões pendentes.</small></span><span class="today-go">›</span></button>`)}};
@@ -2697,7 +2712,7 @@ abrirConsultaSessao=function(id){_abrirConsultaSessaoV4(id);const s=getSessoes()
 function v5SessoesArt76(i,inicio,fim){return getSessoes().filter(s=>s.data&&s.data>=inicio&&s.data<=fim&&s.data<=hojeISO()&&contaParaIrmao(i,s))}
 function v5ResumoNormativoSessao(s){const x=v5LegacySession(s);return {classe:V5_SESSOES[x.tipo]?.label||x.tipo,modalidade:v5ModalidadeNome(x),grau:grauSimbolo(x.grauSessao),status:x.status}}
 // Marca de versão para diagnóstico e backup.
-window.CHANCELARIA_VERSION='5.0.0-conformidade-gob';
+window.CHANCELARIA_VERSION='5.2.0-documentos-assinatura';
 
 
 
@@ -2757,9 +2772,26 @@ function renderVisitantesV5(){
 function editarVisitanteV5(id){const x=getVisitantesV5().find(z=>z.id===id);if(!x)return;v5VisId.value=id;v5VisSessao.value=x.sessaoId;v5VisNome.value=x.nome;v5VisCim.value=x.cim||'';v5VisGrau.value=x.grau||'M';v5VisLoja.value=x.loja||'';v5VisNumero.value=x.numero||'';v5VisOriente.value=x.oriente||'';v5VisIdent.value=x.identificacao||'credencial';v5VisObs.value=x.obs||''}
 function excluirVisitanteV5(id){const x=getVisitantesV5().find(z=>z.id===id);if(!x||!confirm('Excluir este registro de visitante?'))return;setVisitantesV5(getVisitantesV5().filter(z=>z.id!==id));audit('Visitante excluído',x.nome);renderVisitantesV5()}
 function visitanteCertificadoAtual(id=''){let x=id?getVisitantesV5().find(z=>z.id===id):null;const editId=v5VisId.value;if(!x&&editId)x=getVisitantesV5().find(z=>z.id===editId);if(!x&&v5VisNome.value.trim())x={nome:v5VisNome.value.trim(),cim:v5VisCim.value.trim(),grau:v5VisGrau.value,loja:v5VisLoja.value.trim(),numero:v5VisNumero.value.trim(),oriente:v5VisOriente.value.trim(),sessaoId:v5VisSessao.value};return x}
-function corpoCertificadoVisitanteV5(x){const s=getSessoes().find(z=>z.id===x.sessaoId);return `<div class="certificate"><h2>Atestado de Frequência Maçônica</h2><p>Atestamos, para os fins maçônicos cabíveis, que o Irmão <b>${h(x.nome)}</b>${x.cim?' — CIM '+h(x.cim):''}, ${h(grauNome(x.grau)||grauSimbolo(x.grau))}, pertencente à <b>${h(x.loja)}${x.numero?' nº '+h(x.numero):''}</b>, Oriente de <b>${h(x.oriente)}</b>, esteve presente aos trabalhos da A∴R∴L∴S∴ Razão e Força nº 1997${s?` em <b>${brData(s.data)}</b>, na ${h(descricaoSessao(s))}${s.numero?' · '+h(s.numero):''}`:''}.</p><p style="margin-top:8mm;text-align:right">Porto Murtinho/MS, ${brData(hojeISO())}.</p></div>`}
-function certificadoVisitanteV5(id=''){const x=visitanteCertificadoAtual(id);if(!x){toast('Selecione ou informe um visitante');return}abrirPrint('Atestado de frequência maçônica',corpoCertificadoVisitanteV5(x),{assinatura:'____________________________________<br>Chanceler<br>A∴R∴L∴S∴ Razão e Força nº 1997',rodape:'Documento expedido pela Chancelaria. A presença do visitante deve permanecer vinculada à sessão registrada no aplicativo.'})}
-async function gerarImagemCertificadoVisitanteV5(x){const s=getSessoes().find(z=>z.id===x.sessaoId),canvas=document.createElement('canvas');canvas.width=1240;canvas.height=1754;const c=canvas.getContext('2d');c.fillStyle='#fffdf8';c.fillRect(0,0,canvas.width,canvas.height);c.strokeStyle='#c9a84c';c.lineWidth=5;c.strokeRect(42,42,1156,1670);const img=new Image();img.src='cabecalho-oficial.jpg';try{await img.decode();c.drawImage(img,70,75,1100,240)}catch(e){}c.fillStyle='#152541';c.textAlign='center';c.font='700 48px Georgia, serif';c.fillText('ATESTADO DE FREQUÊNCIA MAÇÔNICA',620,390);c.strokeStyle='#c9a84c';c.lineWidth=2;c.beginPath();c.moveTo(210,425);c.lineTo(1030,425);c.stroke();const wrap=(text,x,y,maxWidth,lineHeight)=>{const words=text.split(/\s+/);let line='',yy=y;for(const word of words){const test=line?line+' '+word:word;if(c.measureText(test).width>maxWidth&&line){c.fillText(line,x,yy);line=word;yy+=lineHeight}else line=test}if(line)c.fillText(line,x,yy);return yy};c.fillStyle='#202938';c.textAlign='left';c.font='32px Arial, sans-serif';const sessao=s?` em ${brData(s.data)}, na ${descricaoSessao(s)}${s.numero?' · '+s.numero:''}`:'';const texto=`Atestamos, para os fins maçônicos cabíveis, que o Irmão ${x.nome}${x.cim?' — CIM '+x.cim:''}, ${grauNome(x.grau)||grauSimbolo(x.grau)}, pertencente à ${x.loja}${x.numero?' nº '+x.numero:''}, Oriente de ${x.oriente}, esteve presente aos trabalhos da A.R.L.S. Razão e Força nº 1997${sessao}.`;wrap(texto,125,540,990,52);c.textAlign='right';c.font='30px Arial, sans-serif';c.fillText(`Porto Murtinho/MS, ${brData(hojeISO())}.`,1080,1180);c.textAlign='center';c.strokeStyle='#152541';c.lineWidth=2;c.beginPath();c.moveTo(380,1420);c.lineTo(860,1420);c.stroke();c.fillStyle='#152541';c.font='700 30px Arial, sans-serif';c.fillText('Chanceler',620,1470);c.font='26px Arial, sans-serif';c.fillText('A∴R∴L∴S∴ Razão e Força nº 1997',620,1510);c.fillStyle='#6d665b';c.font='22px Arial, sans-serif';c.fillText('Documento expedido pela Chancelaria',620,1640);return new Promise(resolve=>canvas.toBlob(resolve,'image/png',0.96))}
+function corpoCertificadoVisitanteV5(x){const s=getSessoes().find(z=>z.id===x.sessaoId);return `<div class="certificate"><h2>Atestado de Frequência Maçônica</h2><p class="certificate-body">Atestamos, para os fins maçônicos cabíveis, que o Irmão <b>${h(x.nome)}</b>${x.cim?' — CIM '+h(x.cim):''}, ${h(grauNome(x.grau)||grauSimbolo(x.grau))}, pertencente à <b>${h(x.loja)}${x.numero?' nº '+h(x.numero):''}</b>, Oriente de <b>${h(x.oriente)}</b>, esteve presente aos trabalhos da A∴R∴L∴S∴ Razão e Força nº 1997${s?` em <b>${brData(s.data)}</b>, na ${h(descricaoSessao(s))}${s.numero?' · '+h(s.numero):''}`:''}.</p><p class="certificate-date">Porto Murtinho/MS, ${brData(hojeISO())}.</p></div>`}
+function certificadoVisitanteV5(id=''){const x=visitanteCertificadoAtual(id);if(!x){toast('Selecione ou informe um visitante');return}abrirPrint('Atestado de frequência maçônica',corpoCertificadoVisitanteV5(x),{documentClass:'certificate-document',assinatura:assinaturaChancelerHTML(),rodape:'Documento expedido pela Chancelaria. A presença do visitante permanece vinculada à sessão registrada no aplicativo.'})}
+async function gerarImagemCertificadoVisitanteV5(x){
+  const s=getSessoes().find(z=>z.id===x.sessaoId),canvas=document.createElement('canvas');canvas.width=1240;canvas.height=1754;
+  const c=canvas.getContext('2d');c.fillStyle='#ffffff';c.fillRect(0,0,canvas.width,canvas.height);
+  const left=177,right=118,contentW=canvas.width-left-right; // aprox. 3 cm à esquerda e 2 cm à direita em A4
+  const header=new Image();header.src='cabecalho-oficial.jpg';try{await header.decode();c.drawImage(header,left,100,contentW,205)}catch(e){}
+  c.fillStyle='#152541';c.textAlign='center';c.font='700 39px Arial, sans-serif';c.fillText('ATESTADO DE FREQUÊNCIA MAÇÔNICA',left+contentW/2,390);
+  const texto=`Atestamos, para os fins maçônicos cabíveis, que o Irmão ${x.nome}${x.cim?' — CIM '+x.cim:''}, ${grauNome(x.grau)||grauSimbolo(x.grau)}, pertencente à ${x.loja}${x.numero?' nº '+x.numero:''}, Oriente de ${x.oriente}, esteve presente aos trabalhos da A.R.L.S. Razão e Força nº 1997${s?` em ${brData(s.data)}, na ${descricaoSessao(s)}${s.numero?' · '+s.numero:''}`:''}.`;
+  c.fillStyle='#111';c.textAlign='justify';c.font='29px Arial, sans-serif';
+  const words=texto.split(/\s+/);let line='',yy=530;const lineH=48,firstIndent=72;
+  const drawJustified=(parts,y,isLast,indent=0)=>{const avail=contentW-indent;if(isLast||parts.length<2){c.textAlign='left';c.fillText(parts.join(' '),left+indent,y);return}const widths=parts.map(w=>c.measureText(w).width),spaces=parts.length-1,gap=(avail-widths.reduce((a,b)=>a+b,0))/spaces;let xx=left+indent;c.textAlign='left';parts.forEach((w,i)=>{c.fillText(w,xx,y);xx+=widths[i]+(i<spaces?gap:0)})};
+  let lines=[];let current=[];let currentW=0;for(const w of words){const ww=c.measureText(w).width, gap=c.measureText(' ').width;const indent=lines.length===0?firstIndent:0; if(current.length&&currentW+gap+ww>contentW-indent){lines.push(current);current=[w];currentW=ww}else{if(current.length)currentW+=gap;current.push(w);currentW+=ww}}if(current.length)lines.push(current);
+  lines.forEach((parts,i)=>drawJustified(parts,yy+i*lineH,i===lines.length-1,i===0?firstIndent:0));yy+=lines.length*lineH;
+  c.textAlign='right';c.font='29px Arial, sans-serif';c.fillText(`Porto Murtinho/MS, ${brData(hojeISO())}.`,left+contentW,Math.max(yy+120,1050));
+  const sig=new Image();sig.src='assinatura-chanceler.png';try{await sig.decode();const maxW=470,maxH=150,scale=Math.min(maxW/sig.width,maxH/sig.height);const sw=sig.width*scale,sh=sig.height*scale,sx=left+(contentW-sw)/2,sy=1280;c.drawImage(sig,sx,sy,sw,sh)}catch(e){}
+  c.fillStyle='#152541';c.textAlign='center';c.font='700 27px Arial, sans-serif';c.fillText('Chanceler',left+contentW/2,1460);c.font='23px Arial, sans-serif';c.fillText('A∴R∴L∴S∴ Razão e Força nº 1997',left+contentW/2,1500);
+  c.fillStyle='#555';c.font='19px Arial, sans-serif';c.fillText('Documento expedido pela Chancelaria',left+contentW/2,1620);
+  return new Promise(resolve=>canvas.toBlob(resolve,'image/png',0.96))
+}
 async function compartilharCertificadoVisitanteV5(id=''){const x=visitanteCertificadoAtual(id);if(!x){toast('Selecione ou informe um visitante');return}try{const blob=await gerarImagemCertificadoVisitanteV5(x);if(!blob)throw new Error('imagem');const nome=`Atestado-${String(x.nome).replace(/[^a-z0-9]+/gi,'-')}.png`,file=new File([blob],nome,{type:'image/png'});const texto=`Atestado de frequência maçônica — ${x.nome} — A∴R∴L∴S∴ Razão e Força nº 1997.`;if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){iniciarAcaoExterna();await navigator.share({title:'Atestado de frequência maçônica',text:texto,files:[file]});finalizarAcaoExterna();return}certificadoVisitanteV5(id);setTimeout(()=>{if(enviarAcaoNativa('W',texto))toast('Certificado aberto para PDF; WhatsApp preparado. Salve o PDF e anexe-o à conversa.')},350)}catch(e){finalizarAcaoExterna();certificadoVisitanteV5(id);toast('Abra o certificado, salve em PDF e compartilhe pelo WhatsApp')}}
 
 function abrirExternaV5(){v5ExtIrmao.innerHTML=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>`<option value="${i.id}">${h(i.nome)}${i.cim?' · '+h(i.cim):''}</option>`).join('');v5ExtId.value='';v5ExtData.value=hojeISO();['v5ExtLoja','v5ExtNumero','v5ExtOriente','v5ExtAtestado'].forEach(id=>document.getElementById(id).value='');v5ExtGrau.value='A';renderExternasV5();abrirModal('modalExternaV5')}
@@ -2790,7 +2822,7 @@ function estadoFinanceiroV5(data,iid){return getEleicoesV5().find(x=>x.data===da
 function setFinanceiroV5(iid,val){const data=eleKeyV5(),arr=getEleicoesV5();let x=arr.find(z=>z.data===data&&z.irmaoId===iid);if(!x){x={id:uid(),data,irmaoId:iid,financeiro:val};arr.push(x)}else x.financeiro=val;setEleicoesV5(arr);renderEleitoralV5()}
 function abrirEleitoralV5(){v5EleData.value=v5EleData.value||hojeISO();renderEleitoralV5();abrirModal('modalEleitoralV5')}
 function renderEleitoralV5(){const data=v5EleData.value||hojeISO();const rows=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const r=calcEleitoralV5(i,data),fin=estadoFinanceiroV5(data,i.id),apto=r.apto===false?false:(fin==='quite'&&(r.dispensa||r.pct>=r.req));const status=apto?'Apto':r.apto===false?'Não apto':fin==='devedor'?'Não apto — financeiro':'Pendente';return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${h(grauSimbolo(i.grau))} · frequência ${r.pct}% (${r.pres}/${r.total}) · requisito ${r.req||'-'}%<br>${h(r.motivo)} · <b>${status}</b></div></div><div class="item-side"><select onchange="setFinanceiroV5('${i.id}',this.value)" aria-label="Situação financeira"><option value="pendente" ${fin==='pendente'?'selected':''}>Tesouraria pendente</option><option value="quite" ${fin==='quite'?'selected':''}>Quite</option><option value="devedor" ${fin==='devedor'?'selected':''}>Com pendência</option></select></div></div>`}).join('');v5EleLista.innerHTML=rows||'<div class="empty"><p>Nenhum Irmão cadastrado.</p></div>'}
-function imprimirEleitoralV5(){const data=v5EleData.value||hojeISO();const rows=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const r=calcEleitoralV5(i,data),fin=estadoFinanceiroV5(data,i.id),apto=r.apto!==false&&fin==='quite'&&(r.dispensa||r.pct>=r.req);return `<tr><td>${h(i.nome)}</td><td>${h(i.cim||'')}</td><td>${h(grauSimbolo(i.grau))}</td><td>${r.pct}%</td><td>${h(fin)}</td><td>${apto?'Apto':r.apto===false?'Não apto':'Pendente'}</td></tr>`}).join('');abrirPrint('Relação de qualificação eleitoral',`<h2>Relação de qualificação eleitoral</h2><p><b>Data de referência:</b> ${brData(data)}. Cálculo independente do art. 76; situação financeira anotada pela Tesouraria.</p><table><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Frequência</th><th>Tesouraria</th><th>Situação</th></tr></thead><tbody>${rows}</tbody></table>`,{assinatura:'<div>____________________________________<br>Chanceler</div><div>____________________________________<br>Tesoureiro</div>',assinaturaClasse:'dual-signature',rodape:'Relação auxiliar de qualificação eleitoral. A autoridade competente e os registros oficiais prevalecem.'})}
+function imprimirEleitoralV5(){const data=v5EleData.value||hojeISO();const rows=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const r=calcEleitoralV5(i,data),fin=estadoFinanceiroV5(data,i.id),apto=r.apto!==false&&fin==='quite'&&(r.dispensa||r.pct>=r.req);return `<tr><td>${h(i.nome)}</td><td>${h(i.cim||'')}</td><td>${h(grauSimbolo(i.grau))}</td><td>${r.pct}%</td><td>${h(fin)}</td><td>${apto?'Apto':r.apto===false?'Não apto':'Pendente'}</td></tr>`}).join('');abrirPrint('Relação de qualificação eleitoral',`<h2>Relação de qualificação eleitoral</h2><p><b>Data de referência:</b> ${brData(data)}. Cálculo independente do art. 76; situação financeira anotada pela Tesouraria.</p><table><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Frequência</th><th>Tesouraria</th><th>Situação</th></tr></thead><tbody>${rows}</tbody></table>`,{assinatura:assinaturaDuplaHTML('Tesoureiro'),assinaturaClasse:'dual-signature',rodape:'Relação auxiliar de qualificação eleitoral. A autoridade competente e os registros oficiais prevalecem.'})}
 
 function abrirPendenciasV5(){renderPendenciasV5();abrirModal('modalPendenciasV5')}
 function renderPendenciasV5(){const itens=[];getIrmaos().forEach(i=>{const f=calcFreq(i);if(f.periodo12&&f.pctFalta>=50&&f.total>0&&!processoMaisRecenteIrmao(i.id))itens.push({t:'Art. 76',x:`${i.nome}: limite de faltas sem justa causa atingido, sem procedimento registrado.`});if(i.regimeFreq!=='normal'&&!i.regimeRef)itens.push({t:'Cadastro',x:`${i.nome}: regime especial sem referência/ata.`});if((i.direitos||'pleno')!=='pleno'&&!i.direitosRef)itens.push({t:'Direitos',x:`${i.nome}: situação de direitos sem referência formal.`})});getProcessosFreq().filter(p=>!processoFechado(p)).forEach(p=>{const i=getIrmaos().find(x=>x.id===p.irmaoId);if(p.notificacao?.recebimento&&p.notificacao?.prazo&&hojeISO()>p.notificacao.prazo&&!p.extraordinaria?.dataSessao)itens.push({t:'Art. 77',x:`${i?.nome||'Irmão'}: prazo de justificativa encerrado; verificar leitura do relatório e sessão extraordinária.`});if(p.extraordinaria?.dataSessao&&p.extraordinaria?.recebimento){const dif=Math.floor((new Date(p.extraordinaria.dataSessao)-new Date(p.extraordinaria.recebimento))/86400000);if(dif<15)itens.push({t:'Art. 77',x:`${i?.nome||'Irmão'}: antecedência da notificação da sessão extraordinária inferior a 15 dias.`})}if(p.decisao?.suspensao&&(!p.comunicacoes?.irmaoData||!p.comunicacoes?.guardaData))itens.push({t:'72 horas',x:`${i?.nome||'Irmão'}: suspensão registrada com comunicações pendentes.`})});v5PendLista.innerHTML=itens.length?itens.map(a=>`<div class="alert"><div class="name">${h(a.t)}</div><div class="txt">${h(a.x)}</div></div>`).join(''):'<div class="empty"><p>Nenhuma pendência normativa detectada pelos dados cadastrados.</p></div>'}
@@ -2805,7 +2837,7 @@ abrirProcessoFrequencia=function(id){_abrirProcV50(id);const p=processoModalAtua
 function salvarEtapaExtraV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(p.notificacao?.prazo&&hojeISO()<=p.notificacao.prazo&&!confirm('O prazo de 30 dias ainda não terminou. Salvar mesmo assim?'))return;const ex={leituraRelatorio:procLeituraRelatorio.value,dataSessao:procExtraSessao.value,notificacao:procExtraNotif.value,recebimento:procExtraReceb.value,prova:procExtraProva.value.trim(),manifestacao:procExtraManifest.value==='1',ata:procExtraAta.value.trim()};if(ex.dataSessao&&(!ex.leituraRelatorio||!ex.recebimento||!ex.prova)){toast('Informe leitura do relatório, recebimento e prova da notificação');return}if(ex.dataSessao&&ex.recebimento){const dif=Math.floor((new Date(ex.dataSessao)-new Date(ex.recebimento))/86400000);if(dif<15&&!confirm('A antecedência registrada é inferior a 15 dias. Deseja manter o registro para correção/documentação?'))return}const res=procDecisaoResultadoV51.value,dec={data:procDecisaoDataV51.value,suspensao:res==='suspensao',resultado:res,ata:procDecisaoAtaV51.value.trim()};if(res&&(!dec.data||!dec.ata)){toast('Informe data e referência da decisão');return}p.extraordinaria=ex;p.decisao=dec;salvarProcessoObjeto(p);audit('Etapa extraordinária registrada',`${i.nome}${ex.dataSessao?' · sessão '+brData(ex.dataSessao):''}${res?' · '+res:''}`);renderProcessoFrequencia();toast('Sessão extraordinária e decisão registradas')}
 function salvarComunicacoesV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(!p.decisao?.suspensao){toast('As comunicações de 72 horas são exigidas aqui quando houver suspensão declarada registrada');return}const c={irmaoData:procComIrmaoData.value,irmaoProva:procComIrmaoProva.value.trim(),guardaData:procComGuardaData.value,guardaProtocolo:procComGuardaProt.value.trim()};if(!c.irmaoData||!c.irmaoProva||!c.guardaData||!c.guardaProtocolo){toast('Preencha as duas comunicações e respectivas provas');return}const base=p.decisao.data;if(base){const limite=somarDiasISO(base,3);if((c.irmaoData>limite||c.guardaData>limite)&&!confirm('Uma comunicação está além de 72 horas da decisão registrada. Manter para documentação?'))return}p.comunicacoes=c;salvarProcessoObjeto(p);audit('Comunicações da suspensão registradas',`${i.nome} · Irmão ${brData(c.irmaoData)} · Guarda dos Selos ${brData(c.guardaData)}`);toast('Comunicações registradas')}
 
-window.CHANCELARIA_VERSION='5.0.1-modern-conformidade-gob';
+window.CHANCELARIA_VERSION='5.2.0-documentos-assinatura';
 
 function renderAtual(){migrarV51Normativo();if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
 iniciarSeguranca();
