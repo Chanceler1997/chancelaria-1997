@@ -1,81 +1,19 @@
-CHANCELARIA 1997 — VERSÃO 5.0.1
-CONFORMIDADE GOB · REVISÃO FUNCIONAL E VISUAL
+CHANCELARIA 1997 — VERSÃO 5.3.0
 
-A.R.L.S. RAZÃO E FORÇA Nº 1997
+PRINCIPAIS ALTERAÇÕES
+- Interface operacional mais fluida; cabeçalho oficial retirado das telas do aplicativo e preservado nos documentos.
+- Exclusão segura de sessão: sessão sem vínculos vai à lixeira; sessão com chamada, visitantes ou procedimento é preservada como anulada/retificada com motivo e referência.
+- Fechamento formal da sessão e bloqueio de edição livre após encerramento.
+- Correções pós-encerramento exigem motivo e ficam na auditoria.
+- Total do Templo: Irmãos do Quadro + visitantes.
+- Identificação do visitante obrigatória; apresentação por membro exige identificação do apresentante.
+- Certificado de visitante numerado automaticamente no padrão RF1997-AAAA-NNN.
+- Alertas preventivos de frequência: 40–49,99% (atenção interna) e 50%+ (limite do art. 76).
+- Linha do tempo visual do procedimento do art. 77.
+- Qualificação eleitoral: mantém cálculo e permite registrar leitura da relação, ata e impugnação/observação. Não realiza votação e não cria checklist de votação, pois o pleito ocorre em plataforma própria.
+- Relatório anual da Chancelaria.
+- Auditoria reforçada para atos sensíveis, com valor anterior/novo e motivo; remoção da ação de apagar histórico pela interface.
+- Cabeçalho oficial e assinatura do Chanceler permanecem nos documentos impressos/PDF.
 
-ANTES DE ATUALIZAR
-1. Exporte um backup criptografado da versão atualmente instalada.
-2. Não desinstale o aplicativo.
-3. Não limpe dados/cache/armazenamento do aplicativo.
-4. No GitHub, substitua os arquivos deste pacote mantendo os blocos do Kodular inalterados.
-
-ARQUIVOS
-- index.html
-- print.html
-- manifest.json
-- service-worker.js
-- cabecalho-oficial.jpg
-- icon-192.png
-- icon-512.png
-
-REVISÃO 5.0.1
-- identidade visual refeita: azul-marinho profundo, branco/marfim e ouro, com geometria discreta e linguagem institucional contemporânea;
-- removido o fundo azul-celeste da proposta anterior;
-- barra inferior flutuante, cartões, modais, botões e tela de acesso modernizados;
-- versão e cache do PWA atualizados;
-- bloqueio automático após 10 minutos sem atividade;
-- classificação das sessões conforme art. 108 do RGF;
-- sessão agendada ou cancelada não gera chamada/frequência;
-- frequência individual considera ingresso, grau na data e regime de frequência cadastrado;
-- fluxo de art. 76/77 ampliado com notificação, 30 dias a partir do recebimento, justificativas, sessão extraordinária, antecedência de 15 dias, decisão e comunicações após suspensão;
-- chamada original continua Presença/Falta; justificativas e abonos ficam em procedimento separado;
-- presenças externas antigas deixam de ser tratadas silenciosamente como presença na própria Loja: são migradas para registro separado de frequência externa;
-- novo módulo de visitantes e emissão de atestado de frequência;
-- novo módulo de frequência em outra Loja;
-- cadastro passa a registrar condição Emérito/Remido, situação dos direitos e regime de frequência;
-- novo módulo auxiliar de qualificação eleitoral, separado do art. 76 e com situação financeira dependente de anotação da Tesouraria;
-- painel de pendências normativas;
-- paginação de relatórios deixou de forçar cortes fixos de 20 linhas, reduzindo risco de páginas em branco.
-
-LIMITES IMPORTANTES
-- O aplicativo auxilia o controle administrativo; não declara suspensão ou irregularidade automaticamente.
-- Situações de direitos dependem de decisão formal e referência cadastrada.
-- A qualificação eleitoral depende também dos registros e decisões oficiais competentes.
-- O cabeçalho oficial foi preservado como fornecido. A expressão de jurisdição não foi inventada no sistema; deve ser incluída apenas depois de confirmada a denominação oficial correspondente.
-
-COMPATIBILIDADE
-- Mantido o prefixo de dados arls1997_.
-- Mantido o cofre AES-GCM e a senha mestra.
-- Mantido o bridge do Kodular (W|, P|, X|, T|, N|).
-- Não alterar os blocos existentes do Kodular.
-
-VERSÃO DE DIAGNÓSTICO
-5.0.1-modern-conformidade-gob
-
-
-VERSÃO 5.1.0 — REVISÃO OPERACIONAL
-- O alerta de chamada incompleta identifica a sessão e abre diretamente a chamada pendente.
-- Se houver várias chamadas incompletas, o aplicativo permite escolher qual continuar.
-- Visitantes agora têm acesso direto na tela inicial e dentro da chamada.
-- O visitante permanece vinculado à sessão.
-- Certificado institucional com cabeçalho/logotipo, dados do visitante, Loja, Oriente, data e sessão.
-- Compartilhamento do certificado como imagem pelo menu nativo do Android, incluindo WhatsApp quando suportado; fallback para PDF/impressão.
-- Cache PWA atualizado para v5.1.0.
-
-
-ATUALIZAÇÃO 5.2.0 — DOCUMENTOS E ASSINATURA
-- Assinatura azul do Chanceler incorporada como imagem transparente institucional.
-- A assinatura aparece nos relatórios individual e coletivo e nos documentos de sessão, procedimento de frequência, qualificação eleitoral e atestado de visitante.
-- Nos documentos com duas assinaturas, a assinatura do Chanceler é inserida automaticamente e o segundo cargo permanece com campo próprio para assinatura.
-- O atestado de frequência foi realinhado para padrão formal A4, com margens de 3 cm à esquerda/superior e 2 cm à direita/inferior, fonte Arial 12, espaçamento 1,5, texto justificado e recuo de primeira linha.
-- O certificado compartilhável por imagem também passou a usar a assinatura institucional.
-- A chamada continua registrando somente Presença ou Falta; justificativas e abonos permanecem no procedimento próprio.
-- Cache do PWA atualizado e novo recurso assinatura-chanceler.png incluído.
-
-VERIFICAÇÃO 5.2.0
-- JavaScript validado sintaticamente.
-- IDs HTML verificados sem duplicidade.
-- Manipuladores de interface verificados contra funções existentes.
-- manifest.json validado.
-- Recursos do service worker conferidos.
-- Atestado de teste renderizado em A4 para inspeção de alinhamento, margens, cabeçalho e assinatura.
+ATUALIZAÇÃO
+Substitua todos os arquivos do pacote no mesmo local do GitHub Pages. Não desinstale o APK, não limpe dados e faça backup criptografado antes da atualização.

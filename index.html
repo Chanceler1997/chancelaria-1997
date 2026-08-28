@@ -453,6 +453,20 @@ main{max-width:720px;padding:18px 14px 104px}
 .report-preview-page .certificate .certificate-body{font-size:12pt;line-height:1.5;text-align:justify;text-indent:12.5mm;margin:0}
 .report-preview-page .certificate .certificate-date{font-size:12pt;line-height:1.5;text-align:right;margin-top:12mm;text-indent:0}
 
+
+/* V5.3 — interface fluida e operacional */
+.app-compact-header{padding:7px 10px;background:rgba(12,25,44,.96);border-bottom:1px solid rgba(201,168,76,.35);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.app-topbar{max-width:980px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.compact-brand{display:flex;align-items:center;gap:9px;min-width:0;color:#fff}.compact-brand img{width:38px;height:38px;border-radius:50%;background:#fff;padding:2px;border:1px solid rgba(201,168,76,.7)}.compact-brand span{display:flex;flex-direction:column;min-width:0}.compact-brand b{font-size:15px;letter-spacing:.2px}.compact-brand small{font-size:10.5px;color:#d8cda9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.header-actions{padding:0;margin:0}.header-actions button{width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(201,168,76,.4);color:#dfc878}
+main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow:none}.hero>.install-note{border-radius:14px;background:linear-gradient(135deg,#fffefa,#f2eadb);border:1px solid rgba(201,168,76,.38);box-shadow:0 5px 18px rgba(0,0,0,.08)}
+.action-grid{gap:10px}.action{min-height:86px;border-radius:16px;padding:15px 14px;background:#fffdfa;border:1px solid rgba(201,168,76,.3);box-shadow:0 5px 15px rgba(16,31,52,.08);text-align:left}.action:active{transform:scale(.985)}
+.card,.list-item,.today-item,.stat{border-radius:16px}.card{overflow:hidden}.card-head{padding:13px 15px}.card-body{padding:14px}.compact-card{box-shadow:none;margin:10px 0;border:1px solid rgba(201,168,76,.25)}
+.retificacao-box{margin-top:10px}.session-closed{border-left:4px solid #257b51}.session-annulled{opacity:.76;border-left:4px solid #9a2f38}.norm-chip.closed{background:#e4f2e9;color:#256746}.norm-chip.annulled{background:#f6e2e3;color:#8b2730}
+.freq-bands{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}.freq-band{padding:13px;border-radius:16px;background:#fffdfa;border:1px solid rgba(201,168,76,.25);box-shadow:0 4px 12px rgba(0,0,0,.06)}.freq-band b{font-size:22px;color:#14253f}.freq-band span{display:block;font-size:12px;color:#6f7178;margin-top:3px}.freq-band.attention{border-left:4px solid #d29625}.freq-band.legal{border-left:4px solid #a42f38}
+.process-timeline{display:flex;gap:6px;overflow-x:auto;padding:5px 0 12px;scrollbar-width:none}.process-step{min-width:112px;padding:10px;border-radius:13px;background:#f1eee7;border:1px solid #ded7c9;font-size:11px}.process-step.done{background:#e8f3eb;border-color:#a7ceb4}.process-step.current{background:#fff5dc;border-color:#e0b65a}.process-step b{display:block;font-size:12px;margin-bottom:3px}
+@media(max-width:430px){.compact-brand small{max-width:145px}.freq-bands{grid-template-columns:1fr 1fr}.action{min-height:78px;padding:12px}.hero>.install-note{font-size:12px}.nav{left:8px;right:8px;bottom:8px;border-radius:22px}.nav button{font-size:10px}.nav-symbol{width:26px;height:26px}}
+.audit-actions{display:none!important}
+
 </style>
 </head>
 <body class="app-locked">
@@ -484,11 +498,9 @@ main{max-width:720px;padding:18px 14px 104px}
   </div>
 </div>
 
-<header class="header no-print">
-  <div class="header-top">
-    <div class="app-official-header">
-      <img class="official-banner" src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997">
-    </div>
+<header class="header app-compact-header no-print">
+  <div class="header-top app-topbar">
+    <div class="compact-brand"><img src="icon-192.png" alt="Emblema"><span><b>Chancelaria 1997</b><small>Razão e Força nº 1997</small></span></div>
     <div class="header-actions no-print">
       <button id="backNowButton" class="back-now" type="button" onclick="voltarNoAplicativo()" aria-label="Voltar" title="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/><path d="M8 12h12"/></svg></button>
       <button id="settingsNowButton" class="settings-now" type="button" onclick="abrirAba('relatorios');setTimeout(()=>document.getElementById('centralSeguranca')?.scrollIntoView({behavior:'smooth'}),120)" aria-label="Abrir segurança" title="Segurança e configurações"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8Zm8.2 4.7-1.7 1c-.1.4-.3.8-.5 1.2l.5 1.9-2.1 2.1-1.9-.5c-.4.2-.8.4-1.2.5l-1 1.7h-3l-1-1.7c-.4-.1-.8-.3-1.2-.5l-1.9.5-2.1-2.1.5-1.9c-.2-.4-.4-.8-.5-1.2l-1.7-1v-3l1.7-1c.1-.4.3-.8.5-1.2l-.5-1.9 2.1-2.1 1.9.5c.4-.2.8-.4 1.2-.5l1-1.7h3l1 1.7c.4.1.8.3 1.2.5l1.9-.5 2.1 2.1-.5 1.9c.2.4.4.8.5 1.2l1.7 1v3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
@@ -499,7 +511,7 @@ main{max-width:720px;padding:18px 14px 104px}
 
 <main>
   <section id="inicio" class="section active">
-    <div class="hero"><div class="install-note" style="margin-bottom:12px"><b>Chancelaria 1997 · Versão 5.2.0</b><br>Gestão institucional, frequência e conformidade normativa da A∴R∴L∴S∴ Razão e Força nº 1997.</div>
+    <div class="hero"><div class="install-note" style="margin-bottom:12px"><b>Chancelaria 1997 · Versão 5.3.0</b><br>Gestão institucional, frequência e conformidade normativa da A∴R∴L∴S∴ Razão e Força nº 1997.</div>
       <div class="action-grid">
         <button class="action" onclick="abrirAba('irmaos'); abrirModalIrmao()"><b>Cadastrar Irmão</b><small>Inclua grau, telefone, esposa e filhos.</small></button>
         <button class="action" onclick="abrirAba('sessoes'); abrirModalSessao()"><b>Nova sessão</b><small>Cadastre sessões antigas e futuras.</small></button>
@@ -521,7 +533,7 @@ main{max-width:720px;padding:18px 14px 104px}
     <div id="inicio-aniversarios"></div>
     <div id="inicio-proxima-sessao"></div>
     <div id="inicio-proxima-data"></div>
-    <div id="inicio-alertas"></div>
+    <div id="inicio-alertas"></div><div id="inicio-faixas-v53"></div>
 
     <div class="card">
       <div class="card-head">📊 Frequência da Loja</div>
@@ -575,7 +587,7 @@ main{max-width:720px;padding:18px 14px 104px}
     </div>
     <div id="listaChamada"></div>
     <div id="acoesChamada" style="display:none" class="toolbar no-print">
-      <button class="btn btn-primary btn-full" onclick="salvarChamada()">💾 Salvar chamada</button>
+      <button class="btn btn-primary" onclick="salvarChamada()">Salvar chamada</button><button id="btnEncerrarSessaoV53" class="btn btn-success" onclick="encerrarSessaoV53()">Encerrar sessão</button>
     </div>
   </section>
 
@@ -641,6 +653,7 @@ main{max-width:720px;padding:18px 14px 104px}
           <button class="action" type="button" onclick="abrirExternaV5()"><b>Frequência externa</b><small>Atestados de Irmãos em outras Lojas do GOB.</small></button>
           <button class="action" type="button" onclick="abrirEleitoralV5()"><b>Qualificação eleitoral</b><small>Cálculo separado do art. 76.</small></button>
           <button class="action" type="button" onclick="abrirPendenciasV5()"><b>Pendências normativas</b><small>Procedimentos, comunicações e cadastros.</small></button>
+          <button class="action" type="button" onclick="imprimirRelatorioAnualV53()"><b>Relatório anual</b><small>Sessões, frequência, visitantes, certificados e pendências.</small></button>
         </div>
       </div>
     </div>
@@ -774,6 +787,7 @@ main{max-width:720px;padding:18px 14px 104px}
       </div>
       <div class="field"><label>Número ou identificação</label><input id="sNumero" placeholder="Ex.: 1ª Sessão Ordinária 2026"></div>
       <div class="field"><label>Pauta ou observação</label><textarea id="sObs" placeholder="Resumo da sessão"></textarea></div>
+      <div id="sRetificacaoBox" class="retificacao-box" style="display:none"><div class="install-note"><b>Retificação/anulação documental</b><br>Sessões com registros vinculados não são apagadas. Informe o motivo e a referência administrativa para preservar a rastreabilidade.</div><div class="row"><div class="field"><label>Motivo da retificação/anulação</label><input id="sRetMotivo" placeholder="Descreva o motivo"></div><div class="field"><label>Referência (ata/despacho)</label><input id="sRetRef" placeholder="Ex.: Ata nº 123"></div></div></div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-light" onclick="fecharModal('modalSessao')">Cancelar</button>
@@ -947,7 +961,7 @@ main{max-width:720px;padding:18px 14px 104px}
     <input type="hidden" id="v5VisId"><div class="row"><div class="field"><label>Sessão</label><select id="v5VisSessao"></select></div><div class="field"><label>Nome completo</label><input id="v5VisNome"></div></div>
     <div class="row"><div class="field"><label>CIM</label><input id="v5VisCim"></div><div class="field"><label>Grau</label><select id="v5VisGrau"><option value="A">Aprendiz</option><option value="C">Companheiro</option><option value="M">Mestre</option><option value="MI">Mestre Instalado</option></select></div></div>
     <div class="row"><div class="field"><label>Loja de origem</label><input id="v5VisLoja"></div><div class="field"><label>Número</label><input id="v5VisNumero"></div></div>
-    <div class="row"><div class="field"><label>Oriente</label><input id="v5VisOriente"></div><div class="field"><label>Identificação</label><select id="v5VisIdent"><option value="credencial">Credencial</option><option value="exame">Exame de praxe</option><option value="apresentacao">Apresentado por membro do Quadro</option></select></div></div>
+    <div class="row"><div class="field"><label>Oriente</label><input id="v5VisOriente"></div><div class="field"><label>Identificação</label><select id="v5VisIdent"><option value="">Selecione</option><option value="credencial">Credencial</option><option value="exame">Exame de praxe</option><option value="apresentacao">Apresentado por membro do Quadro</option></select></div></div>
     <div class="field"><label>Apresentado por / observação</label><input id="v5VisObs"></div>
     <div class="toolbar"><button class="btn btn-primary" onclick="salvarVisitanteV5()">Salvar visitante</button><button class="btn btn-light" onclick="certificadoVisitanteV5()">Visualizar certificado</button><button class="btn btn-success" onclick="compartilharCertificadoVisitanteV5()">Compartilhar certificado</button></div>
     <div class="divider"></div><div id="v5VisLista"></div>
@@ -968,6 +982,7 @@ main{max-width:720px;padding:18px 14px 104px}
   <div class="modal processo-modal"><div class="modal-head"><span>Qualificação eleitoral</span><button class="modal-close" onclick="fecharModal('modalEleitoralV5')">×</button></div><div class="modal-body">
     <div class="row"><div class="field"><label>Data da eleição</label><input id="v5EleData" type="date" onchange="renderEleitoralV5()"></div><div class="field"><label>Finalidade</label><select id="v5EleTipo"><option value="loja">Administração/Orador/Deputados</option><option value="geral">Grão-Mestre / eleições gerais</option></select></div></div>
     <div class="install-note">Cálculo eleitoral independente do art. 76. A situação financeira é anotada separadamente e não é presumida pelo aplicativo.</div>
+    <div class="card compact-card"><div class="card-body"><div class="row"><div class="field"><label>Leitura da relação em Loja</label><input id="v53EleLeitura" type="date"></div><div class="field"><label>Referência da ata</label><input id="v53EleAta" placeholder="Ata nº..."></div></div><div class="field"><label>Impugnação/observação registrada em ata</label><textarea id="v53EleImp" placeholder="Deixe em branco se não houve impugnação."></textarea></div><button class="btn btn-primary btn-sm" onclick="salvarRegistroEleitoralV53()">Salvar registro administrativo</button></div></div>
     <div id="v5EleLista"></div>
   </div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalEleitoralV5')">Fechar</button><button class="btn btn-success" onclick="imprimirEleitoralV5()">Imprimir relação</button></div></div>
 </div>
@@ -2693,7 +2708,7 @@ salvarSessao=function(){
   const tipo=sTipo.value,modalidade=sMagnaTipo.value,grauSessao=sGrau.value,status=sStatus.value;
   if(!V5_SESSOES[tipo]||!V5_SESSOES[tipo].modalidades.some(x=>x[0]===modalidade)){toast('Selecione uma modalidade válida do art. 108');return}
   if(!['A','C','M'].includes(grauSessao)){toast('Informe o grau da sessão');return}
-  if(!['realizada','agendada','cancelada'].includes(status)){toast('Informe a situação da sessão');return}
+  if(!['realizada','agendada','cancelada','anulada'].includes(status)){toast('Informe a situação da sessão');return}
   if(status==='realizada'&&sData.value>hojeISO()&&!confirm('A data é futura, mas a sessão foi marcada como realizada. Deseja salvar assim mesmo?'))return;
   const arr=getSessoes(),id=sId.value||uid();
   const duplicada=arr.find(x=>x.id!==id&&x.data===sData.value&&x.tipo===tipo&&x.modalidade===modalidade&&nomeNormalizado(x.numero||'')===nomeNormalizado(sNumero.value||''));if(duplicada){toast('Já existe uma sessão igual nesta data');return}
@@ -2712,7 +2727,7 @@ abrirConsultaSessao=function(id){_abrirConsultaSessaoV4(id);const s=getSessoes()
 function v5SessoesArt76(i,inicio,fim){return getSessoes().filter(s=>s.data&&s.data>=inicio&&s.data<=fim&&s.data<=hojeISO()&&contaParaIrmao(i,s))}
 function v5ResumoNormativoSessao(s){const x=v5LegacySession(s);return {classe:V5_SESSOES[x.tipo]?.label||x.tipo,modalidade:v5ModalidadeNome(x),grau:grauSimbolo(x.grauSessao),status:x.status}}
 // Marca de versão para diagnóstico e backup.
-window.CHANCELARIA_VERSION='5.2.0-documentos-assinatura';
+window.CHANCELARIA_VERSION='5.3.0-fluida-conformidade';
 
 
 
@@ -2779,7 +2794,7 @@ async function gerarImagemCertificadoVisitanteV5(x){
   const c=canvas.getContext('2d');c.fillStyle='#ffffff';c.fillRect(0,0,canvas.width,canvas.height);
   const left=177,right=118,contentW=canvas.width-left-right; // aprox. 3 cm à esquerda e 2 cm à direita em A4
   const header=new Image();header.src='cabecalho-oficial.jpg';try{await header.decode();c.drawImage(header,left,100,contentW,205)}catch(e){}
-  c.fillStyle='#152541';c.textAlign='center';c.font='700 39px Arial, sans-serif';c.fillText('ATESTADO DE FREQUÊNCIA MAÇÔNICA',left+contentW/2,390);
+  c.fillStyle='#152541';c.textAlign='center';c.font='700 39px Arial, sans-serif';c.fillText('ATESTADO DE FREQUÊNCIA MAÇÔNICA',left+contentW/2,390);if(x.certNumero){c.font='22px Arial, sans-serif';c.fillStyle='#555';c.fillText('Certificado nº '+x.certNumero,left+contentW/2,430)}
   const texto=`Atestamos, para os fins maçônicos cabíveis, que o Irmão ${x.nome}${x.cim?' — CIM '+x.cim:''}, ${grauNome(x.grau)||grauSimbolo(x.grau)}, pertencente à ${x.loja}${x.numero?' nº '+x.numero:''}, Oriente de ${x.oriente}, esteve presente aos trabalhos da A.R.L.S. Razão e Força nº 1997${s?` em ${brData(s.data)}, na ${descricaoSessao(s)}${s.numero?' · '+s.numero:''}`:''}.`;
   c.fillStyle='#111';c.textAlign='justify';c.font='29px Arial, sans-serif';
   const words=texto.split(/\s+/);let line='',yy=530;const lineH=48,firstIndent=72;
@@ -2837,7 +2852,99 @@ abrirProcessoFrequencia=function(id){_abrirProcV50(id);const p=processoModalAtua
 function salvarEtapaExtraV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(p.notificacao?.prazo&&hojeISO()<=p.notificacao.prazo&&!confirm('O prazo de 30 dias ainda não terminou. Salvar mesmo assim?'))return;const ex={leituraRelatorio:procLeituraRelatorio.value,dataSessao:procExtraSessao.value,notificacao:procExtraNotif.value,recebimento:procExtraReceb.value,prova:procExtraProva.value.trim(),manifestacao:procExtraManifest.value==='1',ata:procExtraAta.value.trim()};if(ex.dataSessao&&(!ex.leituraRelatorio||!ex.recebimento||!ex.prova)){toast('Informe leitura do relatório, recebimento e prova da notificação');return}if(ex.dataSessao&&ex.recebimento){const dif=Math.floor((new Date(ex.dataSessao)-new Date(ex.recebimento))/86400000);if(dif<15&&!confirm('A antecedência registrada é inferior a 15 dias. Deseja manter o registro para correção/documentação?'))return}const res=procDecisaoResultadoV51.value,dec={data:procDecisaoDataV51.value,suspensao:res==='suspensao',resultado:res,ata:procDecisaoAtaV51.value.trim()};if(res&&(!dec.data||!dec.ata)){toast('Informe data e referência da decisão');return}p.extraordinaria=ex;p.decisao=dec;salvarProcessoObjeto(p);audit('Etapa extraordinária registrada',`${i.nome}${ex.dataSessao?' · sessão '+brData(ex.dataSessao):''}${res?' · '+res:''}`);renderProcessoFrequencia();toast('Sessão extraordinária e decisão registradas')}
 function salvarComunicacoesV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(!p.decisao?.suspensao){toast('As comunicações de 72 horas são exigidas aqui quando houver suspensão declarada registrada');return}const c={irmaoData:procComIrmaoData.value,irmaoProva:procComIrmaoProva.value.trim(),guardaData:procComGuardaData.value,guardaProtocolo:procComGuardaProt.value.trim()};if(!c.irmaoData||!c.irmaoProva||!c.guardaData||!c.guardaProtocolo){toast('Preencha as duas comunicações e respectivas provas');return}const base=p.decisao.data;if(base){const limite=somarDiasISO(base,3);if((c.irmaoData>limite||c.guardaData>limite)&&!confirm('Uma comunicação está além de 72 horas da decisão registrada. Manter para documentação?'))return}p.comunicacoes=c;salvarProcessoObjeto(p);audit('Comunicações da suspensão registradas',`${i.nome} · Irmão ${brData(c.irmaoData)} · Guarda dos Selos ${brData(c.guardaData)}`);toast('Comunicações registradas')}
 
-window.CHANCELARIA_VERSION='5.2.0-documentos-assinatura';
+window.CHANCELARIA_VERSION='5.3.0-fluida-conformidade';
+
+
+/* ============================================================
+   V5.3 — FLUXO OPERACIONAL, RASTREABILIDADE E CONFORMIDADE
+   ============================================================ */
+function auditV53(acao,detalhe='',antes=null,depois=null,motivo=''){
+  const arr=getAudit();arr.unshift({id:uid(),at:new Date().toISOString(),acao:String(acao).slice(0,120),detalhe:String(detalhe).slice(0,900),antes:antes==null?'':JSON.stringify(antes).slice(0,1500),depois:depois==null?'':JSON.stringify(depois).slice(0,1500),motivo:String(motivo||'').slice(0,600),versao:'5.3.0'});dbSet('audit',arr.slice(0,1000))
+}
+function vinculosSessaoV53(id){
+  const pres=Object.keys(getPresencas()[id]||{}).length;
+  const visitantes=getVisitantesV5().filter(v=>v.sessaoId===id).length;
+  const proc=getProcessosFreq().filter(p=>Object.prototype.hasOwnProperty.call(p.itens||{},id)).length;
+  return {pres,visitantes,proc,total:pres+visitantes+proc}
+}
+function atualizarAcaoExcluirSessaoV53(){
+  const id=sId.value,btn=document.getElementById('btnExcluirSessao'),box=document.getElementById('sRetificacaoBox');if(!btn||!box)return;
+  if(!id){btn.style.display='none';box.style.display='none';return}
+  const v=vinculosSessaoV53(id);btn.style.display='inline-flex';btn.textContent=v.total?'Anular / retificar':'Excluir sessão';box.style.display=v.total?'block':'none';
+}
+const _abrirModalSessaoV53=abrirModalSessao;
+abrirModalSessao=function(id=''){_abrirModalSessaoV53(id);const s=id?getSessoes().find(x=>x.id===id):null;const m=document.getElementById('sRetMotivo'),r=document.getElementById('sRetRef');if(m)m.value=s?.retificacao?.motivo||'';if(r)r.value=s?.retificacao?.referencia||'';atualizarAcaoExcluirSessaoV53()};
+if(document.getElementById('sStatus'))document.getElementById('sStatus').insertAdjacentHTML('beforeend','<option value="anulada">Anulada/retificada</option>');
+const _salvarSessaoV53Base=salvarSessao;
+salvarSessao=function(){
+  const id=sId.value,antes=id?getSessoes().find(x=>x.id===id):null;
+  if(antes?.fechamento?.status==='encerrada'&&!confirm('Esta sessão está encerrada. Alterações ficam registradas na auditoria. Continuar?'))return;
+  _salvarSessaoV53Base();
+  if(id&&antes){const depois=getSessoes().find(x=>x.id===id);if(depois&&antes.fechamento) {depois.fechamento=antes.fechamento;depois.retificacao=antes.retificacao;const arr=getSessoes();const ix=arr.findIndex(x=>x.id===id);if(ix>=0){arr[ix]=depois;setSessoes(arr)}}auditV53('Sessão alterada',`${brData(antes.data)} · ${descricaoSessao(antes)}`,antes,depois,'edição de sessão')}
+};
+excluirSessao=function(){
+  const id=sId.value;if(!id)return;const s=getSessoes().find(x=>x.id===id);if(!s)return;const v=vinculosSessaoV53(id);
+  if(!v.total){if(!confirm('Excluir esta sessão sem registros vinculados? Ela ficará 30 dias na lixeira.'))return;const lid=enviarParaLixeira('sessao',s.numero||`${brData(s.data)} · ${descricaoSessao(s)}`,s,{presencas:{}});setSessoes(getSessoes().filter(x=>x.id!==id));auditV53('Sessão excluída para lixeira',`${brData(s.data)} · ${descricaoSessao(s)}`,s,null,'sessão sem registros vinculados');fecharModal('modalSessao');renderAtual();toast('Sessão movida para a lixeira','Desfazer',()=>restaurarItemLixeira(lid));return}
+  const motivo=document.getElementById('sRetMotivo').value.trim(),referencia=document.getElementById('sRetRef').value.trim();if(!motivo||!referencia){toast('Informe motivo e referência para anular/retificar');return}if(!confirm(`Esta sessão possui ${v.pres} registro(s) de chamada, ${v.visitantes} visitante(s) e ${v.proc} vínculo(s) em procedimento. Ela será preservada como anulada. Continuar?`))return;
+  const arr=getSessoes(),ix=arr.findIndex(x=>x.id===id),antes=cloneValue(arr[ix]);arr[ix]={...arr[ix],status:'anulada',retificacao:{motivo,referencia,at:new Date().toISOString()}};setSessoes(arr);auditV53('Sessão anulada/retificada',`${brData(s.data)} · ${descricaoSessao(s)} · ${referencia}`,antes,arr[ix],motivo);fecharModal('modalSessao');renderAtual();toast('Sessão preservada como anulada')
+};
+function encerrarSessaoV53(){
+  const id=presSessao.value,s=getSessoes().find(x=>x.id===id);if(!s)return;const faltantes=chamadasIncompletas().find(x=>x.sessao.id===id);if(faltantes){toast(`Ainda há ${faltantes.faltantes.length} Irmão(s) sem registro`);return}if(s.status!=='realizada'){toast('Somente sessão realizada pode ser encerrada');return}if(s.fechamento?.status==='encerrada'){toast('Sessão já encerrada');return}if(!confirm('Encerrar formalmente esta sessão? Correções posteriores exigirão motivo e ficarão na auditoria.'))return;
+  const arr=getSessoes(),ix=arr.findIndex(x=>x.id===id),antes=cloneValue(arr[ix]);arr[ix]={...arr[ix],fechamento:{status:'encerrada',at:new Date().toISOString(),responsavel:'Chancelaria'}};setSessoes(arr);auditV53('Sessão encerrada',`${brData(s.data)} · ${descricaoSessao(s)}`,antes,arr[ix],'fechamento formal da chamada');carregarChamada();renderSessoes();toast('Sessão encerrada')
+}
+const _carregarChamadaV53Base=carregarChamada;
+carregarChamada=function(){_carregarChamadaV53Base();const id=presSessao.value,s=getSessoes().find(x=>x.id===id),btn=document.getElementById('btnEncerrarSessaoV53');if(!s||!btn)return;if(s.status==='anulada'){listaChamada.innerHTML='<div class="empty"><p>Sessão anulada/retificada. Os registros permanecem apenas para rastreabilidade.</p></div>';acoesChamada.style.display='none';atalhosChamada.style.display='none';return}const fech=s.fechamento?.status==='encerrada';btn.textContent=fech?'Sessão encerrada':'Encerrar sessão';btn.disabled=fech;if(fech){infoChamada.insertAdjacentHTML('beforeend',' · <span class="norm-chip closed">encerrada</span>')}};
+const _salvarChamadaV53Base=salvarChamada;
+salvarChamada=function(){const s=getSessoes().find(x=>x.id===presSessao.value);if(s?.fechamento?.status==='encerrada'){toast('Sessão encerrada. Use a revisão individual para correções justificadas.');return}_salvarChamadaV53Base()};
+const _salvarRevisaoV53Base=salvarRevisaoFrequencia;
+salvarRevisaoFrequencia=function(){const sid=document.getElementById('revisaoSessaoId').value,s=getSessoes().find(x=>x.id===sid);if(s?.fechamento?.status==='encerrada'){const motivo=prompt('Informe o motivo da correção pós-encerramento:','');if(!motivo?.trim()){toast('Correção cancelada: motivo obrigatório');return}const iid=document.getElementById('revisaoIrmaoId').value,antes=(getPresencas()[sid]||{})[iid]||'F';_salvarRevisaoV53Base();const depois=(getPresencas()[sid]||{})[iid]||'F';auditV53('Correção pós-encerramento',`${brData(s.data)} · ${iid}`,antes,depois,motivo.trim());return}_salvarRevisaoV53Base()};
+
+// Visitantes no total do Templo e identificação obrigatória
+const _abrirVisitantesV53Base=abrirVisitantesV5;
+abrirVisitantesV5=function(sessaoId=''){_abrirVisitantesV53Base(sessaoId);if(document.getElementById('v5VisIdent'))v5VisIdent.value=''};
+const _salvarVisitanteV53Base=salvarVisitanteV5;
+salvarVisitanteV5=function(){if(!v5VisIdent.value){toast('Informe como o visitante foi identificado');return}if(v5VisIdent.value==='apresentacao'&&!v5VisObs.value.trim()){toast('Informe por qual membro do Quadro o visitante foi apresentado');return}_salvarVisitanteV53Base()};
+const _resumoChamadaV53Base=resumoChamadaSessao;
+resumoChamadaSessao=function(s){const r=_resumoChamadaV53Base(s),vis=getVisitantesV5().filter(v=>v.sessaoId===s.id).length;return {...r,visitantes:vis,totalTemplo:r.presentesLoja+vis}};
+const _atualizarResumoV53Base=atualizarResumoChamada;
+atualizarResumoChamada=function(){_atualizarResumoV53Base();const s=getSessoes().find(x=>x.id===presSessao.value),el=document.getElementById('contadoresChamada');if(!s||!el)return;const vis=getVisitantesV5().filter(v=>v.sessaoId===s.id).length,p=Object.values(chamadaTemp).filter(x=>statusPresenca(x)==='P').length;el.insertAdjacentHTML('beforeend',`<div class="call-count"><b>${vis}</b><span>Visitantes</span></div><div class="call-count"><b>${p+vis}</b><span>Total no Templo</span></div>`)};
+
+// Certificado numerado e rastreável
+function garantirNumeroCertificadoV53(x){if(x.certNumero)return x.certNumero;const ano=(getSessoes().find(s=>s.id===x.sessaoId)?.data||hojeISO()).slice(0,4),st=getSettings(),seq={...(st.certSeqByYear||{})};seq[ano]=(Number(seq[ano])||0)+1;const numero=`RF1997-${ano}-${String(seq[ano]).padStart(3,'0')}`;setSettings({certSeqByYear:seq});const arr=getVisitantesV5(),ix=arr.findIndex(v=>v.id===x.id);if(ix>=0){arr[ix]={...arr[ix],certNumero:numero,certEmitidoEm:new Date().toISOString()};setVisitantesV5(arr);x=arr[ix]}auditV53('Certificado de visitante numerado',`${numero} · ${x.nome}`,null,{visitanteId:x.id,numero},'emissão de atestado');return numero}
+const _corpoCertV53Base=corpoCertificadoVisitanteV5;
+corpoCertificadoVisitanteV5=function(x){const n=garantirNumeroCertificadoV53(x);return `<div class="certificate-number"><b>Certificado nº ${h(n)}</b></div>`+_corpoCertV53Base(x)};
+const _gerarImagemCertV53Base=gerarImagemCertificadoVisitanteV5;
+gerarImagemCertificadoVisitanteV5=async function(x){garantirNumeroCertificadoV53(x);const atual=x.id?getVisitantesV5().find(v=>v.id===x.id):null;return _gerarImagemCertV53Base(atual||x)};
+
+// Faixas preventivas: 40–49,99% é alerta interno; 50% é limite normativo
+function renderFaixasFrequenciaV53(){const el=document.getElementById('inicio-faixas-v53');if(!el)return;let at=0,lim=0;getIrmaos().forEach(i=>{const f=calcFreq(i);if(!f.periodo12||!f.total)return;if(f.pctFalta>=50)lim++;else if(f.pctFalta>=40)at++});el.innerHTML=`<div class="freq-bands"><button class="freq-band attention" onclick="abrirAba('relatorios');setTimeout(renderRelatorioGeral,50)"><b>${at}</b><span>Atenção preventiva · 40% a 49,99%</span></button><button class="freq-band legal" onclick="abrirAba('relatorios');setTimeout(renderRelatorioGeral,50)"><b>${lim}</b><span>Limite do art. 76 · 50% ou mais</span></button></div>`}
+const _renderInicioV53Base=renderInicio;
+renderInicio=function(){_renderInicioV53Base();renderFaixasFrequenciaV53()};
+
+// Linha do tempo do art. 77
+function atualizarTimelineProcV53(){const p=processoModalAtual(),box=document.getElementById('processTimelineV53');if(!p||!box)return;const stages=[['Limite',true],['Notificação',!!p.notificacao?.emissao],['Recebimento',!!p.notificacao?.recebimento],['30 dias',!!p.notificacao?.prazo],['Extraordinária',!!p.extraordinaria?.dataSessao],['Decisão',!!p.decisao?.data],['Comunicações',!p.decisao?.suspensao||!!(p.comunicacoes?.irmaoData&&p.comunicacoes?.guardaData)],['Encerrado',processoFechado(p)]];let current=stages.findIndex(x=>!x[1]);if(current<0)current=stages.length;box.innerHTML=stages.map((x,i)=>`<div class="process-step ${x[1]?'done':i===current?'current':''}"><b>${i+1}. ${x[0]}</b>${x[1]?'Registrado':i===current?'Próxima etapa':'Pendente'}</div>`).join('')}
+const _prepProcV53Base=prepararInterfaceProcessos;
+prepararInterfaceProcessos=function(){_prepProcV53Base();const sum=document.getElementById('processoResumo');if(sum&&!document.getElementById('processTimelineV53'))sum.insertAdjacentHTML('afterend','<div id="processTimelineV53" class="process-timeline"></div>');atualizarTimelineProcV53()};
+const _renderProcV53Base=renderProcessoFrequencia;
+renderProcessoFrequencia=function(){_renderProcV53Base();atualizarTimelineProcV53()};
+
+// Registro administrativo eleitoral sem interferir na plataforma oficial de votação
+function registroEleitoralV53(data){return getEleicoesV5().find(e=>e.data===data)||{data,financeiro:{},leitura:'',ata:'',impugnacao:''}}
+function salvarRegistroEleitoralV53(){const data=v5EleData.value||hojeISO(),arr=getEleicoesV5(),ix=arr.findIndex(e=>e.data===data),old=ix>=0?cloneValue(arr[ix]):null,obj={...(ix>=0?arr[ix]:{data,financeiro:{}}),leitura:v53EleLeitura.value,ata:v53EleAta.value.trim(),impugnacao:v53EleImp.value.trim(),updatedAt:new Date().toISOString()};if(obj.leitura&&!obj.ata){toast('Informe a ata da leitura da relação');return}if(ix>=0)arr[ix]=obj;else arr.push(obj);setEleicoesV5(arr);auditV53('Registro administrativo eleitoral',`${brData(data)}${obj.ata?' · '+obj.ata:''}`,old,obj,'qualificação e registro em ata; votação ocorre em plataforma externa');toast('Registro eleitoral salvo')}
+const _abrirEleV53Base=abrirEleitoralV5;
+abrirEleitoralV5=function(){_abrirEleV53Base();const data=v5EleData.value||hojeISO(),r=registroEleitoralV53(data);v53EleLeitura.value=r.leitura||'';v53EleAta.value=r.ata||'';v53EleImp.value=r.impugnacao||''};
+const _renderEleV53Base=renderEleitoralV5;
+renderEleitoralV5=function(){_renderEleV53Base();const r=registroEleitoralV53(v5EleData.value||hojeISO());if(document.getElementById('v53EleLeitura')){v53EleLeitura.value=r.leitura||'';v53EleAta.value=r.ata||'';v53EleImp.value=r.impugnacao||''}};
+const _imprimirEleV53Base=imprimirEleitoralV5;
+imprimirEleitoralV5=function(){const data=v5EleData.value||hojeISO(),r=registroEleitoralV53(data);_imprimirEleV53Base();setTimeout(()=>{const c=document.getElementById('previewRelatorioConteudo');if(c)c.insertAdjacentHTML('beforeend',`<p><b>Leitura da relação em Loja:</b> ${r.leitura?brData(r.leitura):'não registrada'}${r.ata?' · <b>Ata:</b> '+h(r.ata):''}</p>${r.impugnacao?'<p><b>Impugnação/observação registrada:</b> '+h(r.impugnacao)+'</p>':''}`)},0)};
+
+// Relatório anual da Chancelaria
+function imprimirRelatorioAnualV53(){const ano=prompt('Ano do relatório anual:',String(new Date().getFullYear()));if(!/^\d{4}$/.test(String(ano||''))){toast('Informe um ano válido');return}const ini=`${ano}-01-01`,fim=`${ano}-12-31`,ss=getSessoes().filter(s=>s.data>=ini&&s.data<=fim),real=ss.filter(s=>s.status==='realizada'),anul=ss.filter(s=>s.status==='anulada'),vis=getVisitantesV5().filter(v=>{const s=getSessoes().find(x=>x.id===v.sessaoId);return s&&s.data>=ini&&s.data<=fim}),cert=vis.filter(v=>v.certNumero),ext=getExternasV5().filter(x=>x.data>=ini&&x.data<=fim),procs=getProcessosFreq().filter(p=>String(p.createdAt||'').slice(0,10)>=ini&&String(p.createdAt||'').slice(0,10)<=fim),abertos=procs.filter(p=>!processoFechado(p)),aud=getAudit().filter(a=>String(a.at||'').slice(0,4)===String(ano));const medias=real.map(s=>resumoChamadaSessao(s).presentesLoja),media=medias.length?Math.round(medias.reduce((a,b)=>a+b,0)/medias.length):0;const corpo=`<h2>Relatório Anual da Chancelaria — ${ano}</h2><table><tbody><tr><th>Sessões cadastradas</th><td>${ss.length}</td></tr><tr><th>Sessões realizadas</th><td>${real.length}</td></tr><tr><th>Sessões anuladas/retificadas</th><td>${anul.length}</td></tr><tr><th>Média de Irmãos do Quadro presentes</th><td>${media}</td></tr><tr><th>Visitantes registrados</th><td>${vis.length}</td></tr><tr><th>Certificados numerados</th><td>${cert.length}</td></tr><tr><th>Frequências externas registradas</th><td>${ext.length}</td></tr><tr><th>Procedimentos iniciados</th><td>${procs.length}</td></tr><tr><th>Procedimentos ainda abertos</th><td>${abertos.length}</td></tr><tr><th>Registros de auditoria no ano</th><td>${aud.length}</td></tr></tbody></table><p>Documento administrativo de síntese para controle da Chancelaria e transmissão de gestão. Não substitui atas, livros, comunicações oficiais ou sistemas do Grande Oriente do Brasil.</p>`;abrirPrint(`Relatório Anual da Chancelaria ${ano}`,corpo,{assinatura:assinaturaChancelerHTML(),rodape:`Chancelaria da A∴R∴L∴S∴ Razão e Força nº 1997 · exercício ${ano}.`})}
+
+// Renderização de sessões com estado, visitantes e total no Templo
+renderSessoes=function(){renderPeriodoRGF();const arr=getSessoes().slice().sort((a,b)=>b.data.localeCompare(a.data));document.getElementById('listaSessoes').innerHTML=arr.length?arr.map(s=>{const r=resumoChamadaSessao(s),fech=s.fechamento?.status==='encerrada',an=s.status==='anulada';return `<div class="list-item session-list-card ${fech?'session-closed':''} ${an?'session-annulled':''}" onclick="abrirConsultaSessao('${s.id}')"><div class="avatar">${an?'×':'◈'}</div><div class="item-main"><div class="item-title">${h(s.numero||descricaoSessao(s))}</div><div class="item-sub">${brData(s.data)} · ${h(descricaoSessao(s))} · ${an?'anulada':fech?'encerrada':h(s.status||'realizada')}</div>${s.retificacao?`<div class="item-sub">${h(s.retificacao.referencia)} · ${h(s.retificacao.motivo)}</div>`:''}</div><div class="session-card-side"><div class="session-card-summary"><span class="badge b-ok">${r.presentesLoja} Quadro</span><span class="badge b-warn">${r.visitantes||0} visitante(s)</span><span class="badge">${r.totalTemplo||r.presentesLoja} no Templo</span></div><span class="session-consult-chip">Consultar ›</span>${!an?`<button class="btn btn-primary btn-sm" type="button" onclick="event.stopPropagation();abrirPresenca('${s.id}')">Chamada</button>`:''}</div></div>`}).join(''):'<div class="empty"><p>Nenhuma sessão cadastrada.</p></div>'}
+
+window.CHANCELARIA_VERSION='5.3.0-fluida-conformidade';
 
 function renderAtual(){migrarV51Normativo();if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
 iniciarSeguranca();
