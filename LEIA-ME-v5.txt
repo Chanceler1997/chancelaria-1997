@@ -1,19 +1,18 @@
-CHANCELARIA 1997 — VERSÃO 5.3.0
+CHANCELARIA 1997 — VERSÃO 5.4.0 — FLUIDA E CLÁSSICA
 
-PRINCIPAIS ALTERAÇÕES
-- Interface operacional mais fluida; cabeçalho oficial retirado das telas do aplicativo e preservado nos documentos.
-- Exclusão segura de sessão: sessão sem vínculos vai à lixeira; sessão com chamada, visitantes ou procedimento é preservada como anulada/retificada com motivo e referência.
-- Fechamento formal da sessão e bloqueio de edição livre após encerramento.
-- Correções pós-encerramento exigem motivo e ficam na auditoria.
-- Total do Templo: Irmãos do Quadro + visitantes.
-- Identificação do visitante obrigatória; apresentação por membro exige identificação do apresentante.
-- Certificado de visitante numerado automaticamente no padrão RF1997-AAAA-NNN.
-- Alertas preventivos de frequência: 40–49,99% (atenção interna) e 50%+ (limite do art. 76).
-- Linha do tempo visual do procedimento do art. 77.
-- Qualificação eleitoral: mantém cálculo e permite registrar leitura da relação, ata e impugnação/observação. Não realiza votação e não cria checklist de votação, pois o pleito ocorre em plataforma própria.
-- Relatório anual da Chancelaria.
-- Auditoria reforçada para atos sensíveis, com valor anterior/novo e motivo; remoção da ação de apagar histórico pela interface.
-- Cabeçalho oficial e assinatura do Chanceler permanecem nos documentos impressos/PDF.
+ALTERAÇÕES PRINCIPAIS
+- Removido o cartão informativo de versão da tela inicial para liberar espaço.
+- Navegação por gesto: deslize horizontal entre Início, Irmãos, Sessões, Presença, Datas e Mais.
+- Correção e padronização do alinhamento dos ícones do cabeçalho e da navegação inferior.
+- O temporizador de segurança fica pausado enquanto a Chancelaria está em segundo plano e volta a contar quando o aplicativo retorna à tela.
+- Estado da página e posição de rolagem são preservados durante a navegação.
+- Atestado identifica a sessão pelo grau quando for Ordinária Regular: Sessão Ordinária de Aprendiz, Companheiro ou Mestre.
+- Demais modalidades recebem sua denominação específica conforme o cadastro da sessão.
+- Atestado redesenhado em estilo clássico e institucional, mantendo cabeçalho oficial, selo, azul, dourado e assinatura azul do Chanceler.
+- O app continua sem executar votação eleitoral; mantém apenas qualificação e registro administrativo.
+
+IMPORTANTE SOBRE SEGUNDO PLANO
+A versão 5.4 deixa de bloquear por inatividade enquanto estiver em segundo plano e preserva a tela ao retornar. O Android, porém, pode encerrar qualquer aplicativo em situações de pouca memória ou por configuração de economia de bateria. Isso não pode ser impedido por HTML/WebView; os dados permanecem protegidos e persistidos.
 
 ATUALIZAÇÃO
-Substitua todos os arquivos do pacote no mesmo local do GitHub Pages. Não desinstale o APK, não limpe dados e faça backup criptografado antes da atualização.
+Substitua todos os arquivos no GitHub. Não desinstale o APK, não limpe os dados e faça backup criptografado antes da atualização.

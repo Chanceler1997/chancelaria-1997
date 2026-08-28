@@ -467,6 +467,44 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
 @media(max-width:430px){.compact-brand small{max-width:145px}.freq-bands{grid-template-columns:1fr 1fr}.action{min-height:78px;padding:12px}.hero>.install-note{font-size:12px}.nav{left:8px;right:8px;bottom:8px;border-radius:22px}.nav button{font-size:10px}.nav-symbol{width:26px;height:26px}}
 .audit-actions{display:none!important}
 
+
+
+/* V5.4 — fluidez, alinhamento e documentos clássicos */
+.quick-actions-hero{padding:12px;background:rgba(255,253,250,.985)}
+.quick-actions-hero .action-grid{margin:0}
+.header-actions{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important;flex:0 0 auto}
+.header-actions button,.nav button{display:flex;align-items:center;justify-content:center;flex-direction:column}
+.header-actions button{padding:0!important;flex-direction:row}
+.header-actions svg,.nav-symbol svg{display:block!important;overflow:visible}
+.header-actions svg{width:20px!important;height:20px!important;margin:0!important}
+.nav-symbol{height:26px!important;display:grid!important;place-items:center!important;margin:0 0 2px!important;line-height:1!important}
+.nav-symbol svg{width:22px!important;height:22px!important;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button{gap:1px;line-height:1.05;padding:6px 1px 8px!important}
+.section.active.page-enter-right{animation:pageInRight .24s cubic-bezier(.22,.8,.28,1)}
+.section.active.page-enter-left{animation:pageInLeft .24s cubic-bezier(.22,.8,.28,1)}
+@keyframes pageInRight{from{opacity:.25;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes pageInLeft{from{opacity:.25;transform:translateX(-28px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.section.active.page-enter-right,.section.active.page-enter-left{animation:none}}
+.swipe-hint{font-size:9px;color:#99a7ba;text-align:center;margin:1px 0 7px;letter-spacing:.25px;user-select:none}
+
+/* Certidão/atestado: linguagem visual clássica, discreta e institucional. */
+.report-preview-page.certificate-document{padding:15mm 16mm 18mm;outline:1px solid rgba(201,168,76,.75);outline-offset:-7mm}
+.report-preview-page.certificate-document:before{content:"";position:absolute;inset:9mm;border:1px solid rgba(21,37,65,.42);pointer-events:none}
+.report-preview-page.certificate-document .official-header{margin:0 0 10mm;border:0;border-radius:0;border-bottom:1.2px solid #c9a84c;padding-bottom:4mm}
+.report-preview-page .certificate{font-family:Georgia,"Times New Roman",serif;color:#171717;padding:0 5mm}
+.report-preview-page .certificate h2{font-family:Georgia,"Times New Roman",serif;font-size:16pt;font-weight:700;letter-spacing:1.1px;color:#152541;margin:0 0 3mm;text-transform:uppercase}
+.report-preview-page .certificate .certificate-subtitle{text-align:center;font-size:8.5pt;letter-spacing:1.6px;color:#8a6b20;text-transform:uppercase;margin-bottom:7mm}
+.report-preview-page .certificate .certificate-rule{width:54mm;height:3px;border-top:1px solid #c9a84c;border-bottom:1px solid #152541;margin:0 auto 10mm}
+.report-preview-page .certificate .certificate-number{text-align:center;font-family:Arial,"Segoe UI",sans-serif;font-size:8.5pt;color:#666;margin:0 0 5mm}
+.report-preview-page .certificate .certificate-body{font-family:Georgia,"Times New Roman",serif;font-size:12pt;line-height:1.65;text-align:justify;text-indent:12.5mm;margin:0}
+.report-preview-page .certificate .certificate-date{font-family:Georgia,"Times New Roman",serif;font-size:11.5pt;line-height:1.5;text-align:right;margin-top:13mm;text-indent:0}
+.report-preview-page.certificate-document .report-preview-signature{margin-top:12mm}
+.report-preview-page.certificate-document .signature-image{width:68mm;max-height:22mm}
+.report-preview-page.certificate-document .signature-role{font-family:Georgia,"Times New Roman",serif;font-size:10.5pt;font-weight:700;color:#152541}
+.report-preview-page.certificate-document .signature-lodge{font-family:Georgia,"Times New Roman",serif;font-size:8.5pt;color:#545454}
+.report-preview-page.certificate-document .report-preview-footer{font-family:Georgia,"Times New Roman",serif;text-align:center;font-size:7.5pt;color:#666;border-top:1px solid rgba(201,168,76,.55)}
+@media(max-width:430px){.quick-actions-hero{padding:9px}.compact-brand b{font-size:14px}.compact-brand small{font-size:10px}.header-actions{gap:6px!important}.nav-symbol svg{width:20px!important;height:20px!important}}
+
 </style>
 </head>
 <body class="app-locked">
@@ -508,10 +546,11 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
     </div>
   </div>
 </header>
+<div class="swipe-hint no-print">Deslize para a esquerda ou direita para navegar</div>
 
 <main>
   <section id="inicio" class="section active">
-    <div class="hero"><div class="install-note" style="margin-bottom:12px"><b>Chancelaria 1997 · Versão 5.3.0</b><br>Gestão institucional, frequência e conformidade normativa da A∴R∴L∴S∴ Razão e Força nº 1997.</div>
+    <div class="hero quick-actions-hero">
       <div class="action-grid">
         <button class="action" onclick="abrirAba('irmaos'); abrirModalIrmao()"><b>Cadastrar Irmão</b><small>Inclua grau, telefone, esposa e filhos.</small></button>
         <button class="action" onclick="abrirAba('sessoes'); abrirModalSessao()"><b>Nova sessão</b><small>Cadastre sessões antigas e futuras.</small></button>
@@ -667,7 +706,7 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
           <div class="sec-box"><b>Bloqueio automático</b><span id="securityTimeoutInfo">10 minutos</span></div>
           <div class="sec-box"><b>Último backup</b><span id="securityBackupInfo">Nunca realizado</span></div>
         </div>
-        <div class="alert"><div class="name">Proteção de sessão</div><div class="txt">O aplicativo bloqueia após 10 minutos sem atividade. Ao usar impressão, WhatsApp ou seleção de arquivo, o bloqueio é temporariamente suspenso para não interromper a ação.</div></div>
+        <div class="alert"><div class="name">Proteção de sessão</div><div class="txt">O aplicativo bloqueia após 10 minutos sem atividade enquanto estiver em primeiro plano. Ao abrir outro aplicativo, impressão, WhatsApp ou seleção de arquivo, o temporizador é pausado e retomado quando a Chancelaria volta à tela.</div></div>
         <div class="toolbar">
           <button class="btn btn-warning" onclick="abrirModal('modalTrocarSenha')">Alterar senha</button>
           <button class="btn btn-light" onclick="bloquearAplicativo('Aplicativo bloqueado.')">Bloquear agora</button>
@@ -689,7 +728,7 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
       <div class="card-body">
         <p class="small" style="margin-bottom:10px">Registra inclusões, correções e exclusões feitas na Chancelaria.</p>
         <div id="listaAuditoria"></div>
-        <div class="audit-actions"><button class="btn btn-danger btn-sm" onclick="solicitarAcaoComSenha('limparHistorico')">Excluir histórico</button></div>
+        
       </div>
     </div>
   </section>
@@ -1238,7 +1277,7 @@ function abrirAplicativo(){
   document.getElementById('securityGate').classList.remove('open');
   document.body.classList.remove('app-locked');
   resetInactivityTimer();
-  if(!appStarted){appStarted=true;migrar();limparLixeiraExpirada();registrarPWA();inicializarNavegacaoInterna();renderInicio();}
+  if(!appStarted){appStarted=true;migrar();limparLixeiraExpirada();registrarPWA();inicializarNavegacaoInterna();inicializarDeslizePaginas();renderInicio();}
   else renderAtual();
 }
 async function bloquearAplicativo(message='Aplicativo bloqueado por segurança.'){
@@ -1295,7 +1334,12 @@ function iniciarSeguranca(){
   window.addEventListener('focus',()=>{if(seletorArquivoAtivo)setTimeout(finalizarSelecaoArquivo,1600)});
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden&&vaultKey){
+      // O tempo em segundo plano não é contado como inatividade do Chanceler.
+      // Persistimos o cofre e pausamos o temporizador; ao voltar, a tela é restaurada.
+      clearTimeout(inactivityTimer);inactivityTimer=null;
       persistQueue.catch(()=>{});
+      sessionStorage.setItem('chancelaria_last_tab',aba||'inicio');
+      sessionStorage.setItem('chancelaria_last_scroll',String(window.scrollY||0));
       if(acaoExternaAtiva())acaoExternaOcultouPagina=true;
       return;
     }
@@ -1305,6 +1349,8 @@ function iniciarSeguranca(){
       renderAtual();
     }
   });
+  window.addEventListener('pagehide',()=>{if(vaultKey){clearTimeout(inactivityTimer);persistQueue.catch(()=>{});sessionStorage.setItem('chancelaria_last_tab',aba||'inicio');sessionStorage.setItem('chancelaria_last_scroll',String(window.scrollY||0));}});
+  window.addEventListener('pageshow',()=>{if(vaultKey){resetInactivityTimer();renderAtual();}});
   document.getElementById('securityPassword').addEventListener('keydown',e=>{if(e.key==='Enter')enviarSenha()});
   document.getElementById('securityPasswordConfirm').addEventListener('keydown',e=>{if(e.key==='Enter')enviarSenha()});
   document.getElementById('senhaAcaoInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmarAcaoComSenha()});
@@ -1632,13 +1678,20 @@ function labelFilho(f){if(f.sexo==='F')return 'Sobrinha';if(f.sexo==='M')return 
 function labelFilhoCadastro(f){if(f.sexo==='F')return 'Filha';if(f.sexo==='M')return 'Filho';return 'Filho(a)'}
 function tipoAniversarioTela(a){if(a.tipo==='Cunhada')return 'Esposa';if(a.tipo==='Sobrinha')return 'Filha';if(a.tipo==='Sobrinho')return 'Filho';return a.tipo}
 
-function aplicarAba(id){
+function aplicarAba(id,direcao='auto'){
   if(!document.getElementById(id))id='inicio';
-  aba=id;document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');
+  const ordem=['inicio','irmaos','sessoes','presenca','datas','relatorios'];
+  const anterior=aba,antIdx=ordem.indexOf(anterior),novoIdx=ordem.indexOf(id);
+  try{sessionStorage.setItem('chancelaria_scroll_'+anterior,String(window.scrollY||0))}catch(e){}
+  if(direcao==='auto')direcao=novoIdx>=antIdx?'right':'left';
+  aba=id;document.querySelectorAll('.section').forEach(sec=>sec.classList.remove('active','page-enter-left','page-enter-right'));
+  const alvo=document.getElementById(id);alvo.classList.add('active',direcao==='left'?'page-enter-left':'page-enter-right');
+  setTimeout(()=>alvo.classList.remove('page-enter-left','page-enter-right'),280);
   document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));document.getElementById('nav-'+id)?.classList.add('active');
   if(id==='inicio')renderInicio();if(id==='irmaos')renderIrmaos();if(id==='sessoes')renderSessoes();if(id==='presenca')initPresenca();if(id==='datas')renderDatas();if(id==='relatorios')initRelatorios();
   atualizarBotaoVoltar();
-  window.scrollTo({top:0,behavior:'smooth'});
+  try{sessionStorage.setItem('chancelaria_last_tab',id)}catch(e){}
+  const y=Number(sessionStorage.getItem('chancelaria_scroll_'+id)||0);window.scrollTo({top:y,behavior:'instant'});
 }
 function inicializarNavegacaoInterna(){
   if(navigationReady)return;
@@ -1663,6 +1716,13 @@ function abrirAba(id,registrar=true){
     history.pushState({appTab:id,appDepth:appHistoryDepth},'',`#${id}`);
   }
   aplicarAba(id);
+}
+const PAGINAS_DESLIZE=['inicio','irmaos','sessoes','presenca','datas','relatorios'];
+function inicializarDeslizePaginas(){
+  if(window.__swipePaginasAtivo)return;window.__swipePaginasAtivo=true;
+  const main=document.querySelector('main');if(!main)return;let sx=0,sy=0,st=0;
+  main.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;const t=e.target;if(t.closest('input,textarea,select,button,a,.modal-back,.report-table-wrap,.tabs')){sx=0;return}sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now()},{passive:true});
+  main.addEventListener('touchend',e=>{if(!sx||!e.changedTouches?.length)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy,dt=Date.now()-st;sx=0;if(dt>850||Math.abs(dx)<65||Math.abs(dx)<Math.abs(dy)*1.35)return;const i=PAGINAS_DESLIZE.indexOf(aba);if(i<0)return;const ni=dx<0?i+1:i-1;if(ni<0||ni>=PAGINAS_DESLIZE.length)return;abrirAba(PAGINAS_DESLIZE[ni],true);},{passive:true});
 }
 function atualizarBotaoVoltar(){
   const b=document.getElementById('backNowButton');if(!b)return;
@@ -2678,6 +2738,15 @@ function v5LegacySession(s){
 const _getSessoesV4=getSessoes;
 getSessoes=function(){return _getSessoesV4().map(v5LegacySession)};
 function v5ModalidadeNome(s){const cfg=V5_SESSOES[s?.tipo];return cfg?.modalidades.find(x=>x[0]===s?.modalidade)?.[1]||String(s?.modalidade||'')}
+function nomeGrauDocumento(g){return {A:'Aprendiz',C:'Companheiro',M:'Mestre',MI:'Mestre'}[g]||'Maçônica'}
+function nomeSessaoDocumento(s){
+  if(!s)return 'Sessão da Loja';const x=v5LegacySession(s),classe=V5_SESSOES[x.tipo]?.label||tipoSessao(x.tipo),modal=v5ModalidadeNome(x),grau=nomeGrauDocumento(x.grauSessao);
+  if(x.tipo==='ordinaria'&&x.modalidade==='regular')return `Sessão Ordinária de ${grau}`;
+  if(x.tipo==='ordinaria')return `Sessão Ordinária de ${modal}${x.grauSessao?` — Grau ${x.grauSessao==='A'?'I':x.grauSessao==='C'?'II':'III'}`:''}`;
+  if(x.tipo==='magna')return `Sessão Magna de ${modal}${x.grauSessao&&!V5_MAGNAS_PUBLICAS.has(x.modalidade)?` — Grau ${x.grauSessao==='A'?'I':x.grauSessao==='C'?'II':'III'}`:''}`;
+  if(x.tipo==='extraordinaria')return `Sessão Extraordinária de ${modal}`;
+  return `Sessão ${classe}${modal?' de '+modal:''}`;
+}
 tipoSessao=function(t){return V5_SESSOES[t]?.label||({'ordinaria-aprendiz':'Ordinária','ordinaria-companheiro':'Ordinária','ordinaria-mestre':'Ordinária'}[t]||t)};
 descricaoSessao=function(s){if(!s)return '';const x=v5LegacySession(s),m=v5ModalidadeNome(x);return `${V5_SESSOES[x.tipo]?.label||tipoSessao(x.tipo)}${m?' · '+m:''}`};
 regraMagnaTexto=function(){return 'Art. 108 do RGF: a sessão é classificada como ordinária, magna ou extraordinária. Para o art. 76, o aplicativo considera as sessões efetivamente realizadas às quais o Irmão estava habilitado a comparecer.'};
@@ -2727,7 +2796,7 @@ abrirConsultaSessao=function(id){_abrirConsultaSessaoV4(id);const s=getSessoes()
 function v5SessoesArt76(i,inicio,fim){return getSessoes().filter(s=>s.data&&s.data>=inicio&&s.data<=fim&&s.data<=hojeISO()&&contaParaIrmao(i,s))}
 function v5ResumoNormativoSessao(s){const x=v5LegacySession(s);return {classe:V5_SESSOES[x.tipo]?.label||x.tipo,modalidade:v5ModalidadeNome(x),grau:grauSimbolo(x.grauSessao),status:x.status}}
 // Marca de versão para diagnóstico e backup.
-window.CHANCELARIA_VERSION='5.3.0-fluida-conformidade';
+window.CHANCELARIA_VERSION='5.4.0-fluida-classica';
 
 
 
@@ -2794,14 +2863,14 @@ async function gerarImagemCertificadoVisitanteV5(x){
   const c=canvas.getContext('2d');c.fillStyle='#ffffff';c.fillRect(0,0,canvas.width,canvas.height);
   const left=177,right=118,contentW=canvas.width-left-right; // aprox. 3 cm à esquerda e 2 cm à direita em A4
   const header=new Image();header.src='cabecalho-oficial.jpg';try{await header.decode();c.drawImage(header,left,100,contentW,205)}catch(e){}
-  c.fillStyle='#152541';c.textAlign='center';c.font='700 39px Arial, sans-serif';c.fillText('ATESTADO DE FREQUÊNCIA MAÇÔNICA',left+contentW/2,390);if(x.certNumero){c.font='22px Arial, sans-serif';c.fillStyle='#555';c.fillText('Certificado nº '+x.certNumero,left+contentW/2,430)}
-  const texto=`Atestamos, para os fins maçônicos cabíveis, que o Irmão ${x.nome}${x.cim?' — CIM '+x.cim:''}, ${grauNome(x.grau)||grauSimbolo(x.grau)}, pertencente à ${x.loja}${x.numero?' nº '+x.numero:''}, Oriente de ${x.oriente}, esteve presente aos trabalhos da A.R.L.S. Razão e Força nº 1997${s?` em ${brData(s.data)}, na ${descricaoSessao(s)}${s.numero?' · '+s.numero:''}`:''}.`;
-  c.fillStyle='#111';c.textAlign='justify';c.font='29px Arial, sans-serif';
+  c.strokeStyle='#c9a84c';c.lineWidth=3;c.strokeRect(72,70,1096,1614);c.strokeStyle='#152541';c.lineWidth=1;c.strokeRect(88,86,1064,1582);c.fillStyle='#152541';c.textAlign='center';c.font='700 40px Georgia, serif';c.fillText('ATESTADO DE FREQUÊNCIA MAÇÔNICA',left+contentW/2,390);c.strokeStyle='#c9a84c';c.lineWidth=2;c.beginPath();c.moveTo(left+180,455);c.lineTo(left+contentW-180,455);c.stroke();if(x.certNumero){c.font='22px Arial, sans-serif';c.fillStyle='#555';c.fillText('Certificado nº '+x.certNumero,left+contentW/2,430)}
+  const texto=`Atestamos, para os fins maçônicos cabíveis, que o Irmão ${x.nome}${x.cim?' — CIM '+x.cim:''}, ${grauNome(x.grau)||grauSimbolo(x.grau)}, pertencente à ${x.loja}${x.numero?' nº '+x.numero:''}, Oriente de ${x.oriente}, esteve presente aos trabalhos da A.R.L.S. Razão e Força nº 1997${s?` em ${brData(s.data)}, na ${nomeSessaoDocumento(s)}${s.numero?' · '+s.numero:''}`:''}.`;
+  c.fillStyle='#111';c.textAlign='justify';c.font='29px Georgia, serif';
   const words=texto.split(/\s+/);let line='',yy=530;const lineH=48,firstIndent=72;
   const drawJustified=(parts,y,isLast,indent=0)=>{const avail=contentW-indent;if(isLast||parts.length<2){c.textAlign='left';c.fillText(parts.join(' '),left+indent,y);return}const widths=parts.map(w=>c.measureText(w).width),spaces=parts.length-1,gap=(avail-widths.reduce((a,b)=>a+b,0))/spaces;let xx=left+indent;c.textAlign='left';parts.forEach((w,i)=>{c.fillText(w,xx,y);xx+=widths[i]+(i<spaces?gap:0)})};
   let lines=[];let current=[];let currentW=0;for(const w of words){const ww=c.measureText(w).width, gap=c.measureText(' ').width;const indent=lines.length===0?firstIndent:0; if(current.length&&currentW+gap+ww>contentW-indent){lines.push(current);current=[w];currentW=ww}else{if(current.length)currentW+=gap;current.push(w);currentW+=ww}}if(current.length)lines.push(current);
   lines.forEach((parts,i)=>drawJustified(parts,yy+i*lineH,i===lines.length-1,i===0?firstIndent:0));yy+=lines.length*lineH;
-  c.textAlign='right';c.font='29px Arial, sans-serif';c.fillText(`Porto Murtinho/MS, ${brData(hojeISO())}.`,left+contentW,Math.max(yy+120,1050));
+  c.textAlign='right';c.font='27px Georgia, serif';c.fillText(`Porto Murtinho/MS, ${brData(hojeISO())}.`,left+contentW,Math.max(yy+120,1050));
   const sig=new Image();sig.src='assinatura-chanceler.png';try{await sig.decode();const maxW=470,maxH=150,scale=Math.min(maxW/sig.width,maxH/sig.height);const sw=sig.width*scale,sh=sig.height*scale,sx=left+(contentW-sw)/2,sy=1280;c.drawImage(sig,sx,sy,sw,sh)}catch(e){}
   c.fillStyle='#152541';c.textAlign='center';c.font='700 27px Arial, sans-serif';c.fillText('Chanceler',left+contentW/2,1460);c.font='23px Arial, sans-serif';c.fillText('A∴R∴L∴S∴ Razão e Força nº 1997',left+contentW/2,1500);
   c.fillStyle='#555';c.font='19px Arial, sans-serif';c.fillText('Documento expedido pela Chancelaria',left+contentW/2,1620);
@@ -2852,7 +2921,7 @@ abrirProcessoFrequencia=function(id){_abrirProcV50(id);const p=processoModalAtua
 function salvarEtapaExtraV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(p.notificacao?.prazo&&hojeISO()<=p.notificacao.prazo&&!confirm('O prazo de 30 dias ainda não terminou. Salvar mesmo assim?'))return;const ex={leituraRelatorio:procLeituraRelatorio.value,dataSessao:procExtraSessao.value,notificacao:procExtraNotif.value,recebimento:procExtraReceb.value,prova:procExtraProva.value.trim(),manifestacao:procExtraManifest.value==='1',ata:procExtraAta.value.trim()};if(ex.dataSessao&&(!ex.leituraRelatorio||!ex.recebimento||!ex.prova)){toast('Informe leitura do relatório, recebimento e prova da notificação');return}if(ex.dataSessao&&ex.recebimento){const dif=Math.floor((new Date(ex.dataSessao)-new Date(ex.recebimento))/86400000);if(dif<15&&!confirm('A antecedência registrada é inferior a 15 dias. Deseja manter o registro para correção/documentação?'))return}const res=procDecisaoResultadoV51.value,dec={data:procDecisaoDataV51.value,suspensao:res==='suspensao',resultado:res,ata:procDecisaoAtaV51.value.trim()};if(res&&(!dec.data||!dec.ata)){toast('Informe data e referência da decisão');return}p.extraordinaria=ex;p.decisao=dec;salvarProcessoObjeto(p);audit('Etapa extraordinária registrada',`${i.nome}${ex.dataSessao?' · sessão '+brData(ex.dataSessao):''}${res?' · '+res:''}`);renderProcessoFrequencia();toast('Sessão extraordinária e decisão registradas')}
 function salvarComunicacoesV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(!p.decisao?.suspensao){toast('As comunicações de 72 horas são exigidas aqui quando houver suspensão declarada registrada');return}const c={irmaoData:procComIrmaoData.value,irmaoProva:procComIrmaoProva.value.trim(),guardaData:procComGuardaData.value,guardaProtocolo:procComGuardaProt.value.trim()};if(!c.irmaoData||!c.irmaoProva||!c.guardaData||!c.guardaProtocolo){toast('Preencha as duas comunicações e respectivas provas');return}const base=p.decisao.data;if(base){const limite=somarDiasISO(base,3);if((c.irmaoData>limite||c.guardaData>limite)&&!confirm('Uma comunicação está além de 72 horas da decisão registrada. Manter para documentação?'))return}p.comunicacoes=c;salvarProcessoObjeto(p);audit('Comunicações da suspensão registradas',`${i.nome} · Irmão ${brData(c.irmaoData)} · Guarda dos Selos ${brData(c.guardaData)}`);toast('Comunicações registradas')}
 
-window.CHANCELARIA_VERSION='5.3.0-fluida-conformidade';
+window.CHANCELARIA_VERSION='5.4.0-fluida-classica';
 
 
 /* ============================================================
@@ -2913,6 +2982,10 @@ atualizarResumoChamada=function(){_atualizarResumoV53Base();const s=getSessoes()
 function garantirNumeroCertificadoV53(x){if(x.certNumero)return x.certNumero;const ano=(getSessoes().find(s=>s.id===x.sessaoId)?.data||hojeISO()).slice(0,4),st=getSettings(),seq={...(st.certSeqByYear||{})};seq[ano]=(Number(seq[ano])||0)+1;const numero=`RF1997-${ano}-${String(seq[ano]).padStart(3,'0')}`;setSettings({certSeqByYear:seq});const arr=getVisitantesV5(),ix=arr.findIndex(v=>v.id===x.id);if(ix>=0){arr[ix]={...arr[ix],certNumero:numero,certEmitidoEm:new Date().toISOString()};setVisitantesV5(arr);x=arr[ix]}auditV53('Certificado de visitante numerado',`${numero} · ${x.nome}`,null,{visitanteId:x.id,numero},'emissão de atestado');return numero}
 const _corpoCertV53Base=corpoCertificadoVisitanteV5;
 corpoCertificadoVisitanteV5=function(x){const n=garantirNumeroCertificadoV53(x);return `<div class="certificate-number"><b>Certificado nº ${h(n)}</b></div>`+_corpoCertV53Base(x)};
+corpoCertificadoVisitanteV5=function(x){
+  const s=getSessoes().find(z=>z.id===x.sessaoId),n=garantirNumeroCertificadoV53(x),sessao=s?nomeSessaoDocumento(s):'Sessão da Loja';
+  return `<div class="certificate"><h2>Atestado de Frequência Maçônica</h2><div class="certificate-subtitle">A∴ R∴ L∴ S∴ Razão e Força nº 1997 · Porto Murtinho/MS</div><div class="certificate-rule"></div><div class="certificate-number">Atestado nº <b>${h(n)}</b></div><p class="certificate-body">Atestamos, para os fins maçônicos cabíveis, que o Irmão <b>${h(x.nome)}</b>${x.cim?' — CIM '+h(x.cim):''}, ${h(grauNome(x.grau)||grauSimbolo(x.grau))}, pertencente à <b>${h(x.loja)}${x.numero?' nº '+h(x.numero):''}</b>, Oriente de <b>${h(x.oriente)}</b>, esteve presente aos trabalhos da A∴R∴L∴S∴ Razão e Força nº 1997${s?` em <b>${brData(s.data)}</b>, na <b>${h(sessao)}</b>${s.numero?' · '+h(s.numero):''}`:''}.</p><p class="certificate-date">Porto Murtinho/MS, ${brData(hojeISO())}.</p></div>`
+};
 const _gerarImagemCertV53Base=gerarImagemCertificadoVisitanteV5;
 gerarImagemCertificadoVisitanteV5=async function(x){garantirNumeroCertificadoV53(x);const atual=x.id?getVisitantesV5().find(v=>v.id===x.id):null;return _gerarImagemCertV53Base(atual||x)};
 
@@ -2944,7 +3017,7 @@ function imprimirRelatorioAnualV53(){const ano=prompt('Ano do relatório anual:'
 // Renderização de sessões com estado, visitantes e total no Templo
 renderSessoes=function(){renderPeriodoRGF();const arr=getSessoes().slice().sort((a,b)=>b.data.localeCompare(a.data));document.getElementById('listaSessoes').innerHTML=arr.length?arr.map(s=>{const r=resumoChamadaSessao(s),fech=s.fechamento?.status==='encerrada',an=s.status==='anulada';return `<div class="list-item session-list-card ${fech?'session-closed':''} ${an?'session-annulled':''}" onclick="abrirConsultaSessao('${s.id}')"><div class="avatar">${an?'×':'◈'}</div><div class="item-main"><div class="item-title">${h(s.numero||descricaoSessao(s))}</div><div class="item-sub">${brData(s.data)} · ${h(descricaoSessao(s))} · ${an?'anulada':fech?'encerrada':h(s.status||'realizada')}</div>${s.retificacao?`<div class="item-sub">${h(s.retificacao.referencia)} · ${h(s.retificacao.motivo)}</div>`:''}</div><div class="session-card-side"><div class="session-card-summary"><span class="badge b-ok">${r.presentesLoja} Quadro</span><span class="badge b-warn">${r.visitantes||0} visitante(s)</span><span class="badge">${r.totalTemplo||r.presentesLoja} no Templo</span></div><span class="session-consult-chip">Consultar ›</span>${!an?`<button class="btn btn-primary btn-sm" type="button" onclick="event.stopPropagation();abrirPresenca('${s.id}')">Chamada</button>`:''}</div></div>`}).join(''):'<div class="empty"><p>Nenhuma sessão cadastrada.</p></div>'}
 
-window.CHANCELARIA_VERSION='5.3.0-fluida-conformidade';
+window.CHANCELARIA_VERSION='5.4.0-fluida-classica';
 
 function renderAtual(){migrarV51Normativo();if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
 iniciarSeguranca();
