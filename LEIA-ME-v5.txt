@@ -1,20 +1,22 @@
-CHANCELARIA 1997 — VERSÃO 5.5.0
+CHANCELARIA 1997 — VERSÃO 5.7.0 — CONFORMIDADE INTEGRAL GOB / GOB-MS
 
-ALTERAÇÕES PRINCIPAIS
-- Cadastro de visitante agora possui Telefone / WhatsApp.
-- O atestado de visitante passa a ser gerado prioritariamente como imagem PNG, não como PDF.
-- Fundo oficial do atestado: certificado-fundo.png, preservado sem regeneração.
-- Cabeçalho oficial original da Loja preservado em cabecalho-oficial.jpg.
-- Bandeiras no atestado, da esquerda para a direita: Argentina, Paraguai, Brasil, Bolívia e Chile.
-- Nome da sessão usa a descrição documental correta, por exemplo Sessão Ordinária de Mestre.
-- Pré-visualização da imagem dentro do aplicativo.
-- Compartilhamento da imagem pelo compartilhamento nativo do Android, compatível com WhatsApp quando disponível.
-- Botão separado abre diretamente a conversa do WhatsApp do visitante cadastrado.
-- Certificados continuam numerados e auditados.
-- Demais relatórios continuam disponíveis em impressão/PDF.
+Base normativa considerada:
+- Constituição do Grande Oriente do Brasil
+- Constituição do GOB-MS
+- Regulamento Geral da Federação (atualizado até 29/09/2025)
+- Código Eleitoral Maçônico (atualizado até 17/02/2025)
+- Código de Processo Maçônico
+- Código Disciplinar Maçônico (atualizado até 19/06/2024)
 
-OBSERVAÇÃO TÉCNICA
-O navegador/WebView consegue compartilhar a imagem como arquivo pelo menu nativo do Android. O WhatsApp não permite que uma página web pré-selecione simultaneamente um destinatário e anexe automaticamente um arquivo. Por isso, o aplicativo oferece Compartilhar imagem e Abrir WhatsApp do visitante como ações complementares, sem alterar os blocos do Kodular.
+Principais correções:
+- Corrigida a contagem das sessões de instrução do Grau de Mestre (modelo modalidade/grauSessao).
+- Qualificação eleitoral separa Loja, GOB e GOB-MS na conferência financeira.
+- Admissão há seis meses ou menos passa a exigir conferência normativa, sem declarar automaticamente inelegibilidade.
+- Eméritos/Remidos não são qualificados automaticamente quando a base local e frequências externas não permitem apuração segura.
+- Relação eleitoral pode ser consolidada em fotografia imutável para o pleito e reaberta com auditoria.
+- Controle de Edital: antecedência mínima de 15 dias e referência de autorização do Tribunal quando eleição da Loja ocorrer fora de maio.
+- Pré-qualificação para Venerável/Deputado é apenas administrativa e exige conferência final pela autoridade competente.
+- Mantida separação entre Chancelaria e plataforma oficial de votação.
+- Identidade documental: Federada ao GOB e Jurisdicionada ao GOB-MS.
 
-ATUALIZAÇÃO
-Substitua todos os arquivos do pacote no GitHub. Faça backup criptografado antes. Não desinstale o aplicativo e não limpe os dados.
+IMPORTANTE: o aplicativo não aplica sanções, não tipifica infrações e não substitui decisões da Loja, Tesouraria, Secretaria, Justiça Maçônica, Justiça Eleitoral Maçônica ou plataformas oficiais do GOB/GOB-MS.

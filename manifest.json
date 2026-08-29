@@ -1,7 +1,7 @@
 {
-  "name": "Chancelaria 1997 — Conformidade GOB",
+  "name": "Chancelaria 1997 — Conformidade GOB/GOB-MS",
   "short_name": "Chancelaria 1997",
-  "description": "Chancelaria 1997 — gestão de presença, sessões, visitantes, certificados e conformidade administrativa.",
+  "description": "Chancelaria 1997 — gestão de presença, visitantes e conformidade administrativa da A.R.L.S. Razão e Força nº 1997, federada ao GOB e jurisdicionada ao GOB-MS.",
   "lang": "pt-BR",
   "id": "./",
   "start_url": "./index.html",

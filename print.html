@@ -13,6 +13,7 @@ html,body{margin:0;background:#e9e9e9;color:var(--texto);font-family:Arial,"Sego
 .page{width:210mm;min-height:297mm;margin:14px auto;background:#fff;padding:30mm 20mm 20mm 30mm;box-shadow:0 4px 22px rgba(0,0,0,.18)}
 .official-header{margin:0 0 9mm;border:1px solid rgba(201,168,76,.75);border-radius:4mm;overflow:hidden;background:#fff;break-inside:avoid;page-break-inside:avoid}
 .official-header img{display:block;width:100%;height:auto}
+.jurisdiction-line{text-align:center;font-size:8pt;font-weight:800;color:var(--azul);margin:-6mm 0 7mm;letter-spacing:.2px}
 h2{font-size:14pt;margin:0 0 8mm;text-align:center;text-transform:uppercase;color:var(--azul);break-after:avoid-page;page-break-after:avoid;line-height:1.25}
 p{font-size:12pt;line-height:1.5;margin:0 0 4mm;text-align:justify;orphans:3;widows:3}
 table{width:100%;border-collapse:collapse;font-size:9pt;line-height:1.25;margin-top:4mm;table-layout:fixed}thead{display:table-header-group}tfoot{display:table-footer-group}tr{break-inside:avoid;page-break-inside:avoid}th,td{border:1px solid #aaa;padding:1.8mm;text-align:left;vertical-align:top;overflow-wrap:anywhere;word-break:normal}th{background:#ece8df;color:var(--azul);font-weight:800}
@@ -43,7 +44,7 @@ table{width:100%;border-collapse:collapse;font-size:9pt;line-height:1.25;margin-
     const raw=location.hash.slice(1);if(!raw)throw new Error('Documento não recebido.');
     const data=JSON.parse(decodeBase64UrlUtf8(raw));history.replaceState(null,'',location.pathname+location.search);document.title=(data.titulo||'Documento')+' · Chancelaria 1997';
     const assinatura=data.assinatura||assinaturaPadrao;const rodape=data.rodape||'Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';const documentClass=String(data.documentClass||'').replace(/[^a-z0-9_-]/gi,'');
-    app.innerHTML=`<article class="page ${documentClass}"><header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header>${data.corpo||''}<div class="assinatura${data.assinaturaClasse?' '+data.assinaturaClasse:''}">${assinatura}</div><div class="footer">${rodape}</div></article>`;
+    app.innerHTML=`<article class="page ${documentClass}"><header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header><div class="jurisdiction-line">Jurisdicionada ao GOB-MS</div>${data.corpo||''}<div class="assinatura${data.assinaturaClasse?' '+data.assinaturaClasse:''}">${assinatura}</div><div class="footer">${rodape}</div></article>`;
     const deveImprimir=new URLSearchParams(location.search).get('print')==='1';if(deveImprimir){const imgs=[...app.querySelectorAll('img')];const aguardar=Promise.all(imgs.map(img=>img.complete?Promise.resolve():new Promise(r=>{img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true})})));aguardar.then(()=>setTimeout(()=>{try{window.print()}catch(e){}},500))}
   }catch(e){app.innerHTML=`<div class="error"><h2>Não foi possível abrir o documento</h2><p>${String(e.message||e)}</p><p>Volte ao aplicativo e gere o documento novamente.</p></div>`}
 })();
