@@ -1,3 +1,13 @@
+CHANCELARIA 1997 — VERSÃO 5.7.1
+
+Correções desta versão:
+- visitante cadastrado passa a aparecer na consulta da sessão, separado dos Irmãos do Quadro;
+- total no Templo = Quadro presente + visitantes;
+- após salvar visitante, o cadastro permanece selecionado para abrir o certificado imediatamente;
+- botão Abrir certificado incluído na lista de visitantes;
+- compartilhamento do certificado em PNG mantido;
+- cache atualizado para evitar carregamento da versão anterior.
+
 CHANCELARIA 1997 — VERSÃO 5.7.0 — CONFORMIDADE INTEGRAL GOB / GOB-MS
 
 Base normativa considerada:

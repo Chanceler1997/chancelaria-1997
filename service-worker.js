@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v57-conformidade-integral";
+const CACHE_NAME = "chancelaria-1997-v571-visitantes-certificado";
 const APP_FILES = [
   "./",
   "./index.html",

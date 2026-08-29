@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.7.0-conformidade-integral">
+<meta name="application-version" content="5.7.1-visitantes-certificado">
 <style>
 :root{
   --azul:#152541;
@@ -3322,6 +3322,77 @@ auditV53=function(acao,detalhe='',antes=null,depois=null,motivo=''){const arr=ge
 
 /* Inicialização tardia da camada final. */
 document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}catch(e){console.error(e)}});
+})();
+</script>
+
+
+<script id="v571-correcoes-visitantes-certificado">
+/* V5.7.1 — correções de visitantes e certificado */
+(function(){
+  const V571='5.7.1-visitantes-certificado';
+  window.CHANCELARIA_VERSION=V571;
+
+  const salvarBase=window.salvarVisitanteV5;
+  window.salvarVisitanteV5=function(){
+    const sessaoAntes=v5VisSessao.value;
+    const nomeAntes=v5VisNome.value.trim();
+    const editIdAntes=v5VisId.value;
+    const arrAntes=getVisitantesV5();
+    const idsAntes=new Set(arrAntes.map(x=>x.id));
+    salvarBase();
+    const arrDepois=getVisitantesV5();
+    let salvo=null;
+    if(editIdAntes) salvo=arrDepois.find(x=>x.id===editIdAntes);
+    if(!salvo && arrDepois.length>arrAntes.length) salvo=arrDepois.slice().reverse().find(x=>!idsAntes.has(x.id));
+    if(!salvo) return;
+    if(salvo){
+      v5VisId.value=salvo.id;
+      v5VisSessao.value=salvo.sessaoId;
+      v5VisNome.value=salvo.nome||'';
+      v5VisCim.value=salvo.cim||'';
+      v5VisGrau.value=salvo.grau||'M';
+      v5VisLoja.value=salvo.loja||'';
+      v5VisNumero.value=salvo.numero||'';
+      v5VisOriente.value=salvo.oriente||'';
+      v5VisTelefone.value=salvo.telefone||'';
+      v5VisIdent.value=salvo.identificacao||'';
+      v5VisObs.value=salvo.obs||'';
+      renderVisitantesV5();
+      if(typeof renderSessoes==='function') renderSessoes();
+    }
+  };
+
+  window.renderVisitantesV5=function(){
+    const arr=getVisitantesV5().slice().sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+    v5VisLista.innerHTML=arr.length?arr.map(x=>{
+      const s=getSessoes().find(z=>z.id===x.sessaoId),tel=x.telefone?`<br>WhatsApp: ${h(x.telefone)}`:'';
+      return `<div class="list-item"><div class="avatar">${h(iniciais(x.nome))}</div><div class="item-main"><div class="item-title">${h(x.nome)}</div><div class="item-sub">${h(x.loja)}${x.numero?' nº '+h(x.numero):''} · ${h(x.oriente)}${s?' · '+brData(s.data)+' · '+h(nomeSessaoDocumento(s)):''}${tel}<br>Identificação: ${h(x.identificacao||'não informada')}</div></div><div class="item-side"><button class="btn btn-primary btn-sm" onclick="certificadoVisitanteV5('${x.id}')">Abrir certificado</button><button class="btn btn-success btn-sm" onclick="compartilharCertificadoVisitanteV5('${x.id}')">Compartilhar</button>${x.telefone?`<button class="btn btn-outline btn-sm" onclick="abrirWhatsAppVisitanteV55('${x.id}')">WhatsApp</button>`:''}<button class="btn btn-light btn-sm" onclick="editarVisitanteV5('${x.id}')">Editar</button><button class="btn btn-danger btn-sm" onclick="excluirVisitanteV5('${x.id}')">Excluir</button></div></div>`
+    }).join(''):'<div class="empty"><p>Nenhum visitante registrado.</p></div>';
+  };
+
+  window.abrirConsultaSessao=function(id){
+    const s=getSessoes().find(x=>x.id===id);
+    if(!s){toast('Sessão não encontrada');return}
+    consultaSessaoId.value=id;
+    consultaSessaoTitulo.textContent=s.numero||descricaoSessao(s);
+    const r=resumoChamadaSessao(s);
+    const presentes=participantesPresentesSessao(s);
+    const visitantes=getVisitantesV5().filter(v=>v.sessaoId===id).sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
+    const listaQuadro=presentes.length?`<div class="session-present-list">${presentes.map((x,n)=>{const i=x.irmao;return `<div class="session-present-row"><span class="session-present-number">${n+1}</span><span><span class="session-present-name">${h(i.nome)}</span><span class="session-present-meta">${h(grauSimbolo(x.grau))}${i.cim?' · CIM '+h(i.cim):' · CIM não informada'}</span></span><span class="session-present-type">Quadro</span></div>`}).join('')}</div>`:'<div class="empty"><p>Nenhum Irmão do Quadro presente foi registrado.</p></div>';
+    const listaVisitantes=visitantes.length?`<div class="session-present-list">${visitantes.map((v,n)=>`<div class="session-present-row"><span class="session-present-number">${n+1}</span><span><span class="session-present-name">${h(v.nome)}</span><span class="session-present-meta">${h(v.loja)}${v.numero?' nº '+h(v.numero):''} · ${h(v.oriente)}${v.cim?' · CIM '+h(v.cim):''}</span></span><span class="session-present-type visit">Visitante</span></div>`).join('')}</div>`:'<div class="empty"><p>Nenhum visitante registrado nesta sessão.</p></div>';
+    consultaSessaoBody.innerHTML=`<div class="session-detail-hero"><div class="session-detail-title">${h(s.numero||descricaoSessao(s))}</div><div class="session-detail-meta"><b>Data:</b> ${brData(s.data)}<br><b>Tipo:</b> ${h(descricaoSessao(s))}<br><b>Classe:</b> ${h(V5_SESSOES[s.tipo]?.label||s.tipo)} · <b>Modalidade:</b> ${h(v5ModalidadeNome(s))}<br><b>Grau:</b> ${h(grauSimbolo(s.grauSessao))} · <b>Situação:</b> ${h(s.status)}</div>${s.obs?`<div class="session-detail-note"><b>Pauta ou observação:</b><br>${h(s.obs)}</div>`:''}</div><div class="session-stat-grid two-status"><div class="session-stat"><b>${r.presentesLoja}</b><span>Quadro presente</span></div><div class="session-stat"><b>${visitantes.length}</b><span>Visitantes</span></div><div class="session-stat"><b>${r.totalTemplo||r.presentesLoja+visitantes.length}</b><span>Total no Templo</span></div><div class="session-stat"><b>${r.faltas}</b><span>Faltas</span></div></div><div class="card-head" style="border-radius:12px;margin-bottom:9px">Irmãos do Quadro presentes · ${r.presentesLoja}</div>${listaQuadro}<div class="card-head" style="border-radius:12px;margin:14px 0 9px">Visitantes presentes · ${visitantes.length}</div>${listaVisitantes}`;
+    abrirModal('modalConsultaSessao');
+  };
+
+  const certBase=window.certificadoVisitanteV5;
+  window.certificadoVisitanteV5=async function(id=''){
+    try{
+      await certBase(id);
+    }catch(e){
+      console.error(e);
+      toast(e?.message||'Não foi possível abrir o certificado');
+    }
+  };
 })();
 </script>
 
