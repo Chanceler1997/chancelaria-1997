@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v585-pdf-direto";
+const CACHE_NAME = "chancelaria-1997-v586-share-web-fallback";
 const APP_FILES = [
   "./",
   "./index.html",
@@ -7,7 +7,7 @@ const APP_FILES = [
   "./cabecalho-oficial.jpg",
   "./icon-192.png",
   "./icon-512.png",
-  "./certificado-base-v58.png",
+  "./certificado-base.png",
   "./assinatura-chanceler.png"
 ];
 self.addEventListener("install", event => {

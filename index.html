@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.8.5-pdf-direto-compartilhamento">
+<meta name="application-version" content="5.8.6-share-web-fallback-visualizador">
 <style>
 :root{
   --azul:#152541;
@@ -3597,7 +3597,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     const s=getSessoes().find(z=>z.id===atual.sessaoId);if(!s)throw new Error('A sessão vinculada à visita não foi localizada.');
     const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=1536;
     const c=canvas.getContext('2d',{alpha:true});if(!c)throw new Error('O dispositivo não conseguiu iniciar o gerador do certificado.');
-    const [base,sig]=await Promise.all([imgV58('certificado-base-v58.png'),imgV58('assinatura-chanceler.png')]);
+    const [base,sig]=await Promise.all([imgV58('certificado-base.png'),imgV58('assinatura-chanceler.png')]);
     c.drawImage(base,0,0,1024,1536);
 
     /* V5.8.3 — composição aprovada. A camada dinâmica permanece 100% transparente:
@@ -3742,5 +3742,118 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{renderVisitantesV5()}catch(e){}
 })();
 </script>
+
+<script id="v586-compartilhamento-sem-kodular">
+/* V5.8.6 — envio do atestado sem alterar os blocos do Kodular.
+   Prioridade operacional: apoiar o Chanceler com o menor número de passos.
+   O aplicativo tenta compartilhar o PDF pela Web Share API; se o WebViewer
+   bloquear anexos, abre automaticamente o PDF no visualizador do Android. */
+(function(){
+  const V586='5.8.6-share-web-fallback-visualizador';
+  window.CHANCELARIA_VERSION=V586;
+
+  function visitanteV586(id=''){
+    return id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();
+  }
+
+  function abrirPdfNoVisualizadorV586(out){
+    try{
+      if(window.__ultimoPdfCertificadoUrl){try{URL.revokeObjectURL(window.__ultimoPdfCertificadoUrl)}catch(e){}}
+      const url=URL.createObjectURL(out.blob);
+      window.__ultimoPdfCertificadoUrl=url;
+      audit('Certificado aberto no visualizador',`${out.x.nome} · ${out.x.certNumero||''}`);
+      iniciarAcaoExterna();
+      const w=window.open(url,'_blank');
+      if(!w)window.location.href=url;
+      setTimeout(()=>finalizarAcaoExterna(),1200);
+      return true;
+    }catch(e){
+      finalizarAcaoExterna();
+      console.error('fallback visualizador V5.8.6',e);
+      return false;
+    }
+  }
+
+  async function tentarCompartilharPdfV586(out){
+    if(!navigator.share)return {ok:false,motivo:'indisponivel'};
+    try{
+      if(navigator.canShare && !navigator.canShare({files:[out.file]}))return {ok:false,motivo:'arquivo-nao-suportado'};
+      iniciarAcaoExterna();
+      await navigator.share({
+        title:'Atestado de frequência maçônica',
+        text:`Atestado de frequência maçônica - ${out.x.nome}`,
+        files:[out.file]
+      });
+      finalizarAcaoExterna();
+      audit('Certificado PDF compartilhado',`${out.x.nome} · ${out.x.certNumero||''}`);
+      return {ok:true};
+    }catch(e){
+      finalizarAcaoExterna();
+      if(e && e.name==='AbortError')return {ok:false,motivo:'cancelado'};
+      console.warn('Web Share bloqueado; será usado o visualizador Android.',e);
+      return {ok:false,motivo:'bloqueado'};
+    }
+  }
+
+  window.compartilharPdfVisitanteV585=async function(id=''){
+    const x=visitanteV586(id);
+    if(!x||!x.id){toast('Selecione uma visita já registrada');return}
+    try{
+      const out=await window.__arquivoPdfVisitanteV585(id);
+      audit('Certificado PDF preparado',`${out.x.nome} · ${out.x.certNumero||''}`);
+      const share=await tentarCompartilharPdfV586(out);
+      if(share.ok||share.motivo==='cancelado')return;
+      if(!abrirPdfNoVisualizadorV586(out))throw new Error('Não foi possível abrir o PDF no visualizador do Android.');
+      setTimeout(()=>toast('No visualizador, toque no menu ⋮, depois em Compartilhar e escolha WhatsApp.'),650);
+    }catch(e){
+      finalizarAcaoExterna();
+      console.error('enviar atestado V5.8.6',e);
+      toast(e?.message||'Não foi possível preparar o atestado');
+    }
+  };
+
+  window.certificadoVisitanteV5=async function(id=''){
+    const x=visitanteV586(id);
+    if(!x||!x.id){toast('Selecione uma visita já registrada');return}
+    try{
+      const out=await window.__arquivoPdfVisitanteV585(id);
+      audit('Certificado PDF conferido',`${out.x.nome} · ${out.x.certNumero||''}`);
+      if(!abrirPdfNoVisualizadorV586(out))throw new Error('Não foi possível abrir o PDF.');
+    }catch(e){
+      finalizarAcaoExterna();
+      console.error('conferir atestado V5.8.6',e);
+      toast(e?.message||'Não foi possível abrir o atestado');
+    }
+  };
+  window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;
+  window.compartilharCertificadoVisitanteV5=window.compartilharPdfVisitanteV585;
+
+  const renderBaseV586=window.renderVisitantesV5;
+  function ajustarInterfaceVisitantesV586(){
+    const note=document.querySelector('#v5VisLista .visitor-repeat-note');
+    if(note)note.innerHTML='<b>Controle do Chanceler:</b> um cadastro por visitante. Cada comparecimento fica no histórico e possui seu próprio atestado.';
+    document.querySelectorAll('#v5VisLista .visitor-history-title').forEach(el=>{el.textContent='Histórico de visitas e atestados'});
+    document.querySelectorAll('#v5VisLista button').forEach(btn=>{
+      const t=(btn.textContent||'').trim();
+      if(t==='Compartilhar PDF'){btn.textContent='Enviar atestado';btn.classList.add('btn-success')}
+      else if(t==='Visualizar PDF'){btn.textContent='Conferir atestado'}
+      else if(/^WhatsApp$/i.test(t)){btn.remove()}
+    });
+    const toolbar=document.querySelector('.visitor-actions-v55');
+    if(toolbar){
+      const success=toolbar.querySelector('button.btn-success');
+      if(success){success.textContent='Enviar atestado';success.setAttribute('onclick','compartilharPdfVisitanteV585()')}
+      [...toolbar.querySelectorAll('button')].forEach(b=>{if(/^Abrir WhatsApp$/i.test((b.textContent||'').trim()))b.remove()});
+    }
+  }
+  window.renderVisitantesV5=function(){
+    const r=renderBaseV586.apply(this,arguments);
+    ajustarInterfaceVisitantesV586();
+    return r;
+  };
+  ajustarInterfaceVisitantesV586();
+})();
+</script>
+
 </body>
 </html>
