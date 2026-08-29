@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.7.3-certificado-oficial">
+<meta name="application-version" content="5.8.0-visitantes-historico-certificado-transparente">
 <style>
 :root{
   --azul:#152541;
@@ -1147,7 +1147,7 @@ const SEC_VAULT_KEY=PFX+'vault_v1';
 const SEC_BACKUP_TYPE='CHANCELARIA1997_BACKUP_CRIPTOGRAFADO';
 const SEC_ITERATIONS=600000;
 const SEC_AAD='A.R.L.S. Razao e Forca 1997 | Cofre local v1';
-const SEC_DATA_KEYS=['irmaos','sessoes','presencas','processosFreq','festivas','periodoFreqRGF','settings','trash','audit','backupInfo','visitantes','freqExterna','eleicoes','obrNormativas','periodosNormativos'];
+const SEC_DATA_KEYS=['irmaos','sessoes','presencas','processosFreq','festivas','periodoFreqRGF','settings','trash','audit','backupInfo','visitantes','visitantePerfis','visitasVisitantes','freqExterna','eleicoes','obrNormativas','periodosNormativos'];
 const SEC_RECOVERY_KEY=PFX+'recovery_v1';
 const TRASH_DAYS=30;
 const EXTERNAL_ACTION_GRACE_MS=15*60*1000;
@@ -3464,7 +3464,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       const {canvas,atual}=await gerarCanvasCertificadoV572(x);
       const dataUrl=canvas.toDataURL('image/png',0.96);
       if(!dataUrl||dataUrl.length<1000)throw new Error('A imagem do certificado não pôde ser criada.');
-      garantirModalV573();
+      garantirModalV580();
       const img=document.getElementById('certificadoImagemV572');img.src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=atual.id;
       document.getElementById('certificadoNotaV572').textContent=`Atestado pronto${atual.telefone?' · WhatsApp '+atual.telefone:' · cadastre o telefone para facilitar o envio'}.`;
       abrirModal('modalCertificadoImagemV572');
@@ -3482,7 +3482,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
         iniciarAcaoExterna();try{await navigator.share({title:'Atestado de frequência maçônica',text:`Atestado de frequência maçônica — ${x.nome} — A∴R∴L∴S∴ Razão e Força nº 1997.`,files:[file]});}finally{finalizarAcaoExterna()}return;
       }
       // WebView sem Web Share API: abre a imagem e mantém o WhatsApp como segundo passo.
-      garantirModalV573();document.getElementById('certificadoImagemV572').src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=x.id;abrirModal('modalCertificadoImagemV572');
+      garantirModalV580();document.getElementById('certificadoImagemV572').src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=x.id;abrirModal('modalCertificadoImagemV572');
       toast('O Android não liberou o compartilhamento direto. A imagem está aberta; use “Abrir WhatsApp”.');
     }catch(e){finalizarAcaoExterna();console.error('envio certificado V5.7.2',e);toast(e?.message||'Não foi possível enviar o certificado')}
   };
@@ -3584,7 +3584,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       const {canvas,atual}=await gerarCanvasCertificadoOficialV573(x);
       const dataUrl=canvas.toDataURL('image/png',0.96);
       if(!dataUrl||dataUrl.length<1000)throw new Error('A imagem do certificado não pôde ser criada.');
-      garantirModalV573();
+      garantirModalV580();
       const img=document.getElementById('certificadoImagemV572');img.src=dataUrl;
       window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=atual.id;
       document.getElementById('certificadoNotaV572').textContent=`Atestado pronto${atual.telefone?' · WhatsApp '+atual.telefone:' · cadastre o telefone para facilitar o envio'}.`;
@@ -3602,10 +3602,344 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       const nome=`Atestado-${String(x.nome||'visitante').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'')}.png`;
       const file=new File([blob],nome,{type:'image/png'});
       if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){iniciarAcaoExterna();try{await navigator.share({title:'Atestado de frequência maçônica',files:[file]})}finally{finalizarAcaoExterna()}return}
-      garantirModalV573();document.getElementById('certificadoImagemV572').src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=x.id;abrirModal('modalCertificadoImagemV572');toast('A imagem está pronta. Use o compartilhamento do Android ou abra o WhatsApp.');
+      garantirModalV580();document.getElementById('certificadoImagemV572').src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=x.id;abrirModal('modalCertificadoImagemV572');toast('A imagem está pronta. Use o compartilhamento do Android ou abra o WhatsApp.');
     }catch(e){finalizarAcaoExterna();console.error('envio certificado V5.7.3',e);toast(e?.message||'Não foi possível enviar o certificado')}
   };
   window.compartilharCertificadoVisitanteV5=window.enviarCertificadoVisitanteV572;
+})();
+</script>
+
+
+<style id="v580-visitantes-certificado-css">
+.visitor-profile-card{border:1px solid rgba(201,168,76,.30);border-radius:16px;background:rgba(255,253,248,.96);margin:0 0 12px;overflow:hidden}
+.visitor-profile-head{display:flex;align-items:flex-start;gap:12px;padding:14px}
+.visitor-profile-head .avatar{flex:0 0 auto}
+.visitor-profile-main{flex:1;min-width:0}
+.visitor-profile-title{font-weight:800;color:#152541;font-size:17px}
+.visitor-profile-sub{font-size:13px;color:#626874;line-height:1.45;margin-top:3px}
+.visitor-profile-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.visitor-history{border-top:1px solid rgba(201,168,76,.22);background:#fbf8f1}
+.visitor-history-title{padding:9px 14px 6px;font-size:12px;font-weight:800;color:#7d6731;text-transform:uppercase;letter-spacing:.04em}
+.visitor-visit-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:10px 14px;border-top:1px solid rgba(21,37,65,.08)}
+.visitor-visit-row:first-of-type{border-top:0}
+.visitor-visit-main{min-width:0}
+.visitor-visit-date{font-weight:800;color:#152541}
+.visitor-visit-meta{font-size:12px;color:#6b6f78;line-height:1.4;margin-top:2px}
+.visitor-visit-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.visitor-repeat-note{font-size:12px;color:#677080;margin:0 0 10px;padding:9px 11px;border-radius:10px;background:#eef3f8}
+@media(max-width:620px){
+  .visitor-profile-head{display:block}
+  .visitor-profile-head .avatar{display:inline-flex;margin-bottom:8px}
+  .visitor-profile-actions{justify-content:flex-start;margin-top:10px}
+  .visitor-visit-row{grid-template-columns:1fr}
+  .visitor-visit-actions{justify-content:flex-start}
+}
+</style>
+<script id="v580-visitantes-certificado">
+/* V5.8.0
+   - cadastro permanente do visitante + múltiplas visitas
+   - cada visita possui certificado próprio
+   - certificado usa camada fixa (ponte, moldura, cabeçalho, bandeiras)
+     e camada dinâmica transparente (texto + assinatura + número)
+*/
+(function(){
+  const V580='5.8.0-visitantes-historico-certificado-transparente';
+  window.CHANCELARIA_VERSION=V580;
+
+  const legadoGetVisitantes = window.getVisitantesV5;
+  const legadoSetVisitantes = window.setVisitantesV5;
+
+  function perfisV58(){return v51Get('visitantePerfis')}
+  function setPerfisV58(v){v51Set('visitantePerfis',v)}
+  function visitasV58(){return v51Get('visitasVisitantes')}
+  function setVisitasV58(v){v51Set('visitasVisitantes',v)}
+
+  function chavePerfilV58(x){
+    const cim=nomeNormalizado(x?.cim||'');
+    if(cim)return 'cim:'+cim;
+    return 'nome:'+nomeNormalizado(x?.nome||'')+'|loja:'+nomeNormalizado(x?.loja||'')+'|ori:'+nomeNormalizado(x?.oriente||'');
+  }
+
+  function migrarVisitantesV58(){
+    if(localStorage.getItem('arls1997_v58_visitantes_migrados')==='1')return;
+    let perfis=perfisV58(),visitas=visitasV58();
+    const legado=(typeof legadoGetVisitantes==='function'?legadoGetVisitantes():[])||[];
+    const porChave=new Map(perfis.map(p=>[chavePerfilV58(p),p]));
+    let mudou=false;
+    legado.forEach(old=>{
+      const key=chavePerfilV58(old);
+      let p=porChave.get(key);
+      if(!p){
+        p={id:uid(),nome:old.nome||'',cim:old.cim||'',grau:old.grau||'M',loja:old.loja||'',numero:old.numero||'',oriente:old.oriente||'',telefone:old.telefone||'',createdAt:old.createdAt||new Date().toISOString(),updatedAt:old.updatedAt||new Date().toISOString()};
+        perfis.push(p);porChave.set(key,p);mudou=true;
+      }else{
+        const novo={...p,
+          nome:old.nome||p.nome,cim:old.cim||p.cim,grau:old.grau||p.grau,
+          loja:old.loja||p.loja,numero:old.numero||p.numero,oriente:old.oriente||p.oriente,
+          telefone:old.telefone||p.telefone,updatedAt:new Date().toISOString()
+        };
+        Object.assign(p,novo);
+      }
+      if(!visitas.some(v=>v.legacyId===old.id || (v.perfilId===p.id&&v.sessaoId===old.sessaoId))){
+        visitas.push({id:old.id||uid(),perfilId:p.id,sessaoId:old.sessaoId,identificacao:old.identificacao||'',obs:old.obs||'',certNumero:old.certNumero||'',certEmitidoEm:old.certEmitidoEm||'',legacyId:old.id||'',createdAt:old.createdAt||new Date().toISOString(),updatedAt:old.updatedAt||new Date().toISOString()});
+        mudou=true;
+      }
+    });
+    if(mudou){setPerfisV58(perfis);setVisitasV58(visitas)}
+    localStorage.setItem('arls1997_v58_visitantes_migrados','1');
+  }
+
+  function achatadosV58(){
+    const perfis=perfisV58(),map=new Map(perfis.map(p=>[p.id,p]));
+    return visitasV58().map(v=>{
+      const p=map.get(v.perfilId)||{};
+      return {...p,...v,id:v.id,perfilId:v.perfilId,sessaoId:v.sessaoId,identificacao:v.identificacao||'',obs:v.obs||'',certNumero:v.certNumero||'',certEmitidoEm:v.certEmitidoEm||''};
+    });
+  }
+
+  window.getVisitantesV5=function(){const novo=achatadosV58();return novo.length?novo:((typeof legadoGetVisitantes==='function'?legadoGetVisitantes():[])||[])};
+  window.setVisitantesV5=function(arr){
+    // Compatibility bridge for legacy helpers that update certificate fields.
+    const atuais=visitasV58();
+    const byId=new Map((arr||[]).map(x=>[x.id,x]));
+    let mudou=false;
+    const novo=atuais.map(v=>{
+      const x=byId.get(v.id);if(!x)return v;
+      const n={...v,certNumero:x.certNumero||v.certNumero||'',certEmitidoEm:x.certEmitidoEm||v.certEmitidoEm||'',updatedAt:new Date().toISOString()};
+      if(n.certNumero!==v.certNumero||n.certEmitidoEm!==v.certEmitidoEm)mudou=true;
+      return n;
+    });
+    if(mudou)setVisitasV58(novo);
+  };
+
+  window.garantirNumeroCertificadoV53=function(x){
+    if(x?.certNumero)return x.certNumero;
+    const s=getSessoes().find(z=>z.id===x?.sessaoId);
+    const ano=(s?.data||hojeISO()).slice(0,4),st=getSettings(),seq={...(st.certSeqByYear||{})};
+    seq[ano]=(Number(seq[ano])||0)+1;
+    const numero=`RF1997-${ano}-${String(seq[ano]).padStart(3,'0')}`;
+    setSettings({certSeqByYear:seq});
+    const arr=visitasV58(),ix=arr.findIndex(v=>v.id===x.id);
+    if(ix>=0){arr[ix]={...arr[ix],certNumero:numero,certEmitidoEm:new Date().toISOString(),updatedAt:new Date().toISOString()};setVisitasV58(arr)}
+    x.certNumero=numero;x.certEmitidoEm=new Date().toISOString();
+    auditV53('Certificado de visitante numerado',`${numero} · ${x.nome}`,null,{visitaId:x.id,perfilId:x.perfilId||'',numero},'emissão de atestado');
+    return numero;
+  };
+
+  function preencherPerfilV58(p){
+    v5VisId.value='';
+    v5VisNome.value=p.nome||'';v5VisCim.value=p.cim||'';v5VisGrau.value=p.grau||'M';
+    v5VisLoja.value=p.loja||'';v5VisNumero.value=p.numero||'';v5VisOriente.value=p.oriente||'';
+    v5VisTelefone.value=p.telefone||'';v5VisIdent.value='';v5VisObs.value='';
+  }
+
+  window.novaVisitaVisitanteV58=function(perfilId){
+    const p=perfisV58().find(x=>x.id===perfilId);if(!p)return;
+    preencherPerfilV58(p);
+    const ss=sessoesRealizadasV5();
+    if(ss.length)v5VisSessao.value=ss[0].id;
+    v5VisIdent.focus();
+    toast(`Nova visita de ${primeiroNome(p.nome)}: escolha a sessão e a identificação.`);
+  };
+
+  window.editarCadastroVisitanteV58=function(perfilId){
+    const p=perfisV58().find(x=>x.id===perfilId);if(!p)return;
+    preencherPerfilV58(p);
+    const ult=visitasV58().filter(v=>v.perfilId===perfilId).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)))[0];
+    if(ult){v5VisId.value=ult.id;v5VisSessao.value=ult.sessaoId||v5VisSessao.value;v5VisIdent.value=ult.identificacao||'';v5VisObs.value=ult.obs||''}
+    toast('Edite o cadastro. Se alterar a sessão, o registro selecionado será atualizado.');
+  };
+
+  window.salvarVisitanteV5=function(){
+    if(!v5VisSessao.value){toast('Cadastre uma sessão realizada');return}
+    if(!v5VisNome.value.trim()){toast('Informe o nome do visitante');return}
+    if(!v5VisLoja.value.trim()||!v5VisOriente.value.trim()){toast('Informe Loja e Oriente de origem');return}
+    if(!v5VisIdent.value){toast('Informe como o visitante foi identificado');return}
+    if(v5VisIdent.value==='apresentacao'&&!v5VisObs.value.trim()){toast('Informe por qual membro do Quadro o visitante foi apresentado');return}
+    const telefone=normalizarTelefoneVisitanteV55(v5VisTelefone.value);
+    if(telefone&&numeroWhatsApp(telefone)===''){toast('Confira o telefone/WhatsApp informado');return}
+
+    let perfis=perfisV58(),visitas=visitasV58();
+    const dados={nome:v5VisNome.value.trim(),cim:v5VisCim.value.trim(),grau:v5VisGrau.value,loja:v5VisLoja.value.trim(),numero:v5VisNumero.value.trim(),oriente:v5VisOriente.value.trim(),telefone};
+    const key=chavePerfilV58(dados);
+    let p=perfis.find(x=>chavePerfilV58(x)===key);
+    const oldPerfil=p?{...p}:null;
+    if(!p){
+      p={id:uid(),...dados,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+      perfis.push(p);
+    }else{
+      Object.assign(p,dados,{updatedAt:new Date().toISOString()});
+    }
+    setPerfisV58(perfis);
+
+    const editId=v5VisId.value;
+    let visita=editId?visitas.find(v=>v.id===editId):null;
+    const oldVisita=visita?{...visita}:null;
+
+    if(!visita){
+      const duplicada=visitas.find(v=>v.perfilId===p.id&&v.sessaoId===v5VisSessao.value);
+      if(duplicada){
+        visita=duplicada;
+        Object.assign(visita,{identificacao:v5VisIdent.value,obs:v5VisObs.value.trim(),updatedAt:new Date().toISOString()});
+        toast('Esta visita já estava registrada; o registro foi atualizado.');
+      }else{
+        visita={id:uid(),perfilId:p.id,sessaoId:v5VisSessao.value,identificacao:v5VisIdent.value,obs:v5VisObs.value.trim(),certNumero:'',certEmitidoEm:'',createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
+        visitas.push(visita);
+      }
+    }else{
+      Object.assign(visita,{perfilId:p.id,sessaoId:v5VisSessao.value,identificacao:v5VisIdent.value,obs:v5VisObs.value.trim(),updatedAt:new Date().toISOString()});
+    }
+    setVisitasV58(visitas);
+
+    auditV53(oldVisita?'Visita de visitante atualizada':'Visita de visitante registrada',
+      `${p.nome} · ${p.loja} · ${p.oriente}`,oldVisita||oldPerfil,{perfil:p,visita},'cadastro permanente + histórico de visitas');
+
+    v5VisId.value=visita.id;
+    renderVisitantesV5();
+    toast(oldVisita?'Visita atualizada':'Visita registrada no histórico');
+  };
+
+  window.editarVisitanteV5=function(id){
+    const x=getVisitantesV5().find(z=>z.id===id);if(!x)return;
+    v5VisId.value=id;v5VisSessao.value=x.sessaoId||'';v5VisNome.value=x.nome||'';v5VisCim.value=x.cim||'';
+    v5VisGrau.value=x.grau||'M';v5VisLoja.value=x.loja||'';v5VisNumero.value=x.numero||'';v5VisOriente.value=x.oriente||'';
+    v5VisTelefone.value=x.telefone||'';v5VisIdent.value=x.identificacao||'';v5VisObs.value=x.obs||'';
+  };
+
+  window.excluirVisitanteV5=function(id){
+    const x=getVisitantesV5().find(z=>z.id===id);if(!x||!confirm('Excluir somente esta visita do histórico? O cadastro permanente do visitante será mantido.'))return;
+    setVisitasV58(visitasV58().filter(v=>v.id!==id));
+    audit('Visita de visitante excluída',`${x.nome} · ${getSessoes().find(s=>s.id===x.sessaoId)?.data||''}`);
+    renderVisitantesV5();
+  };
+
+  window.visitanteCertificadoAtual=function(id=''){
+    let x=id?getVisitantesV5().find(z=>z.id===id):null;
+    const editId=v5VisId.value;
+    if(!x&&editId)x=getVisitantesV5().find(z=>z.id===editId);
+    return x;
+  };
+
+  window.renderVisitantesV5=function(){
+    const perfis=perfisV58().slice().sort((a,b)=>String(a.nome||'').localeCompare(String(b.nome||''),'pt-BR'));
+    const visitas=visitasV58(),smap=new Map(getSessoes().map(s=>[s.id,s]));
+    v5VisLista.innerHTML=perfis.length?`<div class="visitor-repeat-note">Cada visitante possui um único cadastro. Cada comparecimento gera uma nova visita e um certificado independente, preservado no histórico.</div>`+
+      perfis.map(p=>{
+        const hist=visitas.filter(v=>v.perfilId===p.id).sort((a,b)=>{
+          const da=smap.get(a.sessaoId)?.data||'',db=smap.get(b.sessaoId)?.data||'';
+          return db.localeCompare(da)||String(b.createdAt).localeCompare(String(a.createdAt));
+        });
+        const tel=p.telefone?` · WhatsApp ${h(p.telefone)}`:'';
+        const rows=hist.length?hist.map(v=>{
+          const s=smap.get(v.sessaoId),num=v.certNumero?` · ${h(v.certNumero)}`:' · certificado ainda não numerado';
+          return `<div class="visitor-visit-row"><div class="visitor-visit-main"><div class="visitor-visit-date">${s?brData(s.data):'Sessão não localizada'}</div><div class="visitor-visit-meta">${s?h(nomeSessaoDocumento(s)):'Registro histórico'}${s?.numero?' · '+h(s.numero):''}${num}<br>Identificação: ${h(v.identificacao||'não informada')}</div></div><div class="visitor-visit-actions"><button class="btn btn-primary btn-sm" onclick="certificadoVisitanteV5('${v.id}')">Abrir certificado</button><button class="btn btn-success btn-sm" onclick="enviarCertificadoVisitanteV572('${v.id}')">Enviar certificado</button><button class="btn btn-light btn-sm" onclick="editarVisitanteV5('${v.id}')">Editar visita</button><button class="btn btn-danger btn-sm" onclick="excluirVisitanteV5('${v.id}')">Excluir visita</button></div></div>`;
+        }).join(''):'<div class="visitor-visit-row"><div class="visitor-visit-meta">Nenhuma visita registrada.</div></div>';
+        return `<div class="visitor-profile-card"><div class="visitor-profile-head"><div class="avatar">${h(iniciais(p.nome))}</div><div class="visitor-profile-main"><div class="visitor-profile-title">${h(p.nome)}</div><div class="visitor-profile-sub">${p.cim?'CIM '+h(p.cim)+' · ':''}${h(grauNome(p.grau)||grauSimbolo(p.grau)||'')}<br>${h(p.loja)}${p.numero?' nº '+h(p.numero):''} · ${h(p.oriente)}${tel}<br>${hist.length} visita(s) registrada(s)</div></div><div class="visitor-profile-actions"><button class="btn btn-primary btn-sm" onclick="novaVisitaVisitanteV58('${p.id}')">Registrar nova visita</button>${p.telefone?`<button class="btn btn-outline btn-sm" onclick="abrirWhatsAppVisitanteV55('${hist[0]?.id||''}')">WhatsApp</button>`:''}</div></div><div class="visitor-history"><div class="visitor-history-title">Histórico de visitas e certificados</div>${rows}</div></div>`;
+      }).join('')
+      :'<div class="empty"><p>Nenhum visitante cadastrado.</p></div>';
+  };
+
+  const abrirBase=window.abrirVisitantesV5;
+  window.abrirVisitantesV5=function(sessaoId=''){
+    migrarVisitantesV58();
+    const ss=sessoesRealizadasV5();v5VisSessao.innerHTML=ss.map(s=>`<option value="${s.id}">${brData(s.data)} · ${h(nomeSessaoDocumento(s))}${s.numero?' · '+h(s.numero):''}</option>`).join('');
+    if(sessaoId&&ss.some(s=>s.id===sessaoId))v5VisSessao.value=sessaoId;
+    v5VisId.value='';
+    ['v5VisNome','v5VisCim','v5VisLoja','v5VisNumero','v5VisOriente','v5VisTelefone','v5VisObs'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
+    v5VisGrau.value='M';v5VisIdent.value='';
+    renderVisitantesV5();abrirModal('modalVisitantesV5');
+  };
+
+  function imgV58(src){return new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(new Error('Não foi possível carregar '+src));im.src=new URL(src,document.baseURI).href})}
+  function textShadowV58(c,text,x,y,font,fill,align='center',maxWidth){
+    c.save();c.font=font;c.textAlign=align;c.textBaseline='middle';
+    c.shadowColor='rgba(0,0,0,.85)';c.shadowBlur=8;c.shadowOffsetY=2;c.fillStyle=fill;
+    if(maxWidth)c.fillText(text,x,y,maxWidth);else c.fillText(text,x,y);
+    c.restore();
+  }
+  function fitTextV58(c,text,y,startPx,weight,style,color,maxWidth,family='Georgia, serif'){
+    let px=startPx;
+    while(px>15){c.font=`${style||''} ${weight||'400'} ${px}px ${family}`.trim();if(c.measureText(text).width<=maxWidth)break;px--}
+    textShadowV58(c,text,512,y,`${style||''} ${weight||'400'} ${px}px ${family}`.trim(),color,'center',maxWidth);
+  }
+  function lineV58(c,y,w=360){c.save();c.strokeStyle='#d4ad58';c.globalAlpha=.82;c.lineWidth=1.5;c.beginPath();c.moveTo(512-w/2,y);c.lineTo(512+w/2,y);c.stroke();c.restore()}
+
+  async function gerarCanvasV58(x){
+    if(!x?.id)throw new Error('Selecione uma visita registrada.');
+    const numero=garantirNumeroCertificadoV53(x);
+    const atual=getVisitantesV5().find(v=>v.id===x.id)||x;
+    const s=getSessoes().find(z=>z.id===atual.sessaoId);if(!s)throw new Error('A sessão vinculada à visita não foi localizada.');
+    const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=1536;
+    const c=canvas.getContext('2d',{alpha:true});if(!c)throw new Error('O dispositivo não conseguiu iniciar o gerador do certificado.');
+    const [base,sig]=await Promise.all([imgV58('certificado-base-v58.png'),imgV58('assinatura-chanceler.png')]);
+    c.drawImage(base,0,0,1024,1536);
+
+    /* Camada dinâmica: propositalmente sem fundo sólido.
+       Ela se integra ao céu/ponte e não redesenha bandeiras nem nomes dos países. */
+    textShadowV58(c,'Atestamos, para os fins maçônicos cabíveis, que o Irmão',512,545,'25px Georgia, serif','#f4eee3');
+    fitTextV58(c,atual.nome,610,43,'400','italic','#d4ad58',790);
+    const grau=grauNome(atual.grau)||grauSimbolo(atual.grau)||'';
+    textShadowV58(c,`${atual.cim?'CIM '+atual.cim+(grau?' · ':''):''}${grau}`,512,665,'23px Georgia, serif','#f4eee3');
+    fitTextV58(c,`pertencente à ${atual.loja}${atual.numero?' nº '+atual.numero:''},`,710,25,'400','', '#f4eee3',820);
+    fitTextV58(c,`Oriente de ${atual.oriente}, esteve presente aos trabalhos da`,750,24,'400','', '#f4eee3',840);
+    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,795,'700 26px Georgia, serif','#d4ad58');
+    textShadowV58(c,`em ${brData(s.data)}, na`,512,840,'24px Georgia, serif','#f4eee3');
+    fitTextV58(c,nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),887,28,'700','', '#d4ad58',800);
+    lineV58(c,925,365);
+    textShadowV58(c,`Porto Murtinho/MS, ${brData(hojeISO())}.`,512,965,'23px Georgia, serif','#f4eee3');
+
+    const maxW=345,maxH=98,sc=Math.min(maxW/sig.width,maxH/sig.height),sw=sig.width*sc,sh=sig.height*sc;
+    c.save();c.shadowColor='rgba(0,0,0,.7)';c.shadowBlur=7;c.drawImage(sig,(1024-sw)/2,992,sw,sh);c.restore();
+    textShadowV58(c,'Chanceler',512,1088,'700 22px Georgia, serif','#d4ad58');
+    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,1120,'20px Georgia, serif','#f4eee3');
+    textShadowV58(c,'Federada ao GOB · Jurisdicionada ao GOB-MS',512,1148,'14px Arial, sans-serif','#d6b96e');
+    textShadowV58(c,`Atestado nº ${numero}`,512,1171,'15px Arial, sans-serif','#d6b96e');
+    return {canvas,atual,s};
+  }
+
+  function garantirModalV580(){
+    let m=document.getElementById('modalCertificadoImagemV572');
+    if(m)return m;
+    document.body.insertAdjacentHTML('beforeend',`<div class="modal-back certificate-image-modal" id="modalCertificadoImagemV572" role="dialog" aria-modal="true"><div class="modal"><div class="modal-head"><span>Atestado de frequência maçônica</span><button class="modal-close" onclick="fecharModal('modalCertificadoImagemV572')">×</button></div><div class="modal-body"><img id="certificadoImagemV572" alt="Atestado de frequência maçônica"><div id="certificadoNotaV572" class="v572-cert-note"></div><div class="v572-cert-actions"><button class="btn btn-success" onclick="enviarCertificadoVisitanteV572(window.__certVisitanteV572||'')">Enviar certificado</button><button class="btn btn-outline" onclick="abrirWhatsAppVisitanteV55(window.__certVisitanteV572||'')">Abrir WhatsApp</button></div></div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalCertificadoImagemV572')">Fechar</button></div></div></div>`);
+    return document.getElementById('modalCertificadoImagemV572');
+  }
+
+  window.__gerarCanvasCertificadoV573=gerarCanvasV58;
+  window.certificadoVisitanteV5=async function(id=''){
+    const x=id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Selecione uma visita já registrada');return}
+    try{
+      toast('Gerando certificado...');
+      const {canvas,atual}=await gerarCanvasV58(x);
+      const dataUrl=canvas.toDataURL('image/png',0.98);
+      garantirModalV580();
+      const img=document.getElementById('certificadoImagemV572');img.src=dataUrl;
+      window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=atual.id;
+      document.getElementById('certificadoNotaV572').textContent=`Certificado desta visita pronto${atual.telefone?' · WhatsApp '+atual.telefone:''}.`;
+      abrirModal('modalCertificadoImagemV572');
+    }catch(e){console.error('certificado V5.8.0',e);toast(e?.message||'Não foi possível abrir o certificado')}
+  };
+
+  window.enviarCertificadoVisitanteV572=async function(id=''){
+    const x=id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Selecione uma visita já registrada');return}
+    try{
+      let dataUrl=(window.__certVisitanteV572===x.id)?window.__certDataUrlV572:'';
+      if(!dataUrl){const out=await gerarCanvasV58(x);dataUrl=out.canvas.toDataURL('image/png',0.98)}
+      const partes=dataUrl.split(','),mime=(partes[0].match(/data:([^;]+)/)||[])[1]||'image/png',bin=atob(partes[1]),arr=new Uint8Array(bin.length);
+      for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+      const blob=new Blob([arr],{type:mime});
+      const nome=`Atestado-${String(x.nome||'visitante').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'')}-${String(x.certNumero||'').replace(/[^A-Z0-9-]/gi,'')}.png`;
+      const file=new File([blob],nome,{type:'image/png'});
+      if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){
+        iniciarAcaoExterna();try{await navigator.share({title:'Atestado de frequência maçônica',files:[file]})}finally{finalizarAcaoExterna()}return;
+      }
+      garantirModalV580();document.getElementById('certificadoImagemV572').src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=x.id;abrirModal('modalCertificadoImagemV572');
+      toast('Imagem pronta. Use o compartilhamento do Android ou abra o WhatsApp.');
+    }catch(e){finalizarAcaoExterna();console.error('envio certificado V5.8.0',e);toast(e?.message||'Não foi possível enviar o certificado')}
+  };
+  window.compartilharCertificadoVisitanteV5=window.enviarCertificadoVisitanteV572;
+
 })();
 </script>
 
