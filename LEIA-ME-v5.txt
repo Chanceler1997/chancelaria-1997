@@ -1,3 +1,13 @@
+CHANCELARIA 1997 — VERSÃO 5.7.2
+
+Correções desta versão:
+- certificado de visitante refeito para abertura robusta em Android/WebView usando imagem PNG em data URL;
+- removida a dependência da pré-visualização em URL temporária de Blob;
+- lista de visitantes agora possui botão “Enviar certificado”;
+- envio tenta o compartilhamento nativo do Android com o PNG; se o WebView não disponibilizar a Web Share API, o certificado é aberto e o WhatsApp pode ser acionado em seguida;
+- mantido o botão “Abrir certificado”;
+- cache atualizado para impedir carregamento da versão anterior.
+
 CHANCELARIA 1997 — VERSÃO 5.7.1
 
 Correções desta versão:

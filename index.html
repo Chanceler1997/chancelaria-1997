@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.7.1-visitantes-certificado">
+<meta name="application-version" content="5.7.2-certificado-robusto">
 <style>
 :root{
   --azul:#152541;
@@ -3396,5 +3396,103 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 })();
 </script>
 
+
+
+<style id="v572-certificado-fix-css">
+#modalCertificadoImagemV572 .modal{max-width:640px;background:#0b1729;border:1px solid rgba(201,168,76,.55)}
+#modalCertificadoImagemV572 .modal-head{background:#10213a;color:#f0cf69;border-bottom:1px solid rgba(201,168,76,.38)}
+#certificadoImagemV572{display:block;width:100%;height:auto;max-height:70vh;object-fit:contain;background:#06111f;border:1px solid rgba(201,168,76,.42);border-radius:12px;box-shadow:0 14px 34px rgba(0,0,0,.38)}
+.v572-cert-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.v572-cert-note{text-align:center;color:#b9c3d0;font-size:11px;line-height:1.45;margin-top:9px}
+@media(max-width:460px){.v572-cert-actions{grid-template-columns:1fr}.v572-cert-actions .btn{min-height:46px}}
+</style>
+<script id="v572-certificado-fix">
+/* V5.7.2 — certificado robusto para Android/WebView + envio pela lista de visitantes */
+(function(){
+  const V572='5.7.2-certificado-robusto';
+  window.CHANCELARIA_VERSION=V572;
+
+  function visitantePorIdV572(id){return getVisitantesV5().find(v=>v.id===id)||null}
+  function nomeArquivoCertV572(x){return `Atestado-${String(x.nome||'visitante').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'')}.png`}
+  function dataUrlParaBlobV572(dataUrl){
+    const partes=dataUrl.split(','), mime=(partes[0].match(/data:([^;]+)/)||[])[1]||'image/png';
+    const bin=atob(partes[1]), arr=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i); return new Blob([arr],{type:mime});
+  }
+  function carregarImagemV572(src){
+    return new Promise((resolve,reject)=>{
+      const img=new Image();
+      img.onload=()=>resolve(img);
+      img.onerror=()=>reject(new Error(`Não foi possível carregar ${src}`));
+      img.src=new URL(src,document.baseURI).href;
+    });
+  }
+  async function gerarCanvasCertificadoV572(x){
+    if(!x?.id) throw new Error('Salve o visitante antes de emitir o atestado.');
+    garantirNumeroCertificadoV53(x);
+    const atual=visitantePorIdV572(x.id)||x;
+    const s=getSessoes().find(z=>z.id===atual.sessaoId);
+    if(!s) throw new Error('A sessão vinculada ao visitante não foi localizada.');
+    const canvas=document.createElement('canvas'); canvas.width=1024; canvas.height=1536;
+    const c=canvas.getContext('2d',{alpha:false}); if(!c) throw new Error('O dispositivo não conseguiu iniciar o gerador do certificado.');
+    const [bg,header,sig]=await Promise.all([carregarImagemV572('certificado-fundo.png'),carregarImagemV572('cabecalho-oficial.jpg'),carregarImagemV572('assinatura-chanceler.png')]);
+    c.drawImage(bg,0,0,1024,1536);
+    const grd=c.createLinearGradient(0,285,0,1130);grd.addColorStop(0,'rgba(4,13,25,.08)');grd.addColorStop(.2,'rgba(3,12,24,.48)');grd.addColorStop(.82,'rgba(3,12,24,.56)');grd.addColorStop(1,'rgba(3,12,24,.10)');c.fillStyle=grd;c.fillRect(82,276,860,880);
+    const hw=842,hh=hw*(header.height/header.width),hx=(1024-hw)/2,hy=45;arredondarRetV55(c,hx-10,hy-9,hw+20,hh+18,14,'rgba(255,253,248,.97)','rgba(201,168,76,.9)');c.drawImage(header,hx,hy,hw,hh);
+    textoCentroV55(c,'Jurisdicionada ao GOB-MS',hy+hh+30,'700 17px Arial, sans-serif','#e7bd4d');
+    textoCentroV55(c,'ATESTADO DE',352,'700 48px Georgia, serif','#e8c35b');textoCentroV55(c,'FREQUÊNCIA MAÇÔNICA',410,'700 54px Georgia, serif','#e8c35b');linhaCentroV55(c,444,560);
+    textoCentroV55(c,'Atestamos, para os fins maçônicos cabíveis, que o Irmão',510,'25px Georgia, serif','#f6f1e8');textoCentroAjustadoV55(c,atual.nome,566,44,'400','italic','#e7bd4d',760);
+    textoCentroV55(c,`${atual.cim?'CIM '+atual.cim+' · ':''}${grauNome(atual.grau)||grauSimbolo(atual.grau)}`,610,'24px Georgia, serif','#f6f1e8');
+    textoCentroAjustadoV55(c,`pertencente à ${atual.loja}${atual.numero?' nº '+atual.numero:''},`,660,26,'400','','#f6f1e8',790);textoCentroAjustadoV55(c,`Oriente de ${atual.oriente}, esteve presente aos trabalhos da`,704,25,'400','','#f6f1e8',790);
+    textoCentroV55(c,'A∴R∴L∴S∴ Razão e Força nº 1997',751,'700 27px Georgia, serif','#e7bd4d');textoCentroV55(c,`em ${brData(s.data)}, na`,798,'25px Georgia, serif','#f6f1e8');textoCentroAjustadoV55(c,nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),844,28,'700','','#e7bd4d',780);linhaCentroV55(c,880,390);
+    textoCentroV55(c,`Porto Murtinho/MS, ${brData(hojeISO())}.`,925,'23px Georgia, serif','#f6f1e8');
+    const maxW=380,maxH=120,scale=Math.min(maxW/sig.width,maxH/sig.height),sw=sig.width*scale,sh=sig.height*scale;c.drawImage(sig,(1024-sw)/2,952,sw,sh);
+    textoCentroV55(c,'Chanceler',1085,'700 23px Georgia, serif','#e7bd4d');textoCentroV55(c,'A∴R∴L∴S∴ Razão e Força nº 1997',1118,'21px Georgia, serif','#f6f1e8');textoCentroV55(c,'Federada ao GOB · Jurisdicionada ao GOB-MS',1147,'15px Arial, sans-serif','#d5bd77');
+    textoCentroV55(c,`Atestado nº ${atual.certNumero||garantirNumeroCertificadoV53(atual)}`,1173,'17px Arial, sans-serif','#d5bd77');desenharBandeirasCertificadoV55(c,1280);
+    textoCentroV55(c,'ARGENTINA   ·   PARAGUAI   ·   BRASIL   ·   BOLÍVIA   ·   CHILE',1392,'700 15px Georgia, serif','#e7bd4d');textoCentroV55(c,'Documento expedido pela Chancelaria · presença vinculada à sessão registrada.',1450,'16px Georgia, serif','#e7dccf');
+    return {canvas,atual,s};
+  }
+
+  function garantirModalV572(){
+    let m=document.getElementById('modalCertificadoImagemV572'); if(m)return m;
+    document.body.insertAdjacentHTML('beforeend',`<div class="modal-back certificate-image-modal" id="modalCertificadoImagemV572" role="dialog" aria-modal="true"><div class="modal"><div class="modal-head"><span>Atestado de frequência maçônica</span><button class="modal-close" onclick="fecharModal('modalCertificadoImagemV572')">×</button></div><div class="modal-body"><img id="certificadoImagemV572" alt="Atestado de frequência maçônica"><div id="certificadoNotaV572" class="v572-cert-note"></div><div class="v572-cert-actions"><button class="btn btn-success" onclick="enviarCertificadoVisitanteV572(window.__certVisitanteV572||'')">Enviar certificado</button><button class="btn btn-outline" onclick="abrirWhatsAppVisitanteV55(window.__certVisitanteV572||'')">Abrir WhatsApp</button></div></div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalCertificadoImagemV572')">Fechar</button></div></div></div>`);return document.getElementById('modalCertificadoImagemV572');
+  }
+
+  window.certificadoVisitanteV5=async function(id=''){
+    const x=id?visitantePorIdV572(id):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Selecione um visitante já salvo');return}
+    try{
+      toast('Gerando certificado...');
+      const {canvas,atual}=await gerarCanvasCertificadoV572(x);
+      const dataUrl=canvas.toDataURL('image/png',0.96);
+      if(!dataUrl||dataUrl.length<1000)throw new Error('A imagem do certificado não pôde ser criada.');
+      garantirModalV572();
+      const img=document.getElementById('certificadoImagemV572');img.src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=atual.id;
+      document.getElementById('certificadoNotaV572').textContent=`Atestado pronto${atual.telefone?' · WhatsApp '+atual.telefone:' · cadastre o telefone para facilitar o envio'}.`;
+      abrirModal('modalCertificadoImagemV572');
+    }catch(e){console.error('certificado V5.7.2',e);toast(e?.message||'Não foi possível abrir o certificado')}
+  };
+
+  window.enviarCertificadoVisitanteV572=async function(id=''){
+    const x=id?visitantePorIdV572(id):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Selecione um visitante já salvo');return}
+    try{
+      let dataUrl=(window.__certVisitanteV572===x.id)?window.__certDataUrlV572:'';
+      if(!dataUrl){const out=await gerarCanvasCertificadoV572(x);dataUrl=out.canvas.toDataURL('image/png',0.96)}
+      const blob=dataUrlParaBlobV572(dataUrl), file=new File([blob],nomeArquivoCertV572(x),{type:'image/png'});
+      if(navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
+        iniciarAcaoExterna();try{await navigator.share({title:'Atestado de frequência maçônica',text:`Atestado de frequência maçônica — ${x.nome} — A∴R∴L∴S∴ Razão e Força nº 1997.`,files:[file]});}finally{finalizarAcaoExterna()}return;
+      }
+      // WebView sem Web Share API: abre a imagem e mantém o WhatsApp como segundo passo.
+      garantirModalV572();document.getElementById('certificadoImagemV572').src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=x.id;abrirModal('modalCertificadoImagemV572');
+      toast('O Android não liberou o compartilhamento direto. A imagem está aberta; use “Abrir WhatsApp”.');
+    }catch(e){finalizarAcaoExterna();console.error('envio certificado V5.7.2',e);toast(e?.message||'Não foi possível enviar o certificado')}
+  };
+  window.compartilharCertificadoVisitanteV5=window.enviarCertificadoVisitanteV572;
+
+  window.renderVisitantesV5=function(){
+    const arr=getVisitantesV5().slice().sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+    v5VisLista.innerHTML=arr.length?arr.map(x=>{const s=getSessoes().find(z=>z.id===x.sessaoId),tel=x.telefone?`<br>WhatsApp: ${h(x.telefone)}`:'';return `<div class="list-item"><div class="avatar">${h(iniciais(x.nome))}</div><div class="item-main"><div class="item-title">${h(x.nome)}</div><div class="item-sub">${h(x.loja)}${x.numero?' nº '+h(x.numero):''} · ${h(x.oriente)}${s?' · '+brData(s.data)+' · '+h(nomeSessaoDocumento(s)):''}${tel}<br>Identificação: ${h(x.identificacao||'não informada')}</div></div><div class="item-side"><button class="btn btn-primary btn-sm" onclick="certificadoVisitanteV5('${x.id}')">Abrir certificado</button><button class="btn btn-success btn-sm" onclick="enviarCertificadoVisitanteV572('${x.id}')">Enviar certificado</button>${x.telefone?`<button class="btn btn-outline btn-sm" onclick="abrirWhatsAppVisitanteV55('${x.id}')">WhatsApp</button>`:''}<button class="btn btn-light btn-sm" onclick="editarVisitanteV5('${x.id}')">Editar</button><button class="btn btn-danger btn-sm" onclick="excluirVisitanteV5('${x.id}')">Excluir</button></div></div>`}).join(''):'<div class="empty"><p>Nenhum visitante registrado.</p></div>';
+  };
+})();
+</script>
 </body>
 </html>
