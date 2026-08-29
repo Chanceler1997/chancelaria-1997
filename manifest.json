@@ -1,15 +1,15 @@
 {
-  "name": "Chancelaria 1997 — Conformidade GOB/GOB-MS",
+  "name": "Chancelaria 1997 · Razão e Força",
   "short_name": "Chancelaria 1997",
-  "description": "Chancelaria 1997 — gestão de presença, visitantes e conformidade administrativa da A.R.L.S. Razão e Força nº 1997, federada ao GOB e jurisdicionada ao GOB-MS.",
+  "description": "Sistema privativo de gestão da Chancelaria da A.R.L.S. Razão e Força nº 1997.",
   "lang": "pt-BR",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0b1729",
-  "theme_color": "#0b1729",
+  "background_color": "#0a1424",
+  "theme_color": "#152541",
   "icons": [
     {
       "src": "icon-192.png",

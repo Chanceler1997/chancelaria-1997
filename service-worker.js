@@ -1,17 +1,14 @@
-const CACHE_NAME = "chancelaria-1997-v580-visitantes-historico-certificado";
+const CACHE_NAME = "chancelaria-1997-v582-certificado-producao-unico";
 const APP_FILES = [
   "./",
   "./index.html",
   "./print.html",
   "./manifest.json",
   "./cabecalho-oficial.jpg",
-  "./assinatura-chanceler.png",
-  "./certificado-fundo.png",
-  "./certificado-modelo-oficial.png",
-  "./certificado-base-v58.png",
-  "./certificado-modelo-aprovado-referencia.png",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./certificado-base-v58.png",
+  "./assinatura-chanceler.png"
 ];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES)));
