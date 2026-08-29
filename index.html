@@ -505,6 +505,17 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
 .report-preview-page.certificate-document .report-preview-footer{font-family:Georgia,"Times New Roman",serif;text-align:center;font-size:7.5pt;color:#666;border-top:1px solid rgba(201,168,76,.55)}
 @media(max-width:430px){.quick-actions-hero{padding:9px}.compact-brand b{font-size:14px}.compact-brand small{font-size:10px}.header-actions{gap:6px!important}.nav-symbol svg{width:20px!important;height:20px!important}}
 
+
+/* V5.5 — certificado em imagem e contato do visitante */
+.visitor-actions-v55{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.visitor-actions-v55 .btn{width:100%;min-height:44px}
+.certificate-image-modal .modal{max-width:620px;background:#0c1728;border:1px solid rgba(201,168,76,.45)}
+.certificate-image-modal .modal-head{color:#f4d77a;background:#101f35;border-bottom:1px solid rgba(201,168,76,.35)}
+.certificate-image-preview{display:block;width:100%;height:auto;max-height:68vh;object-fit:contain;margin:0 auto;border-radius:10px;border:1px solid rgba(201,168,76,.35);background:#07111f;box-shadow:0 12px 32px rgba(0,0,0,.34)}
+.certificate-image-note{font-size:11px;line-height:1.45;color:#b9c3d0;margin-top:10px;text-align:center}
+.certificate-image-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+@media(max-width:430px){.visitor-actions-v55,.certificate-image-actions{grid-template-columns:1fr}.certificate-image-modal .modal-body{padding:10px}}
+
 </style>
 </head>
 <body class="app-locked">
@@ -1000,9 +1011,9 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
     <input type="hidden" id="v5VisId"><div class="row"><div class="field"><label>Sessão</label><select id="v5VisSessao"></select></div><div class="field"><label>Nome completo</label><input id="v5VisNome"></div></div>
     <div class="row"><div class="field"><label>CIM</label><input id="v5VisCim"></div><div class="field"><label>Grau</label><select id="v5VisGrau"><option value="A">Aprendiz</option><option value="C">Companheiro</option><option value="M">Mestre</option><option value="MI">Mestre Instalado</option></select></div></div>
     <div class="row"><div class="field"><label>Loja de origem</label><input id="v5VisLoja"></div><div class="field"><label>Número</label><input id="v5VisNumero"></div></div>
-    <div class="row"><div class="field"><label>Oriente</label><input id="v5VisOriente"></div><div class="field"><label>Identificação</label><select id="v5VisIdent"><option value="">Selecione</option><option value="credencial">Credencial</option><option value="exame">Exame de praxe</option><option value="apresentacao">Apresentado por membro do Quadro</option></select></div></div>
-    <div class="field"><label>Apresentado por / observação</label><input id="v5VisObs"></div>
-    <div class="toolbar"><button class="btn btn-primary" onclick="salvarVisitanteV5()">Salvar visitante</button><button class="btn btn-light" onclick="certificadoVisitanteV5()">Visualizar certificado</button><button class="btn btn-success" onclick="compartilharCertificadoVisitanteV5()">Compartilhar certificado</button></div>
+    <div class="row"><div class="field"><label>Oriente</label><input id="v5VisOriente"></div><div class="field"><label>Telefone / WhatsApp</label><input id="v5VisTelefone" inputmode="tel" autocomplete="tel" placeholder="(67) 99999-9999"></div></div>
+    <div class="row"><div class="field"><label>Identificação</label><select id="v5VisIdent"><option value="">Selecione</option><option value="credencial">Credencial</option><option value="exame">Exame de praxe</option><option value="apresentacao">Apresentado por membro do Quadro</option></select></div><div class="field"><label>Apresentado por / observação</label><input id="v5VisObs"></div></div>
+    <div class="toolbar visitor-actions-v55"><button class="btn btn-primary" onclick="salvarVisitanteV5()">Salvar visitante</button><button class="btn btn-light" onclick="certificadoVisitanteV5()">Pré-visualizar imagem</button><button class="btn btn-success" onclick="compartilharCertificadoVisitanteV5()">Compartilhar imagem</button><button class="btn btn-outline" onclick="abrirWhatsAppVisitanteV55()">Abrir WhatsApp</button></div>
     <div class="divider"></div><div id="v5VisLista"></div>
   </div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalVisitantesV5')">Fechar</button></div></div>
 </div>
@@ -2796,7 +2807,94 @@ abrirConsultaSessao=function(id){_abrirConsultaSessaoV4(id);const s=getSessoes()
 function v5SessoesArt76(i,inicio,fim){return getSessoes().filter(s=>s.data&&s.data>=inicio&&s.data<=fim&&s.data<=hojeISO()&&contaParaIrmao(i,s))}
 function v5ResumoNormativoSessao(s){const x=v5LegacySession(s);return {classe:V5_SESSOES[x.tipo]?.label||x.tipo,modalidade:v5ModalidadeNome(x),grau:grauSimbolo(x.grauSessao),status:x.status}}
 // Marca de versão para diagnóstico e backup.
-window.CHANCELARIA_VERSION='5.4.0-fluida-classica';
+
+/* ============================================================
+   V5.5.0 — VISITANTES + CERTIFICADO EM IMAGEM PARA WHATSAPP
+   Fundo oficial escolhido pelo usuário; cabeçalho original preservado.
+   ============================================================ */
+function normalizarTelefoneVisitanteV55(v){return String(v||'').replace(/[^0-9+]/g,'').trim()}
+
+function abrirVisitantesV55AposBase(sessaoId=''){
+  const ss=sessoesRealizadasV5();v5VisSessao.innerHTML=ss.map(s=>`<option value="${s.id}">${brData(s.data)} · ${h(nomeSessaoDocumento(s))}${s.numero?' · '+h(s.numero):''}</option>`).join('');
+  if(sessaoId&&ss.some(s=>s.id===sessaoId))v5VisSessao.value=sessaoId;
+  v5VisId.value='';['v5VisNome','v5VisCim','v5VisLoja','v5VisNumero','v5VisOriente','v5VisTelefone','v5VisObs'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});v5VisGrau.value='M';v5VisIdent.value='';renderVisitantesV5();abrirModal('modalVisitantesV5')
+}
+abrirVisitantesV5=abrirVisitantesV55AposBase;
+
+salvarVisitanteV5=function(){
+  if(!v5VisSessao.value){toast('Cadastre uma sessão realizada');return}
+  if(!v5VisNome.value.trim()){toast('Informe o nome do visitante');return}
+  if(!v5VisLoja.value.trim()||!v5VisOriente.value.trim()){toast('Informe Loja e Oriente de origem');return}
+  if(!v5VisIdent.value){toast('Informe como o visitante foi identificado');return}
+  if(v5VisIdent.value==='apresentacao'&&!v5VisObs.value.trim()){toast('Informe por qual membro do Quadro o visitante foi apresentado');return}
+  const telefone=normalizarTelefoneVisitanteV55(v5VisTelefone.value);
+  if(telefone&&numeroWhatsApp(telefone)===''){toast('Confira o telefone/WhatsApp informado');return}
+  const arr=getVisitantesV5(),id=v5VisId.value||uid(),old=arr.find(x=>x.id===id)||null;
+  const obj={...(old||{}),id,sessaoId:v5VisSessao.value,nome:v5VisNome.value.trim(),cim:v5VisCim.value.trim(),grau:v5VisGrau.value,loja:v5VisLoja.value.trim(),numero:v5VisNumero.value.trim(),oriente:v5VisOriente.value.trim(),telefone,identificacao:v5VisIdent.value,obs:v5VisObs.value.trim(),createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
+  const ix=arr.findIndex(x=>x.id===id);if(ix>=0)arr[ix]=obj;else arr.push(obj);setVisitantesV5(arr);
+  auditV53(ix>=0?'Visitante atualizado':'Visitante registrado',`${obj.nome} · ${obj.loja} · ${obj.oriente}`,old,obj,'registro de visitante');
+  v5VisId.value='';v5VisNome.value='';v5VisCim.value='';v5VisTelefone.value='';renderVisitantesV5();toast(ix>=0?'Visitante atualizado':'Visitante registrado')
+};
+
+renderVisitantesV5=function(){
+  const arr=getVisitantesV5().slice().sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+  v5VisLista.innerHTML=arr.length?arr.map(x=>{const s=getSessoes().find(z=>z.id===x.sessaoId),tel=x.telefone?`<br>WhatsApp: ${h(x.telefone)}`:'';return `<div class="list-item"><div class="avatar">${h(iniciais(x.nome))}</div><div class="item-main"><div class="item-title">${h(x.nome)}</div><div class="item-sub">${h(x.loja)}${x.numero?' nº '+h(x.numero):''} · ${h(x.oriente)}${s?' · '+brData(s.data):''}${tel}<br>Identificação: ${h(x.identificacao||'não informada')}</div></div><div class="item-side"><button class="btn btn-success btn-sm" onclick="compartilharCertificadoVisitanteV5('${x.id}')">Imagem</button>${x.telefone?`<button class="btn btn-outline btn-sm" onclick="abrirWhatsAppVisitanteV55('${x.id}')">WhatsApp</button>`:''}<button class="btn btn-light btn-sm" onclick="editarVisitanteV5('${x.id}')">Editar</button><button class="btn btn-danger btn-sm" onclick="excluirVisitanteV5('${x.id}')">Excluir</button></div></div>`}).join(''):'<div class="empty"><p>Nenhum visitante registrado.</p></div>'
+};
+
+editarVisitanteV5=function(id){const x=getVisitantesV5().find(z=>z.id===id);if(!x)return;v5VisId.value=id;v5VisSessao.value=x.sessaoId;v5VisNome.value=x.nome;v5VisCim.value=x.cim||'';v5VisGrau.value=x.grau||'M';v5VisLoja.value=x.loja||'';v5VisNumero.value=x.numero||'';v5VisOriente.value=x.oriente||'';v5VisTelefone.value=x.telefone||'';v5VisIdent.value=x.identificacao||'';v5VisObs.value=x.obs||''};
+
+visitanteCertificadoAtual=function(id=''){let x=id?getVisitantesV5().find(z=>z.id===id):null;const editId=v5VisId.value;if(!x&&editId)x=getVisitantesV5().find(z=>z.id===editId);if(!x&&v5VisNome.value.trim())x={nome:v5VisNome.value.trim(),cim:v5VisCim.value.trim(),grau:v5VisGrau.value,loja:v5VisLoja.value.trim(),numero:v5VisNumero.value.trim(),oriente:v5VisOriente.value.trim(),telefone:v5VisTelefone.value.trim(),sessaoId:v5VisSessao.value};return x};
+
+function carregarImagemV55(src){return new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src=src})}
+function arredondarRetV55(c,x,y,w,h,r,fill,stroke){c.beginPath();if(typeof c.roundRect==='function')c.roundRect(x,y,w,h,r);else{c.moveTo(x+r,y);c.lineTo(x+w-r,y);c.quadraticCurveTo(x+w,y,x+w,y+r);c.lineTo(x+w,y+h-r);c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);c.lineTo(x+r,y+h);c.quadraticCurveTo(x,y+h,x,y+h-r);c.lineTo(x,y+r);c.quadraticCurveTo(x,y,x+r,y)}if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.stroke()}}
+function estrelaV55(c,cx,cy,r1,r2,n=5){c.beginPath();for(let i=0;i<n*2;i++){const a=-Math.PI/2+i*Math.PI/n,r=i%2? r2:r1,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;i?c.lineTo(x,y):c.moveTo(x,y)}c.closePath();c.fill()}
+function bandeiraArgentinaV55(c,x,y,w,h){c.fillStyle='#75AADB';c.fillRect(x,y,w,h/3);c.fillRect(x,y+h*2/3,w,h/3);c.fillStyle='#fff';c.fillRect(x,y+h/3,w,h/3);c.fillStyle='#F6B40E';c.beginPath();c.arc(x+w/2,y+h/2,h*.11,0,Math.PI*2);c.fill()}
+function bandeiraParaguaiV55(c,x,y,w,h){c.fillStyle='#D52B1E';c.fillRect(x,y,w,h/3);c.fillStyle='#fff';c.fillRect(x,y+h/3,w,h/3);c.fillStyle='#0038A8';c.fillRect(x,y+h*2/3,w,h/3);c.strokeStyle='#2E7D32';c.lineWidth=2;c.beginPath();c.arc(x+w/2,y+h/2,h*.10,0,Math.PI*2);c.stroke();c.fillStyle='#D52B1E';c.beginPath();c.arc(x+w/2,y+h/2,h*.045,0,Math.PI*2);c.fill()}
+function bandeiraBrasilV55(c,x,y,w,h){c.fillStyle='#009739';c.fillRect(x,y,w,h);c.fillStyle='#FFDF00';c.beginPath();c.moveTo(x+w/2,y+h*.12);c.lineTo(x+w*.88,y+h/2);c.lineTo(x+w/2,y+h*.88);c.lineTo(x+w*.12,y+h/2);c.closePath();c.fill();c.fillStyle='#012169';c.beginPath();c.arc(x+w/2,y+h/2,h*.22,0,Math.PI*2);c.fill();c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.arc(x+w/2,y+h*.54,h*.16,Math.PI*1.12,Math.PI*1.85);c.stroke()}
+function bandeiraBoliviaV55(c,x,y,w,h){c.fillStyle='#D52B1E';c.fillRect(x,y,w,h/3);c.fillStyle='#F9E300';c.fillRect(x,y+h/3,w,h/3);c.fillStyle='#007934';c.fillRect(x,y+h*2/3,w,h/3);c.fillStyle='#7A5B2E';c.beginPath();c.arc(x+w/2,y+h/2,h*.065,0,Math.PI*2);c.fill()}
+function bandeiraChileV55(c,x,y,w,h){c.fillStyle='#fff';c.fillRect(x,y,w,h/2);c.fillStyle='#D52B1E';c.fillRect(x,y+h/2,w,h/2);c.fillStyle='#0039A6';c.fillRect(x,y,w*.34,h/2);c.fillStyle='#fff';estrelaV55(c,x+w*.17,y+h*.25,h*.13,h*.052,5)}
+function desenharBandeirasCertificadoV55(c,y){const w=145,h=86,gap=18,total=w*5+gap*4,x0=(1024-total)/2,draw=[bandeiraArgentinaV55,bandeiraParaguaiV55,bandeiraBrasilV55,bandeiraBoliviaV55,bandeiraChileV55];draw.forEach((fn,i)=>{const x=x0+i*(w+gap);c.save();c.shadowColor='rgba(0,0,0,.55)';c.shadowBlur=10;c.shadowOffsetY=5;fn(c,x,y,w,h);c.restore();c.strokeStyle='#c9a84c';c.lineWidth=2;c.strokeRect(x,y,w,h)})}
+function textoCentroV55(c,text,y,font,color='#f7f1e6'){c.textAlign='center';c.font=font;c.fillStyle=color;c.fillText(text,512,y)}
+function textoCentroAjustadoV55(c,text,y,fontPx=30,weight='400',style='',color='#f7f1e6',maxW=790){let px=fontPx;do{c.font=`${style?style+' ':''}${weight} ${px}px Georgia, serif`;px-=1}while(px>17&&c.measureText(text).width>maxW);c.fillStyle=color;c.textAlign='center';c.fillText(text,512,y)}
+function linhaCentroV55(c,y,w=440){c.strokeStyle='rgba(228,199,116,.82)';c.lineWidth=1.6;c.beginPath();c.moveTo(512-w/2,y);c.lineTo(512+w/2,y);c.stroke()}
+
+async function gerarImagemCertificadoVisitanteV5(x){
+  if(!x?.id)throw new Error('Salve o visitante antes de emitir o certificado.');
+  garantirNumeroCertificadoV53(x);const atual=getVisitantesV5().find(v=>v.id===x.id)||x,s=getSessoes().find(z=>z.id===atual.sessaoId);if(!s)throw new Error('Sessão não localizada.');
+  const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=1536;const c=canvas.getContext('2d');
+  const bg=await carregarImagemV55('certificado-fundo.png');c.drawImage(bg,0,0,1024,1536);
+  // véu central para leitura, preservando a ponte e a moldura originais
+  const grd=c.createLinearGradient(0,285,0,1130);grd.addColorStop(0,'rgba(4,13,25,.08)');grd.addColorStop(.2,'rgba(3,12,24,.48)');grd.addColorStop(.82,'rgba(3,12,24,.56)');grd.addColorStop(1,'rgba(3,12,24,.10)');c.fillStyle=grd;c.fillRect(82,276,860,880);
+  const header=await carregarImagemV55('cabecalho-oficial.jpg');const hw=842,hh=hw*(header.height/header.width),hx=(1024-hw)/2,hy=58;c.fillStyle='rgba(255,253,248,.96)';arredondarRetV55(c,hx-10,hy-9,hw+20,hh+18,14,'rgba(255,253,248,.97)','rgba(201,168,76,.9)');c.drawImage(header,hx,hy,hw,hh);
+  textoCentroV55(c,'ATESTADO DE',352,'700 48px Georgia, serif','#e8c35b');textoCentroV55(c,'FREQUÊNCIA MAÇÔNICA',410,'700 54px Georgia, serif','#e8c35b');linhaCentroV55(c,444,560);
+  textoCentroV55(c,'Atestamos, para os fins maçônicos cabíveis, que o Irmão',510,'25px Georgia, serif','#f6f1e8');
+  textoCentroAjustadoV55(c,atual.nome,566,44,'400','italic','#e7bd4d',760);
+  textoCentroV55(c,`${atual.cim?'CIM '+atual.cim+' · ':''}${grauNome(atual.grau)||grauSimbolo(atual.grau)}`,610,'24px Georgia, serif','#f6f1e8');
+  textoCentroAjustadoV55(c,`pertencente à ${atual.loja}${atual.numero?' nº '+atual.numero:''},`,660,26,'400','','#f6f1e8',790);
+  textoCentroAjustadoV55(c,`Oriente de ${atual.oriente}, esteve presente aos trabalhos da`,704,25,'400','','#f6f1e8',790);
+  textoCentroV55(c,'A∴R∴L∴S∴ Razão e Força nº 1997',751,'700 27px Georgia, serif','#e7bd4d');
+  textoCentroV55(c,`em ${brData(s.data)}, na`,798,'25px Georgia, serif','#f6f1e8');
+  textoCentroAjustadoV55(c,nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),844,28,'700','','#e7bd4d',780);
+  linhaCentroV55(c,880,390);
+  textoCentroV55(c,`Porto Murtinho/MS, ${brData(hojeISO())}.`,925,'23px Georgia, serif','#f6f1e8');
+  const sig=await carregarImagemV55('assinatura-chanceler.png');const maxW=380,maxH=120,scale=Math.min(maxW/sig.width,maxH/sig.height),sw=sig.width*scale,sh=sig.height*scale;c.drawImage(sig,(1024-sw)/2,952,sw,sh);
+  textoCentroV55(c,'Chanceler',1085,'700 23px Georgia, serif','#e7bd4d');textoCentroV55(c,'A∴R∴L∴S∴ Razão e Força nº 1997',1118,'21px Georgia, serif','#f6f1e8');
+  textoCentroV55(c,`Atestado nº ${atual.certNumero||garantirNumeroCertificadoV53(atual)}`,1160,'18px Arial, sans-serif','#d5bd77');
+  desenharBandeirasCertificadoV55(c,1280);
+  textoCentroV55(c,'ARGENTINA   ·   PARAGUAI   ·   BRASIL   ·   BOLÍVIA   ·   CHILE',1392,'700 15px Georgia, serif','#e7bd4d');
+  textoCentroV55(c,'Documento expedido pela Chancelaria · presença vinculada à sessão registrada.',1450,'16px Georgia, serif','#e7dccf');
+  return new Promise(resolve=>canvas.toBlob(resolve,'image/png',0.98))
+}
+
+function garantirModalCertificadoImagemV55(){if(document.getElementById('modalCertificadoImagemV55'))return;document.body.insertAdjacentHTML('beforeend',`<div class="modal-back certificate-image-modal" id="modalCertificadoImagemV55" role="dialog" aria-modal="true"><div class="modal"><div class="modal-head"><span>Atestado de frequência maçônica</span><button class="modal-close" onclick="fecharModal('modalCertificadoImagemV55')">×</button></div><div class="modal-body"><img id="certificadoImagemV55" class="certificate-image-preview" alt="Pré-visualização do atestado"><div id="certificadoImagemNotaV55" class="certificate-image-note"></div><div class="certificate-image-actions"><button class="btn btn-success" onclick="compartilharCertificadoVisitanteV5(window.__certVisitanteV55||'')">Compartilhar imagem</button><button class="btn btn-outline" onclick="abrirWhatsAppVisitanteV55(window.__certVisitanteV55||'')">Abrir WhatsApp</button></div></div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalCertificadoImagemV55')">Fechar</button></div></div></div>`)}
+async function certificadoVisitanteV5(id=''){const x=visitanteCertificadoAtual(id);if(!x){toast('Selecione um visitante');return}if(!x.id){toast('Salve o visitante antes de emitir o atestado');return}try{const blob=await gerarImagemCertificadoVisitanteV5(x);garantirModalCertificadoImagemV55();const img=document.getElementById('certificadoImagemV55');if(img.dataset.url)URL.revokeObjectURL(img.dataset.url);const url=URL.createObjectURL(blob);img.src=url;img.dataset.url=url;window.__certVisitanteV55=x.id;const tel=x.telefone?` · WhatsApp ${x.telefone}`:' · telefone ainda não cadastrado';document.getElementById('certificadoImagemNotaV55').textContent=`Imagem pronta para compartilhamento${tel}.`;abrirModal('modalCertificadoImagemV55')}catch(e){toast(e.message||'Não foi possível gerar o atestado')}}
+
+async function compartilharCertificadoVisitanteV5(id=''){const x=visitanteCertificadoAtual(id);if(!x||!x.id){toast('Salve o visitante antes de compartilhar');return}try{const blob=await gerarImagemCertificadoVisitanteV5(x);if(!blob)throw new Error('Não foi possível gerar a imagem.');const nome=`Atestado-${String(x.nome).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-')}.png`,file=new File([blob],nome,{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){iniciarAcaoExterna();try{await navigator.share({title:'Atestado de frequência maçônica',files:[file]})}finally{finalizarAcaoExterna()}return}const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nome;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Imagem salva. Use Abrir WhatsApp para enviar ao visitante.')}catch(e){finalizarAcaoExterna();toast(e.message||'Não foi possível compartilhar a imagem')}}
+
+function abrirWhatsAppVisitanteV55(id=''){const x=id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();if(!x){toast('Selecione um visitante');return}const numero=numeroWhatsApp(x.telefone||'');if(!numero){toast('Cadastre o telefone/WhatsApp do visitante');return}const appUrl=`whatsapp://send?phone=${numero}`,webUrl=`https://wa.me/${numero}`;if(enviarAcaoNativa('T',appUrl)){toast(`Abrindo WhatsApp de ${primeiroNome(x.nome)}`);return}iniciarAcaoExterna();window.location.href=webUrl}
+
+window.CHANCELARIA_VERSION='5.5.0-certificado-imagem';
+
 
 
 
@@ -2921,7 +3019,7 @@ abrirProcessoFrequencia=function(id){_abrirProcV50(id);const p=processoModalAtua
 function salvarEtapaExtraV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(p.notificacao?.prazo&&hojeISO()<=p.notificacao.prazo&&!confirm('O prazo de 30 dias ainda não terminou. Salvar mesmo assim?'))return;const ex={leituraRelatorio:procLeituraRelatorio.value,dataSessao:procExtraSessao.value,notificacao:procExtraNotif.value,recebimento:procExtraReceb.value,prova:procExtraProva.value.trim(),manifestacao:procExtraManifest.value==='1',ata:procExtraAta.value.trim()};if(ex.dataSessao&&(!ex.leituraRelatorio||!ex.recebimento||!ex.prova)){toast('Informe leitura do relatório, recebimento e prova da notificação');return}if(ex.dataSessao&&ex.recebimento){const dif=Math.floor((new Date(ex.dataSessao)-new Date(ex.recebimento))/86400000);if(dif<15&&!confirm('A antecedência registrada é inferior a 15 dias. Deseja manter o registro para correção/documentação?'))return}const res=procDecisaoResultadoV51.value,dec={data:procDecisaoDataV51.value,suspensao:res==='suspensao',resultado:res,ata:procDecisaoAtaV51.value.trim()};if(res&&(!dec.data||!dec.ata)){toast('Informe data e referência da decisão');return}p.extraordinaria=ex;p.decisao=dec;salvarProcessoObjeto(p);audit('Etapa extraordinária registrada',`${i.nome}${ex.dataSessao?' · sessão '+brData(ex.dataSessao):''}${res?' · '+res:''}`);renderProcessoFrequencia();toast('Sessão extraordinária e decisão registradas')}
 function salvarComunicacoesV51(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);if(!p||!i)return;if(!p.decisao?.suspensao){toast('As comunicações de 72 horas são exigidas aqui quando houver suspensão declarada registrada');return}const c={irmaoData:procComIrmaoData.value,irmaoProva:procComIrmaoProva.value.trim(),guardaData:procComGuardaData.value,guardaProtocolo:procComGuardaProt.value.trim()};if(!c.irmaoData||!c.irmaoProva||!c.guardaData||!c.guardaProtocolo){toast('Preencha as duas comunicações e respectivas provas');return}const base=p.decisao.data;if(base){const limite=somarDiasISO(base,3);if((c.irmaoData>limite||c.guardaData>limite)&&!confirm('Uma comunicação está além de 72 horas da decisão registrada. Manter para documentação?'))return}p.comunicacoes=c;salvarProcessoObjeto(p);audit('Comunicações da suspensão registradas',`${i.nome} · Irmão ${brData(c.irmaoData)} · Guarda dos Selos ${brData(c.guardaData)}`);toast('Comunicações registradas')}
 
-window.CHANCELARIA_VERSION='5.4.0-fluida-classica';
+window.CHANCELARIA_VERSION='5.5.0-certificado-imagem';
 
 
 /* ============================================================
@@ -3017,7 +3115,7 @@ function imprimirRelatorioAnualV53(){const ano=prompt('Ano do relatório anual:'
 // Renderização de sessões com estado, visitantes e total no Templo
 renderSessoes=function(){renderPeriodoRGF();const arr=getSessoes().slice().sort((a,b)=>b.data.localeCompare(a.data));document.getElementById('listaSessoes').innerHTML=arr.length?arr.map(s=>{const r=resumoChamadaSessao(s),fech=s.fechamento?.status==='encerrada',an=s.status==='anulada';return `<div class="list-item session-list-card ${fech?'session-closed':''} ${an?'session-annulled':''}" onclick="abrirConsultaSessao('${s.id}')"><div class="avatar">${an?'×':'◈'}</div><div class="item-main"><div class="item-title">${h(s.numero||descricaoSessao(s))}</div><div class="item-sub">${brData(s.data)} · ${h(descricaoSessao(s))} · ${an?'anulada':fech?'encerrada':h(s.status||'realizada')}</div>${s.retificacao?`<div class="item-sub">${h(s.retificacao.referencia)} · ${h(s.retificacao.motivo)}</div>`:''}</div><div class="session-card-side"><div class="session-card-summary"><span class="badge b-ok">${r.presentesLoja} Quadro</span><span class="badge b-warn">${r.visitantes||0} visitante(s)</span><span class="badge">${r.totalTemplo||r.presentesLoja} no Templo</span></div><span class="session-consult-chip">Consultar ›</span>${!an?`<button class="btn btn-primary btn-sm" type="button" onclick="event.stopPropagation();abrirPresenca('${s.id}')">Chamada</button>`:''}</div></div>`}).join(''):'<div class="empty"><p>Nenhuma sessão cadastrada.</p></div>'}
 
-window.CHANCELARIA_VERSION='5.4.0-fluida-classica';
+window.CHANCELARIA_VERSION='5.5.0-certificado-imagem';
 
 function renderAtual(){migrarV51Normativo();if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
 iniciarSeguranca();

@@ -1,18 +1,20 @@
-CHANCELARIA 1997 — VERSÃO 5.4.0 — FLUIDA E CLÁSSICA
+CHANCELARIA 1997 — VERSÃO 5.5.0
 
 ALTERAÇÕES PRINCIPAIS
-- Removido o cartão informativo de versão da tela inicial para liberar espaço.
-- Navegação por gesto: deslize horizontal entre Início, Irmãos, Sessões, Presença, Datas e Mais.
-- Correção e padronização do alinhamento dos ícones do cabeçalho e da navegação inferior.
-- O temporizador de segurança fica pausado enquanto a Chancelaria está em segundo plano e volta a contar quando o aplicativo retorna à tela.
-- Estado da página e posição de rolagem são preservados durante a navegação.
-- Atestado identifica a sessão pelo grau quando for Ordinária Regular: Sessão Ordinária de Aprendiz, Companheiro ou Mestre.
-- Demais modalidades recebem sua denominação específica conforme o cadastro da sessão.
-- Atestado redesenhado em estilo clássico e institucional, mantendo cabeçalho oficial, selo, azul, dourado e assinatura azul do Chanceler.
-- O app continua sem executar votação eleitoral; mantém apenas qualificação e registro administrativo.
+- Cadastro de visitante agora possui Telefone / WhatsApp.
+- O atestado de visitante passa a ser gerado prioritariamente como imagem PNG, não como PDF.
+- Fundo oficial do atestado: certificado-fundo.png, preservado sem regeneração.
+- Cabeçalho oficial original da Loja preservado em cabecalho-oficial.jpg.
+- Bandeiras no atestado, da esquerda para a direita: Argentina, Paraguai, Brasil, Bolívia e Chile.
+- Nome da sessão usa a descrição documental correta, por exemplo Sessão Ordinária de Mestre.
+- Pré-visualização da imagem dentro do aplicativo.
+- Compartilhamento da imagem pelo compartilhamento nativo do Android, compatível com WhatsApp quando disponível.
+- Botão separado abre diretamente a conversa do WhatsApp do visitante cadastrado.
+- Certificados continuam numerados e auditados.
+- Demais relatórios continuam disponíveis em impressão/PDF.
 
-IMPORTANTE SOBRE SEGUNDO PLANO
-A versão 5.4 deixa de bloquear por inatividade enquanto estiver em segundo plano e preserva a tela ao retornar. O Android, porém, pode encerrar qualquer aplicativo em situações de pouca memória ou por configuração de economia de bateria. Isso não pode ser impedido por HTML/WebView; os dados permanecem protegidos e persistidos.
+OBSERVAÇÃO TÉCNICA
+O navegador/WebView consegue compartilhar a imagem como arquivo pelo menu nativo do Android. O WhatsApp não permite que uma página web pré-selecione simultaneamente um destinatário e anexe automaticamente um arquivo. Por isso, o aplicativo oferece Compartilhar imagem e Abrir WhatsApp do visitante como ações complementares, sem alterar os blocos do Kodular.
 
 ATUALIZAÇÃO
-Substitua todos os arquivos no GitHub. Não desinstale o APK, não limpe os dados e faça backup criptografado antes da atualização.
+Substitua todos os arquivos do pacote no GitHub. Faça backup criptografado antes. Não desinstale o aplicativo e não limpe os dados.
