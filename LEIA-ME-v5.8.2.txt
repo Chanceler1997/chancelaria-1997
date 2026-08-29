@@ -12,3 +12,6 @@ O cabecalho-oficial.jpg permanece porque é utilizado por relatórios/documentos
 
 
 V5.8.3 — certificado: título restaurado, hierarquia vertical corrigida, camada dinâmica transparente e composição alinhada ao modelo aprovado.
+
+
+V5.8.5: PDF direto a partir do canvas aprovado; botão Compartilhar PDF usa compartilhamento nativo Android quando disponível. Corrigida quebra/overlap do título no fallback de impressão.
