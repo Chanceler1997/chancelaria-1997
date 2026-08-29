@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.8.3-certificado-modelo-ideal">
+<meta name="application-version" content="5.8.4-certificado-pdf">
 <style>
 :root{
   --azul:#152541;
@@ -1026,7 +1026,7 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
     <div class="row"><div class="field"><label>Loja de origem</label><input id="v5VisLoja"></div><div class="field"><label>Número</label><input id="v5VisNumero"></div></div>
     <div class="row"><div class="field"><label>Oriente</label><input id="v5VisOriente"></div><div class="field"><label>Telefone / WhatsApp</label><input id="v5VisTelefone" inputmode="tel" autocomplete="tel" placeholder="(67) 99999-9999"></div></div>
     <div class="row"><div class="field"><label>Identificação</label><select id="v5VisIdent"><option value="">Selecione</option><option value="credencial">Credencial</option><option value="exame">Exame de praxe</option><option value="apresentacao">Apresentado por membro do Quadro</option></select></div><div class="field"><label>Apresentado por / observação</label><input id="v5VisObs"></div></div>
-    <div class="toolbar visitor-actions-v55"><button class="btn btn-primary" onclick="salvarVisitanteV5()">Salvar visitante</button><button class="btn btn-light" onclick="certificadoVisitanteV5()">Pré-visualizar imagem</button><button class="btn btn-success" onclick="compartilharCertificadoVisitanteV5()">Compartilhar imagem</button><button class="btn btn-outline" onclick="abrirWhatsAppVisitanteV55()">Abrir WhatsApp</button></div>
+    <div class="toolbar visitor-actions-v55"><button class="btn btn-primary" onclick="salvarVisitanteV5()">Salvar visitante</button><button class="btn btn-success" onclick="certificadoVisitanteV5()">Gerar certificado em PDF</button><button class="btn btn-outline" onclick="abrirWhatsAppVisitanteV55()">Abrir WhatsApp</button></div>
     <div class="divider"></div><div id="v5VisLista"></div>
   </div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalVisitantesV5')">Fechar</button></div></div>
 </div>
@@ -3551,7 +3551,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
         const tel=p.telefone?` · WhatsApp ${h(p.telefone)}`:'';
         const rows=hist.length?hist.map(v=>{
           const s=smap.get(v.sessaoId),num=v.certNumero?` · ${h(v.certNumero)}`:' · certificado ainda não numerado';
-          return `<div class="visitor-visit-row"><div class="visitor-visit-main"><div class="visitor-visit-date">${s?brData(s.data):'Sessão não localizada'}</div><div class="visitor-visit-meta">${s?h(nomeSessaoDocumento(s)):'Registro histórico'}${s?.numero?' · '+h(s.numero):''}${num}<br>Identificação: ${h(v.identificacao||'não informada')}</div></div><div class="visitor-visit-actions"><button class="btn btn-primary btn-sm" onclick="certificadoVisitanteV5('${v.id}')">Abrir certificado</button><button class="btn btn-success btn-sm" onclick="enviarCertificadoVisitanteV572('${v.id}')">Enviar certificado</button><button class="btn btn-light btn-sm" onclick="editarVisitanteV5('${v.id}')">Editar visita</button><button class="btn btn-danger btn-sm" onclick="excluirVisitanteV5('${v.id}')">Excluir visita</button></div></div>`;
+          return `<div class="visitor-visit-row"><div class="visitor-visit-main"><div class="visitor-visit-date">${s?brData(s.data):'Sessão não localizada'}</div><div class="visitor-visit-meta">${s?h(nomeSessaoDocumento(s)):'Registro histórico'}${s?.numero?' · '+h(s.numero):''}${num}<br>Identificação: ${h(v.identificacao||'não informada')}</div></div><div class="visitor-visit-actions"><button class="btn btn-success btn-sm" onclick="certificadoVisitanteV5('${v.id}')">Gerar PDF</button><button class="btn btn-light btn-sm" onclick="editarVisitanteV5('${v.id}')">Editar visita</button><button class="btn btn-danger btn-sm" onclick="excluirVisitanteV5('${v.id}')">Excluir visita</button></div></div>`;
         }).join(''):'<div class="visitor-visit-row"><div class="visitor-visit-meta">Nenhuma visita registrada.</div></div>';
         return `<div class="visitor-profile-card"><div class="visitor-profile-head"><div class="avatar">${h(iniciais(p.nome))}</div><div class="visitor-profile-main"><div class="visitor-profile-title">${h(p.nome)}</div><div class="visitor-profile-sub">${p.cim?'CIM '+h(p.cim)+' · ':''}${h(grauNome(p.grau)||grauSimbolo(p.grau)||'')}<br>${h(p.loja)}${p.numero?' nº '+h(p.numero):''} · ${h(p.oriente)}${tel}<br>${hist.length} visita(s) registrada(s)</div></div><div class="visitor-profile-actions"><button class="btn btn-primary btn-sm" onclick="novaVisitaVisitanteV58('${p.id}')">Registrar nova visita</button>${p.telefone?`<button class="btn btn-outline btn-sm" onclick="abrirWhatsAppVisitanteV55('${hist[0]?.id||''}')">WhatsApp</button>`:''}</div></div><div class="visitor-history"><div class="visitor-history-title">Histórico de visitas e certificados</div>${rows}</div></div>`;
       }).join('')
@@ -3666,6 +3666,49 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   window.compartilharCertificadoVisitanteV5=window.enviarCertificadoVisitanteV572;
 
   renderVisitantesV5();
+})();
+</script>
+
+<script id="v584-certificado-pdf">
+/* V5.8.4 — certificado em PDF A4. Usa o mesmo plano de fundo aprovado e dados dinâmicos por visita. */
+(function(){
+  function payloadCertificadoPDFV584(x){
+    if(!x?.id)throw new Error('Selecione uma visita registrada.');
+    const numero=garantirNumeroCertificadoV53(x);
+    const atual=getVisitantesV5().find(v=>v.id===x.id)||x;
+    const s=getSessoes().find(z=>z.id===atual.sessaoId);
+    if(!s)throw new Error('A sessão vinculada à visita não foi localizada.');
+    return {
+      titulo:'Atestado de frequência maçônica',
+      documentClass:'certificate-art-v584',
+      certificado:{
+        nome:atual.nome||'', cim:atual.cim||'', grau:grauNome(atual.grau)||grauSimbolo(atual.grau)||'',
+        loja:atual.loja||'', numeroLoja:atual.numero||'', oriente:atual.oriente||'',
+        dataSessao:brData(s.data), tipoSessao:nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),
+        dataEmissao:brData(hojeISO()), numeroAtestado:numero
+      },
+      corpo:'', assinatura:'', rodape:''
+    };
+  }
+  function urlCertificadoPDFV584(x,autoPrint=true){
+    const payload=payloadCertificadoPDFV584(x);
+    const url=new URL('print.html',location.href);
+    if(autoPrint)url.searchParams.set('print','1');
+    return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
+  }
+  window.certificadoVisitanteV5=function(id=''){
+    const x=id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Selecione uma visita já registrada');return}
+    try{
+      const url=urlCertificadoPDFV584(x,true);
+      audit('Certificado PDF gerado',`${x.nome} · ${x.certNumero||''}`);
+      if(enviarAcaoNativa('P',url)){toast('Abrindo certificado para salvar ou compartilhar em PDF');return}
+      iniciarAcaoExterna();const w=window.open(url,'_blank','noopener');if(!w)window.location.href=url;
+    }catch(e){console.error('certificado PDF V5.8.4',e);toast(e?.message||'Não foi possível gerar o certificado em PDF')}
+  };
+  window.enviarCertificadoVisitanteV572=window.certificadoVisitanteV5;
+  window.compartilharCertificadoVisitanteV5=window.certificadoVisitanteV5;
+  try{renderVisitantesV5()}catch(e){}
 })();
 </script>
 
