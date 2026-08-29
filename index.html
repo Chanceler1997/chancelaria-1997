@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.8.2-producao-certificado-unico">
+<meta name="application-version" content="5.8.3-certificado-modelo-ideal">
 <style>
 :root{
   --azul:#152541;
@@ -3600,26 +3600,30 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     const [base,sig]=await Promise.all([imgV58('certificado-base-v58.png'),imgV58('assinatura-chanceler.png')]);
     c.drawImage(base,0,0,1024,1536);
 
-    /* Camada dinâmica: propositalmente sem fundo sólido.
-       Ela se integra ao céu/ponte e não redesenha bandeiras nem nomes dos países. */
-    textShadowV58(c,'Atestamos, para os fins maçônicos cabíveis, que o Irmão',512,545,'25px Georgia, serif','#f4eee3');
-    fitTextV58(c,atual.nome,610,43,'400','italic','#d4ad58',790);
-    const grau=grauNome(atual.grau)||grauSimbolo(atual.grau)||'';
-    textShadowV58(c,`${atual.cim?'CIM '+atual.cim+(grau?' · ':''):''}${grau}`,512,665,'23px Georgia, serif','#f4eee3');
-    fitTextV58(c,`pertencente à ${atual.loja}${atual.numero?' nº '+atual.numero:''},`,710,25,'400','', '#f4eee3',820);
-    fitTextV58(c,`Oriente de ${atual.oriente}, esteve presente aos trabalhos da`,750,24,'400','', '#f4eee3',840);
-    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,795,'700 26px Georgia, serif','#d4ad58');
-    textShadowV58(c,`em ${brData(s.data)}, na`,512,840,'24px Georgia, serif','#f4eee3');
-    fitTextV58(c,nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),887,28,'700','', '#d4ad58',800);
-    lineV58(c,925,365);
-    textShadowV58(c,`Porto Murtinho/MS, ${brData(hojeISO())}.`,512,965,'23px Georgia, serif','#f4eee3');
+    /* V5.8.3 — composição aprovada. A camada dinâmica permanece 100% transparente:
+       não cria painéis, fundos sólidos, bandeiras ou nomes de países. */
+    textShadowV58(c,'ATESTADO DE',512,390,'700 56px Georgia, Times New Roman, serif','#d4ad58');
+    textShadowV58(c,'FREQUÊNCIA MAÇÔNICA',512,455,'700 58px Georgia, Times New Roman, serif','#d4ad58');
+    lineV58(c,510,390);
 
-    const maxW=345,maxH=98,sc=Math.min(maxW/sig.width,maxH/sig.height),sw=sig.width*sc,sh=sig.height*sc;
-    c.save();c.shadowColor='rgba(0,0,0,.7)';c.shadowBlur=7;c.drawImage(sig,(1024-sw)/2,992,sw,sh);c.restore();
-    textShadowV58(c,'Chanceler',512,1088,'700 22px Georgia, serif','#d4ad58');
-    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,1120,'20px Georgia, serif','#f4eee3');
-    textShadowV58(c,'Federada ao GOB · Jurisdicionada ao GOB-MS',512,1148,'14px Arial, sans-serif','#d6b96e');
-    textShadowV58(c,`Atestado nº ${numero}`,512,1171,'15px Arial, sans-serif','#d6b96e');
+    textShadowV58(c,'Atestamos, para os fins maçônicos cabíveis, que o Irmão',512,548,'25px Georgia, Times New Roman, serif','#f4eee3');
+    fitTextV58(c,atual.nome,610,50,'400','italic','#d4ad58',790,'Georgia, Times New Roman, serif');
+    const grau=grauNome(atual.grau)||grauSimbolo(atual.grau)||'';
+    textShadowV58(c,`${atual.cim?'CIM '+atual.cim+(grau?' · ':''):''}${grau}`,512,665,'23px Georgia, Times New Roman, serif','#f4eee3');
+    fitTextV58(c,`pertencente à ${atual.loja}${atual.numero?' nº '+atual.numero:''},`,710,25,'400','', '#f4eee3',820,'Georgia, Times New Roman, serif');
+    fitTextV58(c,`Oriente de ${atual.oriente}, esteve presente aos trabalhos da`,755,24,'400','', '#f4eee3',840,'Georgia, Times New Roman, serif');
+    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,805,'700 26px Georgia, Times New Roman, serif','#d4ad58');
+    textShadowV58(c,`em ${brData(s.data)}, na`,512,850,'24px Georgia, Times New Roman, serif','#f4eee3');
+    fitTextV58(c,nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),900,28,'700','', '#d4ad58',800,'Georgia, Times New Roman, serif');
+    lineV58(c,942,365);
+    textShadowV58(c,`Porto Murtinho/MS, ${brData(hojeISO())}.`,512,978,'23px Georgia, Times New Roman, serif','#f4eee3');
+
+    const maxW=330,maxH=86,sc=Math.min(maxW/sig.width,maxH/sig.height),sw=sig.width*sc,sh=sig.height*sc;
+    c.save();c.shadowColor='rgba(0,0,0,.72)';c.shadowBlur=6;c.drawImage(sig,(1024-sw)/2,1004,sw,sh);c.restore();
+    textShadowV58(c,'Chanceler',512,1092,'700 22px Georgia, Times New Roman, serif','#d4ad58');
+    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,1122,'20px Georgia, Times New Roman, serif','#f4eee3');
+    textShadowV58(c,'Federada ao GOB · Jurisdicionada ao GOB-MS',512,1150,'14px Arial, sans-serif','#d6b96e');
+    textShadowV58(c,`Atestado nº ${numero}`,512,1174,'15px Arial, sans-serif','#d6b96e');
     return {canvas,atual,s};
   }
 

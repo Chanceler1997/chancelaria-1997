@@ -9,3 +9,6 @@ Limpeza de produção do certificado:
 - cadastro permanente de visitante e histórico de visitas preservados
 
 O cabecalho-oficial.jpg permanece porque é utilizado por relatórios/documentos impressos, não pelo certificado em imagem.
+
+
+V5.8.3 — certificado: título restaurado, hierarquia vertical corrigida, camada dinâmica transparente e composição alinhada ao modelo aprovado.
