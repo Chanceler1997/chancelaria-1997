@@ -1,8 +1,8 @@
-const CACHE_NAME = "chancelaria-1997-v586-share-web-fallback";
+const CACHE_NAME = "chancelaria-1997-v587-pdf-https-fallback";
 const APP_FILES = [
   "./",
   "./index.html",
-  "./print.html",
+  "./imprimir.html",
   "./manifest.json",
   "./cabecalho-oficial.jpg",
   "./icon-192.png",

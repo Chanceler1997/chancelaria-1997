@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.8.6-share-web-fallback-visualizador">
+<meta name="application-version" content="5.8.7-pdf-https-fallback">
 <style>
 :root{
   --azul:#152541;
@@ -2294,7 +2294,7 @@ function codificarBase64UrlUtf8(valor){
 }
 function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false,opcoes={}){
   const payload={titulo,corpo,geradoEm:new Date().toISOString(),assinatura:opcoes.assinatura||'',assinaturaClasse:opcoes.assinaturaClasse||'',rodape:opcoes.rodape||''};
-  const url=new URL('print.html',location.href);
+  const url=new URL('imprimir.html',location.href);
   if(modoImpressao)url.searchParams.set('print','1');
   return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
 }
@@ -3719,62 +3719,74 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   }
   window.__arquivoPdfVisitanteV585=arquivoPdfVisitanteV585;
 
-  window.compartilharPdfVisitanteV585=async function(id=''){
-    const x=visitanteV585(id);if(!x||!x.id){toast('Selecione uma visita já registrada');return}
-    try{
-      toast('Preparando PDF para compartilhamento...');const out=await arquivoPdfVisitanteV585(id);
-      audit('Certificado PDF preparado',`${out.x.nome} · ${out.x.certNumero||''}`);
-      if(navigator.share && (!navigator.canShare || navigator.canShare({files:[out.file]}))){
-        iniciarAcaoExterna();try{await navigator.share({title:'Atestado de frequência maçônica',text:`Atestado de frequência maçônica - ${out.x.nome}`,files:[out.file]});audit('Certificado PDF compartilhado',`${out.x.nome} · ${out.x.certNumero||''}`);return}finally{finalizarAcaoExterna()}
-      }
-      const url=URL.createObjectURL(out.blob);window.__ultimoPdfCertificadoUrl=url;iniciarAcaoExterna();const w=window.open(url,'_blank');if(!w)window.location.href=url;
-      toast('O WebViewer não permitiu anexar o PDF diretamente. O arquivo foi aberto para compartilhar pelo menu do Android.');
-    }catch(e){finalizarAcaoExterna();console.error('compartilhar PDF V5.8.5',e);toast(e?.message||'Não foi possível compartilhar o PDF')}
-  };
-
-  window.certificadoVisitanteV5=async function(id=''){
-    const x=visitanteV585(id);if(!x||!x.id){toast('Selecione uma visita já registrada');return}
-    try{toast('Gerando PDF...');const out=await arquivoPdfVisitanteV585(id);const url=URL.createObjectURL(out.blob);window.__ultimoPdfCertificadoUrl=url;audit('Certificado PDF aberto',`${out.x.nome} · ${out.x.certNumero||''}`);iniciarAcaoExterna();const w=window.open(url,'_blank');if(!w)window.location.href=url}
-    catch(e){finalizarAcaoExterna();console.error('visualizar PDF V5.8.5',e);toast(e?.message||'Não foi possível gerar o PDF')}
-  };
-  window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;
-  window.compartilharCertificadoVisitanteV5=window.compartilharPdfVisitanteV585;
   try{renderVisitantesV5()}catch(e){}
 })();
 </script>
 
-<script id="v586-compartilhamento-sem-kodular">
-/* V5.8.6 — envio do atestado sem alterar os blocos do Kodular.
-   Prioridade operacional: apoiar o Chanceler com o menor número de passos.
-   O aplicativo tenta compartilhar o PDF pela Web Share API; se o WebViewer
-   bloquear anexos, abre automaticamente o PDF no visualizador do Android. */
-(function(){
-  const V586='5.8.6-share-web-fallback-visualizador';
-  window.CHANCELARIA_VERSION=V586;
 
-  function visitanteV586(id=''){
+
+<script id="v587-correcao-pdf-kodular">
+/* V5.8.7 — correção do fluxo de PDF no Kodular/WebViewer.
+   Não usa blob: como fallback externo. Quando o compartilhamento de arquivo
+   não é suportado, abre uma página HTTPS de conferência/impressão com os dados
+   do atestado no fragmento da URL. */
+(function(){
+  const V587='5.8.7-pdf-https-fallback';
+  window.CHANCELARIA_VERSION=V587;
+
+  function visitanteV587(id=''){
     return id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();
   }
 
-  function abrirPdfNoVisualizadorV586(out){
+  function payloadCertificadoV587(out){
+    const x=out.x||{};
+    const s=out.s||getSessoes().find(z=>z.id===x.sessaoId);
+    if(!s)throw new Error('A sessão vinculada à visita não foi localizada.');
+    return {
+      titulo:'Atestado de frequência maçônica',
+      documentClass:'certificate-art-v584',
+      certificado:{
+        nome:x.nome||'',
+        cim:x.cim||'',
+        grau:grauNome(x.grau)||grauSimbolo(x.grau)||'',
+        loja:x.loja||'',
+        numeroLoja:x.numero||'',
+        oriente:x.oriente||'',
+        dataSessao:brData(s.data),
+        tipoSessao:nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),
+        dataEmissao:brData(hojeISO()),
+        numeroAtestado:x.certNumero||''
+      },
+      assinatura:'',rodape:''
+    };
+  }
+
+  function urlCertificadoV587(out,imprimir=false){
+    const url=new URL('imprimir.html',location.href);
+    if(imprimir)url.searchParams.set('print','1');
+    return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payloadCertificadoV587(out)));
+  }
+
+  function abrirHttpsV587(url){
+    // No Kodular, P| entrega uma URL HTTPS ao ActivityStarter/Android.
+    if(typeof enviarAcaoNativa==='function' && enviarAcaoNativa('P',url)){
+      audit('Atestado aberto em página HTTPS','Visualização/impressão');
+      return true;
+    }
     try{
-      if(window.__ultimoPdfCertificadoUrl){try{URL.revokeObjectURL(window.__ultimoPdfCertificadoUrl)}catch(e){}}
-      const url=URL.createObjectURL(out.blob);
-      window.__ultimoPdfCertificadoUrl=url;
-      audit('Certificado aberto no visualizador',`${out.x.nome} · ${out.x.certNumero||''}`);
       iniciarAcaoExterna();
-      const w=window.open(url,'_blank');
+      const w=window.open(url,'_blank','noopener');
       if(!w)window.location.href=url;
-      setTimeout(()=>finalizarAcaoExterna(),1200);
+      setTimeout(()=>finalizarAcaoExterna(),900);
       return true;
     }catch(e){
       finalizarAcaoExterna();
-      console.error('fallback visualizador V5.8.6',e);
+      console.error('abrir HTTPS V5.8.7',e);
       return false;
     }
   }
 
-  async function tentarCompartilharPdfV586(out){
+  async function tentarCompartilharArquivoV587(out){
     if(!navigator.share)return {ok:false,motivo:'indisponivel'};
     try{
       if(navigator.canShare && !navigator.canShare({files:[out.file]}))return {ok:false,motivo:'arquivo-nao-suportado'};
@@ -3790,68 +3802,51 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     }catch(e){
       finalizarAcaoExterna();
       if(e && e.name==='AbortError')return {ok:false,motivo:'cancelado'};
-      console.warn('Web Share bloqueado; será usado o visualizador Android.',e);
+      console.warn('Compartilhamento de arquivo indisponível no WebViewer.',e);
       return {ok:false,motivo:'bloqueado'};
     }
   }
 
   window.compartilharPdfVisitanteV585=async function(id=''){
-    const x=visitanteV586(id);
+    const x=visitanteV587(id);
     if(!x||!x.id){toast('Selecione uma visita já registrada');return}
     try{
+      toast('Preparando atestado...');
       const out=await window.__arquivoPdfVisitanteV585(id);
+      // __arquivoPdfVisitanteV585 antigo não expunha a sessão; recuperamos aqui.
+      out.s=getSessoes().find(z=>z.id===out.x.sessaoId);
       audit('Certificado PDF preparado',`${out.x.nome} · ${out.x.certNumero||''}`);
-      const share=await tentarCompartilharPdfV586(out);
+      const share=await tentarCompartilharArquivoV587(out);
       if(share.ok||share.motivo==='cancelado')return;
-      if(!abrirPdfNoVisualizadorV586(out))throw new Error('Não foi possível abrir o PDF no visualizador do Android.');
-      setTimeout(()=>toast('No visualizador, toque no menu ⋮, depois em Compartilhar e escolha WhatsApp.'),650);
+      const url=urlCertificadoV587(out,false);
+      if(!abrirHttpsV587(url))throw new Error('Não foi possível abrir o atestado no navegador.');
+      toast('O compartilhamento direto não está disponível. Use “Imprimir ou salvar em PDF” e depois compartilhe o arquivo pelo Android.');
     }catch(e){
       finalizarAcaoExterna();
-      console.error('enviar atestado V5.8.6',e);
+      console.error('enviar atestado V5.8.7',e);
       toast(e?.message||'Não foi possível preparar o atestado');
     }
   };
 
   window.certificadoVisitanteV5=async function(id=''){
-    const x=visitanteV586(id);
+    const x=visitanteV587(id);
     if(!x||!x.id){toast('Selecione uma visita já registrada');return}
     try{
+      toast('Abrindo atestado...');
       const out=await window.__arquivoPdfVisitanteV585(id);
-      audit('Certificado PDF conferido',`${out.x.nome} · ${out.x.certNumero||''}`);
-      if(!abrirPdfNoVisualizadorV586(out))throw new Error('Não foi possível abrir o PDF.');
+      out.s=getSessoes().find(z=>z.id===out.x.sessaoId);
+      const url=urlCertificadoV587(out,false);
+      audit('Certificado conferido',`${out.x.nome} · ${out.x.certNumero||''}`);
+      if(!abrirHttpsV587(url))throw new Error('Não foi possível abrir o atestado.');
     }catch(e){
       finalizarAcaoExterna();
-      console.error('conferir atestado V5.8.6',e);
+      console.error('conferir atestado V5.8.7',e);
       toast(e?.message||'Não foi possível abrir o atestado');
     }
   };
+
   window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;
   window.compartilharCertificadoVisitanteV5=window.compartilharPdfVisitanteV585;
-
-  const renderBaseV586=window.renderVisitantesV5;
-  function ajustarInterfaceVisitantesV586(){
-    const note=document.querySelector('#v5VisLista .visitor-repeat-note');
-    if(note)note.innerHTML='<b>Controle do Chanceler:</b> um cadastro por visitante. Cada comparecimento fica no histórico e possui seu próprio atestado.';
-    document.querySelectorAll('#v5VisLista .visitor-history-title').forEach(el=>{el.textContent='Histórico de visitas e atestados'});
-    document.querySelectorAll('#v5VisLista button').forEach(btn=>{
-      const t=(btn.textContent||'').trim();
-      if(t==='Compartilhar PDF'){btn.textContent='Enviar atestado';btn.classList.add('btn-success')}
-      else if(t==='Visualizar PDF'){btn.textContent='Conferir atestado'}
-      else if(/^WhatsApp$/i.test(t)){btn.remove()}
-    });
-    const toolbar=document.querySelector('.visitor-actions-v55');
-    if(toolbar){
-      const success=toolbar.querySelector('button.btn-success');
-      if(success){success.textContent='Enviar atestado';success.setAttribute('onclick','compartilharPdfVisitanteV585()')}
-      [...toolbar.querySelectorAll('button')].forEach(b=>{if(/^Abrir WhatsApp$/i.test((b.textContent||'').trim()))b.remove()});
-    }
-  }
-  window.renderVisitantesV5=function(){
-    const r=renderBaseV586.apply(this,arguments);
-    ajustarInterfaceVisitantesV586();
-    return r;
-  };
-  ajustarInterfaceVisitantesV586();
 })();
 </script>
 

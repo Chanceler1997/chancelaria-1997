@@ -1,11 +1,11 @@
-# Chancelaria 1997 — versão 5.8.6
+# Chancelaria 1997 — versão 5.8.7
 
 Aplicativo de apoio às atribuições da Chancelaria da A.R.L.S. Razão e Força nº 1997, Oriente de Porto Murtinho/MS, federada ao Grande Oriente do Brasil e jurisdicionada ao GOB-MS.
 
 ## Arquivos da versão
 
 - `index.html` — aplicativo principal.
-- `print.html` — relatórios e impressão.
+- `imprimir.html` — conferência, relatórios, impressão e salvamento em PDF.
 - `manifest.json` — configuração PWA.
 - `service-worker.js` — funcionamento offline/cache.
 - `certificado-base.png` — base visual única do atestado de frequência maçônica.
@@ -13,14 +13,16 @@ Aplicativo de apoio às atribuições da Chancelaria da A.R.L.S. Razão e Força
 - `cabecalho-oficial.jpg` — cabeçalho institucional.
 - `icon-192.png` e `icon-512.png` — ícones do aplicativo.
 
-## Atestados de visitantes
+## Correção do PDF — v5.8.7
 
-Cada visitante possui cadastro único. Cada comparecimento é registrado como uma visita independente e mantém seu próprio número de atestado no histórico.
+A versão 5.8.7 elimina o uso de URL `blob:` como alternativa para abrir o PDF fora do WebViewer. Esse método não é confiável no Android/Kodular porque a URL temporária pertence ao contexto interno da página.
 
-A emissão utiliza `certificado-base.png` como única composição visual de fundo. Os dados do visitante e da sessão são renderizados dinamicamente pelo aplicativo.
+O comando **Enviar atestado** continua tentando primeiro o compartilhamento nativo de arquivo pela Web Share API. Se o WebViewer não aceitar o PDF, o aplicativo abre uma página HTTPS do próprio aplicativo com o atestado, onde é possível usar **Imprimir ou salvar em PDF**.
 
-Na versão 5.8.6, o comando **Enviar atestado** tenta o compartilhamento de arquivo permitido pelo ambiente web. Quando o WebViewer não oferece compartilhamento direto, o aplicativo utiliza o visualizador do Android como alternativa, evitando o fluxo de impressão sempre que o aparelho permitir.
+O comando **Conferir atestado** abre a mesma visualização HTTPS, evitando a tentativa defeituosa de abrir uma URL `blob:`.
+
+Também foi padronizado o nome `imprimir.html` em `index.html`, `service-worker.js` e neste README.
 
 ## Publicação
 
-Ao atualizar o GitHub Pages, envie todos os arquivos desta pasta para a raiz do repositório. Evite manter modelos antigos de certificado na raiz para não criar referências ou manutenção ambíguas.
+Envie todos os arquivos desta pasta para a raiz do repositório GitHub Pages. Remova qualquer `print.html` antigo para evitar duplicidade. Após publicar, aguarde a nova implantação do GitHub Pages e feche/reabra o aplicativo para o novo service worker assumir o cache.
