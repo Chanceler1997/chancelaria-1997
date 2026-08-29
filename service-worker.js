@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v572-certificado-robusto";
+const CACHE_NAME = "chancelaria-1997-v573-certificado-oficial";
 const APP_FILES = [
   "./",
   "./index.html",
@@ -7,6 +7,7 @@ const APP_FILES = [
   "./cabecalho-oficial.jpg",
   "./assinatura-chanceler.png",
   "./certificado-fundo.png",
+  "./certificado-modelo-oficial.png",
   "./icon-192.png",
   "./icon-512.png"
 ];

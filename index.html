@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.7.2-certificado-robusto">
+<meta name="application-version" content="5.7.3-certificado-oficial">
 <style>
 :root{
   --azul:#152541;
@@ -3464,7 +3464,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       const {canvas,atual}=await gerarCanvasCertificadoV572(x);
       const dataUrl=canvas.toDataURL('image/png',0.96);
       if(!dataUrl||dataUrl.length<1000)throw new Error('A imagem do certificado não pôde ser criada.');
-      garantirModalV572();
+      garantirModalV573();
       const img=document.getElementById('certificadoImagemV572');img.src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=atual.id;
       document.getElementById('certificadoNotaV572').textContent=`Atestado pronto${atual.telefone?' · WhatsApp '+atual.telefone:' · cadastre o telefone para facilitar o envio'}.`;
       abrirModal('modalCertificadoImagemV572');
@@ -3482,7 +3482,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
         iniciarAcaoExterna();try{await navigator.share({title:'Atestado de frequência maçônica',text:`Atestado de frequência maçônica — ${x.nome} — A∴R∴L∴S∴ Razão e Força nº 1997.`,files:[file]});}finally{finalizarAcaoExterna()}return;
       }
       // WebView sem Web Share API: abre a imagem e mantém o WhatsApp como segundo passo.
-      garantirModalV572();document.getElementById('certificadoImagemV572').src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=x.id;abrirModal('modalCertificadoImagemV572');
+      garantirModalV573();document.getElementById('certificadoImagemV572').src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=x.id;abrirModal('modalCertificadoImagemV572');
       toast('O Android não liberou o compartilhamento direto. A imagem está aberta; use “Abrir WhatsApp”.');
     }catch(e){finalizarAcaoExterna();console.error('envio certificado V5.7.2',e);toast(e?.message||'Não foi possível enviar o certificado')}
   };
@@ -3494,5 +3494,120 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 })();
 </script>
+
+<style id="v573-certificado-oficial-css">
+#modalCertificadoImagemV572 .modal{max-width:650px}
+#certificadoImagemV572{background:#06111f}
+</style>
+<script id="v573-certificado-oficial">
+/* V5.7.3 — modelo oficial aprovado do certificado + varredura de estabilidade */
+(function(){
+  const V573='5.7.3-certificado-oficial';
+  window.CHANCELARIA_VERSION=V573;
+
+  function carregarImagemV573(src){
+    return new Promise((resolve,reject)=>{
+      const img=new Image();
+      img.onload=()=>resolve(img);
+      img.onerror=()=>reject(new Error(`Não foi possível carregar ${src}`));
+      img.src=new URL(src,document.baseURI).href;
+    });
+  }
+  function limparFaixaV573(c,y,h,alpha=.95){
+    const g=c.createLinearGradient(0,y,0,y+h);
+    g.addColorStop(0,`rgba(5,17,31,${Math.max(0,alpha-.04)})`);
+    g.addColorStop(.5,`rgba(4,15,29,${alpha})`);
+    g.addColorStop(1,`rgba(5,17,31,${Math.max(0,alpha-.04)})`);
+    c.fillStyle=g;c.fillRect(118,y,788,h);
+  }
+  function linhaOuroV573(c,y,w=360){c.save();c.strokeStyle='#b99443';c.globalAlpha=.9;c.lineWidth=1.5;c.beginPath();c.moveTo(512-w/2,y);c.lineTo(512+w/2,y);c.stroke();c.restore()}
+
+  async function gerarCanvasCertificadoOficialV573(x){
+    if(!x?.id) throw new Error('Salve o visitante antes de emitir o atestado.');
+    garantirNumeroCertificadoV53(x);
+    const atual=(getVisitantesV5().find(v=>v.id===x.id)||x);
+    const s=getSessoes().find(z=>z.id===atual.sessaoId);
+    if(!s) throw new Error('A sessão vinculada ao visitante não foi localizada.');
+    const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=1536;
+    const c=canvas.getContext('2d',{alpha:false});if(!c)throw new Error('O dispositivo não conseguiu iniciar o gerador do certificado.');
+    const [modelo,sig]=await Promise.all([carregarImagemV573('certificado-modelo-oficial.png'),carregarImagemV573('assinatura-chanceler.png')]);
+    c.drawImage(modelo,0,0,1024,1536);
+
+    /* O modelo aprovado contém dados ilustrativos. Estas faixas os removem sem alterar cabeçalho, título, ponte, bandeiras ou moldura. */
+    limparFaixaV573(c,522,58,.96);   // frase inicial
+    limparFaixaV573(c,572,76,.96);   // nome
+    limparFaixaV573(c,646,55,.96);   // CIM/grau
+    limparFaixaV573(c,697,58,.96);   // loja
+    limparFaixaV573(c,744,58,.96);   // oriente
+    limparFaixaV573(c,793,58,.96);   // loja anfitriã
+    limparFaixaV573(c,842,56,.96);   // data
+    limparFaixaV573(c,890,62,.96);   // sessão
+    limparFaixaV573(c,948,62,.94);   // emissão
+    limparFaixaV573(c,1008,170,.90); // assinatura e identificação
+
+    textoCentroV55(c,'Atestamos, para os fins maçônicos cabíveis, que o Irmão',555,'25px Georgia, serif','#f4eee3');
+    textoCentroAjustadoV55(c,atual.nome,617,42,'400','italic','#d4ad58',780);
+    const grau=grauNome(atual.grau)||grauSimbolo(atual.grau)||'';
+    textoCentroV55(c,`${atual.cim?'CIM '+atual.cim+(grau?' · ':''):''}${grau}`,675,'23px Georgia, serif','#f4eee3');
+    textoCentroAjustadoV55(c,`pertencente à ${atual.loja}${atual.numero?' nº '+atual.numero:''},`,725,25,'400','','#f4eee3',800);
+    textoCentroAjustadoV55(c,`Oriente de ${atual.oriente}, esteve presente aos trabalhos da`,774,24,'400','','#f4eee3',820);
+    textoCentroV55(c,'A∴R∴L∴S∴ Razão e Força nº 1997',824,'700 26px Georgia, serif','#d4ad58');
+    textoCentroV55(c,`em ${brData(s.data)}, na`,872,'24px Georgia, serif','#f4eee3');
+    textoCentroAjustadoV55(c,nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),921,27,'700','','#d4ad58',790);
+    linhaOuroV573(c,956,360);
+    textoCentroV55(c,`Porto Murtinho/MS, ${brData(hojeISO())}.`,990,'23px Georgia, serif','#f4eee3');
+
+    const maxW=350,maxH=104,scale=Math.min(maxW/sig.width,maxH/sig.height),sw=sig.width*scale,sh=sig.height*scale;
+    c.drawImage(sig,(1024-sw)/2,1014,sw,sh);
+    textoCentroV55(c,'Chanceler',1110,'700 22px Georgia, serif','#d4ad58');
+    textoCentroV55(c,'A∴R∴L∴S∴ Razão e Força nº 1997',1141,'20px Georgia, serif','#f4eee3');
+    textoCentroV55(c,'Federada ao GOB · Jurisdicionada ao GOB-MS',1169,'14px Arial, sans-serif','#d6b96e');
+    textoCentroV55(c,`Atestado nº ${atual.certNumero||garantirNumeroCertificadoV53(atual)}`,1194,'15px Arial, sans-serif','#d6b96e');
+    return {canvas,atual,s};
+  }
+
+
+  function garantirModalV573(){
+    let m=document.getElementById('modalCertificadoImagemV572');
+    if(m)return m;
+    document.body.insertAdjacentHTML('beforeend',`<div class="modal-back certificate-image-modal" id="modalCertificadoImagemV572" role="dialog" aria-modal="true"><div class="modal"><div class="modal-head"><span>Atestado de frequência maçônica</span><button class="modal-close" onclick="fecharModal('modalCertificadoImagemV572')">×</button></div><div class="modal-body"><img id="certificadoImagemV572" alt="Atestado de frequência maçônica"><div id="certificadoNotaV572" class="v572-cert-note"></div><div class="v572-cert-actions"><button class="btn btn-success" onclick="enviarCertificadoVisitanteV572(window.__certVisitanteV572||'')">Enviar certificado</button><button class="btn btn-outline" onclick="abrirWhatsAppVisitanteV55(window.__certVisitanteV572||'')">Abrir WhatsApp</button></div></div><div class="modal-foot"><button class="btn btn-light" onclick="fecharModal('modalCertificadoImagemV572')">Fechar</button></div></div></div>`);
+    return document.getElementById('modalCertificadoImagemV572');
+  }
+
+  /* substitui apenas o renderizador. O fluxo de abrir/enviar da V5.7.2, já validado no Android, é preservado. */
+  window.__gerarCanvasCertificadoV573=gerarCanvasCertificadoOficialV573;
+  window.certificadoVisitanteV5=async function(id=''){
+    const x=id?(getVisitantesV5().find(v=>v.id===id)||null):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Selecione um visitante já salvo');return}
+    try{
+      toast('Gerando certificado...');
+      const {canvas,atual}=await gerarCanvasCertificadoOficialV573(x);
+      const dataUrl=canvas.toDataURL('image/png',0.96);
+      if(!dataUrl||dataUrl.length<1000)throw new Error('A imagem do certificado não pôde ser criada.');
+      garantirModalV573();
+      const img=document.getElementById('certificadoImagemV572');img.src=dataUrl;
+      window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=atual.id;
+      document.getElementById('certificadoNotaV572').textContent=`Atestado pronto${atual.telefone?' · WhatsApp '+atual.telefone:' · cadastre o telefone para facilitar o envio'}.`;
+      abrirModal('modalCertificadoImagemV572');
+    }catch(e){console.error('certificado V5.7.3',e);toast(e?.message||'Não foi possível abrir o certificado')}
+  };
+  window.enviarCertificadoVisitanteV572=async function(id=''){
+    const x=id?(getVisitantesV5().find(v=>v.id===id)||null):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Selecione um visitante já salvo');return}
+    try{
+      let dataUrl=(window.__certVisitanteV572===x.id)?window.__certDataUrlV572:'';
+      if(!dataUrl){const out=await gerarCanvasCertificadoOficialV573(x);dataUrl=out.canvas.toDataURL('image/png',0.96)}
+      const partes=dataUrl.split(','),mime=(partes[0].match(/data:([^;]+)/)||[])[1]||'image/png',bin=atob(partes[1]),arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);
+      const blob=new Blob([arr],{type:mime});
+      const nome=`Atestado-${String(x.nome||'visitante').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'')}.png`;
+      const file=new File([blob],nome,{type:'image/png'});
+      if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){iniciarAcaoExterna();try{await navigator.share({title:'Atestado de frequência maçônica',files:[file]})}finally{finalizarAcaoExterna()}return}
+      garantirModalV573();document.getElementById('certificadoImagemV572').src=dataUrl;window.__certDataUrlV572=dataUrl;window.__certVisitanteV572=x.id;abrirModal('modalCertificadoImagemV572');toast('A imagem está pronta. Use o compartilhamento do Android ou abra o WhatsApp.');
+    }catch(e){finalizarAcaoExterna();console.error('envio certificado V5.7.3',e);toast(e?.message||'Não foi possível enviar o certificado')}
+  };
+  window.compartilharCertificadoVisitanteV5=window.enviarCertificadoVisitanteV572;
+})();
+</script>
+
 </body>
 </html>
