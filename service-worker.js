@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v589-webviewpdfexporter";
+const CACHE_NAME = "chancelaria-1997-v5811-nativepdf-layout";
 const APP_FILES = [
   "./",
   "./index.html",

@@ -3949,7 +3949,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
    chamar CreatePDF e, em PDFCreated, chamar SharePDF.
    Sem Base64/JSON no lado Kodular e sem ACK. */
 (function(){
-  window.CHANCELARIA_VERSION='5.8.10-webviewpdfexporter';
+  window.CHANCELARIA_VERSION='5.8.11-nativepdf-layout';
 
   function enviarUrlPdfV589(url,titulo='Documento'){
     try{
@@ -3969,7 +3969,9 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   window.compartilharPreviewRelatorioV588=function(){
     if(!pendingPrintPayload){toast('Gere o relatório novamente');return}
     const p=pendingPrintPayload;
-    const url=urlRelatorioParaImpressao(p.titulo,p.corpo,false,p);
+    const u=new URL(urlRelatorioParaImpressao(p.titulo,p.corpo,false,p));
+    u.searchParams.set('nativepdf','1');
+    const url=u.href;
     if(enviarUrlPdfV589(url,p.titulo)) return;
     toast('Compartilhamento nativo indisponível. Abrindo impressão/PDF.');
     imprimirPreviewRelatorio();
@@ -3987,6 +3989,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       const payload={titulo:'Atestado de frequência maçônica',documentClass:'certificate-art-v584',certificado:{
         nome:xx.nome||'',cim:xx.cim||'',grau:grauNome(xx.grau)||grauSimbolo(xx.grau)||'',loja:xx.loja||'',numeroLoja:xx.numero||'',oriente:xx.oriente||'',dataSessao:brData(ss.data),tipoSessao:nomeSessaoDocumento(ss)+(ss.numero?' · '+ss.numero:''),dataEmissao:brData(hojeISO()),numeroAtestado:xx.certNumero||''},assinatura:'',rodape:''};
       const u=new URL('imprimir.html',location.href);
+      u.searchParams.set('nativepdf','1');
       const url=u.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
       if(enviarUrlPdfV589(url,'Atestado de frequência maçônica')) return;
     }catch(e){console.warn('ponte v5.8.10 indisponível para atestado',e)}
