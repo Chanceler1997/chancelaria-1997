@@ -3943,20 +3943,20 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
 
 <script id="v589-ponte-webviewpdfexporter">
-/* V5.8.10 — Ponte simplificada para Kodular + Webviewpdfexporter.
+/* V5.8.12 — Ponte simplificada para Kodular + Webviewpdfexporter.
    Protocolo: S|<URL HTTPS do documento>.
    O Kodular deve navegar o Web_Viewer1 para a URL, aguardar PageLoaded,
    chamar CreatePDF e, em PDFCreated, chamar SharePDF.
    Sem Base64/JSON no lado Kodular e sem ACK. */
 (function(){
-  window.CHANCELARIA_VERSION='5.8.11-nativepdf-layout';
+  window.CHANCELARIA_VERSION='5.8.12-nativepdf-fit-contact';
 
   function enviarUrlPdfV589(url,titulo='Documento'){
     try{
       const ponte=(typeof obterPonteKodular==='function')?obterPonteKodular():null;
       if(!ponte || !url) return false;
       ponte.setWebViewString('S|'+String(url));
-      try{audit('PDF enviado à ponte Kodular',String(titulo||'Documento')+' · v5.8.10')}catch(_e){}
+      try{audit('PDF enviado à ponte Kodular',String(titulo||'Documento')+' · v5.8.12')}catch(_e){}
       try{toast('Preparando PDF para compartilhar...')}catch(_e){}
       return true;
     }catch(e){
@@ -3990,9 +3990,12 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
         nome:xx.nome||'',cim:xx.cim||'',grau:grauNome(xx.grau)||grauSimbolo(xx.grau)||'',loja:xx.loja||'',numeroLoja:xx.numero||'',oriente:xx.oriente||'',dataSessao:brData(ss.data),tipoSessao:nomeSessaoDocumento(ss)+(ss.numero?' · '+ss.numero:''),dataEmissao:brData(hojeISO()),numeroAtestado:xx.certNumero||''},assinatura:'',rodape:''};
       const u=new URL('imprimir.html',location.href);
       u.searchParams.set('nativepdf','1');
+      const wa=numeroWhatsApp(xx.telefone||'');
+      if(wa)u.searchParams.set('wa',wa);
+      u.searchParams.set('visita',String(xx.id||''));
       const url=u.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
       if(enviarUrlPdfV589(url,'Atestado de frequência maçônica')) return;
-    }catch(e){console.warn('ponte v5.8.10 indisponível para atestado',e)}
+    }catch(e){console.warn('ponte v5.8.12 indisponível para atestado',e)}
     return compartilharAtestadoFallbackV589(id);
   };
   window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;
