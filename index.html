@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.8.7-pdf-https-fallback">
+<meta name="application-version" content="5.8.10-webviewpdfexporter">
 <style>
 :root{
   --azul:#152541;
@@ -3943,20 +3943,20 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
 
 <script id="v589-ponte-webviewpdfexporter">
-/* V5.8.9 — Ponte simplificada para Kodular + Webviewpdfexporter.
+/* V5.8.10 — Ponte simplificada para Kodular + Webviewpdfexporter.
    Protocolo: S|<URL HTTPS do documento>.
    O Kodular deve navegar o Web_Viewer1 para a URL, aguardar PageLoaded,
    chamar CreatePDF e, em PDFCreated, chamar SharePDF.
    Sem Base64/JSON no lado Kodular e sem ACK. */
 (function(){
-  window.CHANCELARIA_VERSION='5.8.9-webviewpdfexporter';
+  window.CHANCELARIA_VERSION='5.8.10-webviewpdfexporter';
 
   function enviarUrlPdfV589(url,titulo='Documento'){
     try{
-      const ponte=(typeof ponteNativa==='function')?ponteNativa():null;
+      const ponte=(typeof obterPonteKodular==='function')?obterPonteKodular():null;
       if(!ponte || !url) return false;
       ponte.setWebViewString('S|'+String(url));
-      try{audit('PDF enviado à ponte Kodular',String(titulo||'Documento')+' · v5.8.9')}catch(_e){}
+      try{audit('PDF enviado à ponte Kodular',String(titulo||'Documento')+' · v5.8.10')}catch(_e){}
       try{toast('Preparando PDF para compartilhar...')}catch(_e){}
       return true;
     }catch(e){
@@ -3989,7 +3989,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       const u=new URL('imprimir.html',location.href);
       const url=u.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
       if(enviarUrlPdfV589(url,'Atestado de frequência maçônica')) return;
-    }catch(e){console.warn('ponte v5.8.9 indisponível para atestado',e)}
+    }catch(e){console.warn('ponte v5.8.10 indisponível para atestado',e)}
     return compartilharAtestadoFallbackV589(id);
   };
   window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;
