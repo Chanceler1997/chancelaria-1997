@@ -1,14 +1,15 @@
-# Chancelaria 1997 — v5.8.13
+# Chancelaria 1997 — v5.8.14
 
+- Corrigido o erro `Invalid text operation`: a ponte não envia mais WebViewString vazio antes de `HI` ou `SI`.
 Correção integrada para o projeto Kodular atual.
 
 - A página inicial ganhou **Atestados emitidos**. O comando envia `HI` e abre a Screen `Historico`.
 - O compartilhamento de atestados usa `SI<URL>` como protocolo principal, de acordo com os blocos atuais da Screen1.
 - `S|<URL>` continua como fallback de compatibilidade.
 - Antes da ponte nativa, o app tenta compartilhar o PDF pela Web Share API com nome baseado no atestado.
-- O cache foi atualizado para `v5813-history-share-bridge`.
+- O cache foi atualizado para `v5814-kodular-nonempty-bridge`.
 
-Consulte `PONTE-KODULAR-v5.8.13.md` e `CORRECAO-v5.8.13.txt`.
+Consulte `PONTE-KODULAR-v5.8.14.md` e `CORRECAO-v5.8.14.txt`.
 
 ---
 
