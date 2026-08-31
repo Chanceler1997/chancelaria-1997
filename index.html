@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.8.10-webviewpdfexporter">
+<meta name="application-version" content="5.8.13-history-share-bridge">
 <style>
 :root{
   --azul:#152541;
@@ -579,6 +579,7 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
         <button class="action" onclick="abrirAba('presenca')"><b>Fazer chamada</b><small>Registre presença ou falta dos Irmãos do Quadro.</small></button>
         <button class="action" onclick="abrirVisitantesV5()"><b>Registrar visitante</b><small>Presença, identificação e certificado institucional.</small></button>
         <button class="action" onclick="abrirAba('datas'); abrirModalData()"><b>Nova data</b><small>Inclua datas maçônicas e da Loja.</small></button>
+        <button class="action" onclick="abrirHistoricoAtestadosNativo()"><b>Atestados emitidos</b><small>Abra o histórico de atestados já gerados.</small></button>
       </div>
     </div>
 
@@ -2143,6 +2144,21 @@ function obterPonteKodular(){
   if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
   if(window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')return window.AppInventor;
   return null;
+}
+function abrirHistoricoAtestadosNativo(){
+  const ponte=obterPonteKodular();
+  if(!ponte){toast('O histórico de atestados está disponível no aplicativo Android.');return false}
+  try{
+    // Zera antes para que dois toques seguidos em Histórico também disparem
+    // WebViewStringChange no Kodular.
+    ponte.setWebViewString('');
+    setTimeout(()=>{try{ponte.setWebViewString('HI')}catch(_e){}},25);
+    return true;
+  }catch(e){
+    console.warn('Não foi possível abrir o histórico nativo.',e);
+    toast('Não foi possível abrir o histórico de atestados.');
+    return false;
+  }
 }
 function enviarAcaoNativa(tipo,conteudo){
   const ponte=obterPonteKodular();
@@ -3943,25 +3959,55 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
 
 <script id="v589-ponte-webviewpdfexporter">
-/* V5.8.12 — Ponte simplificada para Kodular + Webviewpdfexporter.
-   Protocolo: S|<URL HTTPS do documento>.
-   O Kodular deve navegar o Web_Viewer1 para a URL, aguardar PageLoaded,
-   chamar CreatePDF e, em PDFCreated, chamar SharePDF.
-   Sem Base64/JSON no lado Kodular e sem ACK. */
+/* V5.8.13 — Ponte ajustada ao Kodular atual.
+   Protocolo principal do PDF: SI<URL HTTPS do documento>.
+   Compatibilidade: se a tela não navegar, também é enviado S|<URL>.
+   O botão Atestados emitidos envia HI e abre a Screen Historico.
+   O compartilhamento tenta primeiro a Web Share API com o PDF já nomeado;
+   se não houver suporte, usa a ponte Kodular/Webviewpdfexporter. */
 (function(){
-  window.CHANCELARIA_VERSION='5.8.12-nativepdf-fit-contact';
+  window.CHANCELARIA_VERSION='5.8.13-history-share-bridge';
 
   function enviarUrlPdfV589(url,titulo='Documento'){
     try{
       const ponte=(typeof obterPonteKodular==='function')?obterPonteKodular():null;
       if(!ponte || !url) return false;
-      ponte.setWebViewString('S|'+String(url));
-      try{audit('PDF enviado à ponte Kodular',String(titulo||'Documento')+' · v5.8.12')}catch(_e){}
+      const alvo=String(url);
+      // O Kodular atual trata o prefixo SI. O S| fica como compatibilidade
+      // para builds anteriores. Se SI for tratado, a navegação descarrega
+      // esta página antes do fallback e evita duplicidade.
+      // Zera o WebViewString para permitir repetir o compartilhamento do
+      // mesmo atestado sem depender de uma mudança de URL.
+      ponte.setWebViewString('');
+      setTimeout(()=>{try{ponte.setWebViewString('SI'+alvo)}catch(_e){}},25);
+      setTimeout(()=>{try{ponte.setWebViewString('S|'+alvo)}catch(_e){}},240);
+      try{audit('PDF enviado à ponte Kodular',String(titulo||'Documento')+' · v5.8.13')}catch(_e){}
       try{toast('Preparando PDF para compartilhar...')}catch(_e){}
       return true;
     }catch(e){
-      console.warn('ponte S| v5.8.9',e);
+      console.warn('ponte PDF v5.8.13',e);
       return false;
+    }
+  }
+
+  async function tentarCompartilharArquivoDiretoV5813(out){
+    if(!out?.file || !navigator.share)return {ok:false,motivo:'indisponivel'};
+    try{
+      if(navigator.canShare && !navigator.canShare({files:[out.file]}))return {ok:false,motivo:'arquivo-nao-suportado'};
+      iniciarAcaoExterna();
+      await navigator.share({
+        title:'Atestado de frequência maçônica',
+        text:`Atestado de frequência maçônica - ${out.x?.nome||''}`.trim(),
+        files:[out.file]
+      });
+      finalizarAcaoExterna();
+      try{audit('Atestado PDF compartilhado diretamente',`${out.x?.nome||''} · ${out.x?.certNumero||''}`)}catch(_e){}
+      return {ok:true};
+    }catch(e){
+      finalizarAcaoExterna();
+      if(e?.name==='AbortError')return {ok:false,motivo:'cancelado'};
+      console.warn('Web Share API indisponível; usando ponte Kodular.',e);
+      return {ok:false,motivo:'falha'};
     }
   }
   window.__enviarUrlPdfV589=enviarUrlPdfV589;
@@ -3984,6 +4030,8 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       if(!x||!x.id){toast('Selecione uma visita já registrada');return}
       const out=await window.__arquivoPdfVisitanteV585(id);
       out.s=getSessoes().find(z=>z.id===out.x.sessaoId);
+      const direto=await tentarCompartilharArquivoDiretoV5813(out);
+      if(direto.ok||direto.motivo==='cancelado')return;
       const xx=out.x||{}, ss=out.s;
       if(!ss)throw new Error('A sessão vinculada à visita não foi localizada.');
       const payload={titulo:'Atestado de frequência maçônica',documentClass:'certificate-art-v584',certificado:{
@@ -3995,7 +4043,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       u.searchParams.set('visita',String(xx.id||''));
       const url=u.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
       if(enviarUrlPdfV589(url,'Atestado de frequência maçônica')) return;
-    }catch(e){console.warn('ponte v5.8.12 indisponível para atestado',e)}
+    }catch(e){console.warn('ponte v5.8.13 indisponível para atestado',e)}
     return compartilharAtestadoFallbackV589(id);
   };
   window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;

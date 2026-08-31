@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v5812-nativepdf-fit-contact";
+const CACHE_NAME = "chancelaria-1997-v5813-history-share-bridge";
 const APP_FILES = [
   "./",
   "./index.html",

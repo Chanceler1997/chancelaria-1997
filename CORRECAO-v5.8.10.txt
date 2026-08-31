@@ -1,0 +1,6 @@
+Chancelaria 1997 — v5.8.10
+
+Correção: a ponte v5.8.9 chamava ponteNativa(), função inexistente no index.html.
+A v5.8.10 usa obterPonteKodular(), que já é a ponte efetivamente usada pelos comandos W|, P|, T| e X|.
+Assim, Compartilhar PDF envia S|<URL> ao WebViewStringChange do Kodular.
+Nenhuma alteração adicional nos blocos é necessária além da estrutura S| já montada.
