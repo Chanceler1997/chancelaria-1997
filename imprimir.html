@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v5.8.14</title>
+<title>Documento · Chancelaria 1997 v5.8.17</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -76,7 +76,7 @@ html.native-pdf .page.certificate-art-v584 .cert-art{transform-origin:0 0!import
   const assinaturaPadrao='<div class="signature-person signature-chanceler"><img class="signature-image" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="signature-role">Chanceler</div><div class="signature-lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div></div>';
   try{
     const raw=location.hash.slice(1);if(!raw)throw new Error('Documento não recebido.');
-    const data=JSON.parse(decodeBase64UrlUtf8(raw));history.replaceState(null,'',location.pathname+location.search);document.title=(data.titulo||'Documento')+' · Chancelaria 1997';
+    const data=JSON.parse(decodeBase64UrlUtf8(raw));history.replaceState(null,'',location.pathname+location.search);const nomePdf=(new URLSearchParams(location.search).get('filename')||'').replace(/\.pdf$/i,'');document.title=nomePdf||(data.titulo||'Documento')+' · Chancelaria 1997';
     const assinatura=data.assinatura||assinaturaPadrao;const rodape=data.rodape||'Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';const documentClass=String(data.documentClass||'').replace(/[^a-z0-9_-]/gi,'');
     if(documentClass==='certificate-art-v584'&&data.certificado){
       const c=data.certificado, esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));

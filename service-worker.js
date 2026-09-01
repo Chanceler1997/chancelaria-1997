@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v5815-kodular-share-fix";
+const CACHE_NAME = "chancelaria-1997-v5818-revisado";
 
 const APP_FILES = [
   "./",
@@ -11,6 +11,8 @@ const APP_FILES = [
   "./certificado-base.png",
   "./assinatura-chanceler.png"
 ];
+
+const STATIC_PATHS = new Set(APP_FILES.map(p => new URL(p, self.location.href).pathname));
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_FILES)));
@@ -29,20 +31,22 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        if (response && response.ok) {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-        }
-        return response;
-      })
-      .catch(async () => {
-        const cached = await caches.match(event.request);
-        if (cached) return cached;
-        if (event.request.mode === "navigate") return caches.match("./index.html");
-        return Response.error();
-      })
-  );
+  event.respondWith((async () => {
+    try {
+      const response = await fetch(event.request);
+      const u = new URL(event.request.url);
+      // Cacheia apenas os arquivos estáticos sem query string. URLs de
+      // imprimir.html com filename/visita/wa não ficam acumuladas no cache.
+      if (response && response.ok && !u.search && STATIC_PATHS.has(u.pathname)) {
+        const cache = await caches.open(CACHE_NAME);
+        cache.put(event.request, response.clone());
+      }
+      return response;
+    } catch (_) {
+      const cached = await caches.match(event.request, { ignoreSearch: true });
+      if (cached) return cached;
+      if (event.request.mode === "navigate") return caches.match("./index.html");
+      return Response.error();
+    }
+  })());
 });

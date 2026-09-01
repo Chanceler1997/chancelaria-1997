@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.8.14-kodular-nonempty-bridge">
+<meta name="application-version" content="5.8.18-revisado">
 <style>
 :root{
   --azul:#152541;
@@ -2153,7 +2153,7 @@ function abrirHistoricoAtestadosNativo(){
     // caracteres do WebViewString e texto vazio provoca "Invalid text operation".
     // Um pulso neutro força nova mudança mesmo em dois toques seguidos.
     ponte.setWebViewString('00'+Date.now());
-    setTimeout(()=>{try{ponte.setWebViewString('HI')}catch(_e){}},25);
+    setTimeout(()=>{try{ponte.setWebViewString('HI')}catch(_e){}},90);
     return true;
   }catch(e){
     console.warn('Não foi possível abrir o histórico nativo.',e);
@@ -2161,16 +2161,31 @@ function abrirHistoricoAtestadosNativo(){
     return false;
   }
 }
+function prefixoKodularV5816(tipo){
+  const mapa={W:'WI',P:'PI',X:'XI',T:'TI',H:'HI',S:'SI'};
+  const chave=String(tipo||'').toUpperCase();
+  return mapa[chave]||chave;
+}
 function enviarAcaoNativa(tipo,conteudo){
   const ponte=obterPonteKodular();
   if(!ponte)return false;
   iniciarAcaoExterna();
-  try{ponte.setWebViewString(`${tipo}|${conteudo}`);return true}catch(e){finalizarAcaoExterna();return false}
+  try{
+    const prefixo=prefixoKodularV5816(tipo),payload=String(conteudo||'');
+    ponte.setWebViewString('00'+Date.now());
+    setTimeout(()=>{try{ponte.setWebViewString(prefixo+payload)}catch(_e){finalizarAcaoExterna()}},90);
+    return true;
+  }catch(e){finalizarAcaoExterna();return false}
 }
 function enviarDadoNativo(tipo,conteudo){
   const ponte=obterPonteKodular();
   if(!ponte)return false;
-  try{ponte.setWebViewString(`${tipo}|${conteudo}`);return true}catch(e){return false}
+  try{
+    const prefixo=prefixoKodularV5816(tipo),payload=String(conteudo||'');
+    ponte.setWebViewString('00'+Date.now());
+    setTimeout(()=>{try{ponte.setWebViewString(prefixo+payload)}catch(_e){}},90);
+    return true;
+  }catch(e){return false}
 }
 function abrirWhatsAppTelefone(id){
   const i=getIrmaos().find(x=>x.id===id);
@@ -3117,7 +3132,7 @@ const _atualizarResumoV53Base=atualizarResumoChamada;
 atualizarResumoChamada=function(){_atualizarResumoV53Base();const s=getSessoes().find(x=>x.id===presSessao.value),el=document.getElementById('contadoresChamada');if(!s||!el)return;const vis=getVisitantesV5().filter(v=>v.sessaoId===s.id).length,p=Object.values(chamadaTemp).filter(x=>statusPresenca(x)==='P').length;el.insertAdjacentHTML('beforeend',`<div class="call-count"><b>${vis}</b><span>Visitantes</span></div><div class="call-count"><b>${p+vis}</b><span>Total no Templo</span></div>`)};
 
 // Certificado numerado e rastreável
-function garantirNumeroCertificadoV53(x){if(x.certNumero)return x.certNumero;const ano=(getSessoes().find(s=>s.id===x.sessaoId)?.data||hojeISO()).slice(0,4),st=getSettings(),seq={...(st.certSeqByYear||{})};seq[ano]=(Number(seq[ano])||0)+1;const numero=`RF1997-${ano}-${String(seq[ano]).padStart(3,'0')}`;setSettings({certSeqByYear:seq});const arr=getVisitantesV5(),ix=arr.findIndex(v=>v.id===x.id);if(ix>=0){arr[ix]={...arr[ix],certNumero:numero,certEmitidoEm:new Date().toISOString()};setVisitantesV5(arr);x=arr[ix]}auditV53('Certificado de visitante numerado',`${numero} · ${x.nome}`,null,{visitanteId:x.id,numero},'emissão de atestado');return numero}
+function garantirNumeroCertificadoV53(x){if(x.certNumero)return x.certNumero;const ano=(getSessoes().find(s=>s.id===x.sessaoId)?.data||hojeISO()).slice(0,4),st=getSettings(),seq={...(st.certSeqByYear||{})};seq[ano]=(Number(seq[ano])||0)+1;const numero=`RF1997-${String(seq[ano]).padStart(4,'0')}-${ano}`;setSettings({certSeqByYear:seq});const arr=getVisitantesV5(),ix=arr.findIndex(v=>v.id===x.id);if(ix>=0){arr[ix]={...arr[ix],certNumero:numero,certEmitidoEm:new Date().toISOString()};setVisitantesV5(arr);x=arr[ix]}auditV53('Certificado de visitante numerado',`${numero} · ${x.nome}`,null,{visitanteId:x.id,numero},'emissão de atestado');return numero}
 // V5.6: wrappers antigos do certificado removidos para evitar redefinições concorrentes.
 // Faixas preventivas: 40–49,99% é alerta interno; 50% é limite normativo
 function renderFaixasFrequenciaV53(){const el=document.getElementById('inicio-faixas-v53');if(!el)return;let at=0,lim=0;getIrmaos().forEach(i=>{const f=calcFreq(i);if(!f.periodo12||!f.total)return;if(f.pctFalta>=50)lim++;else if(f.pctFalta>=40)at++});el.innerHTML=`<div class="freq-bands"><button class="freq-band attention" onclick="abrirAba('relatorios');setTimeout(renderRelatorioGeral,50)"><b>${at}</b><span>Atenção preventiva · 40% a 49,99%</span></button><button class="freq-band legal" onclick="abrirAba('relatorios');setTimeout(renderRelatorioGeral,50)"><b>${lim}</b><span>Limite do art. 76 · 50% ou mais</span></button></div>`}
@@ -3453,8 +3468,18 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     if(x?.certNumero)return x.certNumero;
     const s=getSessoes().find(z=>z.id===x?.sessaoId);
     const ano=(s?.data||hojeISO()).slice(0,4),st=getSettings(),seq={...(st.certSeqByYear||{})};
-    seq[ano]=(Number(seq[ano])||0)+1;
-    const numero=`RF1997-${ano}-${String(seq[ano]).padStart(3,'0')}`;
+    /* Em restauração ou migração, certSeqByYear pode estar vazio ou atrasado.
+       Usa também o maior número já emitido no mesmo ano para impedir duplicidade. */
+    let maiorExistente=0;
+    for(const v of visitasV58()){
+      const cert=String(v?.certNumero||'').toUpperCase();
+      let m=cert.match(new RegExp('^RF1997-(\\d{1,6})-'+ano+'$'));
+      if(m)maiorExistente=Math.max(maiorExistente,Number(m[1])||0);
+      m=cert.match(new RegExp('^RF1997-'+ano+'-(\\d{1,6})$'));
+      if(m)maiorExistente=Math.max(maiorExistente,Number(m[1])||0);
+    }
+    seq[ano]=Math.max(Number(seq[ano])||0,maiorExistente)+1;
+    const numero=`RF1997-${String(seq[ano]).padStart(4,'0')}-${ano}`;
     setSettings({certSeqByYear:seq});
     const arr=visitasV58(),ix=arr.findIndex(v=>v.id===x.id);
     if(ix>=0){arr[ix]={...arr[ix],certNumero:numero,certEmitidoEm:new Date().toISOString(),updatedAt:new Date().toISOString()};setVisitasV58(arr)}
@@ -3549,6 +3574,20 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     audit('Visita de visitante excluída',`${x.nome} · ${getSessoes().find(s=>s.id===x.sessaoId)?.data||''}`);
     renderVisitantesV5();
   };
+  window.excluirCadastroVisitanteV58=function(perfilId){
+    const p=perfisV58().find(x=>x.id===perfilId);if(!p)return;
+    const vinculadas=visitasV58().filter(v=>v.perfilId===perfilId);
+    const aviso=vinculadas.length
+      ?`Excluir definitivamente o cadastro de ${p.nome} e ${vinculadas.length} visita(s) vinculada(s)?`
+      :`Excluir definitivamente o cadastro de ${p.nome}?`;
+    if(!confirm(aviso))return;
+    setVisitasV58(visitasV58().filter(v=>v.perfilId!==perfilId));
+    setPerfisV58(perfisV58().filter(x=>x.id!==perfilId));
+    audit('Cadastro de visitante excluído',`${p.nome} · ${vinculadas.length} visita(s) removida(s)`);
+    v5VisId.value='';
+    renderVisitantesV5();
+    toast('Visitante excluído');
+  };
 
   window.visitanteCertificadoAtual=function(id=''){
     let x=id?getVisitantesV5().find(z=>z.id===id):null;
@@ -3571,7 +3610,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
           const s=smap.get(v.sessaoId),num=v.certNumero?` · ${h(v.certNumero)}`:' · certificado ainda não numerado';
           return `<div class="visitor-visit-row"><div class="visitor-visit-main"><div class="visitor-visit-date">${s?brData(s.data):'Sessão não localizada'}</div><div class="visitor-visit-meta">${s?h(nomeSessaoDocumento(s)):'Registro histórico'}${s?.numero?' · '+h(s.numero):''}${num}<br>Identificação: ${h(v.identificacao||'não informada')}</div></div><div class="visitor-visit-actions"><button class="btn btn-success btn-sm" onclick="compartilharPdfVisitanteV585('${v.id}')">Compartilhar PDF</button><button class="btn btn-outline btn-sm" onclick="certificadoVisitanteV5('${v.id}')">Visualizar PDF</button><button class="btn btn-light btn-sm" onclick="editarVisitanteV5('${v.id}')">Editar visita</button><button class="btn btn-danger btn-sm" onclick="excluirVisitanteV5('${v.id}')">Excluir visita</button></div></div>`;
         }).join(''):'<div class="visitor-visit-row"><div class="visitor-visit-meta">Nenhuma visita registrada.</div></div>';
-        return `<div class="visitor-profile-card"><div class="visitor-profile-head"><div class="avatar">${h(iniciais(p.nome))}</div><div class="visitor-profile-main"><div class="visitor-profile-title">${h(p.nome)}</div><div class="visitor-profile-sub">${p.cim?'CIM '+h(p.cim)+' · ':''}${h(grauNome(p.grau)||grauSimbolo(p.grau)||'')}<br>${h(p.loja)}${p.numero?' nº '+h(p.numero):''} · ${h(p.oriente)}${tel}<br>${hist.length} visita(s) registrada(s)</div></div><div class="visitor-profile-actions"><button class="btn btn-primary btn-sm" onclick="novaVisitaVisitanteV58('${p.id}')">Registrar nova visita</button>${p.telefone?`<button class="btn btn-outline btn-sm" onclick="abrirWhatsAppVisitanteV55('${hist[0]?.id||''}')">WhatsApp</button>`:''}</div></div><div class="visitor-history"><div class="visitor-history-title">Histórico de visitas e certificados</div>${rows}</div></div>`;
+        return `<div class="visitor-profile-card"><div class="visitor-profile-head"><div class="avatar">${h(iniciais(p.nome))}</div><div class="visitor-profile-main"><div class="visitor-profile-title">${h(p.nome)}</div><div class="visitor-profile-sub">${p.cim?'CIM '+h(p.cim)+' · ':''}${h(grauNome(p.grau)||grauSimbolo(p.grau)||'')}<br>${h(p.loja)}${p.numero?' nº '+h(p.numero):''} · ${h(p.oriente)}${tel}<br>${hist.length} visita(s) registrada(s)</div></div><div class="visitor-profile-actions"><button class="btn btn-primary btn-sm" onclick="novaVisitaVisitanteV58('${p.id}')">Registrar nova visita</button>${p.telefone?`<button class="btn btn-outline btn-sm" onclick="abrirWhatsAppVisitanteV55('${hist[0]?.id||''}')">WhatsApp</button>`:''}<button class="btn btn-danger btn-sm" onclick="excluirCadastroVisitanteV58('${p.id}')">Excluir visitante</button></div></div><div class="visitor-history"><div class="visitor-history-title">Histórico de visitas e certificados</div>${rows}</div></div>`;
       }).join('')
       :'<div class="empty"><p>Nenhum visitante cadastrado.</p></div>';
   };
@@ -3724,9 +3763,13 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     return new Blob([concatBytesV585(parts)],{type:'application/pdf'});
   }
   function nomeArquivoPdfV585(x){
-    const base=String(x?.nome||'visitante').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'');
-    const num=String(x?.certNumero||'').replace(/[^A-Z0-9-]/gi,'');
-    return `Atestado-${base}${num?'-'+num:''}.pdf`;
+    const primeiro=String(x?.nome||'VISITANTE').trim().split(/\s+/)[0]
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/gi,'').toUpperCase()||'VISITANTE';
+    const cert=String(x?.certNumero||'').toUpperCase().replace(/[^A-Z0-9-]/g,'');
+    let id=cert||'RF1997-SEM-NUMERO';
+    const m=cert.match(/^RF1997-(\d{4})-(\d{3,4})$/);
+    if(m && Number(m[1])>=2000) id=`RF1997-${String(m[2]).padStart(4,'0')}-${m[1]}`;
+    return `${id}-${primeiro}.pdf`;
   }
   function visitanteV585(id=''){return id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();}
   async function arquivoPdfVisitanteV585(id=''){
@@ -3961,8 +4004,37 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 </script>
 
 
-<script id="v589-ponte-webviewpdfexporter">
-/* V5.8.15 — Ponte ajustada ao Kodular atual.
+<script id="v5817-atestados-individualizados">
+/* V5.8.17 — identificação legível e estável dos atestados.
+   Novas emissões: RF1997-0001-2026.
+   Nome do arquivo: RF1997-0001-2026-MIGUEL.pdf.
+   Certificados já emitidos mantêm a numeração original. */
+(function(){
+  window.CHANCELARIA_VERSION='5.8.18-revisado';
+  window.nomeArquivoAtestadoV5817=function(x){
+    const primeiro=String(x?.nome||'VISITANTE').trim().split(/\s+/)[0]
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/gi,'').toUpperCase()||'VISITANTE';
+    const cert=String(x?.certNumero||'').toUpperCase().replace(/[^A-Z0-9-]/g,'');
+    let id=cert||'RF1997-SEM-NUMERO';
+    const m=cert.match(/^RF1997-(\d{4})-(\d{3,4})$/);
+    if(m && Number(m[1])>=2000) id=`RF1997-${String(m[2]).padStart(4,'0')}-${m[1]}`;
+    return `${id}-${primeiro}.pdf`;
+  };
+  const baseArquivo=window.__arquivoPdfVisitanteV585;
+  if(typeof baseArquivo==='function'){
+    window.__arquivoPdfVisitanteV585=async function(id=''){
+      const out=await baseArquivo(id);
+      const nome=window.nomeArquivoAtestadoV5817(out.x);
+      out.filename=nome;
+      try{if(typeof File==='function')out.file=new File([out.blob],nome,{type:'application/pdf',lastModified:Date.now()})}catch(_e){}
+      return out;
+    };
+  }
+})();
+</script>
+
+<script id="v5818-ponte-webviewpdfexporter">
+/* V5.8.18 — Ponte revisada para o Kodular atual.
    Protocolo do PDF: SI<URL HTTPS do documento>.
    O botão Atestados emitidos envia HI e abre a Screen Historico.
    Antes de HI ou SI é enviado um pulso neutro não vazio para garantir
@@ -3970,7 +4042,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
    O compartilhamento tenta primeiro a Web Share API com o PDF já nomeado;
    se não houver suporte, usa a ponte Kodular/Webviewpdfexporter. */
 (function(){
-  window.CHANCELARIA_VERSION='5.8.15-kodular-share-fix';
+  window.CHANCELARIA_VERSION='5.8.18-revisado';
 
   function enviarUrlPdfV589(url,titulo='Documento'){
     try{
@@ -3981,8 +4053,16 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       // 2 primeiros caracteres do WebViewString. O pulso neutro força uma
       // mudança mesmo quando o mesmo atestado é acionado novamente.
       ponte.setWebViewString('00'+Date.now());
-      setTimeout(()=>{try{ponte.setWebViewString('SI'+alvo)}catch(_e){}},25);
-      try{audit('PDF enviado à ponte Kodular',String(titulo||'Documento')+' · v5.8.15')}catch(_e){}
+      let rotulo='';
+      try{rotulo=(new URL(alvo)).searchParams.get('filename')||''}catch(_e){}
+      rotulo=String(rotulo).replace(/\.pdf$/i,'').slice(0,120);
+      if(rotulo){
+        setTimeout(()=>{try{ponte.setWebViewString('NI'+rotulo)}catch(_e){}},90);
+        setTimeout(()=>{try{ponte.setWebViewString('SI'+alvo)}catch(_e){}},220);
+      }else{
+        setTimeout(()=>{try{ponte.setWebViewString('SI'+alvo)}catch(_e){}},90);
+      }
+      try{audit('PDF enviado à ponte Kodular',String(titulo||'Documento')+' · v5.8.18')}catch(_e){}
       try{toast('Preparando PDF para compartilhar...')}catch(_e){}
       return true;
     }catch(e){
@@ -4015,12 +4095,9 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
   window.compartilharPreviewRelatorioV588=function(){
     if(!pendingPrintPayload){toast('Gere o relatório novamente');return}
-    const p=pendingPrintPayload;
-    const u=new URL(urlRelatorioParaImpressao(p.titulo,p.corpo,false,p));
-    u.searchParams.set('nativepdf','1');
-    const url=u.href;
-    if(enviarUrlPdfV589(url,p.titulo)) return;
-    toast('Compartilhamento nativo indisponível. Abrindo impressão/PDF.');
+    /* SI é reservado aos atestados, pois a tela nativa grava cada SI no
+       histórico de atestados. Relatórios seguem pelo fluxo de impressão/PDF
+       para não contaminar esse histórico. */
     imprimirPreviewRelatorio();
   };
 
@@ -4042,6 +4119,8 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       const wa=numeroWhatsApp(xx.telefone||'');
       if(wa)u.searchParams.set('wa',wa);
       u.searchParams.set('visita',String(xx.id||''));
+      const nomeArquivo=(typeof window.nomeArquivoAtestadoV5817==='function')?window.nomeArquivoAtestadoV5817(xx):`Atestado-${xx.nome||'visitante'}.pdf`;
+      u.searchParams.set('filename',nomeArquivo);
       const url=u.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
       if(enviarUrlPdfV589(url,'Atestado de frequência maçônica')) return;
     }catch(e){console.warn('ponte v5.8.15 indisponível para atestado',e)}
