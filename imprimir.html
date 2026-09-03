@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v5.8.17</title>
+<title>Documento · Chancelaria 1997 v5.9.0</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -57,6 +57,35 @@ html.native-pdf .page:not(.certificate-art-v584){width:100%!important;min-height
 html.native-pdf .page.certificate-art-v584{margin:0!important;padding:0!important;overflow:hidden!important;background:#06111f!important}
 html.native-pdf .page.certificate-art-v584 .cert-art{transform-origin:0 0!important}
 
+
+
+/* V5.9.0 — visualização responsiva e barra profissional */
+:root{--azul:#0d1b2f;--ouro:#c8a64b;--ouro-claro:#e2c874}
+html,body{background:#101a29}
+.toolbar{
+  position:sticky;top:0;z-index:20;
+  gap:9px;justify-content:center;align-items:center;
+  padding:10px max(12px,env(safe-area-inset-right)) 10px max(12px,env(safe-area-inset-left));
+  background:rgba(9,19,33,.97);
+  border-bottom:1px solid rgba(226,200,116,.24);
+  box-shadow:0 8px 24px rgba(0,0,0,.28);
+  backdrop-filter:blur(12px)
+}
+.toolbar button{min-height:44px;border-radius:12px;padding:10px 16px;font-size:14px;letter-spacing:.05px}
+.toolbar .primary{background:#c8a64b;color:#0d1b2f}.toolbar .secondary{background:#fff;color:#17304f;border:1px solid #dedbd3}
+#app{padding:12px 0 20px}
+.page{border-radius:4px}
+.error{border-radius:16px;border:1px solid rgba(166,61,57,.45);box-shadow:0 18px 50px rgba(0,0,0,.24)}
+@media(max-width:800px){
+  body{background:#07111f}
+  .toolbar{position:sticky;display:grid;grid-template-columns:1fr 1fr;padding:10px;gap:8px}
+  .toolbar button{width:100%;min-height:48px;padding:9px 8px;font-size:13.5px}
+  #app{padding:0;overflow:hidden}
+  .page:not(.certificate-art-v584){width:100%;margin:0;border-radius:0;padding:22px 16px 88px}
+  .page.certificate-art-v584{margin:0 auto!important;border-radius:0!important;box-shadow:none!important}
+}
+@media(max-width:390px){.toolbar button{font-size:12.5px}}
+
 </style>
 </head>
 <body>
@@ -81,13 +110,13 @@ html.native-pdf .page.certificate-art-v584 .cert-art{transform-origin:0 0!import
     if(documentClass==='certificate-art-v584'&&data.certificado){
       const c=data.certificado, esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
       app.innerHTML=`<article class="page certificate-art-v584"><div class="cert-art"><div class="dyn title"><div>ATESTADO DE</div><div>FREQUÊNCIA MAÇÔNICA</div></div><div class="rule"></div><div class="dyn intro">Atestamos, para os fins maçônicos cabíveis, que o Irmão</div><div class="dyn name">${esc(c.nome)}</div><div class="dyn cim">${c.cim?'CIM '+esc(c.cim)+(c.grau?' · ':''):''}${esc(c.grau)}</div><div class="dyn loja">pertencente à ${esc(c.loja)}${c.numeroLoja?' nº '+esc(c.numeroLoja):''},</div><div class="dyn oriente">Oriente de ${esc(c.oriente)}, esteve presente aos trabalhos da</div><div class="dyn host">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn date-session">em ${esc(c.dataSessao)}, na</div><div class="dyn session">${esc(c.tipoSessao)}</div><div class="dyn emit">Porto Murtinho/MS, ${esc(c.dataEmissao)}.</div><img class="signature" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="dyn role">Chanceler</div><div class="dyn lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn jur">Federada ao GOB · Jurisdicionada ao GOB-MS</div><div class="dyn number">Atestado nº ${esc(c.numeroAtestado)}</div></div></article>`;
-      if(nativePdf){
+      if(nativePdf || window.matchMedia('(max-width:800px)').matches){
         const page=app.querySelector('.page.certificate-art-v584');
         const art=page&&page.querySelector('.cert-art');
         if(page&&art){
           const BASE_W=794,BASE_H=1123;
-          const vw=Math.max(1,Math.floor(document.documentElement.clientWidth||window.innerWidth||360));
-          const scale=Math.min(1,vw/BASE_W);
+          const vw=Math.max(1,Math.min(BASE_W,Math.floor(document.documentElement.clientWidth||window.innerWidth||360)));
+          const scale=vw/BASE_W;
           const outH=Math.round(BASE_H*scale);
           page.style.width=vw+'px';
           page.style.height=outH+'px';
@@ -95,9 +124,9 @@ html.native-pdf .page.certificate-art-v584 .cert-art{transform-origin:0 0!import
           art.style.inset='auto';
           art.style.left='0';art.style.top='0';
           art.style.width=BASE_W+'px';art.style.height=BASE_H+'px';
+          art.style.transformOrigin='0 0';
           art.style.transform='scale('+scale+')';
-          document.body.style.width=vw+'px';
-          document.body.style.height=outH+'px';
+          if(nativePdf){document.body.style.width=vw+'px';document.body.style.height=outH+'px'}
         }
       }
     }else{

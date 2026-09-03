@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
 <title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.8.18-revisado">
+<meta name="application-version" content="5.9.0-profissional">
 <style>
 :root{
   --azul:#152541;
@@ -526,6 +526,199 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
 
 <style id="v57-conformidade-css">
 .ele-v57-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}.ele-v57-card{border:1px solid rgba(201,168,76,.34);border-radius:14px;padding:12px;background:rgba(255,253,248,.8)}.ele-v57-card h4{margin:0 0 8px;color:var(--azul)}.ele-v57-status{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:.78rem;font-weight:800}.ele-v57-status.ok{background:#e7f5ec;color:#17663b}.ele-v57-status.warn{background:#fff3cf;color:#795600}.ele-v57-status.bad{background:#fde8e6;color:#8a2a24}.ele-v57-sub{font-size:.84rem;color:#676b75;line-height:1.35;margin-top:5px}.ele-fin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;min-width:210px}.ele-fin label{font-size:.66rem;color:#6b6f78}.ele-fin select{font-size:.76rem;padding:5px 4px}.ele-snapshot{border-left:4px solid var(--ouro);padding:9px 11px;margin:9px 0;background:#fff9e9;border-radius:8px}.norm-source-note{font-size:.78rem;color:#666;margin-top:7px}.candidate-chip{display:inline-block;padding:3px 7px;border-radius:8px;font-size:.72rem;font-weight:700;margin-top:5px}.candidate-chip.ok{background:#e7f5ec;color:#17663b}.candidate-chip.warn{background:#fff3cf;color:#795600}.candidate-chip.bad{background:#fde8e6;color:#8a2a24}@media(max-width:700px){.ele-v57-grid{grid-template-columns:1fr}.ele-fin{grid-template-columns:1fr;min-width:120px}}
+</style>
+
+
+<style id="v590-professional-ui">
+/* V5.9.0 — interface profissional, hierarquia visual e acessibilidade móvel. */
+:root{
+  --azul:#0d1b2f;
+  --azul-2:#142844;
+  --azul-3:#1d3a61;
+  --ouro:#c8a64b;
+  --ouro-2:#e0c56f;
+  --papel:#f5f3ee;
+  --branco:#ffffff;
+  --linha:#dedbd3;
+  --texto:#18202c;
+  --muted:#687180;
+  --verde:#1f7a4d;
+  --vermelho:#a63d39;
+  --laranja:#a96725;
+  --sombra:0 14px 34px rgba(7,20,38,.14);
+}
+html{background:#0a1423}
+body{
+  background:
+    radial-gradient(circle at 50% -12%,rgba(200,166,75,.13),transparent 34rem),
+    linear-gradient(180deg,#0a1423 0%,#0d1c31 58%,#10223b 100%);
+  background-attachment:fixed;
+  letter-spacing:.002em;
+}
+.header{
+  padding:8px 12px;
+  background:rgba(10,20,35,.94);
+  border-bottom:1px solid rgba(200,166,75,.24);
+  box-shadow:0 8px 24px rgba(0,0,0,.24);
+  backdrop-filter:blur(14px);
+}
+.app-topbar{max-width:720px;margin:0 auto;justify-content:space-between}
+.compact-brand{gap:11px}
+.compact-brand img{width:42px;height:42px;padding:1px;border:1px solid rgba(224,197,111,.62);box-shadow:0 5px 14px rgba(0,0,0,.2)}
+.compact-brand b{font-size:15px;font-weight:800;letter-spacing:.15px;color:#f9f6ee}
+.compact-brand small{font-size:10.5px;color:#c6cbd3;letter-spacing:.08px}
+.header-actions button{
+  width:38px;height:38px;border-radius:12px!important;
+  background:rgba(255,255,255,.055)!important;
+  border:1px solid rgba(224,197,111,.25)!important;
+  color:#e4ca79!important;
+  transition:transform .16s ease,background .16s ease,border-color .16s ease;
+}
+.header-actions button:active{transform:scale(.94);background:rgba(224,197,111,.12)!important}
+.swipe-hint{color:#8c9aad;font-size:9px;margin:4px 0 5px;opacity:.78}
+main{max-width:720px;padding:14px 12px 28px}
+.hero,.card,.list-item,.visitor-profile-card,.procedure-card{
+  background:#fbfaf7;
+  border:1px solid rgba(222,219,211,.96);
+  box-shadow:var(--sombra);
+}
+.hero{border-radius:22px;padding:11px;margin-bottom:14px}
+.quick-actions-hero{background:#fbfaf7}
+.action-grid{gap:9px}
+.action{
+  position:relative;
+  min-height:88px;
+  padding:14px 14px 13px;
+  border-radius:15px;
+  background:#fff;
+  border:1px solid #e4e1d9;
+  box-shadow:0 5px 14px rgba(13,27,47,.055);
+  transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;
+}
+.action:active{transform:translateY(1px);border-color:#c8a64b;box-shadow:0 2px 7px rgba(13,27,47,.08)}
+.action b{font-size:14.5px;color:#10223a;margin-bottom:5px;font-weight:800}
+.action small{font-size:11.5px;color:#6e7682;line-height:1.38}
+.card{border-radius:18px;margin-bottom:13px;overflow:hidden}
+.card-head{
+  background:#10223a;
+  color:#e4c875;
+  padding:12px 14px;
+  min-height:45px;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.12px;
+}
+.card-body{padding:14px}
+.stat{
+  background:#fff;
+  border:1px solid #e3e0d8;
+  border-radius:16px;
+  padding:14px 10px;
+  box-shadow:0 5px 14px rgba(13,27,47,.05);
+}
+.stat strong{font-size:27px;color:#10223a;font-weight:850}
+.stat span{font-size:10px;color:#747d89;letter-spacing:.55px}
+.btn{
+  border-radius:11px;
+  min-height:42px;
+  padding:10px 14px;
+  font-size:13px;
+  font-weight:800;
+  box-shadow:none;
+  transition:transform .14s ease,filter .14s ease,box-shadow .14s ease;
+}
+.btn:active{transform:scale(.975)}
+.btn-primary{background:#c8a64b;color:#0d1b2f}
+.btn-info{background:#244c7d;color:#fff}
+.btn-success{background:#1f7a4d;color:#fff}
+.btn-danger{background:#a63d39;color:#fff}
+.btn-warning{background:#a96725;color:#fff}
+.btn-outline{background:#fff;color:#17304f;border:1px solid #c8a64b}
+.btn-light{background:#fff;color:#17304f;border:1px solid #d9d7d0}
+.btn-sm{min-height:36px;padding:8px 10px;font-size:11.5px;border-radius:9px}
+.field label{font-size:10.5px;color:#394b61;letter-spacing:.48px;margin-bottom:6px}
+.field input,.field select,.field textarea,.search input{
+  background:#fff;
+  border:1px solid #d9d7d0;
+  border-radius:12px;
+  color:#18202c;
+  box-shadow:0 1px 2px rgba(13,27,47,.03);
+}
+.field input:focus,.field select:focus,.field textarea:focus,.search input:focus{
+  border-color:#c8a64b;
+  box-shadow:0 0 0 3px rgba(200,166,75,.16);
+}
+.list-item{border-radius:15px;box-shadow:0 5px 14px rgba(13,27,47,.05)}
+.avatar{border-radius:14px;background:#102947;color:#e3c56c;box-shadow:none}
+.item-title,.visitor-profile-title{color:#10223a;font-weight:850}
+.item-sub,.visitor-profile-sub,.visitor-visit-meta{color:#687180}
+.modal-back{background:rgba(3,9,17,.78);padding:12px 8px;backdrop-filter:blur(5px)}
+.modal{max-width:620px;border-radius:22px;background:#f8f7f3;border:1px solid rgba(224,197,111,.32);box-shadow:0 28px 80px rgba(0,0,0,.5)}
+.modal-head{background:#10223a;color:#e4c875;padding:15px 17px;font-size:16px;letter-spacing:.1px}
+.modal-body{padding:16px;max-height:76vh}
+.modal-foot{padding:12px 16px;background:#f2f0eb;border-top:1px solid #ddd9d0}
+.modal-close{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font-size:24px;background:rgba(255,255,255,.06);color:#e4c875}
+.visitor-profile-card{border-radius:18px;overflow:hidden;margin-bottom:13px}
+.visitor-profile-head{padding:15px;gap:13px}
+.visitor-profile-title{font-size:18px}
+.visitor-profile-actions{gap:7px}
+.visitor-history{background:#f7f5f0;border-top:1px solid #dedbd3}
+.visitor-history-title{padding:11px 15px 8px;color:#6f5c2d;font-size:11px;letter-spacing:.65px}
+.visitor-visit-row{padding:12px 15px;border-top:1px solid #e1ded6;gap:12px}
+.visitor-visit-date{font-size:15px;color:#10223a}
+.visitor-visit-actions{gap:7px}
+.tabs{border:1px solid #dcd9d1;background:#efede8;border-radius:13px;box-shadow:none;padding:3px;gap:3px}
+.tabs button{background:transparent;border-radius:10px;color:#687180;padding:9px 5px}
+.tabs button.active{background:#10223a;color:#e4c875}
+.nav{
+  left:10px;right:10px;bottom:8px;
+  border:1px solid rgba(224,197,111,.22);
+  border-radius:22px;
+  background:rgba(8,18,32,.96);
+  box-shadow:0 12px 34px rgba(0,0,0,.42);
+  backdrop-filter:blur(16px);
+  padding:4px;
+  overflow:hidden;
+}
+.nav button{min-height:59px;border-radius:16px;color:#aeb8c5;font-size:9.5px;font-weight:760;padding:5px 1px 7px!important}
+.nav button.active{color:#efd77f;background:rgba(200,166,75,.12);box-shadow:none}
+.nav button.active:after{bottom:3px;height:2px;background:#e0c56f}
+.security-gate{background:radial-gradient(circle at 50% 4%,rgba(200,166,75,.15),transparent 28rem),linear-gradient(180deg,#07111e,#10233c)}
+.security-panel{max-width:400px;background:#fbfaf7;border:1px solid rgba(224,197,111,.42);border-radius:26px;padding:22px;box-shadow:0 32px 90px rgba(0,0,0,.52)}
+.security-brand-seal{width:96px;height:96px;background:#fff;border:1px solid rgba(200,166,75,.46);box-shadow:0 12px 30px rgba(13,27,47,.12)}
+.security-brand-seal img{width:88px;height:88px}
+.security-kicker{font-size:10px;letter-spacing:1.4px;color:#8b6a1d}
+.security-panel h1{font-family:Arial,"Segoe UI",sans-serif;font-size:25px;font-weight:850;color:#10223a}
+.security-panel .security-sub{font-size:12px;color:#6d7581}
+.security-panel input{background:#fff;border:1px solid #d8d5cd;border-radius:12px}
+.security-submit{border-radius:12px!important;background:#10223a!important;color:#efd77f!important;min-height:48px;font-weight:850!important}
+.install-note,.visitor-repeat-note{background:#eef2f6;border:1px solid #dde3ea;color:#5f6976}
+.empty{background:#f4f2ed;border:1px solid #dedbd3;color:#687180}
+.alert{background:#fff7e5;border:1px solid #e4c477}
+
+@media(max-width:620px){
+  body{padding-bottom:84px}
+  main{padding:11px 9px 22px}
+  .header{padding:7px 9px}
+  .compact-brand img{width:38px;height:38px}
+  .compact-brand b{font-size:14px}.compact-brand small{font-size:9.7px;max-width:150px}
+  .header-actions{gap:5px!important}.header-actions button{width:34px;height:34px}
+  .hero{padding:8px;border-radius:18px}.action-grid{gap:7px}.action{min-height:82px;padding:12px;border-radius:13px}
+  .action b{font-size:13.5px}.action small{font-size:10.8px}
+  .grid-2{gap:8px}.stat{padding:12px 7px}.stat strong{font-size:25px}
+  .card{border-radius:16px}.card-head{padding:11px 12px;font-size:13.5px}.card-body{padding:12px}
+  .modal-back{padding:6px 4px}.modal{border-radius:20px;margin-bottom:12px}.modal-body{padding:12px;max-height:78vh}.modal-foot{padding:10px 12px}
+  .visitor-profile-head{padding:13px}.visitor-history-title{padding-left:13px}.visitor-visit-row{padding:11px 13px}
+  .visitor-visit-actions .btn{flex:1 1 calc(50% - 5px);min-width:128px}
+  .visitor-profile-actions .btn{flex:1 1 auto}
+  .nav{left:7px;right:7px;bottom:6px;border-radius:20px}.nav button{min-height:57px;font-size:9px}
+}
+@media(max-width:390px){
+  .action-grid{grid-template-columns:1fr 1fr}
+  .action{min-height:86px;padding:11px 10px}
+  .visitor-visit-actions .btn{flex-basis:100%;min-width:0}
+  .visitor-profile-actions .btn{width:100%}
+}
 </style>
 
 </head>
@@ -2162,7 +2355,7 @@ function abrirHistoricoAtestadosNativo(){
   }
 }
 function prefixoKodularV5816(tipo){
-  const mapa={W:'WI',P:'PI',X:'XI',T:'TI',H:'HI',S:'SI'};
+  const mapa={W:'WI',P:'PI',X:'XI',T:'TI',H:'HI',S:'SI',V:'VI'};
   const chave=String(tipo||'').toUpperCase();
   return mapa[chave]||chave;
 }
@@ -2350,11 +2543,12 @@ function abrirPrint(titulo,corpo,meta={}){
 function fecharPreviewRelatorio(){pendingPrintPayload=null;fecharModal('modalPreviewRelatorio')}
 function imprimirPreviewRelatorio(){
   if(!pendingPrintPayload){toast('Gere o relatório novamente');return}
-  const url=urlRelatorioParaImpressao(pendingPrintPayload.titulo,pendingPrintPayload.corpo,true,pendingPrintPayload);
-  if(enviarAcaoNativa('P',url)){toast('Abrindo impressão e PDF');return}
+  const urlNativa=urlRelatorioParaImpressao(pendingPrintPayload.titulo,pendingPrintPayload.corpo,false,pendingPrintPayload);
+  if(enviarAcaoNativa('T',urlNativa)){toast('Abrindo impressão e PDF');return}
+  const urlNavegador=urlRelatorioParaImpressao(pendingPrintPayload.titulo,pendingPrintPayload.corpo,true,pendingPrintPayload);
   iniciarAcaoExterna();
-  const w=window.open(url,'_blank','noopener');
-  if(!w)window.location.href=url
+  const w=window.open(urlNavegador,'_blank','noopener');
+  if(!w)window.location.href=urlNavegador
 }
 function imprimirIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}abrirPrint('Relatório individual',corpoRelatorioIndividual(i),{tipo:'individual',irmaoId:i.id})}
 
@@ -3910,6 +4104,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
   window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;
   window.compartilharCertificadoVisitanteV5=window.compartilharPdfVisitanteV585;
+
 })();
 </script>
 
@@ -4128,6 +4323,199 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
   window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;
   window.compartilharCertificadoVisitanteV5=window.compartilharPdfVisitanteV585;
+})();
+</script>
+
+
+<script id="v590-visualizacao-atestado">
+/* V5.9.0 — separa Visualizar (VI) de Compartilhar (SI).
+   Visualizar nunca solicita CreatePDF no Kodular. */
+(function(){
+  window.CHANCELARIA_VERSION='5.9.0-profissional';
+
+  function escPayloadV590(v){return String(v??'')}
+  function montarUrlVisualizacaoV590(x){
+    const numero=typeof garantirNumeroCertificadoV53==='function'?garantirNumeroCertificadoV53(x):(x.certNumero||'');
+    const atual=(typeof getVisitantesV5==='function'?getVisitantesV5():[]).find(v=>v.id===x.id)||x;
+    const s=(typeof getSessoes==='function'?getSessoes():[]).find(z=>z.id===atual.sessaoId);
+    if(!s)throw new Error('A sessão vinculada à visita não foi localizada.');
+    const payload={
+      titulo:'Atestado de frequência maçônica',
+      documentClass:'certificate-art-v584',
+      certificado:{
+        nome:escPayloadV590(atual.nome),
+        cim:escPayloadV590(atual.cim),
+        grau:escPayloadV590((typeof grauNome==='function'?grauNome(atual.grau):'')||(typeof grauSimbolo==='function'?grauSimbolo(atual.grau):'')),
+        loja:escPayloadV590(atual.loja),
+        numeroLoja:escPayloadV590(atual.numero),
+        oriente:escPayloadV590(atual.oriente),
+        dataSessao:typeof brData==='function'?brData(s.data):escPayloadV590(s.data),
+        tipoSessao:(typeof nomeSessaoDocumento==='function'?nomeSessaoDocumento(s):'Sessão')+(s.numero?' · '+s.numero:''),
+        dataEmissao:typeof brData==='function'&&typeof hojeISO==='function'?brData(hojeISO()):'',
+        numeroAtestado:escPayloadV590(numero||atual.certNumero)
+      },
+      assinatura:'',rodape:''
+    };
+    const u=new URL('imprimir.html',location.href);
+    u.searchParams.set('visita',String(atual.id||''));
+    if(typeof window.nomeArquivoAtestadoV5817==='function')u.searchParams.set('filename',window.nomeArquivoAtestadoV5817(atual));
+    return u.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
+  }
+
+  function enviarVisualizacaoV590(url){
+    if(typeof enviarDadoNativo==='function' && enviarDadoNativo('V',url))return true;
+    const ponte=typeof obterPonteKodular==='function'?obterPonteKodular():null;
+    if(ponte){
+      try{
+        ponte.setWebViewString('00'+Date.now());
+        setTimeout(()=>{try{ponte.setWebViewString('VI'+String(url))}catch(_e){}},90);
+        return true;
+      }catch(_e){}
+    }
+    return false;
+  }
+
+  window.certificadoVisitanteV5=async function(id=''){
+    const x=id?(typeof getVisitantesV5==='function'?getVisitantesV5():[]).find(v=>v.id===id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);
+    if(!x||!x.id){if(typeof toast==='function')toast('Selecione uma visita já registrada');return}
+    try{
+      const url=montarUrlVisualizacaoV590(x);
+      try{if(typeof audit==='function')audit('Atestado visualizado',`${x.nome||''} · ${x.certNumero||''}`)}catch(_e){}
+      if(enviarVisualizacaoV590(url))return;
+      if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
+      const w=window.open(url,'_blank','noopener');
+      if(!w)window.location.href=url;
+      setTimeout(()=>{try{if(typeof finalizarAcaoExterna==='function')finalizarAcaoExterna()}catch(_e){}},900);
+    }catch(e){
+      try{if(typeof finalizarAcaoExterna==='function')finalizarAcaoExterna()}catch(_e){}
+      console.error('visualização de atestado V5.9.0',e);
+      if(typeof toast==='function')toast(e?.message||'Não foi possível abrir o atestado');
+    }
+  };
+
+
+  window.compartilharPdfVisitanteV585=async function(id=''){
+    const x=id?(typeof getVisitantesV5==='function'?getVisitantesV5():[]).find(v=>v.id===id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);
+    if(!x||!x.id){if(typeof toast==='function')toast('Selecione uma visita já registrada');return}
+    try{
+      if(typeof toast==='function')toast('Preparando atestado...');
+      const out=await window.__arquivoPdfVisitanteV585(id);
+      const atual=out.x||x;
+      const s=(typeof getSessoes==='function'?getSessoes():[]).find(z=>z.id===atual.sessaoId);
+      if(!s)throw new Error('A sessão vinculada à visita não foi localizada.');
+
+      if(out.file && navigator.share){
+        try{
+          if(!navigator.canShare || navigator.canShare({files:[out.file]})){
+            if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
+            await navigator.share({title:'Atestado de frequência maçônica',text:`Atestado de frequência maçônica - ${atual.nome||''}`.trim(),files:[out.file]});
+            if(typeof finalizarAcaoExterna==='function')finalizarAcaoExterna();
+            try{if(typeof audit==='function')audit('Atestado PDF compartilhado diretamente',`${atual.nome||''} · ${atual.certNumero||''}`)}catch(_e){}
+            return;
+          }
+        }catch(e){
+          if(typeof finalizarAcaoExterna==='function')finalizarAcaoExterna();
+          if(e?.name==='AbortError')return;
+          console.warn('Compartilhamento direto indisponível; usando ponte Kodular.',e);
+        }
+      }
+
+      const payload={titulo:'Atestado de frequência maçônica',documentClass:'certificate-art-v584',certificado:{
+        nome:atual.nome||'',cim:atual.cim||'',grau:(typeof grauNome==='function'?grauNome(atual.grau):'')||(typeof grauSimbolo==='function'?grauSimbolo(atual.grau):''),
+        loja:atual.loja||'',numeroLoja:atual.numero||'',oriente:atual.oriente||'',
+        dataSessao:typeof brData==='function'?brData(s.data):String(s.data||''),
+        tipoSessao:(typeof nomeSessaoDocumento==='function'?nomeSessaoDocumento(s):'Sessão')+(s.numero?' · '+s.numero:''),
+        dataEmissao:typeof brData==='function'&&typeof hojeISO==='function'?brData(hojeISO()):'',numeroAtestado:atual.certNumero||''
+      },assinatura:'',rodape:''};
+      const u=new URL('imprimir.html',location.href);
+      u.searchParams.set('nativepdf','1');
+      u.searchParams.set('visita',String(atual.id||''));
+      const wa=typeof numeroWhatsApp==='function'?numeroWhatsApp(atual.telefone||''):'';
+      if(wa)u.searchParams.set('wa',wa);
+      const nomeArquivo=(typeof window.nomeArquivoAtestadoV5817==='function')?window.nomeArquivoAtestadoV5817(atual):`Atestado-${atual.nome||'visitante'}.pdf`;
+      u.searchParams.set('filename',nomeArquivo);
+      const url=u.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
+      if(typeof window.__enviarUrlPdfV589==='function' && window.__enviarUrlPdfV589(url,'Atestado de frequência maçônica'))return;
+
+      const urlVisual=url.replace(/([?&])nativepdf=1(&|$)/,(_m,a,b)=>b?a:(a==='?'?'?':'')).replace(/[?&]$/,'');
+      if(typeof toast==='function')toast('Abra “Imprimir ou salvar em PDF” para concluir.');
+      const w=window.open(urlVisual,'_blank','noopener');
+      if(!w)window.location.href=urlVisual;
+    }catch(e){
+      try{if(typeof finalizarAcaoExterna==='function')finalizarAcaoExterna()}catch(_e){}
+      console.error('compartilhamento de atestado V5.9.0',e);
+      if(typeof toast==='function')toast(e?.message||'Não foi possível preparar o atestado');
+    }
+  };
+  window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;
+  window.compartilharCertificadoVisitanteV5=window.compartilharPdfVisitanteV585;
+
+  /* Relatórios: PI compartilha, TI imprime. Evita a inversão antiga. */
+  window.compartilharPreviewRelatorioV588=function(){
+    if(!pendingPrintPayload){if(typeof toast==='function')toast('Gere o relatório novamente');return}
+    const p=pendingPrintPayload;
+    const url=urlRelatorioParaImpressao(p.titulo,p.corpo,false,p);
+    if(typeof enviarAcaoNativa==='function' && enviarAcaoNativa('P',url)){
+      if(typeof toast==='function')toast('Preparando compartilhamento do relatório...');
+      return;
+    }
+    if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
+    const w=window.open(url,'_blank','noopener');
+    if(!w)window.location.href=url;
+  };
+
+  /* TI fica exclusivo da impressão. WhatsApp com destinatário não usa TI. */
+  function abrirWhatsAppDiretoV590(numero,texto=''){
+    const n=String(numero||'').replace(/\D/g,'');
+    if(!n)return false;
+    const query=texto?'&text='+encodeURIComponent(texto):'';
+    const appUrl=`whatsapp://send?phone=${n}${query}`;
+    const webUrl=`https://wa.me/${n}${texto?'?text='+encodeURIComponent(texto):''}`;
+    try{
+      if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
+      window.location.href=appUrl;
+      setTimeout(()=>{
+        try{
+          if(document.visibilityState==='visible')window.location.href=webUrl;
+          else if(typeof finalizarAcaoExterna==='function')finalizarAcaoExterna();
+        }catch(_e){}
+      },900);
+      return true;
+    }catch(_e){
+      try{window.location.href=webUrl;return true}catch(__e){return false}
+    }
+  }
+
+  window.abrirWhatsAppTelefone=function(id){
+    const i=(typeof getIrmaos==='function'?getIrmaos():[]).find(x=>x.id===id);
+    if(!i){if(typeof toast==='function')toast('Cadastro não encontrado');return}
+    const numero=typeof numeroWhatsApp==='function'?numeroWhatsApp(i.telefone):'';
+    if(!numero){if(typeof toast==='function')toast('Revise o telefone. Use DDD e número.');return}
+    abrirWhatsAppDiretoV590(numero);
+  };
+
+  window.abrirWhatsAppVisitanteV55=function(id=''){
+    const x=id?(typeof getVisitantesV5==='function'?getVisitantesV5():[]).find(v=>v.id===id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);
+    if(!x){if(typeof toast==='function')toast('Selecione um visitante');return}
+    const numero=typeof numeroWhatsApp==='function'?numeroWhatsApp(x.telefone||''):'';
+    if(!numero){if(typeof toast==='function')toast('Cadastre o telefone/WhatsApp do visitante');return}
+    abrirWhatsAppDiretoV590(numero);
+  };
+
+  const compartilharMensagemBaseV590=window.compartilharMensagem;
+  window.compartilharMensagem=function(){
+    const texto=typeof msgTexto!=='undefined'?String(msgTexto.value||'').trim():'';
+    if(!texto){if(typeof toast==='function')toast('A mensagem está vazia');return}
+    if(typeof mensagemDestinoIrmaoId!=='undefined' && mensagemDestinoIrmaoId){
+      const i=(typeof getIrmaos==='function'?getIrmaos():[]).find(x=>x.id===mensagemDestinoIrmaoId);
+      if(!i){if(typeof toast==='function')toast('Irmão não encontrado');return}
+      const numero=typeof numeroWhatsApp==='function'?numeroWhatsApp(i.telefone):'';
+      if(!numero){if(typeof toast==='function')toast('Cadastre um telefone válido para este Irmão');return}
+      abrirWhatsAppDiretoV590(numero,texto);
+      return;
+    }
+    return compartilharMensagemBaseV590();
+  };
 })();
 </script>
 
