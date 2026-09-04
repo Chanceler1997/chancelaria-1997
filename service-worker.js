@@ -1,4 +1,4 @@
-const CACHE_NAME = "chancelaria-1997-v590-profissional";
+const CACHE_NAME = "chancelaria-1997-v592-profissional";
 
 const APP_FILES = [
   "./",

@@ -1971,17 +1971,16 @@ function inicializarDeslizePaginas(){
 }
 function atualizarBotaoVoltar(){
   const b=document.getElementById('backNowButton');if(!b)return;
-  const sair=aba==='inicio'&&appHistoryDepth===0;
-  b.setAttribute('aria-label',sair?'Sair do aplicativo':'Voltar à página anterior');
-  b.title=sair?'Sair do aplicativo':'Voltar';
+  const inicio=aba==='inicio'&&appHistoryDepth===0;
+  b.setAttribute('aria-label',inicio?'Página inicial':'Voltar à página anterior');
+  b.title=inicio?'Página inicial':'Voltar';
 }
 function voltarNoAplicativo(){
   const modais=[...document.querySelectorAll('.modal-back.open')];
   if(modais.length){const atual=modais[modais.length-1];if(atual.id==='modalPreviewRelatorio')fecharPreviewRelatorio();else fecharModal(atual.id);return}
   if(appHistoryDepth>0){history.back();return}
   if(aba!=='inicio'){aplicarAba('inicio');return}
-  if(enviarAcaoNativa('X','')){toast('Saindo do aplicativo');return}
-  window.history.back();
+  toast('Você já está na página inicial');
 }
 
 function aniversarios(dias=365){
@@ -2094,6 +2093,8 @@ function salvarIrmao(){
   if(cNasc.value&&!anivISO(cNasc.value)){toast('Informe o aniversário da cunhada em DD/MM');return}
   if(dataIngresso&&!dataValida(dataIngresso)){toast('Informe uma data de ingresso válida');return}
   if(dataIngresso&&dataIngresso>hojeISO()){toast('A data de ingresso não pode estar no futuro');return}
+  const telefoneIrmao=String(iTel.value||'').trim();
+  if(telefoneIrmao&&numeroWhatsApp(telefoneIrmao)===''){toast('Confira o WhatsApp. Informe DDD e número.');return}
   const arr=getIrmaos();
   const id=iId.value||uid();
   const idx=arr.findIndex(x=>x.id===id);
@@ -2108,7 +2109,7 @@ function salvarIrmao(){
   let dataGrauAtual=mudouGrau?dataMudanca:(antigo?.dataGrauAtual||historico[historico.length-1]?.data||dataIngresso||'');
   let corrigiuDataGrau=false;
   if(antigo&&!mudouGrau&&iGrau.value!=='A'&&iGrauData.value){const corrigida=String(iGrauData.value).slice(0,10);const anteriores=historico.filter(x=>ordemGrau(x.grau)<ordemGrau(iGrau.value));const limite=anteriores.length?anteriores.sort((a,b)=>b.data.localeCompare(a.data))[0].data:(dataIngresso||'');if(!dataValida(corrigida)||corrigida>hojeISO()){toast('Informe uma data válida para o grau atual');return}if(limite&&corrigida<limite){toast('A data do grau atual não pode ser anterior ao grau precedente');return}if(corrigida!==dataGrauAtual){historico=corrigirDataGrauAtual({...antigo,historicoGraus:historico},corrigida);dataGrauAtual=corrigida;corrigiuDataGrau=true}}
-  const obj={id,nome,cim,grau:iGrau.value,nascimento:anivISO(iNasc.value),telefone:iTel.value,cargo:iCargo.value,condicao:iCondicao.value||'normal',direitos:iDireitos.value||'pleno',direitosRef:iDireitosRef.value.trim(),regimeFreq:iRegimeFreq.value||'normal',regimeRef:iRegimeRef.value.trim(),regimeInicio:iRegimeInicio.value||'',regimeFim:iRegimeFim.value||'',obs:iObs.value,tipoIngresso,dataIngresso,dataGrauAtual,historicoGraus:historico,familia:{esposa:{nome:cNome.value,nasc:anivISO(cNasc.value)},filhos:filhosTemp.filter(f=>f.nome.trim()).map(f=>({nome:f.nome.trim(),nasc:anivISO(f.nasc),sexo:f.sexo}))}};
+  const obj={id,nome,cim,grau:iGrau.value,nascimento:anivISO(iNasc.value),telefone:telefoneIrmao,cargo:iCargo.value,condicao:iCondicao.value||'normal',direitos:iDireitos.value||'pleno',direitosRef:iDireitosRef.value.trim(),regimeFreq:iRegimeFreq.value||'normal',regimeRef:iRegimeRef.value.trim(),regimeInicio:iRegimeInicio.value||'',regimeFim:iRegimeFim.value||'',obs:iObs.value,tipoIngresso,dataIngresso,dataGrauAtual,historicoGraus:historico,familia:{esposa:{nome:cNome.value,nasc:anivISO(cNasc.value)},filhos:filhosTemp.filter(f=>f.nome.trim()).map(f=>({nome:f.nome.trim(),nasc:anivISO(f.nasc),sexo:f.sexo}))}};
   if(idx>=0)arr[idx]=obj;else arr.push(obj);
   setIrmaos(arr);
   audit(idx>=0?'Cadastro de Irmão atualizado':'Irmão cadastrado',`${nome}${cim?' · CIM '+cim:''}${dataIngresso?' · '+tipoIngressoNome(tipoIngresso)+' '+brData(dataIngresso):''}`);
@@ -2355,7 +2356,7 @@ function abrirHistoricoAtestadosNativo(){
   }
 }
 function prefixoKodularV5816(tipo){
-  const mapa={W:'WI',P:'PI',X:'XI',T:'TI',H:'HI',S:'SI',V:'VI'};
+  const mapa={W:'WI',P:'PI',X:'XI',T:'TI',H:'HI',S:'SI',V:'VI',A:'WA',B:'BK'};
   const chave=String(tipo||'').toUpperCase();
   return mapa[chave]||chave;
 }
@@ -2385,9 +2386,8 @@ function abrirWhatsAppTelefone(id){
   if(!i){toast('Cadastro não encontrado');return}
   const numero=numeroWhatsApp(i.telefone);
   if(!numero){toast('Revise o telefone. Use DDD e número.');return}
-  const appUrl=`whatsapp://send?phone=${numero}`;
   const webUrl=`https://wa.me/${numero}`;
-  if(enviarAcaoNativa('T',appUrl)){toast(`Abrindo WhatsApp de ${primeiroNome(i.nome)}`);return}
+  if(enviarAcaoNativa('WA',webUrl)){toast(`Abrindo WhatsApp de ${primeiroNome(i.nome)}`);return}
   iniciarAcaoExterna();
   window.location.href=webUrl;
 }
@@ -2409,7 +2409,6 @@ function resumoNotificacaoHoje(){
 }
 function publicarResumoNotificacao(){
   const mensagem=vaultKey?resumoNotificacaoHoje():'';
-  enviarDadoNativo('N',mensagem);
   return mensagem;
 }
 function compartilharMensagem(){
@@ -2420,9 +2419,8 @@ function compartilharMensagem(){
     if(!i){toast('Irmão não encontrado');return}
     const numero=numeroWhatsApp(i.telefone);
     if(!numero){toast('Cadastre um telefone válido para este Irmão');return}
-    const appUrl=`whatsapp://send?phone=${numero}&text=${encodeURIComponent(texto)}`;
     const webUrl=`https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
-    if(enviarAcaoNativa('T',appUrl)){toast(`Abrindo WhatsApp de ${primeiroNome(i.nome)}`);return}
+    if(enviarAcaoNativa('WA',webUrl)){toast(`Abrindo WhatsApp de ${primeiroNome(i.nome)}`);return}
     iniciarAcaoExterna();
     window.location.href=webUrl;
     return
@@ -3112,7 +3110,7 @@ editarVisitanteV5=function(id){const x=getVisitantesV5().find(z=>z.id===id);if(!
 visitanteCertificadoAtual=function(id=''){let x=id?getVisitantesV5().find(z=>z.id===id):null;const editId=v5VisId.value;if(!x&&editId)x=getVisitantesV5().find(z=>z.id===editId);if(!x&&v5VisNome.value.trim())x={nome:v5VisNome.value.trim(),cim:v5VisCim.value.trim(),grau:v5VisGrau.value,loja:v5VisLoja.value.trim(),numero:v5VisNumero.value.trim(),oriente:v5VisOriente.value.trim(),telefone:v5VisTelefone.value.trim(),sessaoId:v5VisSessao.value};return x};
 
 /* V5.8.2: geradores gráficos legados V5.5 removidos. */
-function abrirWhatsAppVisitanteV55(id=''){const x=id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();if(!x){toast('Selecione um visitante');return}const numero=numeroWhatsApp(x.telefone||'');if(!numero){toast('Cadastre o telefone/WhatsApp do visitante');return}const appUrl=`whatsapp://send?phone=${numero}`,webUrl=`https://wa.me/${numero}`;if(enviarAcaoNativa('T',appUrl)){toast(`Abrindo WhatsApp de ${primeiroNome(x.nome)}`);return}iniciarAcaoExterna();window.location.href=webUrl}
+function abrirWhatsAppVisitanteV55(id=''){const x=id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();if(!x){toast('Selecione um visitante');return}const numero=numeroWhatsApp(x.telefone||'');if(!numero){toast('Cadastre o telefone/WhatsApp do visitante');return}const webUrl=`https://wa.me/${numero}`;if(enviarAcaoNativa('WA',webUrl)){toast(`Abrindo WhatsApp de ${primeiroNome(x.nome)}`);return}iniciarAcaoExterna();window.location.href=webUrl}
 
 
 /* ============================================================
@@ -4205,7 +4203,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
    Nome do arquivo: RF1997-0001-2026-MIGUEL.pdf.
    Certificados já emitidos mantêm a numeração original. */
 (function(){
-  window.CHANCELARIA_VERSION='5.8.18-revisado';
+  window.CHANCELARIA_VERSION='5.9.2-profissional';
   window.nomeArquivoAtestadoV5817=function(x){
     const primeiro=String(x?.nome||'VISITANTE').trim().split(/\s+/)[0]
       .normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/gi,'').toUpperCase()||'VISITANTE';
@@ -4237,7 +4235,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
    O compartilhamento tenta primeiro a Web Share API com o PDF já nomeado;
    se não houver suporte, usa a ponte Kodular/Webviewpdfexporter. */
 (function(){
-  window.CHANCELARIA_VERSION='5.8.18-revisado';
+  window.CHANCELARIA_VERSION='5.9.2-profissional';
 
   function enviarUrlPdfV589(url,titulo='Documento'){
     try{
@@ -4331,7 +4329,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 /* V5.9.0 — separa Visualizar (VI) de Compartilhar (SI).
    Visualizar nunca solicita CreatePDF no Kodular. */
 (function(){
-  window.CHANCELARIA_VERSION='5.9.0-profissional';
+  window.CHANCELARIA_VERSION='5.9.2-profissional';
 
   function escPayloadV590(v){return String(v??'')}
   function montarUrlVisualizacaoV590(x){
@@ -4464,25 +4462,19 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     if(!w)window.location.href=url;
   };
 
-  /* TI fica exclusivo da impressão. WhatsApp com destinatário não usa TI. */
+  /* TI fica exclusivo da impressão. WA abre o contato do WhatsApp já cadastrado. */
   function abrirWhatsAppDiretoV590(numero,texto=''){
     const n=String(numero||'').replace(/\D/g,'');
     if(!n)return false;
-    const query=texto?'&text='+encodeURIComponent(texto):'';
-    const appUrl=`whatsapp://send?phone=${n}${query}`;
     const webUrl=`https://wa.me/${n}${texto?'?text='+encodeURIComponent(texto):''}`;
+    if(typeof enviarAcaoNativa==='function' && enviarAcaoNativa('WA',webUrl))return true;
     try{
       if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
-      window.location.href=appUrl;
-      setTimeout(()=>{
-        try{
-          if(document.visibilityState==='visible')window.location.href=webUrl;
-          else if(typeof finalizarAcaoExterna==='function')finalizarAcaoExterna();
-        }catch(_e){}
-      },900);
+      window.location.href=webUrl;
       return true;
     }catch(_e){
-      try{window.location.href=webUrl;return true}catch(__e){return false}
+      try{if(typeof finalizarAcaoExterna==='function')finalizarAcaoExterna()}catch(__e){}
+      return false;
     }
   }
 

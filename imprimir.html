@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v5.9.0</title>
+<title>Documento · Chancelaria 1997 v5.9.2</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -59,7 +59,7 @@ html.native-pdf .page.certificate-art-v584 .cert-art{transform-origin:0 0!import
 
 
 
-/* V5.9.0 — visualização responsiva e barra profissional */
+/* V5.9.2 — visualização responsiva e barra profissional */
 :root{--azul:#0d1b2f;--ouro:#c8a64b;--ouro-claro:#e2c874}
 html,body{background:#101a29}
 .toolbar{
@@ -101,7 +101,14 @@ html,body{background:#101a29}
   }
   const app=document.getElementById('app');
   function decodeBase64UrlUtf8(raw){raw=raw.replace(/-/g,'+').replace(/_/g,'/');while(raw.length%4)raw+='=';const bin=atob(raw),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
-  window.voltarAoAplicativo=function(){try{window.close()}catch(e){}setTimeout(()=>{if(history.length>1)history.back()},120)};
+  window.voltarAoAplicativo=function(){
+    try{
+      const ponte=(window.Kodular&&typeof window.Kodular.setWebViewString==='function')?window.Kodular:((window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')?window.AppInventor:null);
+      if(ponte){ponte.setWebViewString('00'+Date.now());setTimeout(()=>{try{ponte.setWebViewString('BK')}catch(_e){}},80);return}
+    }catch(_e){}
+    if(history.length>1){history.back();return}
+    location.href='index.html';
+  };
   const assinaturaPadrao='<div class="signature-person signature-chanceler"><img class="signature-image" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="signature-role">Chanceler</div><div class="signature-lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div></div>';
   try{
     const raw=location.hash.slice(1);if(!raw)throw new Error('Documento não recebido.');
