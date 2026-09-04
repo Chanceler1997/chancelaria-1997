@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v5.9.2</title>
+<title>Documento · Chancelaria 1997 v6.0.2</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -49,11 +49,28 @@ table{width:100%;border-collapse:collapse;font-size:9pt;line-height:1.25;margin-
    O Webviewpdfexporter captura a área visível do WebViewer; por isso o
    certificado A4 é desenhado em uma base de 794x1123 e escalado por JS para
    caber integralmente na largura disponível, sem corte lateral. */
-html.native-pdf,html.native-pdf body{margin:0!important;padding:0!important;background:#fff!important;overflow:hidden!important}
+html.native-pdf,html.native-pdf body{margin:0!important;padding:0!important;background:#fff!important;overflow:visible!important}
 html.native-pdf .toolbar{display:none!important}
-html.native-pdf #app{margin:0!important;padding:0!important;width:100%!important;overflow:hidden!important}
-html.native-pdf .page{margin:0!important;box-shadow:none!important}
-html.native-pdf .page:not(.certificate-art-v584){width:100%!important;min-height:0!important;padding:24px 18px!important}
+html.native-pdf #app{margin:0!important;padding:0!important;width:100%!important;background:#fff!important;overflow:visible!important}
+html.native-pdf .page{margin:0!important;box-shadow:none!important;border-radius:0!important;background:#fff!important}
+/* Relatórios gerados pela extensão nativa: o WebViewer trabalha na largura física
+   do aparelho. As medidas abaixo preservam a proporção A4 nessa largura.
+   Assim o PDF deixa de herdar o layout móvel, a barra de ações não entra no
+   arquivo e o espaço restante da última página permanece branco. */
+html.native-pdf .page:not(.certificate-art-v584){width:100%!important;min-height:141.436vw!important;padding:14.285vw 9.524vw 9.524vw 14.285vw!important}
+html.native-pdf .page:not(.certificate-art-v584) .official-header{margin:0 0 4.25vw!important;border-radius:.5vw!important}
+html.native-pdf .page:not(.certificate-art-v584) .jurisdiction-line{font-size:1.34vw!important;margin:-3.0vw 0 3.5vw!important;letter-spacing:.03vw!important}
+html.native-pdf .page:not(.certificate-art-v584) h2{font-size:2.35vw!important;line-height:1.25!important;margin:0 0 4.0vw!important}
+html.native-pdf .page:not(.certificate-art-v584) p{font-size:2.015vw!important;line-height:1.5!important;margin:0 0 2.0vw!important}
+html.native-pdf .page:not(.certificate-art-v584) table{font-size:1.445vw!important;line-height:1.25!important;margin-top:1.5vw!important}
+html.native-pdf .page:not(.certificate-art-v584) th,html.native-pdf .page:not(.certificate-art-v584) td{padding:.76vw!important}
+html.native-pdf .page:not(.certificate-art-v584) .assinatura{margin-top:6.5vw!important;font-size:1.68vw!important}
+html.native-pdf .page:not(.certificate-art-v584) .signature-person{min-height:18vw!important}
+html.native-pdf .page:not(.certificate-art-v584) .signature-image{width:36vw!important;max-height:12.5vw!important;margin:0 auto -.5vw!important}
+html.native-pdf .page:not(.certificate-art-v584) .signature-role{font-size:1.68vw!important}
+html.native-pdf .page:not(.certificate-art-v584) .signature-lodge{font-size:1.34vw!important;margin-top:.5vw!important}
+html.native-pdf .page:not(.certificate-art-v584) .signature-line{max-width:36vw!important;margin:12vw auto 1vw!important}
+html.native-pdf .page:not(.certificate-art-v584) .footer{margin-top:4vw!important;padding-top:1vw!important;font-size:1.34vw!important;line-height:1.25!important;background:#fff!important}
 html.native-pdf .page.certificate-art-v584{margin:0!important;padding:0!important;overflow:hidden!important;background:#06111f!important}
 html.native-pdf .page.certificate-art-v584 .cert-art{transform-origin:0 0!important}
 
@@ -72,7 +89,7 @@ html,body{background:#101a29}
   backdrop-filter:blur(12px)
 }
 .toolbar button{min-height:44px;border-radius:12px;padding:10px 16px;font-size:14px;letter-spacing:.05px}
-.toolbar .primary{background:#c8a64b;color:#0d1b2f}.toolbar .secondary{background:#fff;color:#17304f;border:1px solid #dedbd3}
+.toolbar .primary{background:#c8a64b;color:#0d1b2f}.toolbar .share{background:#1f7a4d;color:#fff}.toolbar .secondary{background:#fff;color:#17304f;border:1px solid #dedbd3}
 #app{padding:12px 0 20px}
 .page{border-radius:4px}
 .error{border-radius:16px;border:1px solid rgba(166,61,57,.45);box-shadow:0 18px 50px rgba(0,0,0,.24)}
@@ -80,6 +97,7 @@ html,body{background:#101a29}
   body{background:#07111f}
   .toolbar{position:sticky;display:grid;grid-template-columns:1fr 1fr;padding:10px;gap:8px}
   .toolbar button{width:100%;min-height:48px;padding:9px 8px;font-size:13.5px}
+  .toolbar .close-doc{grid-column:1/-1}
   #app{padding:0;overflow:hidden}
   .page:not(.certificate-art-v584){width:100%;margin:0;border-radius:0;padding:22px 16px 88px}
   .page.certificate-art-v584{margin:0 auto!important;border-radius:0!important;box-shadow:none!important}
@@ -89,7 +107,7 @@ html,body{background:#101a29}
 </style>
 </head>
 <body>
-<div class="toolbar"><button class="primary" onclick="window.print()">Imprimir ou salvar em PDF</button><button class="secondary" onclick="voltarAoAplicativo()">Fechar e voltar</button></div>
+<div class="toolbar"><button class="primary" onclick="window.print()">Imprimir ou salvar em PDF</button><button class="share" onclick="compartilharDocumento()">Compartilhar PDF</button><button class="secondary close-doc" onclick="voltarAoAplicativo()">Fechar e voltar</button></div>
 <main id="app"></main>
 <script>
 (function(){
@@ -100,19 +118,38 @@ html,body{background:#101a29}
     if(vp)vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
   }
   const app=document.getElementById('app');
+  let shareUrlDocumento='';
+  let tipoDocumentoAtual='RELATORIO';
   function decodeBase64UrlUtf8(raw){raw=raw.replace(/-/g,'+').replace(/_/g,'/');while(raw.length%4)raw+='=';const bin=atob(raw),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+  window.compartilharDocumento=function(){
+    try{
+      if(!shareUrlDocumento)throw new Error('Documento ainda não preparado.');
+      const ponte=(window.Kodular&&typeof window.Kodular.setWebViewString==='function')?window.Kodular:((window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')?window.AppInventor:null);
+      if(ponte){
+        const prefixo=tipoDocumentoAtual==='ATESTADO'?'SI':'PI';
+        ponte.setWebViewString('00'+Date.now());
+        setTimeout(()=>{try{ponte.setWebViewString(prefixo+shareUrlDocumento)}catch(_e){}},90);
+        return;
+      }
+      if(navigator.share){navigator.share({title:document.title,url:shareUrlDocumento}).catch(()=>{});return}
+      window.print();
+    }catch(e){alert(String(e.message||e))}
+  };
   window.voltarAoAplicativo=function(){
     try{
       const ponte=(window.Kodular&&typeof window.Kodular.setWebViewString==='function')?window.Kodular:((window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')?window.AppInventor:null);
       if(ponte){ponte.setWebViewString('00'+Date.now());setTimeout(()=>{try{ponte.setWebViewString('BK')}catch(_e){}},80);return}
     }catch(_e){}
-    if(history.length>1){history.back();return}
+    try{if(window.parent&&window.parent!==window&&typeof window.parent.fecharAtestadoV603==='function'){window.parent.fecharAtestadoV603();return}}catch(_e){}
     location.href='index.html';
   };
   const assinaturaPadrao='<div class="signature-person signature-chanceler"><img class="signature-image" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="signature-role">Chanceler</div><div class="signature-lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div></div>';
   try{
     const raw=location.hash.slice(1);if(!raw)throw new Error('Documento não recebido.');
-    const data=JSON.parse(decodeBase64UrlUtf8(raw));history.replaceState(null,'',location.pathname+location.search);const nomePdf=(new URLSearchParams(location.search).get('filename')||'').replace(/\.pdf$/i,'');document.title=nomePdf||(data.titulo||'Documento')+' · Chancelaria 1997';
+    const data=JSON.parse(decodeBase64UrlUtf8(raw));
+    tipoDocumentoAtual=(String(data.documentClass||'')==='certificate-art-v584'||new URLSearchParams(location.search).has('visita'))?'ATESTADO':'RELATORIO';
+    const uShare=new URL(location.href);uShare.searchParams.set('nativepdf','1');uShare.searchParams.delete('print');shareUrlDocumento=uShare.href;
+    history.replaceState(null,'',location.pathname+location.search);const nomePdf=(new URLSearchParams(location.search).get('filename')||'').replace(/\.pdf$/i,'');document.title=nomePdf||(data.titulo||'Documento')+' · Chancelaria 1997';
     const assinatura=data.assinatura||assinaturaPadrao;const rodape=data.rodape||'Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';const documentClass=String(data.documentClass||'').replace(/[^a-z0-9_-]/gi,'');
     if(documentClass==='certificate-art-v584'&&data.certificado){
       const c=data.certificado, esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -143,5 +180,18 @@ html,body{background:#101a29}
   }catch(e){app.innerHTML=`<div class="error"><h2>Não foi possível abrir o documento</h2><p>${String(e.message||e)}</p><p>Volte ao aplicativo e gere o documento novamente.</p></div>`}
 })();
 </script>
+
+<script id="v603-embed-mode">
+(function(){
+  try{
+    const q=new URLSearchParams(location.search);
+    if(q.get('embed')==='1'){
+      document.documentElement.classList.add('embedded-document');
+      const st=document.createElement('style');st.textContent='.embedded-document .toolbar{display:none!important}.embedded-document body{padding-top:0!important;background:#eef1f5!important}.embedded-document .sheet{margin-top:10px!important;margin-bottom:14px!important}';document.head.appendChild(st);
+    }
+  }catch(_e){}
+})();
+</script>
+
 </body>
 </html>

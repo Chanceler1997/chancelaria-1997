@@ -12,8 +12,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
-<title>Chancelaria 1997 · Razão e Força · 6.0.1</title>
-<meta name="application-version" content="6.0.0">
+<title>Chancelaria 1997 · Razão e Força · 6.0.3</title>
+<meta name="application-version" content="6.0.3">
 <style>
 :root{
   --azul:#152541;
@@ -210,8 +210,9 @@ main{padding-top:16px}
 @media(max-width:800px){.report-preview-scroll{padding:0}.report-preview-page{width:100%;min-height:0;margin:0;box-shadow:none;padding:14px 12px 40px}.report-preview-actions{top:48px}}
 
 
-.report-toolbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.report-toolbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .report-toolbar .btn{width:100%;padding:10px 8px}
+@media(max-width:700px){.report-toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:430px){.report-toolbar{grid-template-columns:1fr}.report-toolbar .btn{width:100%}}
 
 /* Revisão individual de frequência */
@@ -755,7 +756,7 @@ main{max-width:720px;padding:14px 12px 28px}
   <div class="header-top app-topbar">
     <div class="compact-brand"><img src="icon-192.png" alt="Emblema"><span><b>Chancelaria 1997</b><small>Razão e Força nº 1997</small></span></div>
     <div class="header-actions no-print">
-      <button id="backNowButton" class="back-now" type="button" onclick="voltarNoAplicativo()" aria-label="Voltar" title="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/><path d="M8 12h12"/></svg></button>
+      <button id="backNowButton" class="back-now" type="button" onclick="voltarNoAplicativo()" aria-label="Voltar" title="Voltar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/><path d="M8 12h12"/></svg><span class="back-label">Voltar</span></button>
       <button id="settingsNowButton" class="settings-now" type="button" onclick="abrirAba('relatorios');setTimeout(()=>document.getElementById('centralSeguranca')?.scrollIntoView({behavior:'smooth'}),120)" aria-label="Abrir segurança" title="Segurança e configurações"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.6a3.4 3.4 0 1 0 0 6.8 3.4 3.4 0 0 0 0-6.8Zm8.2 4.7-1.7 1c-.1.4-.3.8-.5 1.2l.5 1.9-2.1 2.1-1.9-.5c-.4.2-.8.4-1.2.5l-1 1.7h-3l-1-1.7c-.4-.1-.8-.3-1.2-.5l-1.9.5-2.1-2.1.5-1.9c-.2-.4-.4-.8-.5-1.2l-1.7-1v-3l1.7-1c.1-.4.3-.8.5-1.2l-.5-1.9 2.1-2.1 1.9.5c.4-.2.8-.4 1.2-.5l1-1.7h3l1 1.7c.4.1.8.3 1.2.5l1.9-.5 2.1 2.1-.5 1.9c.2.4.4.8.5 1.2l1.7 1v3Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></button>
       <button id="lockNowButton" class="lock-now" type="button" onclick="bloquearAplicativo('Aplicativo bloqueado.')" aria-label="Bloquear aplicativo" title="Bloquear aplicativo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="15" r="1.2" fill="currentColor"/></svg></button>
     </div>
@@ -865,9 +866,10 @@ main{max-width:720px;padding:14px 12px 28px}
       <div class="card-head">📄 Relatório individual</div>
       <div class="card-body">
         <div class="field"><label>Irmão</label><select id="relIrmao"></select></div>
-        <div class="toolbar">
+        <div class="toolbar report-toolbar">
           <button class="btn btn-info" onclick="renderRelatorioIndividual()">Ver</button>
           <button class="btn btn-success" onclick="imprimirIndividual()">Imprimir/PDF</button>
+          <button class="btn btn-primary" onclick="compartilharIndividualPDFV602()">Compartilhar PDF</button>
           <button class="btn btn-warning" onclick="mensagemFrequenciaIndividual()">Mensagem</button>
         </div>
         <div id="relIndividual"></div>
@@ -879,6 +881,7 @@ main{max-width:720px;padding:14px 12px 28px}
         <div class="toolbar report-toolbar">
           <button class="btn btn-info" onclick="renderRelatorioGeral()">Ver relatório</button>
           <button class="btn btn-success" onclick="imprimirGeral()">Imprimir/PDF</button>
+          <button class="btn btn-primary" onclick="compartilharGeralPDFV602()">Compartilhar PDF</button>
           <button class="btn btn-warning" onclick="mensagemFrequenciaGeral()">Mensagem</button>
         </div>
         <div id="relGeral"></div>
@@ -1741,7 +1744,7 @@ function numeroWhatsApp(t){
 function telLink(t){const n=numeroWhatsApp(t);return n?`https://wa.me/${n}`:''}
 
 
-function getSettings(){return {...{lockMinutes:5},...(dbGet('settings',{})||{})}}
+function getSettings(){return {...{lockMinutes:10},...(dbGet('settings',{})||{})}}
 function setSettings(v){dbSet('settings',{...getSettings(),...v})}
 function getBackupInfo(){return dbGet('backupInfo',{})||{}}
 function setBackupInfo(v){dbSet('backupInfo',{...getBackupInfo(),...v})}
@@ -1942,7 +1945,7 @@ function inicializarNavegacaoInterna(){
   if(navigationReady)return;
   navigationReady=true;
   appHistoryDepth=0;
-  history.replaceState({appTab:'inicio',appDepth:0},'',location.pathname+location.search);
+  /* V6.0.3: não usa histórico do WebView para navegação interna. */
   window.addEventListener('popstate',event=>{
     const st=event.state;
     appHistoryDepth=Number(st?.appDepth)||0;
@@ -1955,10 +1958,9 @@ function inicializarNavegacaoInterna(){
 }
 function abrirAba(id,registrar=true){
   if(!navigationReady)inicializarNavegacaoInterna();
-  if(registrar&&id==='inicio'&&appHistoryDepth>0){history.go(-appHistoryDepth);return}
   if(registrar&&id!==aba){
     appHistoryDepth++;
-    history.pushState({appTab:id,appDepth:appHistoryDepth},'',`#${id}`);
+    /* pilha interna V6.0.3 */
   }
   aplicarAba(id);
 }
@@ -1978,7 +1980,7 @@ function atualizarBotaoVoltar(){
 function voltarNoAplicativo(){
   const modais=[...document.querySelectorAll('.modal-back.open')];
   if(modais.length){const atual=modais[modais.length-1];if(atual.id==='modalPreviewRelatorio')fecharPreviewRelatorio();else fecharModal(atual.id);return}
-  if(appHistoryDepth>0){history.back();return}
+  if(appHistoryDepth>0){appHistoryDepth=0;aplicarAba('inicio');return}
   if(aba!=='inicio'){aplicarAba('inicio');return}
   toast('Você já está na página inicial');
 }
@@ -2432,7 +2434,7 @@ function compartilharMensagem(){
 
 
 function initRelatorios(){const arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome));relIrmao.innerHTML='<option value="">Selecione</option>'+arr.map(i=>`<option value="${i.id}">${h(i.nome)}${i.cim?' · CIM '+h(i.cim):''}</option>`).join('');relatorioIndividualAtivoId='';relIndividual.innerHTML='';renderBackupStatus();renderLixeira();renderAuditoria();renderCentralSeguranca()}
-function renderRelatorioIndividual(registrar=true){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){relatorioIndividualAtivoId='';relIndividual.innerHTML='<div class="empty"><p>Selecione um irmão.</p></div>';return}relatorioIndividualAtivoId=i.id;relIndividual.innerHTML=htmlRelatorioIndividual(i,true);if(registrar&&history.state?.reportIndividual!==i.id){history.pushState({appTab:'relatorios',appDepth:appHistoryDepth,reportIndividual:i.id},'',`#relatorios/individual/${encodeURIComponent(i.id)}`)}atualizarBotaoVoltar()}
+function renderRelatorioIndividual(registrar=true){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){relatorioIndividualAtivoId='';relIndividual.innerHTML='<div class="empty"><p>Selecione um irmão.</p></div>';return}relatorioIndividualAtivoId=i.id;relIndividual.innerHTML=htmlRelatorioIndividual(i,true);if(registrar){/* pilha interna V6.0.3 gerenciada pelo override final */}atualizarBotaoVoltar()}
 function htmlRelatorioIndividual(i,editavel=false){const f=calcFreq(i);if(!f.periodoAtivo)return `<div class="empty"><p>${h(f.motivoParcial||'Cadastre uma sessão para iniciar a contagem de frequência.')}</p></div>`;return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''}${i.dataIngresso?' · '+h(descricaoIngresso(i)):''} · presença real ${f.pct}% · falta ${f.pctFalta}% · período ${f.periodoTexto}${f.periodo12?'':` · ${h(f.motivoParcial||'período parcial')}, sem alerta Art. 76`}</div></div></div>${htmlFreqDetalhe(i,editavel)}`}
 function abrirRevisaoFrequencia(irmaoId,sessaoId){
   const i=getIrmaos().find(x=>x.id===irmaoId);
@@ -2516,9 +2518,17 @@ function codificarBase64UrlUtf8(valor){
   for(let i=0;i<bytes.length;i+=32768)bin+=String.fromCharCode(...bytes.subarray(i,i+32768));
   return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 }
+function nomeArquivoRelatorioV602(titulo,opcoes={}){
+  const limpar=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'').toUpperCase();
+  let base=limpar(titulo)||'RELATORIO';
+  if(opcoes.tipo==='individual'&&opcoes.irmaoId){const i=getIrmaos().find(x=>x.id===opcoes.irmaoId);if(i?.nome)base+='-'+limpar(i.nome)}
+  return `${base}-${hojeISO()}.pdf`;
+}
 function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false,opcoes={}){
   const payload={titulo,corpo,geradoEm:new Date().toISOString(),assinatura:opcoes.assinatura||'',assinaturaClasse:opcoes.assinaturaClasse||'',rodape:opcoes.rodape||''};
   const url=new URL('imprimir.html',location.href);
+  url.searchParams.set('doctype','relatorio');
+  url.searchParams.set('filename',nomeArquivoRelatorioV602(titulo,opcoes));
   if(modoImpressao)url.searchParams.set('print','1');
   return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
 }
@@ -2541,7 +2551,9 @@ function abrirPrint(titulo,corpo,meta={}){
 function fecharPreviewRelatorio(){pendingPrintPayload=null;fecharModal('modalPreviewRelatorio')}
 function imprimirPreviewRelatorio(){
   if(!pendingPrintPayload){toast('Gere o relatório novamente');return}
-  const urlNativa=urlRelatorioParaImpressao(pendingPrintPayload.titulo,pendingPrintPayload.corpo,false,pendingPrintPayload);
+  const uNativa=new URL(urlRelatorioParaImpressao(pendingPrintPayload.titulo,pendingPrintPayload.corpo,false,pendingPrintPayload));
+  uNativa.searchParams.set('nativepdf','1');
+  const urlNativa=uNativa.href;
   if(enviarAcaoNativa('T',urlNativa)){toast('Abrindo impressão e PDF');return}
   const urlNavegador=urlRelatorioParaImpressao(pendingPrintPayload.titulo,pendingPrintPayload.corpo,true,pendingPrintPayload);
   iniciarAcaoExterna();
@@ -2549,8 +2561,10 @@ function imprimirPreviewRelatorio(){
   if(!w)window.location.href=urlNavegador
 }
 function imprimirIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}abrirPrint('Relatório individual',corpoRelatorioIndividual(i),{tipo:'individual',irmaoId:i.id})}
+window.compartilharIndividualPDFV602=function(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}pendingPrintPayload={titulo:'Relatório individual',corpo:corpoRelatorioIndividual(i),tipo:'individual',irmaoId:i.id};compartilharPreviewRelatorioV588()}
 
 function imprimirGeral(){abrirPrint('Relatório coletivo',corpoRelatorioGeral())}
+window.compartilharGeralPDFV602=function(){pendingPrintPayload={titulo:'Relatório coletivo',corpo:corpoRelatorioGeral(),tipo:'coletivo'};compartilharPreviewRelatorioV588()}
 function mensagemFrequenciaIndividual(){const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um irmão');return}mensagemFalta(i.id)}
 function mensagemFrequenciaGeral(){const per=periodoRGFDatas();if(!per.ativo){toast('Cadastre uma sessão para iniciar a contagem de frequência');return}const arr=getIrmaos().slice().sort((a,b)=>calcFreq(b).pctFalta-calcFreq(a).pctFalta);const linhas=arr.map(i=>{const f=calcFreq(i);return `${i.nome}: presença real ${f.pct}%, falta justificada ${f.justificada}, falta ${f.pctFalta}%`}).join('\n');abrirMensagem('Resumo de frequência',`Meus Irmãos, segue resumo de frequência registrado pela Chancelaria na janela móvel RGF ${per.texto}.
 
@@ -4452,14 +4466,17 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   window.compartilharPreviewRelatorioV588=function(){
     if(!pendingPrintPayload){if(typeof toast==='function')toast('Gere o relatório novamente');return}
     const p=pendingPrintPayload;
-    const url=urlRelatorioParaImpressao(p.titulo,p.corpo,false,p);
+    const u=new URL(urlRelatorioParaImpressao(p.titulo,p.corpo,false,p));
+    u.searchParams.set('nativepdf','1');
+    const url=u.href;
     if(typeof enviarAcaoNativa==='function' && enviarAcaoNativa('P',url)){
-      if(typeof toast==='function')toast('Preparando compartilhamento do relatório...');
+      if(typeof toast==='function')toast('Preparando PDF A4 para compartilhar...');
       return;
     }
     if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
-    const w=window.open(url,'_blank','noopener');
-    if(!w)window.location.href=url;
+    const fallback=new URL(url);fallback.searchParams.delete('nativepdf');
+    const w=window.open(fallback.href,'_blank','noopener');
+    if(!w)window.location.href=fallback.href;
   };
 
   /* TI fica exclusivo da impressão. WA abre o contato do WhatsApp já cadastrado. */
@@ -4550,7 +4567,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.0.0';
+  window.CHANCELARIA_VERSION='6.0.3';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -4628,7 +4645,6 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   // Volta interno: modal -> histórico do navegador -> aba inicial. Nunca encerra o APK.
   window.chancelariaAndroidBack=function(){
     try{if(typeof voltarNoAplicativo==='function'){voltarNoAplicativo();return true}}catch(_e){}
-    try{if(history.length>1){history.back();return true}}catch(_e){}
     return false;
   };
 
@@ -4636,7 +4652,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{
     const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
     if(alvo&&!document.getElementById('v600BuildChip')){
-      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.0.1';alvo.appendChild(chip);
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.0.3';alvo.appendChild(chip);
     }
   }catch(_e){}
 
@@ -4647,6 +4663,240 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
       const ii=document.getElementById('installInfo');if(ii)ii.textContent='Versão Android autônoma. Os arquivos essenciais já estão incorporados ao aplicativo.';
     }
   }catch(_e){}
+})();
+</script>
+
+
+<style id="v603-fluidez-chanceler">
+.back-now{width:auto!important;min-width:88px!important;height:36px!important;padding:0 11px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;white-space:nowrap}
+.back-now .back-label{font-size:12px;font-weight:800;letter-spacing:.1px}
+.back-now.home-state{opacity:.62}
+.v603-direct-contact{background:#128c4a!important;color:#fff!important;border-color:#128c4a!important}
+.v603-atestado-modal .modal-card{width:min(960px,96vw);height:min(94vh,980px);display:flex;flex-direction:column}
+.v603-atestado-modal .modal-body{padding:0;flex:1;min-height:0;background:#eef1f5}
+.v603-atestado-frame{display:block;width:100%;height:100%;border:0;background:#fff}
+.v603-doc-actions{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px;border-bottom:1px solid var(--linha);background:#fff}
+.v603-doc-actions .btn{min-height:40px}
+.v603-contact-note{font-size:11px;color:var(--muted);padding:0 12px 9px;background:#fff}
+@media(max-width:430px){.back-now{min-width:78px!important;padding:0 8px!important}.back-now .back-label{font-size:11px}.v603-atestado-modal .modal-card{width:100vw;height:100vh;max-height:none;border-radius:0}.v603-doc-actions .btn{flex:1 1 45%}}
+</style>
+
+<div class="modal-back v603-atestado-modal" id="modalAtestadoV603" role="dialog" aria-modal="true" aria-labelledby="v603AtestadoTitulo">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div><h3 id="v603AtestadoTitulo">Atestado de frequência maçônica</h3><div class="small" id="v603AtestadoSubtitulo">Visualização</div></div>
+      <button class="modal-x" type="button" onclick="fecharAtestadoV603()" aria-label="Fechar">×</button>
+    </div>
+    <div class="v603-doc-actions no-print">
+      <button class="btn btn-success" type="button" onclick="compartilharAtestadoAtualV603()">Compartilhar PDF</button>
+      <button id="v603EnviarAtestadoContato" class="btn v603-direct-contact" type="button" onclick="compartilharAtestadoContatoV603(window.__v603AtestadoId||'')" style="display:none">Enviar ao visitante</button>
+      <button class="btn btn-light" type="button" onclick="fecharAtestadoV603()">Voltar</button>
+    </div>
+    <div id="v603AtestadoContatoNota" class="v603-contact-note"></div>
+    <div class="modal-body"><iframe id="v603AtestadoFrame" class="v603-atestado-frame" title="Atestado de frequência maçônica"></iframe></div>
+  </div>
+</div>
+
+<script id="v603-fluidez-chanceler-script">
+(function(){
+  'use strict';
+  window.CHANCELARIA_VERSION='6.0.3';
+  const navStackV603=[];
+  let restaurandoV603=false;
+
+  function snapshotV603(){
+    return {tab:String(aba||'inicio'),scroll:Number(window.scrollY||0),reportId:String(relatorioIndividualAtivoId||'')};
+  }
+  function atualizaDepthV603(){appHistoryDepth=navStackV603.length;atualizarBotaoVoltarV603()}
+  function atualizarBotaoVoltarV603(){
+    const b=document.getElementById('backNowButton');if(!b)return;
+    const home=(aba==='inicio'&&navStackV603.length===0&&!document.querySelector('.modal-back.open'));
+    b.classList.toggle('home-state',home);
+    b.setAttribute('aria-label',home?'Página inicial':'Voltar à tela anterior');
+    b.title=home?'Página inicial':'Voltar';
+    const label=b.querySelector('.back-label');if(label)label.textContent=home?'Início':'Voltar';
+  }
+  window.atualizarBotaoVoltar=atualizarBotaoVoltarV603;
+
+  window.inicializarNavegacaoInterna=function(){
+    navigationReady=true;appHistoryDepth=0;navStackV603.length=0;
+    // V6.0.3: a navegação da Chancelaria não cria entradas no histórico do WebView.
+    // Assim a seta do Android nunca recua para o estado de login.
+    atualizarBotaoVoltarV603();
+  };
+
+  function restaurarEstadoV603(st){
+    if(!st)st={tab:'inicio',scroll:0,reportId:''};
+    restaurandoV603=true;
+    try{
+      aplicarAba(st.tab||'inicio','left');
+      if((st.tab||'inicio')==='relatorios'){
+        const sel=document.getElementById('relIrmao');
+        if(sel){sel.value=st.reportId||''}
+        if(st.reportId){
+          const i=getIrmaos().find(x=>x.id===st.reportId);
+          relatorioIndividualAtivoId=i?.id||'';
+          relIndividual.innerHTML=i?htmlRelatorioIndividual(i,true):'';
+          atualizarBotaoContatoRelatorioV603(i||null);
+        }else{
+          relatorioIndividualAtivoId='';if(relIndividual)relIndividual.innerHTML='';atualizarBotaoContatoRelatorioV603(null);
+        }
+      }
+      requestAnimationFrame(()=>window.scrollTo({top:Number(st.scroll)||0,behavior:'instant'}));
+    }finally{restaurandoV603=false;atualizaDepthV603()}
+  }
+
+  window.abrirAba=function(id,registrar=true){
+    if(!navigationReady)inicializarNavegacaoInterna();
+    if(!document.getElementById(id))id='inicio';
+    if(id===aba){if(id==='inicio')window.scrollTo({top:0,behavior:'smooth'});atualizarBotaoVoltarV603();return}
+    if(registrar&&!restaurandoV603)navStackV603.push(snapshotV603());
+    aplicarAba(id);
+    atualizaDepthV603();
+  };
+
+  const renderRelatorioBaseV603=window.renderRelatorioIndividual;
+  window.renderRelatorioIndividual=function(registrar=true){
+    const i=getIrmaos().find(x=>x.id===relIrmao.value);
+    if(!i){relatorioIndividualAtivoId='';relIndividual.innerHTML='<div class="empty"><p>Selecione um irmão.</p></div>';atualizarBotaoContatoRelatorioV603(null);return}
+    if(registrar&&!restaurandoV603&&relatorioIndividualAtivoId!==i.id)navStackV603.push(snapshotV603());
+    relatorioIndividualAtivoId=i.id;
+    relIndividual.innerHTML=htmlRelatorioIndividual(i,true);
+    atualizarBotaoContatoRelatorioV603(i);
+    atualizaDepthV603();
+  };
+
+  window.voltarNoAplicativo=function(){
+    const modais=[...document.querySelectorAll('.modal-back.open')];
+    if(modais.length){
+      const atual=modais[modais.length-1];
+      if(atual.id==='modalPreviewRelatorio')fecharPreviewRelatorio();
+      else if(atual.id==='modalAtestadoV603')fecharAtestadoV603();
+      else fecharModal(atual.id);
+      atualizarBotaoVoltarV603();return true;
+    }
+    if(navStackV603.length){restaurarEstadoV603(navStackV603.pop());return true}
+    if(aba!=='inicio'){restaurarEstadoV603({tab:'inicio',scroll:0,reportId:''});return true}
+    toast('Você já está na página inicial');atualizarBotaoVoltarV603();return true;
+  };
+  window.chancelariaAndroidBack=function(){return window.voltarNoAplicativo()};
+
+  function abrirWhatsAppDiretoDocV603(telefone,texto){
+    const numero=numeroWhatsApp(telefone||'');
+    if(!numero){toast('Cadastre um telefone/WhatsApp válido para este contato');return false}
+    const url=`https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+    if(typeof enviarAcaoNativa==='function'&&enviarAcaoNativa('WA',url)){toast('Abrindo o contato cadastrado no WhatsApp');return true}
+    iniciarAcaoExterna();window.location.href=url;return true;
+  }
+  function documentoLinkMensagemV603(nome,tipo,url){
+    return `Olá, ${nome||''}. Segue ${tipo} emitido pela Chancelaria da A.R.L.S. Razão e Força nº 1997.\n\n${url}\n\nO documento abre em página própria e permite imprimir ou salvar em PDF.`;
+  }
+
+  window.atualizarBotaoContatoRelatorioV603=function(i){
+    const b=document.getElementById('btnCompartilharIndividualContatoV603');if(!b)return;
+    const ok=!!(i&&numeroWhatsApp(i.telefone||''));b.style.display=ok?'inline-flex':'none';
+    if(ok)b.textContent=`Enviar ao Irmão ${primeiroNome(i.nome)}`;
+    const bp=document.getElementById('btnPreviewContatoV603');
+    if(bp){bp.style.display=ok?'inline-flex':'none';if(ok)bp.textContent=`Enviar ao Irmão ${primeiroNome(i.nome)}`}
+  };
+
+  window.compartilharIndividualContatoV603=function(){
+    const i=getIrmaos().find(x=>x.id===relIrmao.value||x.id===pendingPrintPayload?.irmaoId);
+    if(!i){toast('Selecione um Irmão');return}
+    if(!numeroWhatsApp(i.telefone||'')){toast('Cadastre o telefone/WhatsApp deste Irmão');return}
+    const corpo=corpoRelatorioIndividual(i),meta={tipo:'individual',irmaoId:i.id};
+    const url=urlRelatorioParaImpressao('Relatório individual',corpo,false,meta);
+    abrirWhatsAppDiretoDocV603(i.telefone,documentoLinkMensagemV603(primeiroNome(i.nome),'seu relatório individual de frequência',url));
+    try{audit('Relatório individual enviado ao contato cadastrado',`${i.nome} · WhatsApp`)}catch(_e){}
+  };
+
+  function urlAtestadoV603(x,embed=false){
+    const atual=(getVisitantesV5()||[]).find(v=>v.id===x.id)||x;
+    if(typeof garantirNumeroCertificadoV53==='function')garantirNumeroCertificadoV53(atual);
+    const s=getSessoes().find(z=>z.id===atual.sessaoId);if(!s)throw new Error('A sessão vinculada à visita não foi localizada.');
+    const payload={titulo:'Atestado de frequência maçônica',documentClass:'certificate-art-v584',certificado:{
+      nome:atual.nome||'',cim:atual.cim||'',grau:(grauNome(atual.grau)||grauSimbolo(atual.grau)||''),loja:atual.loja||'',numeroLoja:atual.numero||'',oriente:atual.oriente||'',
+      dataSessao:brData(s.data),tipoSessao:nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),dataEmissao:brData(hojeISO()),numeroAtestado:atual.certNumero||''},assinatura:'',rodape:''};
+    const u=new URL('imprimir.html',location.href);if(embed)u.searchParams.set('embed','1');u.searchParams.set('visita',String(atual.id||''));
+    if(typeof window.nomeArquivoAtestadoV5817==='function')u.searchParams.set('filename',window.nomeArquivoAtestadoV5817(atual));
+    return u.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
+  }
+  window.__urlAtestadoV603=urlAtestadoV603;
+
+  window.certificadoVisitanteV5=function(id=''){
+    const x=id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Selecione uma visita já registrada');return}
+    try{
+      const url=urlAtestadoV603(x,true);window.__v603AtestadoId=x.id;
+      const frame=document.getElementById('v603AtestadoFrame');frame.src=url;
+      document.getElementById('v603AtestadoSubtitulo').textContent=`${x.nome||'Visitante'} · ${x.certNumero||'atestado'}`;
+      const direct=document.getElementById('v603EnviarAtestadoContato'),nota=document.getElementById('v603AtestadoContatoNota');
+      const tem=!!numeroWhatsApp(x.telefone||'');direct.style.display=tem?'inline-flex':'none';direct.textContent=tem?`Enviar a ${primeiroNome(x.nome)}`:'Enviar ao visitante';
+      nota.textContent=tem?`Contato cadastrado: ${x.telefone}`:'Cadastre um telefone/WhatsApp para habilitar o envio direto ao visitante.';
+      abrirModal('modalAtestadoV603');
+      try{audit('Atestado visualizado',`${x.nome||''} · ${x.certNumero||''}`)}catch(_e){}
+    }catch(e){console.error(e);toast(e?.message||'Não foi possível abrir o atestado')}
+  };
+  window.fecharAtestadoV603=function(){const f=document.getElementById('v603AtestadoFrame');if(f)f.src='about:blank';window.__v603AtestadoId='';fecharModal('modalAtestadoV603')};
+  window.compartilharAtestadoAtualV603=function(){const id=window.__v603AtestadoId||'';if(!id){toast('Atestado não localizado');return}compartilharCertificadoVisitanteV5(id)};
+  window.compartilharAtestadoContatoV603=function(id=''){
+    const x=id?getVisitantesV5().find(v=>v.id===id):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Atestado não localizado');return}
+    if(!numeroWhatsApp(x.telefone||'')){toast('Cadastre o telefone/WhatsApp do visitante');return}
+    try{
+      const url=urlAtestadoV603(x,false);
+      abrirWhatsAppDiretoDocV603(x.telefone,documentoLinkMensagemV603(primeiroNome(x.nome),'seu atestado de frequência maçônica',url));
+      try{audit('Atestado enviado ao contato cadastrado',`${x.nome||''} · ${x.certNumero||''}`)}catch(_e){}
+    }catch(e){console.error(e);toast(e?.message||'Não foi possível preparar o envio')}
+  };
+
+  const abrirPrintBaseV603=window.abrirPrint;
+  window.abrirPrint=function(titulo,corpo,meta={}){
+    abrirPrintBaseV603(titulo,corpo,meta);
+    const i=meta?.irmaoId?getIrmaos().find(x=>x.id===meta.irmaoId):null;
+    atualizarBotaoContatoRelatorioV603(i||null);
+  };
+
+  // Acrescenta envio direto ao relatório individual sem retirar as opções de PDF.
+  try{
+    const toolbar=document.querySelector('#relatorios .card .report-toolbar');
+    if(toolbar&&!document.getElementById('btnCompartilharIndividualContatoV603')){
+      const b=document.createElement('button');b.id='btnCompartilharIndividualContatoV603';b.className='btn v603-direct-contact';b.type='button';b.style.display='none';b.textContent='Enviar ao Irmão';b.onclick=window.compartilharIndividualContatoV603;toolbar.appendChild(b);
+    }
+    const preview=document.querySelector('#modalPreviewRelatorio .report-preview-actions');
+    if(preview&&!document.getElementById('btnPreviewContatoV603')){
+      const b=document.createElement('button');b.id='btnPreviewContatoV603';b.className='btn v603-direct-contact';b.type='button';b.style.display='none';b.textContent='Enviar ao Irmão';b.onclick=window.compartilharIndividualContatoV603;preview.appendChild(b);
+    }
+  }catch(_e){}
+
+  // Sobrescreve o histórico para exibir a ação direta quando o visitante tem contato.
+  const renderHistBaseV603=window.renderHistoricoAtestadosWeb;
+  window.renderHistoricoAtestadosWeb=function(){
+    renderHistBaseV603();
+    const cards=[...document.querySelectorAll('#v600HistoricoLista .v600-history-card')];
+    const q=String(document.getElementById('v600HistoricoBusca')?.value||'').trim().toLocaleLowerCase('pt-BR');
+    let arr=(getVisitantesV5()||[]).filter(v=>v&&v.certNumero).sort((a,b)=>String(b.certEmitidoEm||b.updatedAt||b.createdAt||'').localeCompare(String(a.certEmitidoEm||a.updatedAt||a.createdAt||'')));
+    if(q)arr=arr.filter(v=>{const s=getSessoes().find(x=>x.id===v.sessaoId);return [v.nome,v.cim,v.loja,v.numero,v.oriente,v.certNumero,s?.data,s?.data?brData(s.data):'',s?nomeSessaoDocumento(s):''].join(' ').toLocaleLowerCase('pt-BR').includes(q)});
+    cards.forEach((card,idx)=>{const v=arr[idx];if(!v||!numeroWhatsApp(v.telefone||''))return;const actions=card.querySelector('.v600-history-actions');if(!actions||actions.querySelector('.v603-direct-contact'))return;const b=document.createElement('button');b.className='btn btn-sm v603-direct-contact';b.type='button';b.textContent=`Enviar a ${primeiroNome(v.nome)}`;b.onclick=()=>compartilharAtestadoContatoV603(v.id);actions.insertBefore(b,actions.children[2]||null)});
+  };
+
+  // Sobrescreve a listagem atual de visitantes apenas para acrescentar o envio direto.
+  const renderVisitantesBaseV603=window.renderVisitantesV5;
+  window.renderVisitantesV5=function(){
+    renderVisitantesBaseV603();
+    const visitas=getVisitantesV5()||[];
+    document.querySelectorAll('.visitor-visit-row').forEach(row=>{
+      const compartilhar=row.querySelector('button[onclick*="compartilharPdfVisitanteV585"]');if(!compartilhar)return;
+      const m=String(compartilhar.getAttribute('onclick')||'').match(/\('([^']+)'\)/);const id=m?.[1]||'';const v=visitas.find(x=>x.id===id);if(!v||!numeroWhatsApp(v.telefone||''))return;
+      const actions=row.querySelector('.visitor-visit-actions');if(!actions||actions.querySelector('.v603-direct-contact'))return;
+      const b=document.createElement('button');b.className='btn btn-sm v603-direct-contact';b.type='button';b.textContent=`Enviar a ${primeiroNome(v.nome)}`;b.onclick=()=>compartilharAtestadoContatoV603(v.id);actions.insertBefore(b,actions.children[1]||null);
+    });
+  };
+
+  // Atualiza rótulo visual da versão e o botão Voltar.
+  const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.0.3';
+  const back=document.getElementById('backNowButton');if(back&&!back.querySelector('.back-label'))back.insertAdjacentHTML('beforeend','<span class="back-label">Voltar</span>');
+  atualizarBotaoVoltarV603();
 })();
 </script>
 
