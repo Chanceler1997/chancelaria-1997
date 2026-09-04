@@ -12,8 +12,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
-<title>Chancelaria 1997 · Razão e Força</title>
-<meta name="application-version" content="5.9.0-profissional">
+<title>Chancelaria 1997 · Razão e Força · 6.0.1</title>
+<meta name="application-version" content="6.0.0">
 <style>
 :root{
   --azul:#152541;
@@ -1448,7 +1448,7 @@ function configureSecurityGate(mode,message=''){
   document.getElementById('securityGate').classList.add('open');
   const setup=mode==='setup';
   document.getElementById('securityTitle').textContent=setup?'Crie sua senha mestra':'Chancelaria protegida';
-  document.getElementById('securitySubtitle').textContent=setup?'Use uma senha com no mínimo 8 caracteres. Ela protege os cadastros e os backups.':'Digite sua senha para abrir o aplicativo.';
+  document.getElementById('securitySubtitle').textContent=setup?'Primeiro acesso neste ambiente. Crie e confirme uma nova senha com no mínimo 8 caracteres.':'Digite a senha mestra já cadastrada neste aparelho para abrir o aplicativo.';
   document.getElementById('securityConfirmBox').style.display=setup?'block':'none';
   document.getElementById('securitySubmitButton').textContent=setup?'Criar proteção':'Abrir aplicativo';
   document.getElementById('securityPassword').value='';
@@ -4508,6 +4508,145 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     }
     return compartilharMensagemBaseV590();
   };
+})();
+</script>
+
+
+<style id="v600-modernizacao">
+/* V6.0.0 — núcleo simplificado e histórico integral no WebViewer. */
+.v600-history-toolbar{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin:0 0 12px}
+.v600-history-search{width:100%;min-height:44px;border:1px solid var(--linha);border-radius:12px;padding:10px 12px;background:var(--branco);color:var(--texto);font:inherit}
+.v600-history-count{font-size:12px;color:var(--muted);white-space:nowrap}
+.v600-history-list{display:grid;gap:10px}
+.v600-history-card{border:1px solid var(--linha);border-radius:16px;background:var(--branco);padding:14px;box-shadow:0 5px 18px rgba(7,17,31,.06)}
+.v600-history-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.v600-history-name{font-weight:800;color:var(--azul);font-size:16px;line-height:1.25}
+.v600-history-number{font-size:11px;font-weight:800;letter-spacing:.3px;color:#7a6119;background:#fff7d6;border:1px solid #ead89c;border-radius:999px;padding:5px 8px;white-space:nowrap}
+.v600-history-meta{font-size:12px;line-height:1.5;color:var(--muted);margin-top:6px}
+.v600-history-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.v600-history-actions .btn{min-height:38px}
+.v600-system-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(201,168,76,.45);background:rgba(201,168,76,.08);color:var(--azul);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800}
+@media(max-width:620px){.v600-history-toolbar{grid-template-columns:1fr}.v600-history-head{display:block}.v600-history-number{display:inline-flex;margin-top:7px}.v600-history-actions .btn{flex:1 1 45%}}
+</style>
+
+<div class="modal-back" id="modalHistoricoAtestadosWeb" aria-hidden="true">
+  <div class="modal-card modal-lg">
+    <div class="modal-head">
+      <div><h3>Atestados emitidos</h3><div class="small">Histórico preservado no próprio aplicativo</div></div>
+      <button class="modal-x" type="button" onclick="fecharModal('modalHistoricoAtestadosWeb')" aria-label="Fechar">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="v600-history-toolbar">
+        <input id="v600HistoricoBusca" class="v600-history-search" type="search" autocomplete="off" placeholder="Pesquisar nome, CIM, Loja, número ou data" oninput="renderHistoricoAtestadosWeb()">
+        <span id="v600HistoricoContagem" class="v600-history-count"></span>
+      </div>
+      <div id="v600HistoricoLista" class="v600-history-list"></div>
+      <div class="install-note" style="margin-top:12px">Cada comparecimento permanece vinculado à sessão registrada. Visualizar não cria uma nova emissão. Compartilhar reutiliza o mesmo registro e o mesmo número do atestado.</div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-light" type="button" onclick="fecharModal('modalHistoricoAtestadosWeb')">Fechar</button></div>
+  </div>
+</div>
+
+<script id="v600-core-reconstruido">
+(function(){
+  'use strict';
+  window.CHANCELARIA_VERSION='6.0.0';
+
+  function ponteV600(){
+    if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
+    if(window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')return window.AppInventor;
+    return null;
+  }
+  function pulsoV600(ponte,valor,delay=70){
+    try{
+      ponte.setWebViewString('00'+Date.now());
+      setTimeout(()=>{try{ponte.setWebViewString(String(valor||''))}catch(_e){}},delay);
+      return true;
+    }catch(_e){return false}
+  }
+  const mapaV600={W:'WI',P:'PI',X:'XI',T:'TI',H:'HI',S:'SI',V:'VI',A:'WA',B:'BK'};
+  window.prefixoKodularV5816=function(tipo){const k=String(tipo||'').toUpperCase();return mapaV600[k]||k};
+  window.obterPonteKodular=ponteV600;
+  window.enviarDadoNativo=function(tipo,conteudo){const p=ponteV600();if(!p)return false;return pulsoV600(p,window.prefixoKodularV5816(tipo)+String(conteudo||''))};
+  window.enviarAcaoNativa=function(tipo,conteudo){
+    const k=window.prefixoKodularV5816(tipo),p=ponteV600();
+    if(!p)return false;
+    if(k==='WA'||k==='WI'){try{if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna()}catch(_e){}}
+    return pulsoV600(p,k+String(conteudo||''));
+  };
+
+  function dadosHistoricoV600(){
+    const visitas=(typeof getVisitantesV5==='function'?getVisitantesV5():[]).filter(v=>v&&v.certNumero);
+    return visitas.sort((a,b)=>String(b.certEmitidoEm||b.updatedAt||b.createdAt||'').localeCompare(String(a.certEmitidoEm||a.updatedAt||a.createdAt||'')));
+  }
+  window.renderHistoricoAtestadosWeb=function(){
+    const box=document.getElementById('v600HistoricoLista'),cont=document.getElementById('v600HistoricoContagem');if(!box)return;
+    const q=String(document.getElementById('v600HistoricoBusca')?.value||'').trim().toLocaleLowerCase('pt-BR');
+    let arr=dadosHistoricoV600();
+    if(q)arr=arr.filter(v=>{
+      const s=(typeof getSessoes==='function'?getSessoes():[]).find(x=>x.id===v.sessaoId);
+      const texto=[v.nome,v.cim,v.loja,v.numero,v.oriente,v.certNumero,s?.data,typeof brData==='function'&&s?.data?brData(s.data):'',s&&typeof nomeSessaoDocumento==='function'?nomeSessaoDocumento(s):''].join(' ').toLocaleLowerCase('pt-BR');
+      return texto.includes(q);
+    });
+    if(cont)cont.textContent=`${arr.length} registro${arr.length===1?'':'s'}`;
+    if(!arr.length){box.innerHTML='<div class="empty"><div class="icon">📄</div><p>Nenhum atestado encontrado.</p></div>';return}
+    box.innerHTML=arr.map(v=>{
+      const s=(typeof getSessoes==='function'?getSessoes():[]).find(x=>x.id===v.sessaoId);
+      const data=s?.data&&typeof brData==='function'?brData(s.data):(s?.data||'Data não localizada');
+      const sessao=s&&typeof nomeSessaoDocumento==='function'?nomeSessaoDocumento(s):'Sessão';
+      const tel=v.telefone?` · WhatsApp ${h(v.telefone)}`:'';
+      return `<article class="v600-history-card">
+        <div class="v600-history-head"><div><div class="v600-history-name">${h(v.nome||'Visitante')}</div><div class="v600-history-meta">${h(data)} · ${h(sessao)}<br>${v.cim?'CIM '+h(v.cim)+' · ':''}${h(v.loja||'Loja não informada')}${v.numero?' nº '+h(v.numero):''} · ${h(v.oriente||'Oriente não informado')}${tel}</div></div><span class="v600-history-number">${h(v.certNumero||'')}</span></div>
+        <div class="v600-history-actions">
+          <button class="btn btn-primary btn-sm" type="button" onclick="certificadoVisitanteV5('${v.id}')">Visualizar PDF</button>
+          <button class="btn btn-success btn-sm" type="button" onclick="compartilharCertificadoVisitanteV5('${v.id}')">Compartilhar PDF</button>
+          ${v.telefone?`<button class="btn btn-outline btn-sm" type="button" onclick="abrirWhatsAppVisitanteV55('${v.id}')">WhatsApp</button>`:''}
+          <button class="btn btn-light btn-sm" type="button" onclick="editarVisitanteV5('${v.id}');fecharModal('modalHistoricoAtestadosWeb');abrirVisitantesV5('${v.sessaoId||''}')">Editar</button>
+        </div>
+      </article>`
+    }).join('');
+  };
+  window.abrirHistoricoAtestadosNativo=function(){
+    const busca=document.getElementById('v600HistoricoBusca');if(busca)busca.value='';
+    renderHistoricoAtestadosWeb();abrirModal('modalHistoricoAtestadosWeb');return true;
+  };
+
+  // Mensagens ligadas a uma pessoa sempre carregam o contato cadastrado do Irmão.
+  window.mensagemPessoaPorDados=function(tipo,id){
+    const i=getIrmaos().find(x=>x.id===id);if(!i)return;
+    if(tipo==='Irmão')abrirMensagem('Mensagem para o Irmão',mensagemPessoa('Irmão',i.nome,i.nome),i.id);
+    else abrirMensagem('Mensagem para a família',mensagemPessoa('Cunhada',i.familia?.esposa?.nome||'',i.nome),i.id);
+  };
+  window.mensagemFilho=function(id,idx){const i=getIrmaos().find(x=>x.id===id);if(!i)return;const f=(i.familia?.filhos||[])[idx];if(!f)return;abrirMensagem('Mensagem para a família',mensagemPessoa(labelFilho(f),f.nome,i.nome,f.sexo),i.id)};
+  window.mensagemAniversario=function(irmaoId,tipo,nome){
+    const i=getIrmaos().find(x=>x.id===irmaoId);if(!i)return;
+    if(tipo==='Irmão')abrirMensagem('Mensagem para o Irmão',mensagemPessoa('Irmão',i.nome,i.nome),i.id);
+    else if(tipo==='Cunhada')abrirMensagem('Mensagem para a família',mensagemPessoa('Cunhada',i.familia?.esposa?.nome||'',i.nome),i.id);
+    else{const f=(i.familia?.filhos||[]).find(x=>x.nome===nome)||(i.familia?.filhos||[])[0];if(f)abrirMensagem('Mensagem para a família',mensagemPessoa(labelFilho(f),f.nome,i.nome,f.sexo),i.id)}
+  };
+
+  // Volta interno: modal -> histórico do navegador -> aba inicial. Nunca encerra o APK.
+  window.chancelariaAndroidBack=function(){
+    try{if(typeof voltarNoAplicativo==='function'){voltarNoAplicativo();return true}}catch(_e){}
+    try{if(history.length>1){history.back();return true}}catch(_e){}
+    return false;
+  };
+
+  // Estado visível para conferência técnica no rodapé de configurações, sem pop-ups.
+  try{
+    const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
+    if(alvo&&!document.getElementById('v600BuildChip')){
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.0.1';alvo.appendChild(chip);
+    }
+  }catch(_e){}
+
+  // Dentro do APK autônomo não exibimos controles de instalação PWA.
+  try{
+    if(location.protocol==='file:'){
+      const ib=document.getElementById('installAppButton');if(ib)ib.style.display='none';
+      const ii=document.getElementById('installInfo');if(ii)ii.textContent='Versão Android autônoma. Os arquivos essenciais já estão incorporados ao aplicativo.';
+    }
+  }catch(_e){}
 })();
 </script>
 
