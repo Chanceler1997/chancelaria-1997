@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v6.1.4</title>
+<title>Documento · Chancelaria 1997 v6.1.6</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -105,7 +105,7 @@ html,body{background:#101a29}
 @media(max-width:390px){.toolbar button{font-size:12.5px}}
 
 
-/* V6.1.4 — geometria estável para PDF nativo. */
+/* V6.1.6 — geometria estável para PDF nativo. */
 html.native-pdf,html.native-pdf body{width:100%!important;min-width:100%!important;max-width:100%!important}
 html.native-pdf #app{width:100%!important;min-width:100%!important;max-width:100%!important}
 html.native-pdf .page{break-after:page;page-break-after:always;transform:none!important}
@@ -114,7 +114,7 @@ html.native-pdf thead{display:table-header-group!important}
 html.native-pdf tr,html.native-pdf th,html.native-pdf td{break-inside:avoid!important;page-break-inside:avoid!important}
 html.native-pdf img{max-width:100%}
 
-/* V6.1.4 — A4 fixo e captura paginada. O PDF só é criado após o documento informar a altura total ao Kodular. */
+/* V6.1.6 — A4 fixo e captura paginada. O PDF só é criado após o documento informar a altura total ao Kodular. */
 html.native-pdf body{background:#fff!important;width:100%!important;min-height:0!important}
 html.native-pdf #app{padding:0!important;margin:0!important;overflow:visible!important}
 html.native-pdf .page:not(.certificate-art-v584){
@@ -124,6 +124,95 @@ html.native-pdf .page:not(.certificate-art-v584){
 }
 html.native-pdf .page:not(.certificate-art-v584) .footer{margin-bottom:0!important}
 html.native-pdf .toolbar{display:none!important}
+
+
+
+/* V6.1.6 — paginação física A4 alinhada ao recorte da extensão Android. */
+html.native-pdf .page.native-report-page{
+  position:relative!important;
+  width:100%!important;
+  height:141.4vw!important;
+  min-height:141.4vw!important;
+  max-height:141.4vw!important;
+  margin:0!important;
+  padding:10.5vw 8.8vw 8.8vw 8.8vw!important;
+  overflow:hidden!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+html.native-pdf .page.native-report-page .official-header{
+  margin:0 0 2.6vw!important;
+  border-radius:.45vw!important;
+}
+html.native-pdf .page.native-report-page .official-header img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:1536/332!important;
+  object-fit:contain!important;
+}
+html.native-pdf .page.native-report-page .jurisdiction-line{
+  font-size:1.75vw!important;
+  margin:0 0 3.0vw!important;
+  line-height:1.15!important;
+}
+html.native-pdf .page.native-report-page h2{
+  font-size:2.55vw!important;
+  line-height:1.2!important;
+  margin:0 0 3.4vw!important;
+}
+html.native-pdf .page.native-report-page p{
+  font-size:2.05vw!important;
+  line-height:1.38!important;
+  margin:0 0 2.1vw!important;
+}
+html.native-pdf .page.native-report-page table{
+  font-size:1.68vw!important;
+  line-height:1.18!important;
+  margin-top:1.8vw!important;
+}
+html.native-pdf .page.native-report-page th,
+html.native-pdf .page.native-report-page td{
+  padding:1.05vw!important;
+}
+html.native-pdf .page.native-report-page .session-report-summary{
+  gap:1.0vw!important;
+  margin:1.8vw 0!important;
+}
+html.native-pdf .page.native-report-page .session-report-box{padding:1.2vw!important}
+html.native-pdf .page.native-report-page .session-report-box b{font-size:2.4vw!important}
+html.native-pdf .page.native-report-page .session-report-box span{font-size:1.35vw!important}
+html.native-pdf .page.native-report-page .assinatura{
+  margin-top:4.2vw!important;
+  font-size:1.7vw!important;
+}
+html.native-pdf .page.native-report-page .signature-person{min-height:15vw!important}
+html.native-pdf .page.native-report-page .signature-image{width:31vw!important;max-height:10vw!important}
+html.native-pdf .page.native-report-page .signature-role{font-size:1.7vw!important}
+html.native-pdf .page.native-report-page .signature-lodge{font-size:1.4vw!important}
+html.native-pdf .page.native-report-page .footer{
+  margin-top:3.0vw!important;
+  padding-top:1.2vw!important;
+  font-size:1.35vw!important;
+  line-height:1.28!important;
+}
+html.native-pdf .page.native-report-page .native-continuation{
+  text-align:center!important;
+  color:#555!important;
+  font-size:1.45vw!important;
+  font-weight:700!important;
+  margin:-1.8vw 0 2.5vw!important;
+}
+html.native-pdf .page.native-report-page .native-page-number{
+  position:absolute!important;
+  right:8.8vw!important;
+  bottom:3.5vw!important;
+  font-size:1.25vw!important;
+  color:#666!important;
+}
+html.native-pdf .page.native-report-page tr,
+html.native-pdf .page.native-report-page th,
+html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-break-inside:avoid!important}
 
 </style>
 </head>
@@ -194,6 +283,89 @@ html.native-pdf .toolbar{display:none!important}
   window.voltarNoAplicativo=window.voltarAoAplicativo;
   window.chancelariaAndroidBack=window.voltarAoAplicativo;
   const assinaturaPadrao='<div class="signature-person signature-chanceler"><img class="signature-image" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="signature-role">Chanceler</div><div class="signature-lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div></div>';
+
+
+  function cabecalhoOficialV616(){
+    const h=document.createElement('header');h.className='official-header';
+    h.innerHTML='<img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997">';
+    return h;
+  }
+  function jurisdicaoV616(){const d=document.createElement('div');d.className='jurisdiction-line';d.textContent='Jurisdicionada ao GOB-MS';return d}
+  function paginaRelatorioV616(titulo,continuacao=false){
+    const page=document.createElement('article');page.className='page native-report-page';
+    page.appendChild(cabecalhoOficialV616());page.appendChild(jurisdicaoV616());
+    if(titulo){const h=titulo.cloneNode(true);page.appendChild(h)}
+    if(continuacao){const c=document.createElement('div');c.className='native-continuation';c.textContent='Continuação';page.appendChild(c)}
+    return page;
+  }
+  function estouraPaginaV616(page){return page.scrollHeight>page.clientHeight+2}
+  function tabelaV616(original){
+    const t=original.cloneNode(false);t.innerHTML='';
+    const cap=original.querySelector(':scope > caption');if(cap)t.appendChild(cap.cloneNode(true));
+    const col=original.querySelector(':scope > colgroup');if(col)t.appendChild(col.cloneNode(true));
+    const head=original.querySelector(':scope > thead');if(head)t.appendChild(head.cloneNode(true));
+    const body=document.createElement('tbody');t.appendChild(body);return t;
+  }
+  function fechamentoV616(assinatura,assinaturaClasse,rodape,posTabela){
+    const f=document.createElement('div');f.className='native-closing-block';
+    if(posTabela)for(const n of posTabela)f.appendChild(n.cloneNode(true));
+    const a=document.createElement('div');a.className='assinatura'+(assinaturaClasse?' '+assinaturaClasse:'');a.innerHTML=assinatura;f.appendChild(a);
+    const r=document.createElement('div');r.className='footer';r.innerHTML=rodape;f.appendChild(r);return f;
+  }
+  function paginarRelatorioNativoV616(data,assinatura,rodape){
+    const fonte=document.createElement('div');fonte.innerHTML=data.corpo||'';
+    const filhos=[...fonte.children];
+    const tabelaOriginal=filhos.find(n=>n.tagName==='TABLE');
+    const tituloOriginal=filhos.find(n=>/^H[1-3]$/.test(n.tagName));
+    if(!tabelaOriginal){
+      const p=paginaRelatorioV616(tituloOriginal,false);app.appendChild(p);
+      for(const n of filhos){if(n!==tituloOriginal)p.appendChild(n.cloneNode(true))}
+      p.appendChild(fechamentoV616(assinatura,data.assinaturaClasse||'',rodape,[]));
+      if(estouraPaginaV616(p))p.style.overflow='visible';
+      return [p];
+    }
+    const ix=filhos.indexOf(tabelaOriginal);
+    const antes=filhos.slice(0,ix).filter(n=>n!==tituloOriginal);
+    const depois=filhos.slice(ix+1);
+    const linhas=[...tabelaOriginal.querySelectorAll(':scope > tbody > tr')];
+    const paginas=[];
+    function nova(continuacao){
+      const p=paginaRelatorioV616(tituloOriginal,continuacao);app.appendChild(p);paginas.push(p);return p;
+    }
+    let p=nova(false);
+    for(const n of antes)p.appendChild(n.cloneNode(true));
+    let tabela=tabelaV616(tabelaOriginal);p.appendChild(tabela);let tbody=tabela.querySelector('tbody');
+    for(const row of linhas){
+      const clone=row.cloneNode(true);tbody.appendChild(clone);
+      if(estouraPaginaV616(p)){
+        tbody.removeChild(clone);
+        p=nova(true);tabela=tabelaV616(tabelaOriginal);p.appendChild(tabela);tbody=tabela.querySelector('tbody');tbody.appendChild(clone);
+        if(estouraPaginaV616(p)){
+          clone.style.fontSize='95%';
+        }
+      }
+    }
+    const fechar=fechamentoV616(assinatura,data.assinaturaClasse||'',rodape,depois);
+    p.appendChild(fechar);
+    if(estouraPaginaV616(p)){
+      p.removeChild(fechar);
+      const anterior=p, tbodyAnterior=anterior.querySelector('table tbody');
+      const finalPage=nova(true), finalTable=tabelaV616(tabelaOriginal), finalBody=finalTable.querySelector('tbody');
+      finalPage.appendChild(finalTable);finalPage.appendChild(fechar);
+      if(tbodyAnterior){
+        while(tbodyAnterior.children.length){
+          const mover=tbodyAnterior.lastElementChild;
+          finalBody.insertBefore(mover,finalBody.firstChild);
+          if(estouraPaginaV616(finalPage)){
+            finalBody.removeChild(mover);tbodyAnterior.appendChild(mover);break;
+          }
+        }
+      }
+      if(!finalBody.children.length)finalTable.remove();
+    }
+    paginas.forEach((pg,i)=>{const n=document.createElement('div');n.className='native-page-number';n.textContent='Página '+(i+1)+' de '+paginas.length;pg.appendChild(n)});
+    return paginas;
+  }
   try{
     const raw=location.hash.slice(1);if(!raw)throw new Error('Documento não recebido.');
     const data=JSON.parse(decodeBase64UrlUtf8(raw));
@@ -224,7 +396,12 @@ html.native-pdf .toolbar{display:none!important}
         }
       }
     }else{
-      app.innerHTML=`<article class="page ${documentClass}"><header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header><div class="jurisdiction-line">Jurisdicionada ao GOB-MS</div>${data.corpo||''}<div class="assinatura${data.assinaturaClasse?' '+data.assinaturaClasse:''}">${assinatura}</div><div class="footer">${rodape}</div></article>`;
+      if(nativePdf){
+        app.innerHTML='';
+        paginarRelatorioNativoV616(data,assinatura,rodape);
+      }else{
+        app.innerHTML=`<article class="page ${documentClass}"><header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header><div class="jurisdiction-line">Jurisdicionada ao GOB-MS</div>${data.corpo||''}<div class="assinatura${data.assinaturaClasse?' '+data.assinaturaClasse:''}">${assinatura}</div><div class="footer">${rodape}</div></article>`;
+      }
     }
     informarAlturaNativaV612();
     const deveImprimir=new URLSearchParams(location.search).get('print')==='1';if(deveImprimir){const imgs=[...app.querySelectorAll('img')];const aguardar=Promise.all(imgs.map(img=>img.complete?Promise.resolve():new Promise(r=>{img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true})})));aguardar.then(()=>setTimeout(()=>{try{window.print()}catch(e){}},500))}
