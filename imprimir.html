@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v6.1.6</title>
+<title>Documento · Chancelaria 1997 v6.1.9</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -105,7 +105,7 @@ html,body{background:#101a29}
 @media(max-width:390px){.toolbar button{font-size:12.5px}}
 
 
-/* V6.1.6 — geometria estável para PDF nativo. */
+/* V6.1.8 — geometria estável para PDF nativo. */
 html.native-pdf,html.native-pdf body{width:100%!important;min-width:100%!important;max-width:100%!important}
 html.native-pdf #app{width:100%!important;min-width:100%!important;max-width:100%!important}
 html.native-pdf .page{break-after:page;page-break-after:always;transform:none!important}
@@ -114,7 +114,7 @@ html.native-pdf thead{display:table-header-group!important}
 html.native-pdf tr,html.native-pdf th,html.native-pdf td{break-inside:avoid!important;page-break-inside:avoid!important}
 html.native-pdf img{max-width:100%}
 
-/* V6.1.6 — A4 fixo e captura paginada. O PDF só é criado após o documento informar a altura total ao Kodular. */
+/* V6.1.8 — A4 fixo e captura paginada. O PDF só é criado após o documento informar a altura total ao Kodular. */
 html.native-pdf body{background:#fff!important;width:100%!important;min-height:0!important}
 html.native-pdf #app{padding:0!important;margin:0!important;overflow:visible!important}
 html.native-pdf .page:not(.certificate-art-v584){
@@ -127,7 +127,7 @@ html.native-pdf .toolbar{display:none!important}
 
 
 
-/* V6.1.6 — paginação física A4 alinhada ao recorte da extensão Android. */
+/* V6.1.8 — paginação física A4 alinhada ao recorte da extensão Android. */
 html.native-pdf .page.native-report-page{
   position:relative!important;
   width:100%!important;
@@ -215,6 +215,28 @@ html.native-pdf .page.native-report-page th,
 html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-break-inside:avoid!important}
 
 </style>
+
+<style id="v619-certificado-fundo-oficial">
+/* V6.1.9 — texto reposicionado para a área clara da arte oficial enviada pelo usuário. */
+.cert-art .dyn{left:8%;width:84%;text-shadow:0 1px 2px rgba(255,255,255,.72)}
+.cert-art .title{top:23.2%;font-size:9.3mm;line-height:1.05;color:#14243d;letter-spacing:.12mm}
+.cert-art .rule{top:30.8%;left:33%;width:34%;border-top:.35mm solid rgba(174,128,34,.9)}
+.cert-art .intro{top:32.4%;font-size:4.35mm;color:#253349}
+.cert-art .name{top:35.9%;font-size:8.8mm;color:#9b6c16;text-shadow:0 1px 1px rgba(255,255,255,.85)}
+.cert-art .cim{top:40.0%;font-size:4.25mm;color:#253349}
+.cert-art .loja{top:43.0%;font-size:4.35mm;color:#253349}
+.cert-art .oriente{top:46.0%;font-size:4.15mm;color:#253349}
+.cert-art .host{top:49.2%;font-size:4.65mm;color:#8b6012;text-shadow:0 1px 1px rgba(255,255,255,.85)}
+.cert-art .date-session{top:52.3%;font-size:4.15mm;color:#253349}
+.cert-art .session{top:55.4%;font-size:4.75mm;color:#8b6012;text-shadow:0 1px 1px rgba(255,255,255,.85)}
+.cert-art .emit{top:59.2%;font-size:4.15mm;color:#253349}
+.cert-art .signature{top:61.0%;left:35%;width:30%;height:5.0%;filter:none}
+.cert-art .role{top:65.0%;font-size:4.0mm;color:#8b6012;text-shadow:none}
+.cert-art .lodge{top:66.7%;font-size:3.55mm;color:#253349;text-shadow:none}
+.cert-art .jur{top:68.2%;font:2.6mm Arial,sans-serif;color:#42506a;text-shadow:none}
+.cert-art .number{top:69.5%;font:2.7mm Arial,sans-serif;color:#42506a;text-shadow:none}
+</style>
+
 </head>
 <body>
 <div class="toolbar"><button class="share" onclick="compartilharDocumento()">Compartilhar PDF</button><button class="secondary close-doc" onclick="voltarAoAplicativo()">Voltar ao aplicativo</button></div>

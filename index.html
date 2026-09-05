@@ -12,8 +12,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
-<title>Chancelaria 1997 · Razão e Força · 6.1.6</title>
-<meta name="application-version" content="6.1.6">
+<title>Chancelaria 1997 · Razão e Força · 6.1.9</title>
+<meta name="application-version" content="6.1.9">
 <style>
 :root{
   --azul:#152541;
@@ -1177,7 +1177,7 @@ main{max-width:720px;padding:14px 12px 28px}
         </div>
         <div class="field"><label>Protocolo ou prova de recebimento</label><input id="procProtocolo" placeholder="Ex.: confirmação no WhatsApp, AR, assinatura ou número do documento"></div>
         <div class="field"><label>Observação administrativa</label><textarea id="procObservacao" placeholder="Registre informações relevantes sobre a notificação."></textarea></div>
-        <div class="toolbar processo-toolbar"><button class="btn btn-primary" type="button" onclick="salvarNotificacaoFrequencia()">Salvar notificação</button><button class="btn btn-warning" type="button" onclick="gerarTextoNotificacaoProcesso()">Gerar texto</button></div>
+        <div class="toolbar processo-toolbar"><button class="btn btn-primary" type="button" onclick="salvarNotificacaoFrequencia()">Salvar notificação</button><button class="btn btn-warning" type="button" onclick="gerarTextoNotificacaoProcesso()">Gerar texto</button><button id="btnExcluirNotificacao" class="btn btn-danger" type="button" onclick="excluirNotificacaoFrequencia()">Excluir notificação</button></div>
       </div>
       <div class="processo-section">
         <div class="processo-section-title"><span>2</span> Faltas do período</div>
@@ -3446,6 +3446,8 @@ function v57CalcEleitor(i,dataEleicao){
 }
 function v57FinanceiroFinal(fin){if(fin.loja==='devedor'||fin.gob==='devedor'||fin.gobms==='devedor')return 'devedor';if(fin.loja==='quite'&&fin.gob==='quite'&&fin.gobms==='quite')return 'quite';return 'pendente'}
 function v57StatusVoto(i,data){const r=v57CalcEleitor(i,data),fin=v57FinRec(data,i.id),fs=v57FinanceiroFinal(fin);if(r.final==='nao')return {...r,fin,fs,apto:false,label:'Não apto'};if(r.final==='revisao')return {...r,fin,fs,apto:null,label:'Conferência normativa'};if(fs==='devedor')return {...r,fin,fs,apto:false,label:'Não apto — financeiro'};if(fs!=='quite')return {...r,fin,fs,apto:null,label:'Pendente da Tesouraria'};return {...r,fin,fs,apto:true,label:'Apto a votar'} }
+window.v57StatusVoto=v57StatusVoto;
+window.v57FinRec=v57FinRec;
 function v57StatusCandidatura(i,data,cargo='veneravel'){
   if(!['M','MI'].includes(i.grau))return {nivel:'nao',texto:'Não elegível na base: não é Mestre Maçom'};
   if((i.direitos||'pleno')==='suspenso')return {nivel:'nao',texto:'Não elegível na base: direitos suspensos'};
@@ -3835,7 +3837,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   function imgV58(src){return new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(new Error('Não foi possível carregar '+src));im.src=new URL(src,document.baseURI).href})}
   function textShadowV58(c,text,x,y,font,fill,align='center',maxWidth){
     c.save();c.font=font;c.textAlign=align;c.textBaseline='middle';
-    c.shadowColor='rgba(0,0,0,.85)';c.shadowBlur=8;c.shadowOffsetY=2;c.fillStyle=fill;
+    c.shadowColor='rgba(255,255,255,.82)';c.shadowBlur=3;c.shadowOffsetY=1;c.fillStyle=fill;
     if(maxWidth)c.fillText(text,x,y,maxWidth);else c.fillText(text,x,y);
     c.restore();
   }
@@ -3865,28 +3867,28 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
     /* V5.8.3 — composição aprovada. A camada dinâmica permanece 100% transparente:
        não cria painéis, fundos sólidos, bandeiras ou nomes de países. */
-    textShadowV58(c,'ATESTADO DE',512,390,'700 56px Georgia, Times New Roman, serif','#d4ad58');
-    textShadowV58(c,'FREQUÊNCIA MAÇÔNICA',512,455,'700 58px Georgia, Times New Roman, serif','#d4ad58');
-    lineV58(c,510,390);
+    textShadowV58(c,'ATESTADO DE',512,370,'700 50px Georgia, Times New Roman, serif','#14243d');
+    textShadowV58(c,'FREQUÊNCIA MAÇÔNICA',512,418,'700 52px Georgia, Times New Roman, serif','#14243d');
+    lineV58(c,472,350);
 
-    textShadowV58(c,'Atestamos, para os fins maçônicos cabíveis, que o Irmão',512,548,'25px Georgia, Times New Roman, serif','#f4eee3');
-    fitTextV58(c,atual.nome,610,50,'400','italic','#d4ad58',790,'Georgia, Times New Roman, serif');
+    textShadowV58(c,'Atestamos, para os fins maçônicos cabíveis, que o Irmão',512,505,'24px Georgia, Times New Roman, serif','#253349');
+    fitTextV58(c,atual.nome,560,46,'400','italic','#9b6c16',790,'Georgia, Times New Roman, serif');
     const grau=grauNome(atual.grau)||grauSimbolo(atual.grau)||'';
-    textShadowV58(c,`${atual.cim?'CIM '+atual.cim+(grau?' · ':''):''}${grau}`,512,665,'23px Georgia, Times New Roman, serif','#f4eee3');
-    fitTextV58(c,`pertencente à ${atual.loja}${atual.numero?' nº '+atual.numero:''},`,710,25,'400','', '#f4eee3',820,'Georgia, Times New Roman, serif');
-    fitTextV58(c,`Oriente de ${atual.oriente}, esteve presente aos trabalhos da`,755,24,'400','', '#f4eee3',840,'Georgia, Times New Roman, serif');
-    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,805,'700 26px Georgia, Times New Roman, serif','#d4ad58');
-    textShadowV58(c,`em ${brData(s.data)}, na`,512,850,'24px Georgia, Times New Roman, serif','#f4eee3');
-    fitTextV58(c,nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),900,28,'700','', '#d4ad58',800,'Georgia, Times New Roman, serif');
-    lineV58(c,942,365);
-    textShadowV58(c,`Porto Murtinho/MS, ${brData(hojeISO())}.`,512,978,'23px Georgia, Times New Roman, serif','#f4eee3');
+    textShadowV58(c,`${atual.cim?'CIM '+atual.cim+(grau?' · ':''):''}${grau}`,512,615,'22px Georgia, Times New Roman, serif','#253349');
+    fitTextV58(c,`pertencente à ${atual.loja}${atual.numero?' nº '+atual.numero:''},`,660,24,'400','', '#253349',820,'Georgia, Times New Roman, serif');
+    fitTextV58(c,`Oriente de ${atual.oriente}, esteve presente aos trabalhos da`,705,23,'400','', '#253349',840,'Georgia, Times New Roman, serif');
+    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,755,'700 25px Georgia, Times New Roman, serif','#8b6012');
+    textShadowV58(c,`em ${brData(s.data)}, na`,512,800,'23px Georgia, Times New Roman, serif','#253349');
+    fitTextV58(c,nomeSessaoDocumento(s)+(s.numero?' · '+s.numero:''),850,27,'700','', '#8b6012',800,'Georgia, Times New Roman, serif');
+    lineV58(c,890,340);
+    textShadowV58(c,`Porto Murtinho/MS, ${brData(hojeISO())}.`,512,915,'22px Georgia, Times New Roman, serif','#253349');
 
     const maxW=330,maxH=86,sc=Math.min(maxW/sig.width,maxH/sig.height),sw=sig.width*sc,sh=sig.height*sc;
-    c.save();c.shadowColor='rgba(0,0,0,.72)';c.shadowBlur=6;c.drawImage(sig,(1024-sw)/2,1004,sw,sh);c.restore();
-    textShadowV58(c,'Chanceler',512,1092,'700 22px Georgia, Times New Roman, serif','#d4ad58');
-    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,1122,'20px Georgia, Times New Roman, serif','#f4eee3');
-    textShadowV58(c,'Federada ao GOB · Jurisdicionada ao GOB-MS',512,1150,'14px Arial, sans-serif','#d6b96e');
-    textShadowV58(c,`Atestado nº ${numero}`,512,1174,'15px Arial, sans-serif','#d6b96e');
+    c.save();c.shadowColor='rgba(255,255,255,.65)';c.shadowBlur=3;c.drawImage(sig,(1024-sw)/2,935,sw,sh);c.restore();
+    textShadowV58(c,'Chanceler',512,1015,'700 21px Georgia, Times New Roman, serif','#8b6012');
+    textShadowV58(c,'A∴R∴L∴S∴ Razão e Força nº 1997',512,1045,'19px Georgia, Times New Roman, serif','#253349');
+    textShadowV58(c,'Federada ao GOB · Jurisdicionada ao GOB-MS',512,1070,'14px Arial, sans-serif','#42506a');
+    textShadowV58(c,`Atestado nº ${numero}`,512,1093,'15px Arial, sans-serif','#42506a');
     return {canvas,atual,s};
   }
 
@@ -4567,7 +4569,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.6';
+  window.CHANCELARIA_VERSION='6.1.9';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -4652,7 +4654,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{
     const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
     if(alvo&&!document.getElementById('v600BuildChip')){
-      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.1.6';alvo.appendChild(chip);
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.1.9';alvo.appendChild(chip);
     }
   }catch(_e){}
 
@@ -4700,7 +4702,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v603-fluidez-chanceler-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.6';
+  window.CHANCELARIA_VERSION='6.1.9';
   const navStackV603=[];
   let restaurandoV603=false;
 
@@ -4894,7 +4896,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 
   // Atualiza rótulo visual da versão e o botão Voltar.
-  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.6')chip.textContent='Chancelaria 1997 · núcleo 6.1.6';
+  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.9')chip.textContent='Chancelaria 1997 · núcleo 6.1.9';
   const back=document.getElementById('backNowButton');if(back&&!back.querySelector('.back-label'))back.insertAdjacentHTML('beforeend','<span class="back-label">Voltar</span>');
   atualizarBotaoVoltarV603();
 })();
@@ -4903,7 +4905,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
 
 <style id="v610-pdf-navigation-polish">
-/* V6.1.6 — navegação previsível, PDF real e interface enxuta. */
+/* V6.1.8 — navegação previsível, PDF real e interface enxuta. */
 .header.app-compact-header{position:sticky!important;top:0!important;z-index:1300!important}
 #modalAtestadoV603{top:54px!important;height:calc(100vh - 54px)!important;z-index:1200!important}
 #modalAtestadoV603 .v603-doc-actions button[onclick*="fecharAtestadoV603"]{display:none!important}
@@ -4918,7 +4920,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v610-pdf-real-share-and-back">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.6';
+  window.CHANCELARIA_VERSION='6.1.9';
   const locks=new Map();
 
   function travaV610(chave,ms=2200){
@@ -5059,9 +5061,9 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     const nota=document.getElementById('v603AtestadoContatoNota');if(nota&&window.__v603AtestadoId&&nota.textContent!=='O compartilhamento envia o documento como arquivo PDF pelo Android.')nota.textContent='O compartilhamento envia o documento como arquivo PDF pelo Android.';
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){bi.onclick=window.compartilharIndividualContatoV603;if(bi.textContent!=='Compartilhar PDF com o Irmão')bi.textContent='Compartilhar PDF com o Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;if(bp.textContent!=='Compartilhar PDF com o Irmão')bp.textContent='Compartilhar PDF com o Irmão'}
-    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.6')chip.textContent='Chancelaria 1997 · núcleo 6.1.6';
+    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.9')chip.textContent='Chancelaria 1997 · núcleo 6.1.9';
   }
-  // V6.1.6: o observador é desconectado enquanto limpa a interface.
+  // V6.1.8: o observador é desconectado enquanto limpa a interface.
   // Isso evita realimentação de mutações (textContent/remove) e congelamento da tela de login.
   const alvoObsV611=document.body;
   const obs=new MutationObserver(()=>{
@@ -5070,7 +5072,454 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   });
   limparAcoesV610();
   obs.observe(alvoObsV611,{childList:true,subtree:true});
-  try{audit('Aplicativo atualizado','Núcleo 6.1.6 · PDF real · retorno seguro · lixeira ampliada · login estabilizado')}catch(_e){}
+  try{audit('Aplicativo atualizado','Núcleo 6.1.8 · PDF real · retorno seguro · lixeira ampliada · login estabilizado')}catch(_e){}
+})();
+</script>
+
+
+<script id="v617-fluxo-e-escopo-chancelaria">
+(function(){
+  'use strict';
+  window.CHANCELARIA_VERSION='6.1.9';
+
+  function notificacaoTemDados(p){
+    const n=p?.notificacao||{};
+    return !!(n.emissao||n.recebimento||n.prazo||n.protocolo||n.observacao);
+  }
+  function processoTemEtapasPosteriores(p){
+    return !!(Object.keys(p?.itens||{}).length || p?.extraordinaria?.dataSessao || p?.decisao?.data || p?.comunicacoes?.irmaoData || p?.comunicacoes?.guardaData || p?.conclusao?.data);
+  }
+  window.excluirNotificacaoFrequencia=function(){
+    const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value);
+    if(!p||!i)return;
+    if(processoFechado(p)){toast('Reabra o procedimento antes de excluir a notificação');return}
+    if(!notificacaoTemDados(p)){toast('Não existe notificação registrada para excluir');return}
+    if(!confirm(`Excluir a notificação registrada para ${i.nome}?`))return;
+    const dependentes=processoTemEtapasPosteriores(p);
+    if(dependentes&&!confirm('Existem registros posteriores vinculados a esta notificação. Para manter a coerência do procedimento, esses registros também serão apagados. Deseja continuar?'))return;
+    const anterior=cloneValue(p.notificacao||{});
+    p.notificacao={emissao:'',recebimento:'',prazo:'',meio:'WhatsApp',protocolo:'',observacao:''};
+    if(dependentes){
+      p.itens={};
+      p.extraordinaria={leituraRelatorio:'',dataSessao:'',notificacao:'',recebimento:'',prova:'',manifestacao:false,ata:''};
+      p.decisao={data:'',suspensao:false,resultado:'',ata:''};
+      p.comunicacoes={irmaoData:'',irmaoProva:'',guardaData:'',guardaProtocolo:''};
+      p.conclusao={data:'',resultado:'',referencia:'',observacao:''};
+      p.situacao='aberto';
+    }
+    salvarProcessoObjeto(p);
+    procDataEmissao.value=hoje();procDataRecebimento.value='';procPrazoFinal.value='';procMeio.value='WhatsApp';procProtocolo.value='';procObservacao.value='';
+    try{audit('Notificação de frequência excluída',`${i.nome}${dependentes?' · registros posteriores vinculados também removidos':''} · registro anterior: ${anterior.emissao||'sem data'}`)}catch(_e){}
+    cancelarAnaliseFalta();renderProcessoFrequencia();renderInicio();toast('Notificação excluída');
+  };
+
+  const renderProc617=window.renderProcessoFrequencia;
+  window.renderProcessoFrequencia=function(){
+    renderProc617();
+    const p=processoModalAtual(),b=document.getElementById('btnExcluirNotificacao');
+    if(b)b.style.display=p&&notificacaoTemDados(p)?'inline-flex':'none';
+  };
+
+  function prepararEscopoVoto617(){
+    const modal=document.getElementById('modalEleitoralV5');if(!modal)return;
+    const head=modal.querySelector('.modal-head span');if(head)head.textContent='Validação de aptidão para voto';
+    const data=document.getElementById('v5EleData');if(data){const field=data.closest('.field');const lab=field?.querySelector('label');if(lab)lab.textContent='Data de referência da apuração'}
+    const tipo=document.getElementById('v5EleTipo');if(tipo){const f=tipo.closest('.field');if(f)f.style.display='none'}
+    const note=modal.querySelector('.install-note');if(note)note.textContent='A Chancelaria verifica frequência, grau, situação de direitos e a informação financeira registrada. Use como referência a data em que a relação for elaborada no mês anterior ao pleito. A votação ocorre fora deste aplicativo, na plataforma eleitoral competente.';
+    const admin=document.getElementById('v57EleAdmin');if(admin)admin.remove();
+    ['v53EleAdmin','v53EleRegistro','v53EleLeituraBox'].forEach(id=>{const x=document.getElementById(id);if(x)x.style.display='none'});
+    // Oculta blocos antigos de edital, ata e impugnação sem apagar dados históricos já salvos.
+    ['v53EleLeitura','v53EleAta','v53EleImp'].forEach(id=>{const x=document.getElementById(id);const f=x?.closest('.field');if(f)f.style.display='none'});
+    const action=[...document.querySelectorAll('button.action')].find(b=>/Qualificação eleitoral/i.test(b.textContent||''));
+    if(action){const b=action.querySelector('b'),s=action.querySelector('small');if(b)b.textContent='Aptidão para voto';if(s)s.textContent='Controle de frequência e requisitos para votar.'}
+  }
+
+  window.abrirEleitoralV5=function(){
+    prepararEscopoVoto617();
+    v5EleData.value=v5EleData.value||hojeISO();
+    renderEleitoralV5();abrirModal('modalEleitoralV5');
+  };
+
+  window.renderEleitoralV5=function(){
+    prepararEscopoVoto617();
+    const data=v5EleData.value||hojeISO();
+    const arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome));
+    v5EleLista.innerHTML=arr.length?arr.map(i=>{
+      const v=window.v57StatusVoto(i,data),fin=v.fin||window.v57FinRec(data,i.id),cls=v.apto===true?'ok':v.apto===false?'bad':'warn';
+      return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${h(grauSimbolo(i.grau))} · frequência ${Number(v.pct||0)}% (${v.pres||0}/${v.total||0})<br>${h(v.motivo||'')}<br><span class="ele-v57-status ${cls}">${h(v.label||'Pendente')}</span></div></div><div class="item-side ele-fin"><label>Loja<select onchange="v57SetFin('${i.id}','financeiroLoja',this.value)"><option value="pendente" ${fin.loja==='pendente'?'selected':''}>Pendente</option><option value="quite" ${fin.loja==='quite'?'selected':''}>Quite</option><option value="devedor" ${fin.loja==='devedor'?'selected':''}>Débito</option></select></label><label>GOB<select onchange="v57SetFin('${i.id}','financeiroGob',this.value)"><option value="pendente" ${fin.gob==='pendente'?'selected':''}>Pendente</option><option value="quite" ${fin.gob==='quite'?'selected':''}>Quite</option><option value="devedor" ${fin.gob==='devedor'?'selected':''}>Débito</option></select></label><label>GOB-MS<select onchange="v57SetFin('${i.id}','financeiroGobms',this.value)"><option value="pendente" ${fin.gobms==='pendente'?'selected':''}>Pendente</option><option value="quite" ${fin.gobms==='quite'?'selected':''}>Quite</option><option value="devedor" ${fin.gobms==='devedor'?'selected':''}>Débito</option></select></label></div></div>`
+    }).join(''):'<div class="empty"><p>Nenhum Irmão cadastrado.</p></div>';
+  };
+
+  window.imprimirEleitoralV5=function(){
+    const data=v5EleData.value||hojeISO();
+    const trs=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const v=window.v57StatusVoto(i,data);return `<tr><td>${h(i.nome)}</td><td>${h(i.cim||'')}</td><td>${h(grauSimbolo(i.grau))}</td><td>${Number(v.pct||0)}%</td><td>${h(v.fs||'pendente')}</td><td>${h(v.label||'Pendente')}</td></tr>`}).join('');
+    abrirPrint('Validação de aptidão para voto',`<h2>Validação de aptidão para voto</h2><p><b>Data de referência:</b> ${brData(data)}. Relação auxiliar da Chancelaria para conferência dos requisitos de voto. A votação não ocorre neste aplicativo.</p><table><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Frequência</th><th>Tesouraria</th><th>Situação para voto</th></tr></thead><tbody>${trs}</tbody></table>`,{assinatura:assinaturaDuplaHTML('Tesoureiro'),assinaturaClasse:'dual-signature',rodape:'Documento auxiliar de controle da Chancelaria. A plataforma eleitoral e os registros oficiais prevalecem.'});
+  };
+
+  // Remove avisos relativos à condução do pleito. O aplicativo conserva apenas a qualificação para voto.
+  const diag617=window.executarDiagnosticoV56;
+  window.executarDiagnosticoV56=function(){diag617();document.querySelectorAll('#v56Diagnostico .diag-item').forEach(el=>{const t=el.textContent||'';if(/Diagnóstico eleitoral|Eleição .*Edital|Eleição .*autorização|relação de qualificação ainda não consolidada|leitura da relação de eleitores/i.test(t))el.remove()})};
+  const pend617=window.renderPendenciasV5;
+  window.renderPendenciasV5=function(){pend617();document.querySelectorAll('#v5PendLista .alert').forEach(el=>{if((el.querySelector('.name')?.textContent||'').trim()==='Eleitoral')el.remove()})};
+
+  document.addEventListener('DOMContentLoaded',prepararEscopoVoto617);
+  try{prepararEscopoVoto617()}catch(_e){}
+})();
+</script>
+
+
+
+<style id="v618-aptidao-eleitoral-css">
+.ele-v618-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.ele-v618-tab{border:1px solid rgba(201,168,76,.4);background:#fffdf8;color:var(--azul);font-weight:800;border-radius:12px;padding:11px 10px;cursor:pointer}
+.ele-v618-tab.active{background:var(--azul);color:#fff;border-color:var(--azul)}
+.ele-v618-cand-side{display:grid;gap:6px;min-width:190px;max-width:230px}
+.ele-v618-cand-side label{font-size:.68rem;color:#6b6f78;font-weight:700}
+.ele-v618-cand-side select,.ele-v618-cand-side input{font-size:.76rem;padding:6px 7px;width:100%}
+.ele-v618-report-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.ele-v618-report-actions .btn{white-space:normal;line-height:1.2;min-height:44px}
+@media(max-width:700px){.ele-v618-cand-side{min-width:120px;max-width:145px}.ele-v618-report-actions{grid-template-columns:1fr}.ele-v618-tabs{grid-template-columns:1fr 1fr}}
+</style>
+<script id="v618-aptidao-eleitoral">
+(function(){
+  'use strict';
+  window.CHANCELARIA_VERSION='6.1.9';
+  let view618='voto';
+
+  function reg618(data,iid){return getEleicoesV5().find(e=>e.data===data&&e.irmaoId===iid)||{}}
+  function saveReg618(iid,patch){
+    const data=v5EleData.value||hojeISO(),arr=getEleicoesV5();
+    let x=arr.find(e=>e.data===data&&e.irmaoId===iid);
+    if(!x){x={id:uid(),data,irmaoId:iid,financeiro:'pendente'};arr.push(x)}
+    Object.assign(x,patch,{updatedAt:new Date().toISOString()});setEleicoesV5(arr);renderEleitoralV5();
+  }
+  window.v618SetAtividade=function(iid,val){saveReg618(iid,{atividadeVeneravel:val})};
+  window.v618SetHabilitacao=function(iid,val){
+    const data=v5EleData.value||hojeISO();
+    let ref=reg618(data,iid).habilitacaoVeneravelRef||'';
+    if(val==='concedida'&&!ref){ref=(prompt('Informe a referência da habilitação concedida pelo Grão-Mestre Geral. Ex.: ato, despacho ou protocolo.')||'').trim();if(!ref){toast('A referência da habilitação é obrigatória');renderEleitoralV5();return}}
+    saveReg618(iid,{habilitacaoVeneravel:val,habilitacaoVeneravelRef:val==='concedida'?ref:''});
+  };
+  window.v618EditarRefHabilitacao=function(iid){
+    const data=v5EleData.value||hojeISO(),r=reg618(data,iid),ref=(prompt('Referência da habilitação do Grão-Mestre Geral:',r.habilitacaoVeneravelRef||'')||'').trim();
+    if(!ref)return;saveReg618(iid,{habilitacaoVeneravel:'concedida',habilitacaoVeneravelRef:ref});
+  };
+
+  function statusCand618(i,data){
+    if(!['M','MI'].includes(i.grau))return {apto:false,nivel:'nao',label:'Não apto',motivo:'Exige Grau de Mestre',pct:0,total:0,pres:0,tempoMeses:0};
+    if((i.direitos||'pleno')==='suspenso')return {apto:false,nivel:'nao',label:'Não apto',motivo:'Direitos maçônicos suspensos',pct:0,total:0,pres:0,tempoMeses:0};
+    const mestre=v57EntradaMestre(i);
+    if(!mestre)return {apto:null,nivel:'revisao',label:'Pendente de cadastro',motivo:'Data de ingresso no Grau de Mestre não registrada. Cadastre a data antes de concluir a aptidão para candidatura.',pct:0,total:0,pres:0,tempoMeses:null};
+    const tempo=v57MesesEntre(mestre,data),ini=mesesAntesISO(data,24),f=v57FreqPeriodo(i,ini,data,false);
+    const disp=i.regimeFreq==='dispensa_legal'&&v51EmRegimeEspecial(i,data)&&!!i.regimeRef;
+    if(!disp&&(!f.total||f.pct<50))return {apto:false,nivel:'nao',label:'Não apto',motivo:f.total?`Frequência de 2 anos abaixo de 50% (${f.pct}%)`:'Sem sessões suficientes registradas nos últimos 2 anos',pct:f.pct,total:f.total,pres:f.pres,tempoMeses:tempo};
+    const r=reg618(data,i.id),hab=r.habilitacaoVeneravel||'pendente',habRef=r.habilitacaoVeneravelRef||'',atividade=r.atividadeVeneravel||'pendente';
+    if(tempo<36){
+      if(hab==='concedida'&&habRef)return {apto:true,nivel:'ok',label:'Apto pelos registros',motivo:`Habilitação do Grão-Mestre Geral registrada: ${habRef}. Frequência ${disp?'dispensada por hipótese legal':f.pct+'%'}.`,pct:f.pct,total:f.total,pres:f.pres,tempoMeses:tempo,habilitacao:true,habilitacaoRef:habRef};
+      return {apto:null,nivel:'revisao',label:'Pendente de habilitação',motivo:`Menos de 3 anos como Mestre (${tempo} meses). A candidatura depende de habilitação do Grão-Mestre Geral.`,pct:f.pct,total:f.total,pres:f.pres,tempoMeses:tempo,habilitacao:false};
+    }
+    if(atividade!=='confirmada')return {apto:null,nivel:'revisao',label:'Pendente de conferência',motivo:`Tempo como Mestre: ${tempo} meses. Confirme a atividade maçônica ininterrupta dos últimos 3 anos.`,pct:f.pct,total:f.total,pres:f.pres,tempoMeses:tempo};
+    return {apto:true,nivel:'ok',label:'Apto pelos registros',motivo:`Atividade ininterrupta confirmada e frequência ${disp?'dispensada por hipótese legal':f.pct+'% nos últimos 2 anos'}.`,pct:f.pct,total:f.total,pres:f.pres,tempoMeses:tempo};
+  }
+  window.v618StatusVeneravel=statusCand618;
+
+  function preparar618(){
+    const modal=document.getElementById('modalEleitoralV5');if(!modal)return;
+    const head=modal.querySelector('.modal-head span');if(head)head.textContent='Aptidão eleitoral';
+    const note=modal.querySelector('.install-note');if(note)note.textContent='A Chancelaria mantém duas apurações independentes: aptidão para votar e aptidão para requerer candidatura a Venerável Mestre. A votação e o registro oficial de candidatura ocorrem na plataforma eleitoral competente.';
+    const action=[...document.querySelectorAll('button.action')].find(b=>/Aptidão para voto|Qualificação eleitoral|Aptidão eleitoral/i.test(b.textContent||''));
+    if(action){const b=action.querySelector('b'),sm=action.querySelector('small');if(b)b.textContent='Aptidão eleitoral';if(sm)sm.textContent='Aptos para votar e para candidatura a Venerável Mestre.'}
+    const body=modal.querySelector('.modal-body');
+    if(body&&!document.getElementById('v618Tabs')){
+      const lista=document.getElementById('v5EleLista');
+      if(lista)lista.insertAdjacentHTML('beforebegin',`<div id="v618Tabs" class="ele-v618-tabs"><button id="v618TabVoto" class="ele-v618-tab active" type="button" onclick="v618MudarAba('voto')">Aptidão para votar</button><button id="v618TabVen" class="ele-v618-tab" type="button" onclick="v618MudarAba('veneravel')">Venerável Mestre</button></div><div id="v618Resumo" class="ele-snapshot"></div>`);
+      if(lista)lista.insertAdjacentHTML('afterend',`<div class="ele-v618-report-actions"><button class="btn btn-success" type="button" onclick="v618RelatorioAptosVoto()">Relatório dos aptos para votar</button><button class="btn btn-primary" type="button" onclick="v618RelatorioAptosVeneravel()">Relatório dos aptos a Venerável Mestre</button></div>`);
+    }
+    const old=modal.querySelector('.modal-foot button[onclick="imprimirEleitoralV5()"]');if(old)old.style.display='none';
+  }
+  window.v618MudarAba=function(v){view618=v==='veneravel'?'veneravel':'voto';const a=document.getElementById('v618TabVoto'),b=document.getElementById('v618TabVen');a?.classList.toggle('active',view618==='voto');b?.classList.toggle('active',view618==='veneravel');renderEleitoralV5()};
+
+  function renderVoto618(data,arr){return arr.map(i=>{const v=window.v57StatusVoto(i,data),fin=v.fin||window.v57FinRec(data,i.id),cls=v.apto===true?'ok':v.apto===false?'bad':'warn';return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${h(grauSimbolo(i.grau))} · frequência ${Number(v.pct||0)}% (${v.pres||0}/${v.total||0})<br>${h(v.motivo||'')}<br><span class="ele-v57-status ${cls}">${h(v.label||'Pendente')}</span></div></div><div class="item-side ele-fin"><label>Loja<select onchange="v57SetFin('${i.id}','financeiroLoja',this.value)"><option value="pendente" ${fin.loja==='pendente'?'selected':''}>Pendente</option><option value="quite" ${fin.loja==='quite'?'selected':''}>Quite</option><option value="devedor" ${fin.loja==='devedor'?'selected':''}>Débito</option></select></label><label>GOB<select onchange="v57SetFin('${i.id}','financeiroGob',this.value)"><option value="pendente" ${fin.gob==='pendente'?'selected':''}>Pendente</option><option value="quite" ${fin.gob==='quite'?'selected':''}>Quite</option><option value="devedor" ${fin.gob==='devedor'?'selected':''}>Débito</option></select></label><label>GOB-MS<select onchange="v57SetFin('${i.id}','financeiroGobms',this.value)"><option value="pendente" ${fin.gobms==='pendente'?'selected':''}>Pendente</option><option value="quite" ${fin.gobms==='quite'?'selected':''}>Quite</option><option value="devedor" ${fin.gobms==='devedor'?'selected':''}>Débito</option></select></label></div></div>`}).join('')}
+  function renderVen618(data,arr){return arr.map(i=>{const s=statusCand618(i,data),r=reg618(data,i.id),cls=s.apto===true?'ok':s.apto===false?'bad':'warn',tempo=s.tempoMeses||0,menos=tempo<36;return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${h(grauSimbolo(i.grau))} · Mestre há ${tempo} mês(es) · frequência 2 anos ${Number(s.pct||0)}% (${s.pres||0}/${s.total||0})<br>${h(s.motivo||'')}<br><span class="ele-v57-status ${cls}">${h(s.label)}</span></div></div><div class="item-side ele-v618-cand-side">${menos?`<label>Habilitação GM<select onchange="v618SetHabilitacao('${i.id}',this.value)"><option value="pendente" ${(r.habilitacaoVeneravel||'pendente')==='pendente'?'selected':''}>Pendente</option><option value="concedida" ${r.habilitacaoVeneravel==='concedida'?'selected':''}>Concedida</option></select></label>${r.habilitacaoVeneravel==='concedida'?`<button class="btn btn-light btn-sm" type="button" onclick="v618EditarRefHabilitacao('${i.id}')">Referência</button>`:''}`:`<label>Atividade ininterrupta<select onchange="v618SetAtividade('${i.id}',this.value)"><option value="pendente" ${(r.atividadeVeneravel||'pendente')==='pendente'?'selected':''}>Conferir</option><option value="confirmada" ${r.atividadeVeneravel==='confirmada'?'selected':''}>Confirmada</option></select></label>`}</div></div>`}).join('')}
+
+  window.abrirEleitoralV5=function(){preparar618();v5EleData.value=v5EleData.value||hojeISO();renderEleitoralV5();abrirModal('modalEleitoralV5')};
+  window.renderEleitoralV5=function(){
+    preparar618();const data=v5EleData.value||hojeISO(),arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome));
+    if(view618==='veneravel'){
+      const sts=arr.map(i=>statusCand618(i,data)),apt=sts.filter(x=>x.apto===true).length,pen=sts.filter(x=>x.apto===null).length;
+      document.getElementById('v618Resumo').innerHTML=`<b>Candidatura a Venerável Mestre</b><div class="ele-v57-sub">${apt} apto(s) pelos registros · ${pen} pendente(s) de conferência ou habilitação. O registro oficial da candidatura permanece fora do aplicativo.</div>`;
+      v5EleLista.innerHTML=arr.length?renderVen618(data,arr):'<div class="empty"><p>Nenhum Irmão cadastrado.</p></div>';
+    }else{
+      const sts=arr.map(i=>window.v57StatusVoto(i,data)),apt=sts.filter(x=>x.apto===true).length,pen=sts.filter(x=>x.apto===null).length;
+      document.getElementById('v618Resumo').innerHTML=`<b>Aptidão para votar</b><div class="ele-v57-sub">${apt} apto(s) · ${pen} pendente(s). A situação financeira deve estar confirmada nos três níveis cadastrados.</div>`;
+      v5EleLista.innerHTML=arr.length?renderVoto618(data,arr):'<div class="empty"><p>Nenhum Irmão cadastrado.</p></div>';
+    }
+  };
+
+  function corpoAptosVoto618(data){
+    const arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>({i,s:window.v57StatusVoto(i,data)})).filter(x=>x.s.apto===true);
+    const rows=arr.map(({i,s})=>`<tr><td>${h(i.nome)}</td><td>${h(i.cim||'')}</td><td>${h(grauSimbolo(i.grau))}</td><td>${Number(s.pct||0)}% (${s.pres||0}/${s.total||0})</td><td>Quite</td></tr>`).join('');
+    return `<h2>Relação de Irmãos aptos para votar</h2><p><b>Data de referência:</b> ${brData(data)} · <b>Total de aptos:</b> ${arr.length}. Relação auxiliar da Chancelaria para conferência de grau, direitos, frequência e quitação registradas.</p><table><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Frequência</th><th>Situação financeira</th></tr></thead><tbody>${rows||'<tr><td colspan="5">Nenhum Irmão consta como apto pelos dados cadastrados.</td></tr>'}</tbody></table>`;
+  }
+  function corpoAptosVen618(data){
+    const arr=getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>({i,s:statusCand618(i,data)})).filter(x=>x.s.apto===true);
+    const rows=arr.map(({i,s})=>`<tr><td>${h(i.nome)}</td><td>${h(i.cim||'')}</td><td>${h(grauSimbolo(i.grau))}</td><td>${s.tempoMeses||0} meses</td><td>${Number(s.pct||0)}% (${s.pres||0}/${s.total||0})</td><td>${s.habilitacao?`Habilitação: ${h(s.habilitacaoRef||'registrada')}`:'Atividade ininterrupta confirmada'}</td></tr>`).join('');
+    return `<h2>Relação de Irmãos aptos a se candidatar a Venerável Mestre</h2><p><b>Data de referência:</b> ${brData(data)} · <b>Total de aptos:</b> ${arr.length}. A relação considera os dados cadastrados sobre Grau de Mestre, direitos maçônicos, frequência dos últimos dois anos e, quando aplicável, habilitação do Grão-Mestre Geral.</p><table><thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Tempo como Mestre</th><th>Frequência 2 anos</th><th>Base registrada</th></tr></thead><tbody>${rows||'<tr><td colspan="6">Nenhum Irmão consta como apto pelos dados cadastrados.</td></tr>'}</tbody></table>`;
+  }
+  window.v618RelatorioAptosVoto=function(){const data=v5EleData.value||hojeISO();abrirPrint('Aptos para votar',corpoAptosVoto618(data),{tipo:'eleitoral_voto',nomeArquivoV618:'Relatorio_Aptos_Para_Votar_Razao_e_Forca_1997.pdf',rodape:'Relação auxiliar da Chancelaria. A votação ocorre na plataforma eleitoral competente e os registros oficiais prevalecem.'})};
+  window.v618RelatorioAptosVeneravel=function(){const data=v5EleData.value||hojeISO();abrirPrint('Aptos a Venerável Mestre',corpoAptosVen618(data),{tipo:'eleitoral_veneravel',nomeArquivoV618:'Relatorio_Aptos_Candidatura_Veneravel_Mestre_Razao_e_Forca_1997.pdf',rodape:'Relação auxiliar da Chancelaria. O registro oficial da candidatura, inelegibilidades e incompatibilidades são apreciados pela instância eleitoral competente.'})};
+
+  function ponte618(){try{if(typeof obterPonteKodular==='function')return obterPonteKodular()}catch(_e){}if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;if(window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')return window.AppInventor;return null}
+  function nome618(t){const x=String(t||'Documento').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9._ -]+/g,'').trim().replace(/\s+/g,'_').slice(0,100)||'Documento';return x.toLowerCase().endsWith('.pdf')?x:x+'.pdf'}
+  const shareBase618=window.compartilharPreviewRelatorioV588;
+  window.compartilharPreviewRelatorioV588=function(){
+    const p=pendingPrintPayload;if(!p?.nomeArquivoV618)return shareBase618();
+    try{const bridge=ponte618();if(!bridge){return shareBase618()};const u=new URL(urlRelatorioParaImpressao(p.titulo,p.corpo,false,p));u.searchParams.set('nativepdf','1');const nome=nome618(p.nomeArquivoV618);u.searchParams.set('filename',nome);bridge.setWebViewString('00'+Date.now());setTimeout(()=>{try{bridge.setWebViewString('NI'+nome)}catch(_e){}},80);setTimeout(()=>{try{bridge.setWebViewString('PI'+u.href)}catch(_e){}},210);toast('Preparando o PDF para compartilhar...')}catch(e){console.error(e);shareBase618()}
+  };
+
+  const diagBase618=window.executarDiagnosticoV56;
+  window.executarDiagnosticoV56=function(){diagBase618();const box=document.getElementById('v56Diagnostico');if(!box)return;const data=v5EleData?.value||hojeISO();const pend=getIrmaos().map(i=>({i,s:statusCand618(i,data)})).filter(x=>x.s.apto===null);if(pend.length)box.insertAdjacentHTML('beforeend',`<div class="diag-list"><div class="diag-item warn"><b>Aptidão a Venerável Mestre</b></div>${pend.map(x=>`<div class="diag-item warn">⚠ ${h(x.i.nome)}: ${h(x.s.label)} · ${h(x.s.motivo)}</div>`).join('')}</div>`)};
+
+  function init618(){preparar618();const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.1.9'}
+  document.addEventListener('DOMContentLoaded',init618);try{init618()}catch(_e){}
+})();
+</script>
+
+
+<script id="v618-fix-exclusao-visitas">
+(function(){
+  'use strict';
+  function perfis(){const x=v51Get('visitantePerfis');return Array.isArray(x)?x:[]}
+  function visitas(){const x=v51Get('visitasVisitantes');return Array.isArray(x)?x:[]}
+  function setPerfis(x){v51Set('visitantePerfis',Array.isArray(x)?x:[])}
+  function setVisitas(x){v51Set('visitasVisitantes',Array.isArray(x)?x:[])}
+  function perfilNome(pid){return perfis().find(p=>p.id===pid)?.nome||'Visitante'}
+
+  window.excluirVisitanteV5=function(id){
+    const arr=visitas(),ix=arr.findIndex(v=>v.id===id);
+    if(ix<0){toast('Registro de visita não localizado');return}
+    const v=arr[ix],p=perfis().find(x=>x.id===v.perfilId),sess=(getSessoes()||[]).find(x=>x.id===v.sessaoId);
+    const nome=p?.nome||'visitante',quando=sess?.data?` em ${brData(sess.data)}`:'';
+    if(!confirm(`Excluir a visita de ${nome}${quando}? O cadastro permanente do visitante será mantido.`))return;
+    const lid=enviarParaLixeira('visita_visitante',`${nome}${sess?.data?' · '+brData(sess.data):''}`,v,{perfilId:v.perfilId});
+    arr.splice(ix,1);setVisitas(arr);
+    const campo=document.getElementById('v5VisId');if(campo&&campo.value===id)campo.value='';
+    try{audit('Visita de visitante excluída',`${nome}${sess?.data?' · '+sess.data:''}`)}catch(_e){}
+    try{renderVisitantesV5()}catch(_e){}
+    toast('Visita movida para a lixeira','Desfazer',()=>window.restaurarItemLixeira(lid));
+  };
+
+  window.excluirCadastroVisitanteV58=function(perfilId){
+    const ps=perfis(),ix=ps.findIndex(p=>p.id===perfilId);
+    if(ix<0){toast('Cadastro de visitante não localizado');return}
+    const p=ps[ix],vs=visitas(),vinc=vs.filter(v=>v.perfilId===perfilId);
+    if(!confirm(`Excluir o cadastro de ${p.nome||'visitante'} e ${vinc.length} visita(s) vinculada(s)?`))return;
+    const lid=enviarParaLixeira('cadastro_visitante',p.nome||'Visitante',p,{visitas:vinc});
+    setVisitas(vs.filter(v=>v.perfilId!==perfilId));ps.splice(ix,1);setPerfis(ps);
+    const campo=document.getElementById('v5VisId');if(campo)campo.value='';
+    try{audit('Cadastro de visitante excluído',`${p.nome||'Visitante'} · ${vinc.length} visita(s)`) }catch(_e){}
+    try{renderVisitantesV5()}catch(_e){}
+    toast('Visitante movido para a lixeira','Desfazer',()=>window.restaurarItemLixeira(lid));
+  };
+
+  const restaurarAnterior=window.restaurarItemLixeira;
+  window.restaurarItemLixeira=function(id){
+    const trash=limparLixeiraExpirada(),ix=trash.findIndex(x=>x.id===id);
+    if(ix<0){toast('Item não encontrado na lixeira');return}
+    const item=trash[ix];
+    if(item.tipo==='visita_visitante'){
+      const vs=visitas();
+      if(!vs.some(v=>v.id===item.dados?.id))vs.push(item.dados);
+      setVisitas(vs);trash.splice(ix,1);setTrash(trash);
+      try{renderLixeira();renderVisitantesV5();renderAtual()}catch(_e){}
+      try{audit('Visita restaurada da lixeira',item.nome||perfilNome(item.dados?.perfilId))}catch(_e){}
+      toast('Visita restaurada');return;
+    }
+    if(item.tipo==='cadastro_visitante'){
+      const ps=perfis();if(item.dados?.id&&!ps.some(p=>p.id===item.dados.id))ps.push(item.dados);setPerfis(ps);
+      const vs=visitas();for(const v of (item.relacionados?.visitas||[]))if(v?.id&&!vs.some(x=>x.id===v.id))vs.push(v);setVisitas(vs);
+      trash.splice(ix,1);setTrash(trash);
+      try{renderLixeira();renderVisitantesV5();renderAtual()}catch(_e){}
+      try{audit('Cadastro de visitante restaurado da lixeira',item.nome||'Visitante')}catch(_e){}
+      toast('Visitante restaurado');return;
+    }
+    return typeof restaurarAnterior==='function'?restaurarAnterior(id):undefined;
+  };
+})();
+</script>
+
+
+<style id="v619-auditoria-final-ui">
+/* V6.1.9 — confirmação própria, ações previsíveis e área de certificado atualizada. */
+#v619ConfirmModal{z-index:3000}
+#v619ConfirmModal .modal{max-width:440px}
+#v619ConfirmModal .v619-confirm-text{font-size:15px;line-height:1.55;color:var(--texto);padding:4px 0 8px}
+#v619ConfirmModal .modal-foot{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.v619-delete-visit{background:#a43e39!important;color:#fff!important;border-color:#a43e39!important}
+.v619-direct-contact{background:#128c4a!important;color:#fff!important;border-color:#128c4a!important}
+.v619-direct-contact:before{content:'↗';font-weight:900;margin-right:5px}
+.v619-contact-caption{font-size:11px;color:var(--muted);margin-top:5px}
+</style>
+
+<script id="v619-auditoria-final-funcoes">
+(function(){
+  'use strict';
+  window.CHANCELARIA_VERSION='6.1.9';
+
+  function listaPerfis619(){const x=v51Get('visitantePerfis');return Array.isArray(x)?x:[]}
+  function listaVisitas619(){const x=v51Get('visitasVisitantes');return Array.isArray(x)?x:[]}
+  function salvarPerfis619(x){v51Set('visitantePerfis',Array.isArray(x)?x:[])}
+  function salvarVisitas619(x){v51Set('visitasVisitantes',Array.isArray(x)?x:[])}
+  function visita619(id){return (getVisitantesV5()||[]).find(v=>v.id===id)||null}
+  function perfil619(id){return listaPerfis619().find(p=>p.id===id)||null}
+  function primeiro619(nome){return String(nome||'Irmão').trim().split(/\s+/)[0]||'Irmão'}
+
+  function garantirConfirmacao619(){
+    let m=document.getElementById('v619ConfirmModal');
+    if(m)return m;
+    document.body.insertAdjacentHTML('beforeend',`<div class="modal-back" id="v619ConfirmModal" role="dialog" aria-modal="true"><div class="modal"><div class="modal-head"><span id="v619ConfirmTitle">Confirmar</span><button class="modal-close" type="button" id="v619ConfirmX">×</button></div><div class="modal-body"><div id="v619ConfirmText" class="v619-confirm-text"></div></div><div class="modal-foot"><button class="btn btn-light" type="button" id="v619ConfirmCancel">Cancelar</button><button class="btn btn-danger" type="button" id="v619ConfirmOk">Excluir</button></div></div></div>`);
+    m=document.getElementById('v619ConfirmModal');
+    const fechar=()=>{m.classList.remove('open');m.setAttribute('aria-hidden','true');window.__v619ConfirmAction=null};
+    document.getElementById('v619ConfirmCancel').onclick=fechar;
+    document.getElementById('v619ConfirmX').onclick=fechar;
+    document.getElementById('v619ConfirmOk').onclick=()=>{const fn=window.__v619ConfirmAction;fechar();if(typeof fn==='function')fn()};
+    m.addEventListener('click',e=>{if(e.target===m)fechar()});
+    return m;
+  }
+  function confirmar619(titulo,mensagem,acao,rotulo='Excluir'){
+    const m=garantirConfirmacao619();
+    document.getElementById('v619ConfirmTitle').textContent=titulo||'Confirmar';
+    document.getElementById('v619ConfirmText').textContent=mensagem||'';
+    const ok=document.getElementById('v619ConfirmOk');ok.textContent=rotulo;
+    window.__v619ConfirmAction=acao;
+    m.classList.add('open');m.setAttribute('aria-hidden','false');
+  }
+  window.confirmarAcaoV619=confirmar619;
+
+  function abrirContatoWhatsapp619(telefone,nome,texto=''){
+    const numero=numeroWhatsApp(telefone||'');
+    if(!numero){toast('Cadastre um telefone/WhatsApp válido para este contato');return false}
+    const url=`https://wa.me/${numero}${texto?'?text='+encodeURIComponent(texto):''}`;
+    try{
+      if(typeof enviarAcaoNativa==='function'&&enviarAcaoNativa('WA',url)){
+        toast(`Abrindo o contato de ${primeiro619(nome)} no WhatsApp`);return true;
+      }
+      if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
+      window.location.href=url;return true;
+    }catch(e){try{finalizarAcaoExterna()}catch(_e){};console.error(e);toast('Não foi possível abrir o WhatsApp');return false}
+  }
+  window.abrirContatoWhatsappV619=abrirContatoWhatsapp619;
+
+  /* Botão direto: abre a conversa do contato correto. O PDF continua no botão Compartilhar PDF,
+     evitando o erro da v6.1.8 que transformava "Enviar a ..." em compartilhamento genérico. */
+  window.compartilharAtestadoContatoV603=function(id=''){
+    const x=id?visita619(id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);
+    if(!x){toast('Atestado não localizado');return}
+    const msg=`Olá, ${primeiro619(x.nome)}. A Chancelaria da A.R.L.S. Razão e Força nº 1997 está com seu atestado de frequência pronto para envio.`;
+    abrirContatoWhatsapp619(x.telefone,x.nome,msg);
+  };
+  window.abrirWhatsAppVisitanteV55=function(id=''){
+    const x=id?visita619(id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);
+    if(!x){toast('Selecione uma visita ou visitante');return}
+    abrirContatoWhatsapp619(x.telefone,x.nome,'');
+  };
+  window.compartilharIndividualContatoV603=function(){
+    const rid=document.getElementById('relIrmao')?.value||((typeof pendingPrintPayload!=='undefined'&&pendingPrintPayload)?pendingPrintPayload.irmaoId:'');
+    const i=(getIrmaos()||[]).find(x=>x.id===rid);
+    if(!i){toast('Selecione um Irmão');return}
+    const msg=`Olá, ${primeiro619(i.nome)}. A Chancelaria da A.R.L.S. Razão e Força nº 1997 está com seu relatório individual de frequência pronto para envio.`;
+    abrirContatoWhatsapp619(i.telefone,i.nome,msg);
+  };
+
+  function excluirVisitaDef619(id){
+    const arr=listaVisitas619(),ix=arr.findIndex(v=>v.id===id);
+    if(ix<0){toast('Registro de visita não localizado');return}
+    const v=arr[ix],p=perfil619(v.perfilId),s=(getSessoes()||[]).find(x=>x.id===v.sessaoId),nome=p?.nome||'Visitante';
+    const lid=enviarParaLixeira('visita_visitante',`${nome}${s?.data?' · '+brData(s.data):''}`,v,{perfilId:v.perfilId});
+    arr.splice(ix,1);salvarVisitas619(arr);
+    const campo=document.getElementById('v5VisId');if(campo&&campo.value===id)campo.value='';
+    try{audit('Visita de visitante excluída',`${nome}${s?.data?' · '+s.data:''}`)}catch(_e){}
+    try{renderVisitantesV5();renderHistoricoAtestadosWeb();renderAtual()}catch(_e){}
+    toast('Visita movida para a lixeira','Desfazer',()=>window.restaurarItemLixeira(lid));
+  }
+  window.excluirVisitanteV5=function(id){
+    const v=listaVisitas619().find(x=>x.id===id);if(!v){toast('Registro de visita não localizado');return}
+    const p=perfil619(v.perfilId),s=(getSessoes()||[]).find(x=>x.id===v.sessaoId),nome=p?.nome||'Visitante';
+    confirmar619('Excluir visita',`Excluir a visita de ${nome}${s?.data?' em '+brData(s.data):''}? O cadastro permanente do visitante será preservado.`,()=>excluirVisitaDef619(id),'Excluir visita');
+  };
+
+  function excluirCadastroDef619(perfilId){
+    const ps=listaPerfis619(),ix=ps.findIndex(p=>p.id===perfilId);
+    if(ix<0){toast('Cadastro de visitante não localizado');return}
+    const p=ps[ix],vs=listaVisitas619(),vinc=vs.filter(v=>v.perfilId===perfilId);
+    const lid=enviarParaLixeira('cadastro_visitante',p.nome||'Visitante',p,{visitas:vinc});
+    salvarVisitas619(vs.filter(v=>v.perfilId!==perfilId));ps.splice(ix,1);salvarPerfis619(ps);
+    const campo=document.getElementById('v5VisId');if(campo)campo.value='';
+    try{audit('Cadastro de visitante excluído',`${p.nome||'Visitante'} · ${vinc.length} visita(s)`) }catch(_e){}
+    try{renderVisitantesV5();renderHistoricoAtestadosWeb();renderAtual()}catch(_e){}
+    toast('Visitante movido para a lixeira','Desfazer',()=>window.restaurarItemLixeira(lid));
+  }
+  window.excluirCadastroVisitanteV58=function(perfilId){
+    const p=perfil619(perfilId);if(!p){toast('Cadastro de visitante não localizado');return}
+    const qtd=listaVisitas619().filter(v=>v.perfilId===perfilId).length;
+    confirmar619('Excluir visitante',`Excluir o cadastro de ${p.nome||'Visitante'} e ${qtd} visita(s) vinculada(s)? O conteúdo ficará disponível na lixeira para restauração.`,()=>excluirCadastroDef619(perfilId),'Excluir visitante');
+  };
+
+  /* Histórico de atestados: acrescenta envio ao contato correto e exclusão da visita. */
+  const histBase619=window.renderHistoricoAtestadosWeb;
+  window.renderHistoricoAtestadosWeb=function(){
+    histBase619();
+    const cards=[...document.querySelectorAll('#v600HistoricoLista .v600-history-card')];
+    const q=String(document.getElementById('v600HistoricoBusca')?.value||'').trim().toLocaleLowerCase('pt-BR');
+    let arr=(getVisitantesV5()||[]).filter(v=>v&&v.certNumero).sort((a,b)=>String(b.certEmitidoEm||b.updatedAt||b.createdAt||'').localeCompare(String(a.certEmitidoEm||a.updatedAt||a.createdAt||'')));
+    if(q)arr=arr.filter(v=>{const s=(getSessoes()||[]).find(x=>x.id===v.sessaoId);return [v.nome,v.cim,v.loja,v.numero,v.oriente,v.certNumero,s?.data,s?.data?brData(s.data):'',s?nomeSessaoDocumento(s):''].join(' ').toLocaleLowerCase('pt-BR').includes(q)});
+    cards.forEach((card,idx)=>{
+      const v=arr[idx];if(!v)return;const actions=card.querySelector('.v600-history-actions');if(!actions)return;
+      actions.querySelectorAll('.v603-direct-contact,.v619-delete-visit').forEach(b=>b.remove());
+      if(numeroWhatsApp(v.telefone||'')){
+        const b=document.createElement('button');b.className='btn btn-sm v619-direct-contact';b.type='button';b.textContent=`Enviar a ${primeiro619(v.nome)}`;b.onclick=()=>window.compartilharAtestadoContatoV603(v.id);actions.appendChild(b);
+      }
+      const del=document.createElement('button');del.className='btn btn-sm v619-delete-visit';del.type='button';del.textContent='Excluir visita';del.onclick=()=>window.excluirVisitanteV5(v.id);actions.appendChild(del);
+    });
+  };
+
+  /* Tela de visitantes: reconecta todos os botões gerados dinamicamente às funções corrigidas. */
+  const rvBase619=window.renderVisitantesV5;
+  window.renderVisitantesV5=function(){
+    rvBase619();
+    document.querySelectorAll('.visitor-visit-row').forEach(row=>{
+      const share=row.querySelector('button[onclick*="compartilharPdfVisitanteV585"]');if(!share)return;
+      const m=String(share.getAttribute('onclick')||'').match(/\('([^']+)'\)/),id=m?.[1]||'',v=visita619(id);if(!v)return;
+      const actions=row.querySelector('.visitor-visit-actions');if(!actions)return;
+      actions.querySelectorAll('.v603-direct-contact,.v619-direct-contact').forEach(b=>b.remove());
+      if(numeroWhatsApp(v.telefone||'')){
+        const b=document.createElement('button');b.className='btn btn-sm v619-direct-contact';b.type='button';b.textContent=`Enviar a ${primeiro619(v.nome)}`;b.onclick=()=>window.compartilharAtestadoContatoV603(v.id);actions.insertBefore(b,actions.children[1]||null);
+      }
+      const del=actions.querySelector('button[onclick*="excluirVisitanteV5"]');if(del){del.onclick=()=>window.excluirVisitanteV5(v.id);del.removeAttribute('onclick')}
+    });
+    document.querySelectorAll('.visitor-profile-card').forEach(card=>{
+      const del=card.querySelector('.visitor-profile-actions button[onclick*="excluirCadastroVisitanteV58"]');if(del){const m=String(del.getAttribute('onclick')||'').match(/\('([^']+)'\)/),id=m?.[1]||'';del.onclick=()=>window.excluirCadastroVisitanteV58(id);del.removeAttribute('onclick')}
+    });
+  };
+
+  function corrigirRotulos619(){
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.1.9';
+    const direct=document.getElementById('v603EnviarAtestadoContato');
+    if(direct&&window.__v603AtestadoId){const v=visita619(window.__v603AtestadoId);if(v){direct.textContent=`Enviar a ${primeiro619(v.nome)}`;direct.classList.add('v619-direct-contact');direct.onclick=()=>window.compartilharAtestadoContatoV603(v.id)}}
+    const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){const i=(getIrmaos()||[]).find(x=>x.id===document.getElementById('relIrmao')?.value);if(i&&numeroWhatsApp(i.telefone||'')){bi.textContent=`Enviar a ${primeiro619(i.nome)}`;bi.classList.add('v619-direct-contact')}bi.onclick=window.compartilharIndividualContatoV603}
+    const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;bp.classList.add('v619-direct-contact')}
+  }
+
+  const obs619=new MutationObserver(()=>{obs619.disconnect();try{corrigirRotulos619()}finally{obs619.observe(document.body,{childList:true,subtree:true})}});
+  function iniciar619(){
+    if(window.__v619Inicializado)return;window.__v619Inicializado=true;
+    corrigirRotulos619();
+    try{renderVisitantesV5()}catch(_e){}
+    try{if(document.getElementById('v600HistoricoLista'))renderHistoricoAtestadosWeb()}catch(_e){}
+    obs619.observe(document.body,{childList:true,subtree:true});
+    try{audit('Aplicativo atualizado','Núcleo 6.1.9 · auditoria de controles · contatos WhatsApp · exclusão de visitantes · fundo oficial do certificado')}catch(_e){}
+  }
+  document.addEventListener('DOMContentLoaded',iniciar619);try{iniciar619()}catch(_e){}
 })();
 </script>
 
