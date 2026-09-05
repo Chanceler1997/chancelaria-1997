@@ -12,8 +12,9 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
-<title>Chancelaria 1997 · Razão e Força · 6.2.0</title>
-<meta name="application-version" content="6.2.0">
+<title>Chancelaria 1997 · Razão e Força · 6.2.1</title>
+<meta name="application-version" content="6.2.1">
+<meta name="login-fix" content="shared-mutation-observer-guard">
 <style>
 :root{
   --azul:#152541;
@@ -4602,7 +4603,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.2.0';
+  window.CHANCELARIA_VERSION='6.2.1';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -4687,7 +4688,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{
     const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
     if(alvo&&!document.getElementById('v600BuildChip')){
-      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.2.0';alvo.appendChild(chip);
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.2.1';alvo.appendChild(chip);
     }
   }catch(_e){}
 
@@ -4735,7 +4736,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v603-fluidez-chanceler-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.2.0';
+  window.CHANCELARIA_VERSION='6.2.1';
   const navStackV603=[];
   let restaurandoV603=false;
 
@@ -4929,7 +4930,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 
   // Atualiza rótulo visual da versão e o botão Voltar.
-  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.2.0')chip.textContent='Chancelaria 1997 · núcleo 6.2.0';
+  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.2.1')chip.textContent='Chancelaria 1997 · núcleo 6.2.1';
   const back=document.getElementById('backNowButton');if(back&&!back.querySelector('.back-label'))back.insertAdjacentHTML('beforeend','<span class="back-label">Voltar</span>');
   atualizarBotaoVoltarV603();
 })();
@@ -4953,7 +4954,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v610-pdf-real-share-and-back">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.2.0';
+  window.CHANCELARIA_VERSION='6.2.1';
   const locks=new Map();
 
   function travaV610(chave,ms=2200){
@@ -5094,14 +5095,19 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     const nota=document.getElementById('v603AtestadoContatoNota');if(nota&&window.__v603AtestadoId&&nota.textContent!=='O compartilhamento envia o documento como arquivo PDF pelo Android.')nota.textContent='O compartilhamento envia o documento como arquivo PDF pelo Android.';
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){bi.onclick=window.compartilharIndividualContatoV603;if(bi.textContent!=='Compartilhar PDF com o Irmão')bi.textContent='Compartilhar PDF com o Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;if(bp.textContent!=='Compartilhar PDF com o Irmão')bp.textContent='Compartilhar PDF com o Irmão'}
-    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.2.0')chip.textContent='Chancelaria 1997 · núcleo 6.2.0';
+    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.2.1')chip.textContent='Chancelaria 1997 · núcleo 6.2.1';
   }
   // V6.1.8: o observador é desconectado enquanto limpa a interface.
   // Isso evita realimentação de mutações (textContent/remove) e congelamento da tela de login.
   const alvoObsV611=document.body;
   const obs=new MutationObserver(()=>{
+    if(document.body.classList.contains('app-locked')||window.__chancelariaDomPatchBusy)return;
+    window.__chancelariaDomPatchBusy=true;
     obs.disconnect();
-    try{limparAcoesV610()}finally{obs.observe(alvoObsV611,{childList:true,subtree:true})}
+    try{limparAcoesV610()}finally{
+      obs.observe(alvoObsV611,{childList:true,subtree:true});
+      setTimeout(()=>{window.__chancelariaDomPatchBusy=false},0);
+    }
   });
   limparAcoesV610();
   obs.observe(alvoObsV611,{childList:true,subtree:true});
@@ -5113,7 +5119,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v617-fluxo-e-escopo-chancelaria">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.2.0';
+  window.CHANCELARIA_VERSION='6.2.1';
 
   function notificacaoTemDados(p){
     const n=p?.notificacao||{};
@@ -5216,7 +5222,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v618-aptidao-eleitoral">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.2.0';
+  window.CHANCELARIA_VERSION='6.2.1';
   let view618='voto';
 
   function reg618(data,iid){return getEleicoesV5().find(e=>e.data===data&&e.irmaoId===iid)||{}}
@@ -5313,7 +5319,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   const diagBase618=window.executarDiagnosticoV56;
   window.executarDiagnosticoV56=function(){diagBase618();const box=document.getElementById('v56Diagnostico');if(!box)return;const data=v5EleData?.value||hojeISO();const pend=getIrmaos().map(i=>({i,s:statusCand618(i,data)})).filter(x=>x.s.apto===null);if(pend.length)box.insertAdjacentHTML('beforeend',`<div class="diag-list"><div class="diag-item warn"><b>Aptidão a Venerável Mestre</b></div>${pend.map(x=>`<div class="diag-item warn">⚠ ${h(x.i.nome)}: ${h(x.s.label)} · ${h(x.s.motivo)}</div>`).join('')}</div>`)};
 
-  function init618(){preparar618();const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.2.0'}
+  function init618(){preparar618();const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.2.1'}
   document.addEventListener('DOMContentLoaded',init618);try{init618()}catch(_e){}
 })();
 </script>
@@ -5383,7 +5389,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 
 
 <style id="v619-auditoria-final-ui">
-/* V6.2.0 — confirmação própria, ações previsíveis e área de certificado atualizada. */
+/* V6.2.1 — confirmação própria, ações previsíveis e área de certificado atualizada. */
 #v619ConfirmModal{z-index:3000}
 #v619ConfirmModal .modal{max-width:440px}
 #v619ConfirmModal .v619-confirm-text{font-size:15px;line-height:1.55;color:var(--texto);padding:4px 0 8px}
@@ -5397,7 +5403,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v619-auditoria-final-funcoes">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.2.0';
+  window.CHANCELARIA_VERSION='6.2.1';
 
   function listaPerfis619(){const x=v51Get('visitantePerfis');return Array.isArray(x)?x:[]}
   function listaVisitas619(){const x=v51Get('visitasVisitantes');return Array.isArray(x)?x:[]}
@@ -5536,21 +5542,31 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   };
 
   function corrigirRotulos619(){
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.2.0';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.2.1';
     const direct=document.getElementById('v603EnviarAtestadoContato');
     if(direct&&window.__v603AtestadoId){const v=visita619(window.__v603AtestadoId);if(v){direct.textContent=`Enviar a ${primeiro619(v.nome)}`;direct.classList.add('v619-direct-contact');direct.onclick=()=>window.compartilharAtestadoContatoV603(v.id)}}
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){const i=(getIrmaos()||[]).find(x=>x.id===document.getElementById('relIrmao')?.value);if(i&&numeroWhatsApp(i.telefone||'')){bi.textContent=`Enviar a ${primeiro619(i.nome)}`;bi.classList.add('v619-direct-contact')}bi.onclick=window.compartilharIndividualContatoV603}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;bp.classList.add('v619-direct-contact')}
   }
 
-  const obs619=new MutationObserver(()=>{obs619.disconnect();try{corrigirRotulos619()}finally{obs619.observe(document.body,{childList:true,subtree:true})}});
+  const obs619=new MutationObserver(()=>{
+    if(document.body.classList.contains('app-locked')||window.__chancelariaDomPatchBusy)return;
+    window.__chancelariaDomPatchBusy=true;
+    obs619.disconnect();
+    try{corrigirRotulos619()}finally{
+      obs619.observe(document.body,{childList:true,subtree:true});
+      setTimeout(()=>{window.__chancelariaDomPatchBusy=false},0);
+    }
+  });
   function iniciar619(){
     if(window.__v619Inicializado)return;window.__v619Inicializado=true;
     corrigirRotulos619();
-    try{renderVisitantesV5()}catch(_e){}
-    try{if(document.getElementById('v600HistoricoLista'))renderHistoricoAtestadosWeb()}catch(_e){}
+    if(!document.body.classList.contains('app-locked')){
+      try{renderVisitantesV5()}catch(_e){}
+      try{if(document.getElementById('v600HistoricoLista'))renderHistoricoAtestadosWeb()}catch(_e){}
+    }
     obs619.observe(document.body,{childList:true,subtree:true});
-    try{audit('Aplicativo atualizado','Núcleo 6.2.0 · auditoria de controles · contatos WhatsApp · exclusão de visitantes · fundo oficial do certificado')}catch(_e){}
+    try{audit('Aplicativo atualizado','Núcleo 6.2.1 · auditoria de controles · contatos WhatsApp · exclusão de visitantes · fundo oficial do certificado')}catch(_e){}
   }
   document.addEventListener('DOMContentLoaded',iniciar619);try{iniciar619()}catch(_e){}
 })();
@@ -5558,7 +5574,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 
 
 <style id="v620-estabilizacao-relatorios-normas">
-/* V6.2.0: tabela coletiva legível em A4 e painel normativo. */
+/* V6.2.1: tabela coletiva legível em A4 e painel normativo. */
 .v620-norm-guide{display:grid;gap:10px;margin:12px 0 16px}
 .v620-norm-item{border:1px solid rgba(200,166,75,.38);border-radius:13px;background:#fff;padding:12px 13px}
 .v620-norm-item b{display:block;color:#10233e;font-size:14px;margin-bottom:4px}
@@ -5574,7 +5590,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v620-estabilizacao-final">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.2.0';
+  window.CHANCELARIA_VERSION='6.2.1';
 
   function primeiro620(nome){return String(nome||'Irmão').trim().split(/\s+/)[0]||'Irmão'}
 
@@ -5655,13 +5671,21 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   };
 
   function corrigirBotoes620(){
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.2.0';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.2.1';
     const direct=document.getElementById('v603EnviarAtestadoContato');if(direct){direct.onclick=()=>window.compartilharAtestadoContatoV603(window.__v603AtestadoId||'')}
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){const i=(getIrmaos()||[]).find(x=>x.id===document.getElementById('relIrmao')?.value);if(i)bi.textContent=`Enviar a ${primeiro620(i.nome)}`;bi.onclick=window.compartilharIndividualContatoV603}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603}
   }
-  const obs=new MutationObserver(()=>{obs.disconnect();try{corrigirBotoes620()}finally{obs.observe(document.body,{childList:true,subtree:true})}});
-  function init(){corrigirBotoes620();obs.observe(document.body,{childList:true,subtree:true});try{audit('Aplicativo atualizado','Núcleo 6.2.0 · estabilização de PDF · pendências normativas · conformidade ampliada')}catch(_e){}}
+  const obs=new MutationObserver(()=>{
+    if(document.body.classList.contains('app-locked')||window.__chancelariaDomPatchBusy)return;
+    window.__chancelariaDomPatchBusy=true;
+    obs.disconnect();
+    try{corrigirBotoes620()}finally{
+      obs.observe(document.body,{childList:true,subtree:true});
+      setTimeout(()=>{window.__chancelariaDomPatchBusy=false},0);
+    }
+  });
+  function init(){corrigirBotoes620();obs.observe(document.body,{childList:true,subtree:true});try{audit('Aplicativo atualizado','Núcleo 6.2.1 · estabilização de PDF · pendências normativas · conformidade ampliada')}catch(_e){}}
   document.addEventListener('DOMContentLoaded',init);try{init()}catch(_e){}
 })();
 </script>
