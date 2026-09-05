@@ -12,8 +12,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
-<title>Chancelaria 1997 · Razão e Força · 6.1.1</title>
-<meta name="application-version" content="6.1.1">
+<title>Chancelaria 1997 · Razão e Força · 6.1.2</title>
+<meta name="application-version" content="6.1.2">
 <style>
 :root{
   --azul:#152541;
@@ -4567,7 +4567,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.1';
+  window.CHANCELARIA_VERSION='6.1.2';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -4652,7 +4652,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{
     const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
     if(alvo&&!document.getElementById('v600BuildChip')){
-      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.1.1';alvo.appendChild(chip);
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.1.2';alvo.appendChild(chip);
     }
   }catch(_e){}
 
@@ -4700,7 +4700,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v603-fluidez-chanceler-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.1';
+  window.CHANCELARIA_VERSION='6.1.2';
   const navStackV603=[];
   let restaurandoV603=false;
 
@@ -4894,7 +4894,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 
   // Atualiza rótulo visual da versão e o botão Voltar.
-  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.1')chip.textContent='Chancelaria 1997 · núcleo 6.1.1';
+  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.2')chip.textContent='Chancelaria 1997 · núcleo 6.1.2';
   const back=document.getElementById('backNowButton');if(back&&!back.querySelector('.back-label'))back.insertAdjacentHTML('beforeend','<span class="back-label">Voltar</span>');
   atualizarBotaoVoltarV603();
 })();
@@ -4903,7 +4903,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
 
 <style id="v610-pdf-navigation-polish">
-/* V6.1.1 — navegação previsível, PDF real e interface enxuta. */
+/* V6.1.2 — navegação previsível, PDF real e interface enxuta. */
 .header.app-compact-header{position:sticky!important;top:0!important;z-index:1300!important}
 #modalAtestadoV603{top:54px!important;height:calc(100vh - 54px)!important;z-index:1200!important}
 #modalAtestadoV603 .v603-doc-actions button[onclick*="fecharAtestadoV603"]{display:none!important}
@@ -4918,7 +4918,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v610-pdf-real-share-and-back">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.1';
+  window.CHANCELARIA_VERSION='6.1.2';
   const locks=new Map();
 
   function travaV610(chave,ms=2200){
@@ -4939,7 +4939,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   function enviarPdfNativoV610(prefixo,url,nome){
     const p=ponteV610();
     if(!p||!url)return false;
-    const rotulo=nomeSeguroV610(nome).replace(/\.pdf$/i,'');
+    const rotulo=nomeSeguroV610(nome);
     try{
       p.setWebViewString('00'+Date.now());
       setTimeout(()=>{try{p.setWebViewString('NI'+rotulo)}catch(_e){}},80);
@@ -5059,9 +5059,9 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     const nota=document.getElementById('v603AtestadoContatoNota');if(nota&&window.__v603AtestadoId&&nota.textContent!=='O compartilhamento envia o documento como arquivo PDF pelo Android.')nota.textContent='O compartilhamento envia o documento como arquivo PDF pelo Android.';
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){bi.onclick=window.compartilharIndividualContatoV603;if(bi.textContent!=='Compartilhar PDF com o Irmão')bi.textContent='Compartilhar PDF com o Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;if(bp.textContent!=='Compartilhar PDF com o Irmão')bp.textContent='Compartilhar PDF com o Irmão'}
-    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.1')chip.textContent='Chancelaria 1997 · núcleo 6.1.1';
+    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.2')chip.textContent='Chancelaria 1997 · núcleo 6.1.2';
   }
-  // V6.1.1: o observador é desconectado enquanto limpa a interface.
+  // V6.1.2: o observador é desconectado enquanto limpa a interface.
   // Isso evita realimentação de mutações (textContent/remove) e congelamento da tela de login.
   const alvoObsV611=document.body;
   const obs=new MutationObserver(()=>{
@@ -5070,7 +5070,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   });
   limparAcoesV610();
   obs.observe(alvoObsV611,{childList:true,subtree:true});
-  try{audit('Aplicativo atualizado','Núcleo 6.1.1 · PDF real · retorno seguro · lixeira ampliada · login estabilizado')}catch(_e){}
+  try{audit('Aplicativo atualizado','Núcleo 6.1.2 · PDF real · retorno seguro · lixeira ampliada · login estabilizado')}catch(_e){}
 })();
 </script>
 

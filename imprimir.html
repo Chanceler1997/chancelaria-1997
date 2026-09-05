@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v6.1.1</title>
+<title>Documento · Chancelaria 1997 v6.1.2</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -105,7 +105,7 @@ html,body{background:#101a29}
 @media(max-width:390px){.toolbar button{font-size:12.5px}}
 
 
-/* V6.1.1 — geometria estável para PDF nativo. */
+/* V6.1.2 — geometria estável para PDF nativo. */
 html.native-pdf,html.native-pdf body{width:100%!important;min-width:100%!important;max-width:100%!important}
 html.native-pdf #app{width:100%!important;min-width:100%!important;max-width:100%!important}
 html.native-pdf .page{break-after:page;page-break-after:always;transform:none!important}
@@ -113,6 +113,17 @@ html.native-pdf table{table-layout:fixed!important;border-collapse:collapse!impo
 html.native-pdf thead{display:table-header-group!important}
 html.native-pdf tr,html.native-pdf th,html.native-pdf td{break-inside:avoid!important;page-break-inside:avoid!important}
 html.native-pdf img{max-width:100%}
+
+/* V6.1.2 — A4 fixo para o arquivo físico, sem herdar o layout móvel. */
+html.native-pdf body{background:#fff!important;width:100%!important;min-height:0!important}
+html.native-pdf #app{padding:0!important;margin:0!important;overflow:visible!important}
+html.native-pdf .page:not(.certificate-art-v584){
+  display:block!important;width:100%!important;max-width:none!important;min-height:141.436vw!important;
+  margin:0!important;border-radius:0!important;box-shadow:none!important;
+  padding:14.285vw 9.524vw 9.524vw 14.285vw!important;overflow:visible!important;background:#fff!important
+}
+html.native-pdf .page:not(.certificate-art-v584) .footer{margin-bottom:0!important}
+html.native-pdf .toolbar{display:none!important}
 
 </style>
 </head>
@@ -128,7 +139,33 @@ html.native-pdf img{max-width:100%}
     if(vp)vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
   }
   const app=document.getElementById('app');
+  function ponteNativaV612(){
+    if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
+    if(window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')return window.AppInventor;
+    return null;
+  }
+  function informarAlturaNativaV612(){
+    if(!nativePdf)return;
+    const emitir=()=>{
+      try{
+        const page=app.querySelector('.page');
+        const h=Math.ceil(Math.max(
+          page?page.scrollHeight:0, app.scrollHeight||0, document.body.scrollHeight||0,
+          document.documentElement.scrollHeight||0, window.innerHeight||0
+        ));
+        const ponte=ponteNativaV612();
+        if(!ponte||h<100)return;
+        ponte.setWebViewString('00'+Date.now());
+        setTimeout(()=>{try{ponte.setWebViewString('PH'+h)}catch(_e){}},70);
+      }catch(_e){}
+    };
+    const imgs=[...app.querySelectorAll('img')];
+    Promise.all(imgs.map(img=>img.complete?Promise.resolve():new Promise(r=>{
+      img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true});
+    }))).then(()=>requestAnimationFrame(()=>setTimeout(emitir,280)));
+  }
   let shareUrlDocumento='';
+  let nomeArquivoAtual='Documento.pdf';
   let tipoDocumentoAtual='RELATORIO';
   function decodeBase64UrlUtf8(raw){raw=raw.replace(/-/g,'+').replace(/_/g,'/');while(raw.length%4)raw+='=';const bin=atob(raw),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
   window.compartilharDocumento=function(){
@@ -138,7 +175,8 @@ html.native-pdf img{max-width:100%}
       if(ponte){
         const prefixo=tipoDocumentoAtual==='ATESTADO'?'SI':'PI';
         ponte.setWebViewString('00'+Date.now());
-        setTimeout(()=>{try{ponte.setWebViewString(prefixo+shareUrlDocumento)}catch(_e){}},90);
+        setTimeout(()=>{try{ponte.setWebViewString('NI'+nomeArquivoAtual)}catch(_e){}},70);
+        setTimeout(()=>{try{ponte.setWebViewString(prefixo+shareUrlDocumento)}catch(_e){}},190);
         return;
       }
       if(navigator.share){navigator.share({title:document.title,url:shareUrlDocumento}).catch(()=>{});return}
@@ -161,7 +199,7 @@ html.native-pdf img{max-width:100%}
     const data=JSON.parse(decodeBase64UrlUtf8(raw));
     tipoDocumentoAtual=(String(data.documentClass||'')==='certificate-art-v584'||new URLSearchParams(location.search).has('visita'))?'ATESTADO':'RELATORIO';
     const uShare=new URL(location.href);uShare.searchParams.set('nativepdf','1');uShare.searchParams.delete('print');shareUrlDocumento=uShare.href;
-    history.replaceState(null,'',location.pathname+location.search);const nomePdf=(new URLSearchParams(location.search).get('filename')||'').replace(/\.pdf$/i,'');document.title=nomePdf||(data.titulo||'Documento')+' · Chancelaria 1997';
+    history.replaceState(null,'',location.pathname+location.search);const nomeParam=(new URLSearchParams(location.search).get('filename')||'Documento.pdf');nomeArquivoAtual=/\.pdf$/i.test(nomeParam)?nomeParam:nomeParam+'.pdf';const nomePdf=nomeArquivoAtual.replace(/\.pdf$/i,'');document.title=nomePdf||(data.titulo||'Documento')+' · Chancelaria 1997';
     const assinatura=data.assinatura||assinaturaPadrao;const rodape=data.rodape||'Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';const documentClass=String(data.documentClass||'').replace(/[^a-z0-9_-]/gi,'');
     if(documentClass==='certificate-art-v584'&&data.certificado){
       const c=data.certificado, esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -188,6 +226,7 @@ html.native-pdf img{max-width:100%}
     }else{
       app.innerHTML=`<article class="page ${documentClass}"><header class="official-header"><img src="cabecalho-oficial.jpg" alt="Cabeçalho oficial da A.R.L.S. Razão e Força nº 1997"></header><div class="jurisdiction-line">Jurisdicionada ao GOB-MS</div>${data.corpo||''}<div class="assinatura${data.assinaturaClasse?' '+data.assinaturaClasse:''}">${assinatura}</div><div class="footer">${rodape}</div></article>`;
     }
+    informarAlturaNativaV612();
     const deveImprimir=new URLSearchParams(location.search).get('print')==='1';if(deveImprimir){const imgs=[...app.querySelectorAll('img')];const aguardar=Promise.all(imgs.map(img=>img.complete?Promise.resolve():new Promise(r=>{img.addEventListener('load',r,{once:true});img.addEventListener('error',r,{once:true})})));aguardar.then(()=>setTimeout(()=>{try{window.print()}catch(e){}},500))}
   }catch(e){app.innerHTML=`<div class="error"><h2>Não foi possível abrir o documento</h2><p>${String(e.message||e)}</p><p>Volte ao aplicativo e gere o documento novamente.</p></div>`}
 })();
