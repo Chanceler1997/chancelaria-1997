@@ -12,8 +12,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
-<title>Chancelaria 1997 · Razão e Força · 6.1.9</title>
-<meta name="application-version" content="6.1.9">
+<title>Chancelaria 1997 · Razão e Força · 6.2.0</title>
+<meta name="application-version" content="6.2.0">
 <style>
 :root{
   --azul:#152541;
@@ -867,7 +867,7 @@ main{max-width:720px;padding:14px 12px 28px}
       <div class="card-body">
         <div class="field"><label>Irmão</label><select id="relIrmao"></select></div>
         <div class="toolbar report-toolbar">
-          <button class="btn btn-info" onclick="renderRelatorioIndividual()">Ver</button>
+          <button class="btn btn-info" onclick="visualizarIndividualV620()">Visualizar</button>
           <button class="btn btn-success" onclick="imprimirIndividual()">Imprimir/PDF</button>
           <button class="btn btn-primary" onclick="compartilharIndividualPDFV602()">Compartilhar PDF</button>
           <button class="btn btn-warning" onclick="mensagemFrequenciaIndividual()">Mensagem</button>
@@ -1404,8 +1404,36 @@ function base64ToBytes(str){
 }
 async function deriveVaultKey(password,salt,iterations=SEC_ITERATIONS){
   const raw=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);
-  return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations,hash:'SHA-256'},raw,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);
+  return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations,hash:'SHA-256'},raw,{name:'AES-GCM',length:256},true,['encrypt','decrypt']);
 }
+
+const SEC_SESSION_KEY=PFX+'session_key_v620';
+const SEC_SESSION_MAX_MS=12*60*1000;
+async function salvarSessaoV620(){
+  if(!vaultKey)return false;
+  try{
+    const raw=await crypto.subtle.exportKey('raw',vaultKey);
+    sessionStorage.setItem(SEC_SESSION_KEY,JSON.stringify({key:bytesToBase64(new Uint8Array(raw)),ts:Date.now()}));
+    return true;
+  }catch(e){console.error('Falha ao preservar sessão',e);return false}
+}
+function tocarSessaoV620(){
+  try{const raw=sessionStorage.getItem(SEC_SESSION_KEY);if(!raw)return;const d=JSON.parse(raw);if(d&&d.key){d.ts=Date.now();sessionStorage.setItem(SEC_SESSION_KEY,JSON.stringify(d))}}catch(e){}
+}
+function limparSessaoV620(){try{sessionStorage.removeItem(SEC_SESSION_KEY)}catch(e){}}
+async function restaurarSessaoV620(){
+  try{
+    const raw=sessionStorage.getItem(SEC_SESSION_KEY);if(!raw)return false;
+    const d=JSON.parse(raw);if(!d?.key||!d?.ts||Date.now()-Number(d.ts)>SEC_SESSION_MAX_MS){limparSessaoV620();return false}
+    const meta=getSecurityMeta();if(!meta?.verifier){limparSessaoV620();return false}
+    const key=await crypto.subtle.importKey('raw',base64ToBytes(d.key),{name:'AES-GCM'},true,['encrypt','decrypt']);
+    const verifier=await decryptPayload(key,meta.verifier);if(verifier?.ok!=='CHANCELARIA-1997')throw new Error('Sessão inválida');
+    const rawVault=localStorage.getItem(SEC_VAULT_KEY);const vault=rawVault?await decryptPayload(key,JSON.parse(rawVault)):{data:{}};
+    if(!vault||typeof vault.data!=='object')throw new Error('Cofre inválido');
+    secureCache=vault.data||Object.create(null);vaultKey=key;failedAttempts=0;tocarSessaoV620();abrirAplicativo();return true;
+  }catch(e){console.error('Sessão não restaurada',e);limparSessaoV620();return false}
+}
+
 async function encryptPayload(key,value){
   const iv=crypto.getRandomValues(new Uint8Array(12));
   const plain=new TextEncoder().encode(JSON.stringify(value));
@@ -1491,6 +1519,7 @@ async function enviarSenha(){
       await persistVaultNow();
       removeLegacyData();
       failedAttempts=0;
+      await salvarSessaoV620();
       abrirAplicativo();
     }else{
       const meta=getSecurityMeta();
@@ -1504,6 +1533,7 @@ async function enviarSenha(){
       secureCache=vault.data||Object.create(null);
       vaultKey=key;
       failedAttempts=0;
+      await salvarSessaoV620();
       abrirAplicativo();
     }
   }catch(e){
@@ -1532,6 +1562,7 @@ async function bloquearAplicativo(message='Aplicativo bloqueado por segurança.'
   if(!vaultKey){configureSecurityGate(getSecurityMeta()?'unlock':'setup',message);return}
   try{await persistQueue}catch(e){}
   vaultKey=null;
+  limparSessaoV620();
   secureCache=Object.create(null);
   document.querySelectorAll('.modal-back.open').forEach(el=>el.classList.remove('open'));
   clearTimeout(inactivityTimer);
@@ -1540,6 +1571,7 @@ async function bloquearAplicativo(message='Aplicativo bloqueado por segurança.'
 function resetInactivityTimer(){
   clearTimeout(inactivityTimer);
   inactivityTimer=null;
+  if(vaultKey)tocarSessaoV620();
   if(vaultKey&&!seletorArquivoAtivo&&!acaoExternaAtiva())inactivityTimer=setTimeout(()=>bloquearAplicativo('Aplicativo bloqueado após 10 minutos sem atividade.'),10*60*1000);
 }
 function iniciarSelecaoArquivo(){
@@ -1571,6 +1603,7 @@ function finalizarAcaoExterna(){
 function iniciarSeguranca(){
   const meta=getSecurityMeta();
   configureSecurityGate(meta?'unlock':'setup');
+  if(meta)setTimeout(()=>{restaurarSessaoV620().catch(()=>{})},0);
   ['pointerdown','touchstart','keydown'].forEach(evt=>document.addEventListener(evt,()=>{if(vaultKey)resetInactivityTimer()},{passive:true}));
   ['backupInput','verifyBackupInput'].forEach(id=>{
     const input=document.getElementById(id);
@@ -2590,7 +2623,7 @@ async function validarSenha(password,meta=getSecurityMeta()){if(!meta)throw new 
 function solicitarAcaoComSenha(acao){sensitiveAction=acao;senhaAcaoTitulo.textContent=acao==='exportar'?'Confirme para exportar':acao==='esvaziarLixeira'?'Confirme para apagar a lixeira':acao==='limparHistorico'?'Confirme para excluir o histórico':'Confirme sua senha';senhaAcaoInput.value='';senhaAcaoErro.textContent='';abrirModal('modalSenhaAcao');setTimeout(()=>senhaAcaoInput.focus(),80)}
 function cancelarAcaoComSenha(){sensitiveAction='';fecharModal('modalSenhaAcao')}
 async function confirmarAcaoComSenha(){try{await validarSenha(senhaAcaoInput.value);const a=sensitiveAction;cancelarAcaoComSenha();if(a==='exportar')await exportarBackupConfirmado();else if(a==='esvaziarLixeira')esvaziarLixeiraConfirmado();else if(a==='limparHistorico')limparHistoricoConfirmado()}catch(e){senhaAcaoErro.textContent='Senha incorreta.';senhaAcaoInput.value=''}}
-async function trocarSenhaMestra(){const atual=senhaAtualTroca.value,nova=senhaNovaTroca.value,conf=senhaNovaConfirma.value;if(nova.length<8){toast('Use no mínimo 8 caracteres');return}if(nova!==conf){toast('As novas senhas não conferem');return}try{await validarSenha(atual);await persistQueue;const salt=crypto.getRandomValues(new Uint8Array(16)),key=await deriveVaultKey(nova,salt,SEC_ITERATIONS),verifier=await encryptPayload(key,{ok:'CHANCELARIA-1997',version:1}),meta={version:1,salt:bytesToBase64(salt),iterations:SEC_ITERATIONS,verifier,createdAt:new Date().toISOString(),changedAt:new Date().toISOString()};vaultKey=key;localStorage.setItem(SEC_META_KEY,JSON.stringify(meta));audit('Senha mestra alterada','Nova chave criptográfica criada');await persistVaultNow();senhaAtualTroca.value=senhaNovaTroca.value=senhaNovaConfirma.value='';fecharModal('modalTrocarSenha');toast('Senha alterada com sucesso')}catch(e){toast('Senha atual incorreta')}}
+async function trocarSenhaMestra(){const atual=senhaAtualTroca.value,nova=senhaNovaTroca.value,conf=senhaNovaConfirma.value;if(nova.length<8){toast('Use no mínimo 8 caracteres');return}if(nova!==conf){toast('As novas senhas não conferem');return}try{await validarSenha(atual);await persistQueue;const salt=crypto.getRandomValues(new Uint8Array(16)),key=await deriveVaultKey(nova,salt,SEC_ITERATIONS),verifier=await encryptPayload(key,{ok:'CHANCELARIA-1997',version:1}),meta={version:1,salt:bytesToBase64(salt),iterations:SEC_ITERATIONS,verifier,createdAt:new Date().toISOString(),changedAt:new Date().toISOString()};vaultKey=key;localStorage.setItem(SEC_META_KEY,JSON.stringify(meta));audit('Senha mestra alterada','Nova chave criptográfica criada');await persistVaultNow();await salvarSessaoV620();senhaAtualTroca.value=senhaNovaTroca.value=senhaNovaConfirma.value='';fecharModal('modalTrocarSenha');toast('Senha alterada com sucesso')}catch(e){toast('Senha atual incorreta')}}
 function resumoCofre(data){return {irmaos:Array.isArray(data?.irmaos)?data.irmaos.length:0,sessoes:Array.isArray(data?.sessoes)?data.sessoes.length:0,datas:Array.isArray(data?.festivas)?data.festivas.length:0,alteradoEm:data?.updatedAt||''}}
 function guardarCopiaRecuperacao(){const meta=localStorage.getItem(SEC_META_KEY),vault=localStorage.getItem(SEC_VAULT_KEY);if(meta&&vault)localStorage.setItem(SEC_RECOVERY_KEY,JSON.stringify({tipo:'CHANCELARIA1997_RECOVERY',meta:JSON.parse(meta),vault:JSON.parse(vault),savedAt:new Date().toISOString()}))}
 function solicitarSenhaArquivo(fileData,mode){pendingBackupFile=fileData;pendingBackupMode=mode;senhaArquivoTitulo.textContent=mode==='verify'?'Verificar backup':'Importar backup';senhaArquivoInput.value='';senhaArquivoErro.textContent='';abrirModal('modalSenhaArquivo');setTimeout(()=>senhaArquivoInput.focus(),80)}
@@ -4569,7 +4602,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.9';
+  window.CHANCELARIA_VERSION='6.2.0';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -4654,7 +4687,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{
     const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
     if(alvo&&!document.getElementById('v600BuildChip')){
-      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.1.9';alvo.appendChild(chip);
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.2.0';alvo.appendChild(chip);
     }
   }catch(_e){}
 
@@ -4702,7 +4735,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v603-fluidez-chanceler-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.9';
+  window.CHANCELARIA_VERSION='6.2.0';
   const navStackV603=[];
   let restaurandoV603=false;
 
@@ -4896,7 +4929,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 
   // Atualiza rótulo visual da versão e o botão Voltar.
-  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.9')chip.textContent='Chancelaria 1997 · núcleo 6.1.9';
+  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.2.0')chip.textContent='Chancelaria 1997 · núcleo 6.2.0';
   const back=document.getElementById('backNowButton');if(back&&!back.querySelector('.back-label'))back.insertAdjacentHTML('beforeend','<span class="back-label">Voltar</span>');
   atualizarBotaoVoltarV603();
 })();
@@ -4920,7 +4953,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v610-pdf-real-share-and-back">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.9';
+  window.CHANCELARIA_VERSION='6.2.0';
   const locks=new Map();
 
   function travaV610(chave,ms=2200){
@@ -5061,7 +5094,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     const nota=document.getElementById('v603AtestadoContatoNota');if(nota&&window.__v603AtestadoId&&nota.textContent!=='O compartilhamento envia o documento como arquivo PDF pelo Android.')nota.textContent='O compartilhamento envia o documento como arquivo PDF pelo Android.';
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){bi.onclick=window.compartilharIndividualContatoV603;if(bi.textContent!=='Compartilhar PDF com o Irmão')bi.textContent='Compartilhar PDF com o Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;if(bp.textContent!=='Compartilhar PDF com o Irmão')bp.textContent='Compartilhar PDF com o Irmão'}
-    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.1.9')chip.textContent='Chancelaria 1997 · núcleo 6.1.9';
+    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 6.2.0')chip.textContent='Chancelaria 1997 · núcleo 6.2.0';
   }
   // V6.1.8: o observador é desconectado enquanto limpa a interface.
   // Isso evita realimentação de mutações (textContent/remove) e congelamento da tela de login.
@@ -5080,7 +5113,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v617-fluxo-e-escopo-chancelaria">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.9';
+  window.CHANCELARIA_VERSION='6.2.0';
 
   function notificacaoTemDados(p){
     const n=p?.notificacao||{};
@@ -5183,7 +5216,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v618-aptidao-eleitoral">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.9';
+  window.CHANCELARIA_VERSION='6.2.0';
   let view618='voto';
 
   function reg618(data,iid){return getEleicoesV5().find(e=>e.data===data&&e.irmaoId===iid)||{}}
@@ -5280,7 +5313,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   const diagBase618=window.executarDiagnosticoV56;
   window.executarDiagnosticoV56=function(){diagBase618();const box=document.getElementById('v56Diagnostico');if(!box)return;const data=v5EleData?.value||hojeISO();const pend=getIrmaos().map(i=>({i,s:statusCand618(i,data)})).filter(x=>x.s.apto===null);if(pend.length)box.insertAdjacentHTML('beforeend',`<div class="diag-list"><div class="diag-item warn"><b>Aptidão a Venerável Mestre</b></div>${pend.map(x=>`<div class="diag-item warn">⚠ ${h(x.i.nome)}: ${h(x.s.label)} · ${h(x.s.motivo)}</div>`).join('')}</div>`)};
 
-  function init618(){preparar618();const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.1.9'}
+  function init618(){preparar618();const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.2.0'}
   document.addEventListener('DOMContentLoaded',init618);try{init618()}catch(_e){}
 })();
 </script>
@@ -5350,7 +5383,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 
 
 <style id="v619-auditoria-final-ui">
-/* V6.1.9 — confirmação própria, ações previsíveis e área de certificado atualizada. */
+/* V6.2.0 — confirmação própria, ações previsíveis e área de certificado atualizada. */
 #v619ConfirmModal{z-index:3000}
 #v619ConfirmModal .modal{max-width:440px}
 #v619ConfirmModal .v619-confirm-text{font-size:15px;line-height:1.55;color:var(--texto);padding:4px 0 8px}
@@ -5364,7 +5397,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v619-auditoria-final-funcoes">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.1.9';
+  window.CHANCELARIA_VERSION='6.2.0';
 
   function listaPerfis619(){const x=v51Get('visitantePerfis');return Array.isArray(x)?x:[]}
   function listaVisitas619(){const x=v51Get('visitasVisitantes');return Array.isArray(x)?x:[]}
@@ -5503,7 +5536,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   };
 
   function corrigirRotulos619(){
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.1.9';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.2.0';
     const direct=document.getElementById('v603EnviarAtestadoContato');
     if(direct&&window.__v603AtestadoId){const v=visita619(window.__v603AtestadoId);if(v){direct.textContent=`Enviar a ${primeiro619(v.nome)}`;direct.classList.add('v619-direct-contact');direct.onclick=()=>window.compartilharAtestadoContatoV603(v.id)}}
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){const i=(getIrmaos()||[]).find(x=>x.id===document.getElementById('relIrmao')?.value);if(i&&numeroWhatsApp(i.telefone||'')){bi.textContent=`Enviar a ${primeiro619(i.nome)}`;bi.classList.add('v619-direct-contact')}bi.onclick=window.compartilharIndividualContatoV603}
@@ -5517,9 +5550,119 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     try{renderVisitantesV5()}catch(_e){}
     try{if(document.getElementById('v600HistoricoLista'))renderHistoricoAtestadosWeb()}catch(_e){}
     obs619.observe(document.body,{childList:true,subtree:true});
-    try{audit('Aplicativo atualizado','Núcleo 6.1.9 · auditoria de controles · contatos WhatsApp · exclusão de visitantes · fundo oficial do certificado')}catch(_e){}
+    try{audit('Aplicativo atualizado','Núcleo 6.2.0 · auditoria de controles · contatos WhatsApp · exclusão de visitantes · fundo oficial do certificado')}catch(_e){}
   }
   document.addEventListener('DOMContentLoaded',iniciar619);try{iniciar619()}catch(_e){}
+})();
+</script>
+
+
+<style id="v620-estabilizacao-relatorios-normas">
+/* V6.2.0: tabela coletiva legível em A4 e painel normativo. */
+.v620-norm-guide{display:grid;gap:10px;margin:12px 0 16px}
+.v620-norm-item{border:1px solid rgba(200,166,75,.38);border-radius:13px;background:#fff;padding:12px 13px}
+.v620-norm-item b{display:block;color:#10233e;font-size:14px;margin-bottom:4px}
+.v620-norm-item .ref{color:#8b6918;font-size:12px;font-weight:800;margin-bottom:5px}
+.v620-norm-item p{margin:0;color:#4e5969;font-size:13px;line-height:1.45}
+.v620-norm-heading{margin:14px 0 8px;color:#10233e;font-size:17px}
+.report-preview-page .collective-table{table-layout:fixed;width:100%;font-size:10.5px}
+.report-preview-page .collective-table th,.report-preview-page .collective-table td{word-break:normal;overflow-wrap:normal;vertical-align:top;padding:6px 5px}
+.report-preview-page .collective-table .v620-nowrap{white-space:nowrap}
+</style>
+
+
+<script id="v620-estabilizacao-final">
+(function(){
+  'use strict';
+  window.CHANCELARIA_VERSION='6.2.0';
+
+  function primeiro620(nome){return String(nome||'Irmão').trim().split(/\s+/)[0]||'Irmão'}
+
+  /* O botão de envio ao Irmão volta a compartilhar o PDF físico. O botão WhatsApp permanece reservado à conversa. */
+  window.compartilharAtestadoContatoV603=function(id=''){
+    if(!id){try{id=window.__v603AtestadoId||''}catch(_e){}}
+    if(!id){toast('Atestado não localizado');return}
+    if(typeof window.compartilharPdfVisitanteV585!=='function'){toast('Compartilhamento de PDF indisponível');return}
+    window.compartilharPdfVisitanteV585(id);
+  };
+  window.compartilharIndividualContatoV603=function(){
+    if(typeof window.compartilharIndividualPDFV602!=='function'){toast('Compartilhamento de PDF indisponível');return}
+    window.compartilharIndividualPDFV602();
+  };
+
+  /* Visualização leve em modal. Evita montar todo o histórico individual na tela principal. */
+  window.visualizarIndividualV620=function(){
+    const sel=document.getElementById('relIrmao');const i=(getIrmaos()||[]).find(x=>x.id===sel?.value);
+    if(!i){toast('Selecione um Irmão');return}
+    try{abrirPrint('Relatório individual',corpoRelatorioIndividual(i),{tipo:'individual',irmaoId:i.id})}
+    catch(e){console.error(e);toast('Não foi possível abrir o relatório individual')}
+  };
+
+  /* Corrige a pendência normativa sem depender de função privada de outro módulo. */
+  window.renderPendenciasV5=function(){
+    const box=document.getElementById('v5PendLista');if(!box)return;
+    try{
+      const itens=[];
+      (getIrmaos()||[]).forEach(i=>{
+        const f=calcFreq(i);
+        if(f.periodo12&&Number(f.pctFalta)>=50&&Number(f.total)>0&&!processoMaisRecenteIrmao(i.id))itens.push({t:'RGF, art. 76',x:`${i.nome}: limite de faltas sem justa causa atingido, sem procedimento registrado.`});
+        if(i.regimeFreq!=='normal'&&!i.regimeRef)itens.push({t:'Cadastro',x:`${i.nome}: regime especial sem referência ou ata.`});
+        if((i.direitos||'pleno')!=='pleno'&&!i.direitosRef)itens.push({t:'Direitos',x:`${i.nome}: situação de direitos sem referência formal.`});
+      });
+      const processos=typeof getProcessosFreq==='function'?(getProcessosFreq()||[]):[];
+      processos.filter(p=>p&&p.situacao!=='concluido').forEach(p=>{
+        const i=(getIrmaos()||[]).find(x=>x.id===p.irmaoId);
+        if(p.notificacao?.recebimento&&p.notificacao?.prazo&&hojeISO()>p.notificacao.prazo&&!p.extraordinaria?.dataSessao)itens.push({t:'RGF, art. 77',x:`${i?.nome||'Irmão'}: prazo de justificativa encerrado. Verifique relatório de faltas e sessão extraordinária.`});
+        if(p.extraordinaria?.dataSessao&&p.extraordinaria?.recebimento){const dif=Math.floor((new Date(p.extraordinaria.dataSessao)-new Date(p.extraordinaria.recebimento))/86400000);if(dif<15)itens.push({t:'RGF, art. 77',x:`${i?.nome||'Irmão'}: antecedência da notificação da sessão extraordinária inferior a 15 dias.`})}
+        if(p.decisao?.suspensao&&(!p.comunicacoes?.irmaoData||!p.comunicacoes?.guardaData))itens.push({t:'RGF, art. 77',x:`${i?.nome||'Irmão'}: suspensão registrada com comunicações pendentes no prazo administrativo.`});
+      });
+      box.innerHTML=itens.length?itens.map(a=>`<div class="alert"><div class="name">${h(a.t)}</div><div class="txt">${h(a.x)}</div></div>`).join(''):'<div class="empty"><p>Nenhuma pendência normativa detectada pelos dados cadastrados.</p></div>';
+    }catch(e){console.error(e);box.innerHTML='<div class="alert"><div class="name">Falha na leitura</div><div class="txt">Revise os registros do módulo de frequência e tente novamente.</div></div>'}
+  };
+  window.abrirPendenciasV5=function(){try{window.renderPendenciasV5();abrirModal('modalPendenciasV5')}catch(e){console.error(e);toast('Não foi possível abrir Pendências normativas')}};
+
+  function guiaNormativo620(){return `
+    <h3 class="v620-norm-heading">Guia normativo da Chancelaria</h3>
+    <div class="v620-norm-guide">
+      <div class="v620-norm-item"><b>1. Atribuições do Chanceler</b><div class="ref">Regulamento Geral da Federação, art. 126</div><p>Compete ao Chanceler controlar presenças, manter o índice de frequência, informar o número de presentes, os Irmãos aptos a votar e ser votados, apontar quem excedeu o limite de faltas, expedir certificados aos visitantes, anunciar aniversariantes, manter registros de identificação e remeter prancha ao Irmão que exceder o limite legal de faltas.</p></div>
+      <div class="v620-norm-item"><b>2. Limite de faltas sem justa causa</b><div class="ref">Regulamento Geral da Federação, art. 76</div><p>O controle considera o período de doze meses. O limite normativo é atingido quando o Maçom ativo deixa de frequentar, sem justa causa, cinquenta por cento das sessões da Loja.</p></div>
+      <div class="v620-norm-item"><b>3. Notificação e justificativa</b><div class="ref">Regulamento Geral da Federação, art. 77</div><p>O Irmão infrequente deve ser notificado para justificar as faltas em trinta dias. A notificação, por si, não o torna irregular. Esgotado o prazo, o procedimento segue para sessão extraordinária, com antecedência mínima de quinze dias e prova inequívoca de recebimento.</p></div>
+      <div class="v620-norm-item"><b>4. Deliberação e efeitos administrativos</b><div class="ref">Regulamento Geral da Federação, arts. 77 e 78</div><p>Na sessão extraordinária, o relatório de faltas é apresentado e o Irmão pode expor suas razões. Se ocorrer suspensão, devem ser feitas as comunicações previstas. O aplicativo registra o procedimento, mas não substitui a deliberação da Loja nem o ato da autoridade competente.</p></div>
+      <div class="v620-norm-item"><b>5. Visitantes e atestados de frequência</b><div class="ref">Constituição do GOB, art. 30, VIII e IX. RGF, art. 96, XVII, XVIII e XX. RGF, arts. 217 e 218</div><p>O Maçom regular pode visitar sessões compatíveis com seu grau, apresentar CIM ou título e receber atestado de frequência. A Loja deve identificar o visitante, fornecer o atestado e registrar as frequências externas dos membros do seu Quadro.</p></div>
+      <div class="v620-norm-item"><b>6. Aptidão para votar</b><div class="ref">Código Eleitoral Maçônico, arts. 9 e 12</div><p>A relação eleitoral considera grau de Mestre, pleno gozo de direitos, situação financeira e frequência. A regra geral exige cinquenta por cento nos doze meses antecedentes. Eméritos e Remidos seguem a regra própria de trinta por cento em vinte e quatro meses. A relação de frequência é preparada no período definido pelo Código Eleitoral.</p></div>
+      <div class="v620-norm-item"><b>7. Candidatura a Venerável Mestre</b><div class="ref">Constituição do GOB, art. 123, IV. Art. 77, XV</div><p>O controle auxilia na verificação de atividade como Mestre, pleno gozo de direitos e frequência mínima de cinquenta por cento nos dois anos anteriores. O Grão Mestre Geral possui competência para habilitar, na hipótese prevista na Constituição, Maçom com menos de três anos de exaltado ao grau de Mestre.</p></div>
+      <div class="v620-norm-item"><b>8. Hierarquia e conferência oficial</b><div class="ref">Constituição do GOB e Constituição do GOB MS</div><p>Os registros do aplicativo são apoio administrativo. Atas, Tesouraria, Secretaria, Guarda dos Selos, legislação vigente e sistemas oficiais prevalecem quando houver divergência.</p></div>
+    </div>`}
+
+  window.abrirConformidadeNormativaV56=function(){
+    try{
+      const ano=document.getElementById('v56ObrigAno');if(ano&&!ano.value)ano.value=String(new Date().getFullYear());
+      const note=document.querySelector('#modalConformidadeV56 .install-note');
+      let guia=document.getElementById('v620GuiaNormativo');
+      if(!guia&&note){guia=document.createElement('div');guia.id='v620GuiaNormativo';guia.innerHTML=guiaNormativo620();note.insertAdjacentElement('afterend',guia)}
+      for(const fn of ['renderInstrucaoMestreV56','renderProgressaoV56','renderExtraordinariaV56','renderObrigacoesV56']){try{if(typeof window[fn]==='function')window[fn]()}catch(e){console.error(fn,e)}}
+      const d=document.getElementById('v56Diagnostico');if(d)d.innerHTML='';
+      abrirModal('modalConformidadeV56');
+    }catch(e){console.error(e);toast('Não foi possível abrir Conformidade normativa')}
+  };
+
+  /* Relatório coletivo com oito colunas dimensionadas. */
+  window.corpoRelatorioGeral=function(){
+    const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório coletivo de frequência</h2><p>Cadastre uma sessão para iniciar a contagem.</p>';
+    const cols='<colgroup><col style="width:22%"><col style="width:12%"><col style="width:8%"><col style="width:12%"><col style="width:14%"><col style="width:10%"><col style="width:14%"><col style="width:8%"></colgroup>';
+    const rows=(getIrmaos()||[]).slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td class="v620-nowrap">${i.cim?h(i.cim):'Não informado'}</td><td class="v620-nowrap">${h(grauSimbolo(i.grau))}</td><td class="v620-nowrap">${f.pctPresenca}% (${f.presente})</td><td class="v620-nowrap">${f.pctFaltaBruta}% (${f.faltasRegistradas})</td><td class="v620-nowrap">${f.abonado}</td><td class="v620-nowrap">${f.pctFalta}% (${f.falta})</td><td class="v620-nowrap">${f.total}</td></tr>`}).join('');
+    return `<h2>Relatório coletivo de frequência</h2><p>Critério: janela móvel dos últimos 12 meses, ${per.texto}. A chamada registra Presença ou Falta. Justificativas aceitas em procedimento próprio geram abono, preservando a falta original e retirando-a do total de faltas sem justa causa para o art. 76.</p><table class="collective-table">${cols}<thead><tr><th>Irmão</th><th>CIM</th><th>Grau</th><th>Presença</th><th>Faltas registradas</th><th>Abonadas</th><th>Sem justa causa</th><th>Total</th></tr></thead><tbody>${rows}</tbody></table>`;
+  };
+
+  function corrigirBotoes620(){
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.2.0';
+    const direct=document.getElementById('v603EnviarAtestadoContato');if(direct){direct.onclick=()=>window.compartilharAtestadoContatoV603(window.__v603AtestadoId||'')}
+    const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){const i=(getIrmaos()||[]).find(x=>x.id===document.getElementById('relIrmao')?.value);if(i)bi.textContent=`Enviar a ${primeiro620(i.nome)}`;bi.onclick=window.compartilharIndividualContatoV603}
+    const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603}
+  }
+  const obs=new MutationObserver(()=>{obs.disconnect();try{corrigirBotoes620()}finally{obs.observe(document.body,{childList:true,subtree:true})}});
+  function init(){corrigirBotoes620();obs.observe(document.body,{childList:true,subtree:true});try{audit('Aplicativo atualizado','Núcleo 6.2.0 · estabilização de PDF · pendências normativas · conformidade ampliada')}catch(_e){}}
+  document.addEventListener('DOMContentLoaded',init);try{init()}catch(_e){}
 })();
 </script>
 

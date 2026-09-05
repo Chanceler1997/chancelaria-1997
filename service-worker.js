@@ -1,6 +1,6 @@
-const CACHE='chancelaria-1997-v6.1.9';
+const CACHE='chancelaria-1997-v6.2.0';
 const CORE=[
-  './index.html?v=6.1.9','./index.html','./imprimir.html','./manifest.json',
+  './index.html?v=6.2.0','./index.html','./imprimir.html','./manifest.json',
   './icon-192.png','./icon-512.png','./cabecalho-oficial.jpg','./assinatura-chanceler.png','./certificado-base.png'
 ];
 self.addEventListener('install',event=>{
