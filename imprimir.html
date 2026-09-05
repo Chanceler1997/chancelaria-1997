@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v6.0.2</title>
+<title>Documento · Chancelaria 1997 v6.1.0</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -104,10 +104,20 @@ html,body{background:#101a29}
 }
 @media(max-width:390px){.toolbar button{font-size:12.5px}}
 
+
+/* V6.1.0 — geometria estável para PDF nativo. */
+html.native-pdf,html.native-pdf body{width:100%!important;min-width:100%!important;max-width:100%!important}
+html.native-pdf #app{width:100%!important;min-width:100%!important;max-width:100%!important}
+html.native-pdf .page{break-after:page;page-break-after:always;transform:none!important}
+html.native-pdf table{table-layout:fixed!important;border-collapse:collapse!important}
+html.native-pdf thead{display:table-header-group!important}
+html.native-pdf tr,html.native-pdf th,html.native-pdf td{break-inside:avoid!important;page-break-inside:avoid!important}
+html.native-pdf img{max-width:100%}
+
 </style>
 </head>
 <body>
-<div class="toolbar"><button class="primary" onclick="window.print()">Imprimir ou salvar em PDF</button><button class="share" onclick="compartilharDocumento()">Compartilhar PDF</button><button class="secondary close-doc" onclick="voltarAoAplicativo()">Fechar e voltar</button></div>
+<div class="toolbar"><button class="share" onclick="compartilharDocumento()">Compartilhar PDF</button><button class="secondary close-doc" onclick="voltarAoAplicativo()">Voltar ao aplicativo</button></div>
 <main id="app"></main>
 <script>
 (function(){
@@ -143,6 +153,8 @@ html,body{background:#101a29}
     try{if(window.parent&&window.parent!==window&&typeof window.parent.fecharAtestadoV603==='function'){window.parent.fecharAtestadoV603();return}}catch(_e){}
     location.href='index.html';
   };
+  window.voltarNoAplicativo=window.voltarAoAplicativo;
+  window.chancelariaAndroidBack=window.voltarAoAplicativo;
   const assinaturaPadrao='<div class="signature-person signature-chanceler"><img class="signature-image" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="signature-role">Chanceler</div><div class="signature-lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div></div>';
   try{
     const raw=location.hash.slice(1);if(!raw)throw new Error('Documento não recebido.');

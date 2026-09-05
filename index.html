@@ -4567,7 +4567,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.0.3';
+  window.CHANCELARIA_VERSION='6.1.0';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -4652,7 +4652,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{
     const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
     if(alvo&&!document.getElementById('v600BuildChip')){
-      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.0.3';alvo.appendChild(chip);
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 6.1.0';alvo.appendChild(chip);
     }
   }catch(_e){}
 
@@ -4700,7 +4700,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v603-fluidez-chanceler-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='6.0.3';
+  window.CHANCELARIA_VERSION='6.1.0';
   const navStackV603=[];
   let restaurandoV603=false;
 
@@ -4894,9 +4894,175 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 
   // Atualiza rótulo visual da versão e o botão Voltar.
-  const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.0.3';
+  const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.1.0';
   const back=document.getElementById('backNowButton');if(back&&!back.querySelector('.back-label'))back.insertAdjacentHTML('beforeend','<span class="back-label">Voltar</span>');
   atualizarBotaoVoltarV603();
+})();
+</script>
+
+
+
+<style id="v610-pdf-navigation-polish">
+/* V6.1.0 — navegação previsível, PDF real e interface enxuta. */
+.header.app-compact-header{position:sticky!important;top:0!important;z-index:1300!important}
+#modalAtestadoV603{top:54px!important;height:calc(100vh - 54px)!important;z-index:1200!important}
+#modalAtestadoV603 .v603-doc-actions button[onclick*="fecharAtestadoV603"]{display:none!important}
+button[onclick="imprimirIndividual()"],
+button[onclick="imprimirGeral()"],
+button[onclick="imprimirSessaoConsultada()"],
+button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
+.v610-pdf-note{font-size:11px;color:var(--muted);padding:6px 10px 10px;text-align:center}
+@media(max-width:430px){#modalAtestadoV603{top:52px!important;height:calc(100vh - 52px)!important}}
+</style>
+
+<script id="v610-pdf-real-share-and-back">
+(function(){
+  'use strict';
+  window.CHANCELARIA_VERSION='6.1.0';
+  const locks=new Map();
+
+  function travaV610(chave,ms=2200){
+    const agora=Date.now(),ate=locks.get(chave)||0;
+    if(agora<ate){try{toast('Aguarde o documento terminar de ser preparado.')}catch(_e){};return false}
+    locks.set(chave,agora+ms);setTimeout(()=>{if((locks.get(chave)||0)<=Date.now())locks.delete(chave)},ms+50);return true;
+  }
+  function ponteV610(){
+    try{if(typeof obterPonteKodular==='function')return obterPonteKodular()}catch(_e){}
+    if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
+    if(window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')return window.AppInventor;
+    return null;
+  }
+  function nomeSeguroV610(txt,padrao='Documento'){
+    const x=String(txt||padrao).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9._ -]+/g,'').trim().replace(/\s+/g,'_').slice(0,100)||padrao;
+    return x.toLowerCase().endsWith('.pdf')?x:x+'.pdf';
+  }
+  function enviarPdfNativoV610(prefixo,url,nome){
+    const p=ponteV610();
+    if(!p||!url)return false;
+    const rotulo=nomeSeguroV610(nome).replace(/\.pdf$/i,'');
+    try{
+      p.setWebViewString('00'+Date.now());
+      setTimeout(()=>{try{p.setWebViewString('NI'+rotulo)}catch(_e){}},80);
+      setTimeout(()=>{try{p.setWebViewString(prefixo+String(url))}catch(_e){}},210);
+      return true;
+    }catch(_e){return false}
+  }
+  function abrirFallbackV610(url){
+    try{const u=new URL(url);u.searchParams.delete('nativepdf');location.href=u.href;return true}catch(_e){return false}
+  }
+  function urlRelatorioV610(p){
+    const u=new URL(urlRelatorioParaImpressao(p.titulo,p.corpo,false,p));
+    u.searchParams.set('nativepdf','1');
+    const nome=p.tipo==='individual'?'Relatorio_Individual_'+(getIrmaos().find(x=>x.id===p.irmaoId)?.nome||'Irmao'):'Relatorio_Coletivo_Razao_e_Forca_1997';
+    u.searchParams.set('filename',nomeSeguroV610(nome));
+    return {url:u.href,nome:nomeSeguroV610(nome)};
+  }
+  function compartilharRelatorioV610(p,chave='relatorio'){
+    if(!p){toast('Gere o relatório novamente');return}
+    if(!travaV610(chave))return;
+    try{
+      const doc=urlRelatorioV610(p);
+      if(enviarPdfNativoV610('PI',doc.url,doc.nome)){toast('Preparando o PDF para compartilhar...');return}
+      abrirFallbackV610(doc.url);
+    }catch(e){console.error(e);toast(e?.message||'Não foi possível preparar o PDF')}
+  }
+  function urlAtestadoPdfV610(x){
+    if(!x||!x.id)throw new Error('Atestado não localizado.');
+    let url='';
+    if(typeof window.__urlAtestadoV603==='function')url=window.__urlAtestadoV603(x,false);
+    if(!url)throw new Error('Não foi possível montar o atestado.');
+    const u=new URL(url);u.searchParams.set('nativepdf','1');
+    const nome=(typeof window.nomeArquivoAtestadoV5817==='function')?window.nomeArquivoAtestadoV5817(x):nomeSeguroV610('Atestado_'+(x.nome||'Visitante'));
+    u.searchParams.set('filename',nome);
+    return {url:u.href,nome};
+  }
+  function compartilharAtestadoPdfV610(id=''){
+    const x=id?(getVisitantesV5()||[]).find(v=>v.id===id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);
+    if(!x||!x.id){toast('Selecione uma visita já registrada');return}
+    if(!travaV610('atestado:'+x.id))return;
+    try{
+      if(typeof garantirNumeroCertificadoV53==='function')garantirNumeroCertificadoV53(x);
+      const doc=urlAtestadoPdfV610(x);
+      if(enviarPdfNativoV610('SI',doc.url,doc.nome)){
+        try{audit('Atestado PDF enviado para compartilhamento',`${x.nome||''} · ${x.certNumero||''} · arquivo PDF`) }catch(_e){}
+        toast('Preparando o arquivo PDF para compartilhar...');return;
+      }
+      abrirFallbackV610(doc.url);
+    }catch(e){console.error(e);toast(e?.message||'Não foi possível preparar o PDF')}
+  }
+
+  // Relatórios: sempre geram e compartilham arquivo PDF. Nenhum link é enviado.
+  window.compartilharPreviewRelatorioV588=function(){compartilharRelatorioV610(pendingPrintPayload,'preview-relatorio')};
+  window.compartilharIndividualPDFV602=function(){
+    const i=getIrmaos().find(x=>x.id===relIrmao.value);if(!i){toast('Selecione um Irmão');return}
+    pendingPrintPayload={titulo:'Relatório individual',corpo:corpoRelatorioIndividual(i),tipo:'individual',irmaoId:i.id};
+    compartilharRelatorioV610(pendingPrintPayload,'relatorio-individual:'+i.id);
+  };
+  window.compartilharGeralPDFV602=function(){
+    pendingPrintPayload={titulo:'Relatório coletivo',corpo:corpoRelatorioGeral(),tipo:'coletivo'};
+    compartilharRelatorioV610(pendingPrintPayload,'relatorio-coletivo');
+  };
+
+  // Atestados: o compartilhamento principal e o botão ligado ao contato usam o mesmo PDF oficial.
+  window.compartilharPdfVisitanteV585=compartilharAtestadoPdfV610;
+  window.compartilharCertificadoVisitanteV5=compartilharAtestadoPdfV610;
+  window.enviarCertificadoVisitanteV572=compartilharAtestadoPdfV610;
+  window.compartilharAtestadoAtualV603=function(){const id=window.__v603AtestadoId||'';if(!id){toast('Atestado não localizado');return}compartilharAtestadoPdfV610(id)};
+  window.compartilharAtestadoContatoV603=function(id=''){
+    const x=id?(getVisitantesV5()||[]).find(v=>v.id===id):visitanteCertificadoAtual();
+    if(!x||!x.id){toast('Atestado não localizado');return}
+    compartilharAtestadoPdfV610(x.id);
+  };
+  window.compartilharIndividualContatoV603=function(){
+    const i=getIrmaos().find(x=>x.id===relIrmao.value||x.id===pendingPrintPayload?.irmaoId);
+    if(!i){toast('Selecione um Irmão');return}
+    pendingPrintPayload={titulo:'Relatório individual',corpo:corpoRelatorioIndividual(i),tipo:'individual',irmaoId:i.id};
+    compartilharRelatorioV610(pendingPrintPayload,'relatorio-contato:'+i.id);
+  };
+
+  // Exclusões de visitantes também passam pela lixeira e admitem restauração.
+  const restaurarBaseV610=window.restaurarItemLixeira;
+  window.excluirVisitanteV5=function(id){
+    const x=(getVisitantesV5()||[]).find(z=>z.id===id);if(!x)return;
+    const s=(getSessoes()||[]).find(z=>z.id===x.sessaoId);
+    if(!confirm(`Mover esta visita de ${x.nome||'visitante'}${s?.data?' ('+brData(s.data)+')':''} para a lixeira?`))return;
+    const lid=enviarParaLixeira('visita_visitante',`${x.nome||'Visitante'} · ${s?.data?brData(s.data):'visita'}`,x,{});
+    setVisitasV58(visitasV58().filter(v=>v.id!==id));renderVisitantesV5();
+    toast('Visita movida para a lixeira','Desfazer',()=>restaurarItemLixeira(lid));
+  };
+  window.excluirCadastroVisitanteV58=function(perfilId){
+    const p=perfisV58().find(x=>x.id===perfilId);if(!p)return;const vinculadas=visitasV58().filter(v=>v.perfilId===perfilId);
+    if(!confirm(`Mover o cadastro de ${p.nome||'visitante'} e ${vinculadas.length} visita(s) vinculada(s) para a lixeira?`))return;
+    const lid=enviarParaLixeira('cadastro_visitante',p.nome||'Visitante',p,{visitas:vinculadas});
+    setVisitasV58(visitasV58().filter(v=>v.perfilId!==perfilId));setPerfisV58(perfisV58().filter(x=>x.id!==perfilId));
+    v5VisId.value='';renderVisitantesV5();toast('Visitante movido para a lixeira','Desfazer',()=>restaurarItemLixeira(lid));
+  };
+  window.restaurarItemLixeira=function(id){
+    const arr=limparLixeiraExpirada(),idx=arr.findIndex(x=>x.id===id);if(idx<0){toast('Item não encontrado na lixeira');return}
+    const x=arr[idx];
+    if(x.tipo==='visita_visitante'){
+      const vs=visitasV58();if(!vs.some(v=>v.id===x.dados.id))vs.push(x.dados);setVisitasV58(vs);
+    }else if(x.tipo==='cadastro_visitante'){
+      const ps=perfisV58();if(!ps.some(p=>p.id===x.dados.id))ps.push(x.dados);setPerfisV58(ps);
+      const vs=visitasV58();for(const v of (x.relacionados?.visitas||[]))if(!vs.some(z=>z.id===v.id))vs.push(v);setVisitasV58(vs);
+    }else{return restaurarBaseV610(id)}
+    arr.splice(idx,1);setTrash(arr);try{audit('Item restaurado da lixeira',`${x.tipo}: ${x.nome}`)}catch(_e){}
+    try{renderAtual();renderLixeira();renderVisitantesV5()}catch(_e){};toast('Item restaurado');
+  };
+
+  function limparAcoesV610(){
+    document.querySelectorAll('button').forEach(b=>{
+      const oc=String(b.getAttribute('onclick')||'');
+      if(/^(imprimirIndividual|imprimirGeral|imprimirSessaoConsultada|imprimirPreviewRelatorio)\(\)/.test(oc))b.remove();
+      if(oc.includes("fecharAtestadoV603()")&&b.closest('.v603-doc-actions'))b.remove();
+    });
+    const nota=document.getElementById('v603AtestadoContatoNota');if(nota&&window.__v603AtestadoId)nota.textContent='O compartilhamento envia o documento como arquivo PDF pelo Android.';
+    const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){bi.onclick=window.compartilharIndividualContatoV603;bi.textContent='Compartilhar PDF com o Irmão'}
+    const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;bp.textContent='Compartilhar PDF com o Irmão'}
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 6.1.0';
+  }
+  const obs=new MutationObserver(()=>limparAcoesV610());obs.observe(document.body,{childList:true,subtree:true});limparAcoesV610();
+  try{audit('Aplicativo atualizado','Núcleo 6.1.0 · PDF real · retorno seguro · lixeira ampliada')}catch(_e){}
 })();
 </script>
 
