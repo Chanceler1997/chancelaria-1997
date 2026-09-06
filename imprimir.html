@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v6.2.3</title>
+<title>Documento · Chancelaria 1997 v6.4.0</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -217,14 +217,14 @@ html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-br
 </style>
 
 <style id="v630-certificado-fundo-oficial">
-/* V6.3.0 — corpo em preto, serifada clássica e contraste reforçado. */
+/* V6.4.0 — corpo em preto, serifada clássica e contraste reforçado. */
 .cert-art{font-family:Georgia,'Palatino Linotype','Book Antiqua','Times New Roman',serif!important}
 .cert-art .dyn{left:8%;width:84%;color:#111!important;text-shadow:0 1px 1px rgba(255,255,255,.88)!important}
 .cert-art .title{top:23.2%;font-size:9.3mm;line-height:1.05;color:#111!important;letter-spacing:.12mm;text-shadow:0 1px 1px rgba(255,255,255,.9)!important}
 .cert-art .rule{top:30.8%;left:33%;width:34%;border-top:.35mm solid rgba(153,109,24,.95)}
 .cert-art .intro{top:32.4%;font-size:4.35mm;color:#111!important}
-.cert-art .name{top:35.9%;font-size:8.6mm;color:#080808!important;font-family:Georgia,'Palatino Linotype','Book Antiqua','Times New Roman',serif!important;font-style:italic;font-weight:700;letter-spacing:.06mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 1px rgba(255,255,255,.95)!important}
-.cert-art .name.long-name{font-size:7.2mm!important;letter-spacing:0!important}
+.cert-art .name{top:35.9%;font-size:8.6mm;color:#080808!important;font-family:Georgia,'Palatino Linotype','Book Antiqua','Times New Roman',serif!important;font-style:italic;font-weight:700;letter-spacing:.06mm;white-space:nowrap;overflow:visible;text-overflow:clip;text-shadow:0 1px 1px rgba(255,255,255,.95)!important}
+.cert-art .name.long-name{font-size:7.2mm!important;letter-spacing:0!important}.cert-art .name.very-long-name{font-size:5.8mm!important;letter-spacing:-.08mm!important}
 .cert-art .cim{top:40.0%;font-size:4.25mm;color:#111!important}.cert-art .loja{top:43.0%;font-size:4.35mm;color:#111!important}.cert-art .oriente{top:46.0%;font-size:4.15mm;color:#111!important}
 .cert-art .host{top:49.2%;font-size:4.65mm;color:#111!important;text-shadow:0 1px 1px rgba(255,255,255,.9)!important}.cert-art .date-session{top:52.3%;font-size:4.15mm;color:#111!important}.cert-art .session{top:55.4%;font-size:4.75mm;color:#111!important;text-shadow:0 1px 1px rgba(255,255,255,.9)!important}
 .cert-art .emit{top:59.2%;font-size:4.15mm;color:#111!important}.cert-art .signature{top:61.0%;left:35%;width:30%;height:5.0%;filter:none}.cert-art .role{top:65.0%;font-size:4.0mm;color:#111!important;text-shadow:none!important}.cert-art .lodge{top:66.7%;font-size:3.55mm;color:#111!important;text-shadow:none!important}.cert-art .jur{top:68.2%;font:2.6mm Arial,sans-serif;color:#111!important;text-shadow:none!important}.cert-art .number{top:69.5%;font:2.7mm Arial,sans-serif;color:#111!important;text-shadow:none!important}
@@ -235,8 +235,8 @@ html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-br
 .birthday-art .title{top:25.0%;font-size:10.5mm;font-weight:700;letter-spacing:.25mm;color:#111!important}
 .birthday-art .rule{position:absolute;top:31.0%;left:34%;width:32%;border-top:.4mm solid rgba(153,109,24,.95)}
 .birthday-art .saudacao{top:33.1%;font-size:4.5mm}
-.birthday-art .name{top:37.0%;font-size:9.0mm;font-style:italic;font-weight:700;color:#080808!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.birthday-art .name.long-name{font-size:7.3mm!important}
+.birthday-art .name{top:37.0%;font-size:9.0mm;font-style:italic;font-weight:700;color:#080808!important;white-space:nowrap;overflow:visible;text-overflow:clip}
+.birthday-art .name.long-name{font-size:7.3mm!important}.birthday-art .name.very-long-name{font-size:5.9mm!important}
 .birthday-art .message{top:43.5%;left:15%;width:70%;font-size:4.35mm;line-height:1.48;font-weight:500}
 .birthday-art .date{top:58.3%;font-size:4.1mm}
 .birthday-art .signature{position:absolute;top:61.0%;left:35%;width:30%;height:5.0%;object-fit:contain;filter:none}
@@ -451,7 +451,7 @@ html.native-pdf .page.native-report-page .native-dense-row td{font-size:.88em!im
     const assinatura=data.assinatura||assinaturaPadrao;const rodape=data.rodape||'Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';const documentClass=String(data.documentClass||'').replace(/[^a-z0-9_-]/gi,'');
     if(documentClass==='certificate-art-v584'&&data.certificado){
       const c=data.certificado, esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-      app.innerHTML=`<article class="page certificate-art-v584"><div class="cert-art"><div class="dyn title"><div>ATESTADO DE</div><div>FREQUÊNCIA MAÇÔNICA</div></div><div class="rule"></div><div class="dyn intro">Atestamos, para os fins maçônicos cabíveis, que o Irmão</div><div class="dyn name${String(c.nome||'').trim().length>28?' long-name':''}">${esc(c.nome)}</div><div class="dyn cim">${c.cim?'CIM '+esc(c.cim)+(c.grau?' · ':''):''}${esc(c.grau)}</div><div class="dyn loja">pertencente à ${esc(c.loja)}${c.numeroLoja?' nº '+esc(c.numeroLoja):''},</div><div class="dyn oriente">Oriente de ${esc(c.oriente)}, esteve presente aos trabalhos da</div><div class="dyn host">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn date-session">em ${esc(c.dataSessao)}, na</div><div class="dyn session">${esc(c.tipoSessao)}</div><div class="dyn emit">Porto Murtinho/MS, ${esc(c.dataEmissao)}.</div><img class="signature" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="dyn role">Chanceler</div><div class="dyn lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn jur">Federada ao GOB · Jurisdicionada ao GOB-MS</div><div class="dyn number">Atestado nº ${esc(c.numeroAtestado)}</div></div></article>`;
+      app.innerHTML=`<article class="page certificate-art-v584"><div class="cert-art"><div class="dyn title"><div>ATESTADO DE</div><div>FREQUÊNCIA MAÇÔNICA</div></div><div class="rule"></div><div class="dyn intro">Atestamos, para os fins maçônicos cabíveis, que o Irmão</div><div class="dyn name${String(c.nome||'').trim().length>44?' very-long-name':String(c.nome||'').trim().length>28?' long-name':''}">${esc(c.nome)}</div><div class="dyn cim">${c.cim?'CIM '+esc(c.cim)+(c.grau?' · ':''):''}${esc(c.grau)}</div><div class="dyn loja">pertencente à ${esc(c.loja)}${c.numeroLoja?' nº '+esc(c.numeroLoja):''},</div><div class="dyn oriente">Oriente de ${esc(c.oriente)}, esteve presente aos trabalhos da</div><div class="dyn host">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn date-session">em ${esc(c.dataSessao)}, na</div><div class="dyn session">${esc(c.tipoSessao)}</div><div class="dyn emit">Porto Murtinho/MS, ${esc(c.dataEmissao)}.</div><img class="signature" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="dyn role">Chanceler</div><div class="dyn lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn jur">Federada ao GOB · Jurisdicionada ao GOB-MS</div><div class="dyn number">Atestado nº ${esc(c.numeroAtestado)}</div></div></article>`;
       if(nativePdf || window.matchMedia('(max-width:800px)').matches){
         const page=app.querySelector('.page.certificate-art-v584');
         const art=page&&page.querySelector('.cert-art');
@@ -473,7 +473,7 @@ html.native-pdf .page.native-report-page .native-dense-row td{font-size:.88em!im
       }
     }else if(documentClass==='birthday-art-v630'&&data.aniversario){
       const c=data.aniversario, esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-      const longName=String(c.nome||'').trim().length>28?' long-name':'';
+      const longName=String(c.nome||'').trim().length>44?' very-long-name':String(c.nome||'').trim().length>28?' long-name':'';
       app.innerHTML=`<article class="page birthday-art-v630"><div class="birthday-art"><div class="dyn title">FELIZ ANIVERSÁRIO</div><div class="rule"></div><div class="dyn saudacao">Com alegria e fraternidade, felicitamos</div><div class="dyn name${longName}">${esc(c.nome)}</div><div class="dyn message">${esc(c.mensagem)}</div><div class="dyn date">${esc(c.cidade||'Porto Murtinho/MS')}, ${esc(c.data||'')}.</div><img class="signature" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="dyn role">Chanceler</div><div class="dyn lodge">${esc(c.loja||'A∴R∴L∴S∴ Razão e Força nº 1997')}</div><div class="dyn jur">Federada ao GOB · Jurisdicionada ao GOB-MS</div><div class="dyn city">Benfeitora da Ordem</div></div></article>`;
       if(nativePdf || window.matchMedia('(max-width:800px)').matches){
         const page=app.querySelector('.page.birthday-art-v630'),art=page&&page.querySelector('.birthday-art');

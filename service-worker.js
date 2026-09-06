@@ -1,5 +1,5 @@
-const CACHE='chancelaria-1997-v6.3.0';
-const CORE=['./index.html?v=6.3.0','./index.html','./imprimir.html','./manifest.json','./icon-192.png','./icon-512.png','./cabecalho-oficial.jpg','./assinatura-chanceler.png','./certificado-base.png'];
+const CACHE='chancelaria-1997-v6.4.0';
+const CORE=['./index.html?v=6.4.0','./index.html','./imprimir.html','./manifest.json','./icon-192.png','./icon-512.png','./cabecalho-oficial.jpg','./assinatura-chanceler.png','./certificado-base.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',event=>{

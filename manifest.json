@@ -4,7 +4,7 @@
   "description": "Sistema privativo de gestão da Chancelaria da A.R.L.S. Razão e Força nº 1997.",
   "lang": "pt-BR",
   "id": "./",
-  "start_url": "./index.html?v=6.3.0",
+  "start_url": "./index.html?v=6.4.0",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
