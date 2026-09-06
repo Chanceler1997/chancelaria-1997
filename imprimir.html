@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v6.1.6</title>
+<title>Documento · Chancelaria 1997 v6.2.3</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -57,20 +57,20 @@ html.native-pdf .page{margin:0!important;box-shadow:none!important;border-radius
    do aparelho. As medidas abaixo preservam a proporção A4 nessa largura.
    Assim o PDF deixa de herdar o layout móvel, a barra de ações não entra no
    arquivo e o espaço restante da última página permanece branco. */
-html.native-pdf .page:not(.certificate-art-v584){width:100%!important;min-height:141.436vw!important;padding:14.285vw 9.524vw 9.524vw 14.285vw!important}
-html.native-pdf .page:not(.certificate-art-v584) .official-header{margin:0 0 4.25vw!important;border-radius:.5vw!important}
-html.native-pdf .page:not(.certificate-art-v584) .jurisdiction-line{font-size:1.34vw!important;margin:-3.0vw 0 3.5vw!important;letter-spacing:.03vw!important}
-html.native-pdf .page:not(.certificate-art-v584) h2{font-size:2.35vw!important;line-height:1.25!important;margin:0 0 4.0vw!important}
-html.native-pdf .page:not(.certificate-art-v584) p{font-size:2.015vw!important;line-height:1.5!important;margin:0 0 2.0vw!important}
-html.native-pdf .page:not(.certificate-art-v584) table{font-size:1.445vw!important;line-height:1.25!important;margin-top:1.5vw!important}
-html.native-pdf .page:not(.certificate-art-v584) th,html.native-pdf .page:not(.certificate-art-v584) td{padding:.76vw!important}
-html.native-pdf .page:not(.certificate-art-v584) .assinatura{margin-top:6.5vw!important;font-size:1.68vw!important}
-html.native-pdf .page:not(.certificate-art-v584) .signature-person{min-height:18vw!important}
-html.native-pdf .page:not(.certificate-art-v584) .signature-image{width:36vw!important;max-height:12.5vw!important;margin:0 auto -.5vw!important}
-html.native-pdf .page:not(.certificate-art-v584) .signature-role{font-size:1.68vw!important}
-html.native-pdf .page:not(.certificate-art-v584) .signature-lodge{font-size:1.34vw!important;margin-top:.5vw!important}
-html.native-pdf .page:not(.certificate-art-v584) .signature-line{max-width:36vw!important;margin:12vw auto 1vw!important}
-html.native-pdf .page:not(.certificate-art-v584) .footer{margin-top:4vw!important;padding-top:1vw!important;font-size:1.34vw!important;line-height:1.25!important;background:#fff!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630){width:100%!important;min-height:141.436vw!important;padding:14.285vw 9.524vw 9.524vw 14.285vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .official-header{margin:0 0 4.25vw!important;border-radius:.5vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .jurisdiction-line{font-size:1.34vw!important;margin:-3.0vw 0 3.5vw!important;letter-spacing:.03vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) h2{font-size:2.35vw!important;line-height:1.25!important;margin:0 0 4.0vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) p{font-size:2.015vw!important;line-height:1.5!important;margin:0 0 2.0vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) table{font-size:1.445vw!important;line-height:1.25!important;margin-top:1.5vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) th,html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) td{padding:.76vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .assinatura{margin-top:6.5vw!important;font-size:1.68vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .signature-person{min-height:18vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .signature-image{width:36vw!important;max-height:12.5vw!important;margin:0 auto -.5vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .signature-role{font-size:1.68vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .signature-lodge{font-size:1.34vw!important;margin-top:.5vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .signature-line{max-width:36vw!important;margin:12vw auto 1vw!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .footer{margin-top:4vw!important;padding-top:1vw!important;font-size:1.34vw!important;line-height:1.25!important;background:#fff!important}
 html.native-pdf .page.certificate-art-v584{margin:0!important;padding:0!important;overflow:hidden!important;background:#06111f!important}
 html.native-pdf .page.certificate-art-v584 .cert-art{transform-origin:0 0!important}
 
@@ -99,13 +99,13 @@ html,body{background:#101a29}
   .toolbar button{width:100%;min-height:48px;padding:9px 8px;font-size:13.5px}
   .toolbar .close-doc{grid-column:1/-1}
   #app{padding:0;overflow:hidden}
-  .page:not(.certificate-art-v584){width:100%;margin:0;border-radius:0;padding:22px 16px 88px}
+  .page:not(.certificate-art-v584):not(.birthday-art-v630){width:100%;margin:0;border-radius:0;padding:22px 16px 88px}
   .page.certificate-art-v584{margin:0 auto!important;border-radius:0!important;box-shadow:none!important}
 }
 @media(max-width:390px){.toolbar button{font-size:12.5px}}
 
 
-/* V6.1.6 — geometria estável para PDF nativo. */
+/* V6.1.8 — geometria estável para PDF nativo. */
 html.native-pdf,html.native-pdf body{width:100%!important;min-width:100%!important;max-width:100%!important}
 html.native-pdf #app{width:100%!important;min-width:100%!important;max-width:100%!important}
 html.native-pdf .page{break-after:page;page-break-after:always;transform:none!important}
@@ -114,20 +114,20 @@ html.native-pdf thead{display:table-header-group!important}
 html.native-pdf tr,html.native-pdf th,html.native-pdf td{break-inside:avoid!important;page-break-inside:avoid!important}
 html.native-pdf img{max-width:100%}
 
-/* V6.1.6 — A4 fixo e captura paginada. O PDF só é criado após o documento informar a altura total ao Kodular. */
+/* V6.1.8 — A4 fixo e captura paginada. O PDF só é criado após o documento informar a altura total ao Kodular. */
 html.native-pdf body{background:#fff!important;width:100%!important;min-height:0!important}
 html.native-pdf #app{padding:0!important;margin:0!important;overflow:visible!important}
-html.native-pdf .page:not(.certificate-art-v584){
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630){
   display:block!important;width:100%!important;max-width:none!important;min-height:141.436vw!important;
   margin:0!important;border-radius:0!important;box-shadow:none!important;
   padding:14.285vw 9.524vw 9.524vw 14.285vw!important;overflow:visible!important;background:#fff!important
 }
-html.native-pdf .page:not(.certificate-art-v584) .footer{margin-bottom:0!important}
+html.native-pdf .page:not(.certificate-art-v584):not(.birthday-art-v630) .footer{margin-bottom:0!important}
 html.native-pdf .toolbar{display:none!important}
 
 
 
-/* V6.1.6 — paginação física A4 alinhada ao recorte da extensão Android. */
+/* V6.1.8 — paginação física A4 alinhada ao recorte da extensão Android. */
 html.native-pdf .page.native-report-page{
   position:relative!important;
   width:100%!important;
@@ -215,6 +215,73 @@ html.native-pdf .page.native-report-page th,
 html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-break-inside:avoid!important}
 
 </style>
+
+<style id="v630-certificado-fundo-oficial">
+/* V6.3.0 — corpo em preto, serifada clássica e contraste reforçado. */
+.cert-art{font-family:Georgia,'Palatino Linotype','Book Antiqua','Times New Roman',serif!important}
+.cert-art .dyn{left:8%;width:84%;color:#111!important;text-shadow:0 1px 1px rgba(255,255,255,.88)!important}
+.cert-art .title{top:23.2%;font-size:9.3mm;line-height:1.05;color:#111!important;letter-spacing:.12mm;text-shadow:0 1px 1px rgba(255,255,255,.9)!important}
+.cert-art .rule{top:30.8%;left:33%;width:34%;border-top:.35mm solid rgba(153,109,24,.95)}
+.cert-art .intro{top:32.4%;font-size:4.35mm;color:#111!important}
+.cert-art .name{top:35.9%;font-size:8.6mm;color:#080808!important;font-family:Georgia,'Palatino Linotype','Book Antiqua','Times New Roman',serif!important;font-style:italic;font-weight:700;letter-spacing:.06mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 1px rgba(255,255,255,.95)!important}
+.cert-art .name.long-name{font-size:7.2mm!important;letter-spacing:0!important}
+.cert-art .cim{top:40.0%;font-size:4.25mm;color:#111!important}.cert-art .loja{top:43.0%;font-size:4.35mm;color:#111!important}.cert-art .oriente{top:46.0%;font-size:4.15mm;color:#111!important}
+.cert-art .host{top:49.2%;font-size:4.65mm;color:#111!important;text-shadow:0 1px 1px rgba(255,255,255,.9)!important}.cert-art .date-session{top:52.3%;font-size:4.15mm;color:#111!important}.cert-art .session{top:55.4%;font-size:4.75mm;color:#111!important;text-shadow:0 1px 1px rgba(255,255,255,.9)!important}
+.cert-art .emit{top:59.2%;font-size:4.15mm;color:#111!important}.cert-art .signature{top:61.0%;left:35%;width:30%;height:5.0%;filter:none}.cert-art .role{top:65.0%;font-size:4.0mm;color:#111!important;text-shadow:none!important}.cert-art .lodge{top:66.7%;font-size:3.55mm;color:#111!important;text-shadow:none!important}.cert-art .jur{top:68.2%;font:2.6mm Arial,sans-serif;color:#111!important;text-shadow:none!important}.cert-art .number{top:69.5%;font:2.7mm Arial,sans-serif;color:#111!important;text-shadow:none!important}
+
+.page.birthday-art-v630{position:relative;width:210mm;height:297mm;min-height:297mm;padding:0!important;overflow:hidden;background:#06111f;box-shadow:0 4px 22px rgba(0,0,0,.28)}
+.birthday-art{position:absolute;inset:0;background:#06111f url('certificado-base.png') center/100% 100% no-repeat;font-family:Georgia,'Palatino Linotype','Book Antiqua','Times New Roman',serif;color:#111;text-align:center;overflow:hidden}
+.birthday-art .dyn{position:absolute;left:10%;width:80%;color:#111!important;text-shadow:0 1px 1px rgba(255,255,255,.92)}
+.birthday-art .title{top:25.0%;font-size:10.5mm;font-weight:700;letter-spacing:.25mm;color:#111!important}
+.birthday-art .rule{position:absolute;top:31.0%;left:34%;width:32%;border-top:.4mm solid rgba(153,109,24,.95)}
+.birthday-art .saudacao{top:33.1%;font-size:4.5mm}
+.birthday-art .name{top:37.0%;font-size:9.0mm;font-style:italic;font-weight:700;color:#080808!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.birthday-art .name.long-name{font-size:7.3mm!important}
+.birthday-art .message{top:43.5%;left:15%;width:70%;font-size:4.35mm;line-height:1.48;font-weight:500}
+.birthday-art .date{top:58.3%;font-size:4.1mm}
+.birthday-art .signature{position:absolute;top:61.0%;left:35%;width:30%;height:5.0%;object-fit:contain;filter:none}
+.birthday-art .role{top:65.0%;font-size:4.0mm;font-weight:700}.birthday-art .lodge{top:66.8%;font-size:3.6mm;font-weight:700}.birthday-art .jur{top:68.4%;font:2.7mm Arial,sans-serif}.birthday-art .city{top:70.0%;font-size:3.3mm}
+@media print{.page.birthday-art-v630{width:210mm!important;height:297mm!important;min-height:297mm!important;padding:0!important}.birthday-art{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+@media(max-width:800px){.page.birthday-art-v630{margin:0 auto!important;border-radius:0!important;box-shadow:none!important}}
+html.native-pdf .page.birthday-art-v630{margin:0!important;padding:0!important;overflow:hidden!important;background:#06111f!important}
+html.native-pdf .page.birthday-art-v630 .birthday-art{transform-origin:0 0!important}
+</style>
+
+
+<style id="v620-tabela-coletiva-a4">
+/* V6.2.3: oito colunas fixas, sem quebra caractere a caractere. */
+.collective-table{width:100%!important;table-layout:fixed!important;border-collapse:collapse!important}
+.collective-table th,.collective-table td{word-break:normal!important;overflow-wrap:normal!important;hyphens:none!important;vertical-align:top!important}
+.collective-table .v620-nowrap{white-space:nowrap!important}
+.collective-table th:nth-child(1){width:22%!important}.collective-table th:nth-child(2){width:12%!important}.collective-table th:nth-child(3){width:8%!important}.collective-table th:nth-child(4){width:12%!important}.collective-table th:nth-child(5){width:14%!important}.collective-table th:nth-child(6){width:10%!important}.collective-table th:nth-child(7){width:14%!important}.collective-table th:nth-child(8){width:8%!important}
+html.native-pdf .page.native-report-page .collective-table{font-size:1.32vw!important;line-height:1.14!important;margin-top:1.5vw!important}
+html.native-pdf .page.native-report-page .collective-table th,html.native-pdf .page.native-report-page .collective-table td{padding:.58vw .48vw!important}
+html.native-pdf .page.native-report-page .collective-table th{white-space:normal!important}
+</style>
+
+
+<style id="v622-pdf-cell-safety">
+/* V6.2.3 — nenhuma célula pode deixar texto ultrapassar suas bordas. */
+html.native-pdf .page.native-report-page table{width:100%!important;table-layout:fixed!important}
+html.native-pdf .page.native-report-page th,
+html.native-pdf .page.native-report-page td{
+  min-width:0!important;max-width:100%!important;white-space:normal!important;
+  overflow:hidden!important;overflow-wrap:anywhere!important;word-break:break-word!important;hyphens:auto!important
+}
+html.native-pdf .page.native-report-page .v620-nowrap{white-space:normal!important;overflow-wrap:anywhere!important}
+html.native-pdf .page.native-report-page.native-wide-table{padding-left:5.5vw!important;padding-right:5.5vw!important}
+html.native-pdf .page.native-report-page.native-medium-table{padding-left:6.8vw!important;padding-right:6.8vw!important}
+html.native-pdf .page.native-report-page.native-wide-table table{font-size:1.12vw!important;line-height:1.12!important}
+html.native-pdf .page.native-report-page.native-wide-table th,
+html.native-pdf .page.native-report-page.native-wide-table td{padding:.42vw .35vw!important}
+html.native-pdf .page.native-report-page.native-medium-table table{font-size:1.30vw!important;line-height:1.14!important}
+html.native-pdf .page.native-report-page.native-medium-table th,
+html.native-pdf .page.native-report-page.native-medium-table td{padding:.52vw .42vw!important}
+html.native-pdf .page.native-report-page .pdf-metric{display:block;text-align:center;line-height:1.02;white-space:normal!important}
+html.native-pdf .page.native-report-page .pdf-metric small{display:block;font-size:.78em;line-height:1.05;margin-top:.25vw;white-space:normal!important}
+html.native-pdf .page.native-report-page .native-dense-row td{font-size:.88em!important;line-height:1.08!important;padding-top:.35vw!important;padding-bottom:.35vw!important}
+</style>
+
 </head>
 <body>
 <div class="toolbar"><button class="share" onclick="compartilharDocumento()">Compartilhar PDF</button><button class="secondary close-doc" onclick="voltarAoAplicativo()">Voltar ao aplicativo</button></div>
@@ -257,9 +324,13 @@ html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-br
   let nomeArquivoAtual='Documento.pdf';
   let tipoDocumentoAtual='RELATORIO';
   function decodeBase64UrlUtf8(raw){raw=raw.replace(/-/g,'+').replace(/_/g,'/');while(raw.length%4)raw+='=';const bin=atob(raw),bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes)}
+  function preservarRetornoExternoV622(){
+    try{const raw=sessionStorage.getItem('arls1997_session_key_v620');if(!raw)return;const d=JSON.parse(raw);if(d?.key)localStorage.setItem('arls1997_external_resume_v622',JSON.stringify({key:d.key,ts:Date.now()}))}catch(_e){}
+  }
   window.compartilharDocumento=function(){
     try{
       if(!shareUrlDocumento)throw new Error('Documento ainda não preparado.');
+      preservarRetornoExternoV622();
       const ponte=(window.Kodular&&typeof window.Kodular.setWebViewString==='function')?window.Kodular:((window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')?window.AppInventor:null);
       if(ponte){
         const prefixo=tipoDocumentoAtual==='ATESTADO'?'SI':'PI';
@@ -328,9 +399,12 @@ html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-br
     const antes=filhos.slice(0,ix).filter(n=>n!==tituloOriginal);
     const depois=filhos.slice(ix+1);
     const linhas=[...tabelaOriginal.querySelectorAll(':scope > tbody > tr')];
+    const colCount=Math.max(tabelaOriginal.querySelectorAll(':scope > thead th').length,linhas[0]?.children?.length||0);
     const paginas=[];
     function nova(continuacao){
-      const p=paginaRelatorioV616(tituloOriginal,continuacao);app.appendChild(p);paginas.push(p);return p;
+      const p=paginaRelatorioV616(tituloOriginal,continuacao);
+      if(colCount>=7)p.classList.add('native-wide-table');else if(colCount>=6)p.classList.add('native-medium-table');
+      app.appendChild(p);paginas.push(p);return p;
     }
     let p=nova(false);
     for(const n of antes)p.appendChild(n.cloneNode(true));
@@ -341,7 +415,9 @@ html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-br
         tbody.removeChild(clone);
         p=nova(true);tabela=tabelaV616(tabelaOriginal);p.appendChild(tabela);tbody=tabela.querySelector('tbody');tbody.appendChild(clone);
         if(estouraPaginaV616(p)){
-          clone.style.fontSize='95%';
+          clone.classList.add('native-dense-row');
+          clone.style.fontSize='88%';
+          clone.querySelectorAll('td,th').forEach(c=>{c.style.whiteSpace='normal';c.style.overflowWrap='anywhere';c.style.wordBreak='break-word'});
         }
       }
     }
@@ -375,7 +451,7 @@ html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-br
     const assinatura=data.assinatura||assinaturaPadrao;const rodape=data.rodape||'Art. 76 do Regulamento Geral da Federação: o Maçom ativo terá seus direitos suspensos quando deixar de frequentar sem justa causa 50% das sessões da Loja no período de doze meses.';const documentClass=String(data.documentClass||'').replace(/[^a-z0-9_-]/gi,'');
     if(documentClass==='certificate-art-v584'&&data.certificado){
       const c=data.certificado, esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-      app.innerHTML=`<article class="page certificate-art-v584"><div class="cert-art"><div class="dyn title"><div>ATESTADO DE</div><div>FREQUÊNCIA MAÇÔNICA</div></div><div class="rule"></div><div class="dyn intro">Atestamos, para os fins maçônicos cabíveis, que o Irmão</div><div class="dyn name">${esc(c.nome)}</div><div class="dyn cim">${c.cim?'CIM '+esc(c.cim)+(c.grau?' · ':''):''}${esc(c.grau)}</div><div class="dyn loja">pertencente à ${esc(c.loja)}${c.numeroLoja?' nº '+esc(c.numeroLoja):''},</div><div class="dyn oriente">Oriente de ${esc(c.oriente)}, esteve presente aos trabalhos da</div><div class="dyn host">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn date-session">em ${esc(c.dataSessao)}, na</div><div class="dyn session">${esc(c.tipoSessao)}</div><div class="dyn emit">Porto Murtinho/MS, ${esc(c.dataEmissao)}.</div><img class="signature" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="dyn role">Chanceler</div><div class="dyn lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn jur">Federada ao GOB · Jurisdicionada ao GOB-MS</div><div class="dyn number">Atestado nº ${esc(c.numeroAtestado)}</div></div></article>`;
+      app.innerHTML=`<article class="page certificate-art-v584"><div class="cert-art"><div class="dyn title"><div>ATESTADO DE</div><div>FREQUÊNCIA MAÇÔNICA</div></div><div class="rule"></div><div class="dyn intro">Atestamos, para os fins maçônicos cabíveis, que o Irmão</div><div class="dyn name${String(c.nome||'').trim().length>28?' long-name':''}">${esc(c.nome)}</div><div class="dyn cim">${c.cim?'CIM '+esc(c.cim)+(c.grau?' · ':''):''}${esc(c.grau)}</div><div class="dyn loja">pertencente à ${esc(c.loja)}${c.numeroLoja?' nº '+esc(c.numeroLoja):''},</div><div class="dyn oriente">Oriente de ${esc(c.oriente)}, esteve presente aos trabalhos da</div><div class="dyn host">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn date-session">em ${esc(c.dataSessao)}, na</div><div class="dyn session">${esc(c.tipoSessao)}</div><div class="dyn emit">Porto Murtinho/MS, ${esc(c.dataEmissao)}.</div><img class="signature" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="dyn role">Chanceler</div><div class="dyn lodge">A∴R∴L∴S∴ Razão e Força nº 1997</div><div class="dyn jur">Federada ao GOB · Jurisdicionada ao GOB-MS</div><div class="dyn number">Atestado nº ${esc(c.numeroAtestado)}</div></div></article>`;
       if(nativePdf || window.matchMedia('(max-width:800px)').matches){
         const page=app.querySelector('.page.certificate-art-v584');
         const art=page&&page.querySelector('.cert-art');
@@ -394,6 +470,14 @@ html.native-pdf .page.native-report-page td{break-inside:avoid!important;page-br
           art.style.transform='scale('+scale+')';
           if(nativePdf){document.body.style.width=vw+'px';document.body.style.height=outH+'px'}
         }
+      }
+    }else if(documentClass==='birthday-art-v630'&&data.aniversario){
+      const c=data.aniversario, esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+      const longName=String(c.nome||'').trim().length>28?' long-name':'';
+      app.innerHTML=`<article class="page birthday-art-v630"><div class="birthday-art"><div class="dyn title">FELIZ ANIVERSÁRIO</div><div class="rule"></div><div class="dyn saudacao">Com alegria e fraternidade, felicitamos</div><div class="dyn name${longName}">${esc(c.nome)}</div><div class="dyn message">${esc(c.mensagem)}</div><div class="dyn date">${esc(c.cidade||'Porto Murtinho/MS')}, ${esc(c.data||'')}.</div><img class="signature" src="assinatura-chanceler.png" alt="Assinatura do Chanceler"><div class="dyn role">Chanceler</div><div class="dyn lodge">${esc(c.loja||'A∴R∴L∴S∴ Razão e Força nº 1997')}</div><div class="dyn jur">Federada ao GOB · Jurisdicionada ao GOB-MS</div><div class="dyn city">Benfeitora da Ordem</div></div></article>`;
+      if(nativePdf || window.matchMedia('(max-width:800px)').matches){
+        const page=app.querySelector('.page.birthday-art-v630'),art=page&&page.querySelector('.birthday-art');
+        if(page&&art){const BASE_W=794,BASE_H=1123;const vw=Math.max(1,Math.min(BASE_W,Math.floor(document.documentElement.clientWidth||window.innerWidth||360)));const scale=vw/BASE_W,outH=Math.round(BASE_H*scale);page.style.width=vw+'px';page.style.height=outH+'px';page.style.minHeight=outH+'px';art.style.inset='auto';art.style.left='0';art.style.top='0';art.style.width=BASE_W+'px';art.style.height=BASE_H+'px';art.style.transformOrigin='0 0';art.style.transform='scale('+scale+')';if(nativePdf){document.body.style.width=vw+'px';document.body.style.height=outH+'px'}}
       }
     }else{
       if(nativePdf){
