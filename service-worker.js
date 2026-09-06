@@ -1,10 +1,14 @@
-const CACHE='chancelaria-1997-v6.4.0';
-const CORE=['./index.html?v=6.4.0','./index.html','./imprimir.html','./manifest.json','./icon-192.png','./icon-512.png','./cabecalho-oficial.jpg','./assinatura-chanceler.png','./certificado-base.png'];
+const CACHE='chancelaria-1997-v6.5.0';
+const CORE=['./index.html?v=6.5.0','./index.html','./imprimir.html','./manifest.json','./icon-192.png','./icon-512.png','./cabecalho-oficial.jpg?v=6.5.0','./assinatura-chanceler.png?v=6.5.0','./certificado-base.png?v=6.5.0'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',event=>{
-  if(event.request.method!=='GET')return;const u=new URL(event.request.url);if(u.origin!==self.location.origin)return;
-  const html=u.pathname.endsWith('/index.html')||u.pathname.endsWith('/imprimir.html')||u.pathname.endsWith('/');
-  if(html){event.respondWith(fetch(event.request,{cache:'no-store'}).then(resp=>{const copy=resp.clone();caches.open(CACHE).then(c=>c.put(event.request,copy));return resp}).catch(()=>caches.match(event.request,{ignoreSearch:true}).then(r=>r||caches.match('./index.html'))));return}
+  if(event.request.method!=='GET')return;
+  const u=new URL(event.request.url);if(u.origin!==self.location.origin)return;
+  const volatile=u.pathname.endsWith('/index.html')||u.pathname.endsWith('/imprimir.html')||u.pathname.endsWith('/certificado-base.png')||u.pathname.endsWith('/assinatura-chanceler.png')||u.pathname.endsWith('/');
+  if(volatile){
+    event.respondWith(fetch(event.request,{cache:'no-store'}).then(resp=>{const copy=resp.clone();caches.open(CACHE).then(c=>c.put(event.request,copy));return resp}).catch(()=>caches.match(event.request,{ignoreSearch:true}).then(r=>r||caches.match('./index.html'))));
+    return;
+  }
   event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request).then(resp=>{const copy=resp.clone();caches.open(CACHE).then(c=>c.put(event.request,copy));return resp})));
 });
