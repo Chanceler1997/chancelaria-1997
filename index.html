@@ -1370,10 +1370,10 @@ main{max-width:720px;padding:14px 12px 28px}
 
 <script>
 (function(){
-  // V7.0.0: a migração nativa não sobrescreve nem apaga o cofre principal.
+  // V7.0.1: a migração nativa não sobrescreve nem apaga o cofre principal.
   // Snapshots antigos são oferecidos como candidatos e só viram o principal após a senha descriptografar o cofre.
 })();
-const PFX='chancelaria1997_v7_';
+const PFX='chancelaria1997_v701_limpo_';
 const SEC_META_KEY=PFX+'security_v1';
 const SEC_VAULT_KEY=PFX+'vault_v1';
 const SEC_BACKUP_TYPE='CHANCELARIA1997_BACKUP_CRIPTOGRAFADO';
@@ -1503,41 +1503,20 @@ function normalizarMetaSeguranca(valor){
 }
 function metaSegurancaCompleta(m){return !!(m&&m.salt&&normalizarBoxCripto(m.verifier))}
 function lerMigracaoNativaSeguranca(){
-  // v7.0.0: instalação limpa. Configurações nativas de versões anteriores não entram automaticamente.
+  // v7.0.1: instalação limpa. Configurações nativas de versões anteriores não entram automaticamente.
   return null;
 }
 function obterFontesSeguranca(){
   const fontes=[];
-  const add=(origem,metaRaw,vaultRaw)=>{
-    const meta=normalizarMetaSeguranca(metaRaw),vault=normalizarBoxCripto(vaultRaw);
-    if(meta||vault)fontes.push({origem,meta,vault});
-  };
-  add('principal',localStorage.getItem(SEC_META_KEY),localStorage.getItem(SEC_VAULT_KEY));
-  try{
-    const rec=parseJsonPersistido(localStorage.getItem(SEC_RECOVERY_KEY));
-    if(rec&&typeof rec==='object')add('recuperacao',rec.meta,rec.vault);
-  }catch(_e){}
-  const mig=lerMigracaoNativaSeguranca();
-  if(mig){
-    add('migracao',mig[SEC_META_KEY]??mig.security_v1??mig.securityMeta,mig[SEC_VAULT_KEY]??mig.vault_v1??mig.vault);
-  }
-  try{
-    for(let i=0;i<localStorage.length;i++){
-      const k=localStorage.key(i)||'';
-      if(!k.startsWith(PFX))continue;
-      if(k===SEC_META_KEY||k===SEC_VAULT_KEY||k===SEC_RECOVERY_KEY)continue;
-      if(!/(security|segur|recovery|recuper|backup|vault|cofre)/i.test(k))continue;
-      const obj=parseJsonPersistido(localStorage.getItem(k));
-      if(obj&&typeof obj==='object')add('local:'+k,obj.meta??obj.security??obj,obj.vault??obj.cofre??null);
-    }
-  }catch(_e){}
+  const meta=normalizarMetaSeguranca(localStorage.getItem(SEC_META_KEY));
+  const vault=normalizarBoxCripto(localStorage.getItem(SEC_VAULT_KEY));
+  if(meta||vault)fontes.push({origem:'principal',meta,vault});
   return fontes;
 }
 function temVestigioSeguranca(){
-  try{
-    if(localStorage.getItem(SEC_META_KEY)!==null||localStorage.getItem(SEC_VAULT_KEY)!==null||localStorage.getItem(SEC_RECOVERY_KEY)!==null)return true;
-  }catch(_e){}
-  return obterFontesSeguranca().length>0;
+  const meta=normalizarMetaSeguranca(localStorage.getItem(SEC_META_KEY));
+  const vault=normalizarBoxCripto(localStorage.getItem(SEC_VAULT_KEY));
+  return !!(metaSegurancaCompleta(meta)&&vault);
 }
 let recuperacaoSegurancaSolicitadaV6917=false;
 window.__recuperacaoSegurancaEncontradaV6917=false;
@@ -1565,39 +1544,7 @@ function coletarPossiveisParesSegurancaV6917(d,origem){
   }
   return pares;
 }
-window.chancelariaReceberRecuperacaoNativaV6916=function(raw,origem='nativa'){
-  try{
-    const d=parseJsonPersistido(raw);
-    if(!d||typeof d!=='object'||Array.isArray(d))return false;
-    const safeOrigem=String(origem||'nativa').replace(/[^a-z0-9_-]+/gi,'_').slice(0,32)||'nativa';
-    try{localStorage.setItem(PFX+'security_snapshot_v6917_'+safeOrigem,JSON.stringify({raw:d,savedAt:new Date().toISOString()}))}catch(_e){}
-    let encontrou=false,temMeta=false,temVault=false,temLegado=false,seq=0;
-    const pares=coletarPossiveisParesSegurancaV6917(d,safeOrigem);
-    for(const p of pares){
-      const meta=normalizarMetaSeguranca(p.meta),vault=normalizarBoxCripto(p.vault);
-      if(!meta&&!vault)continue;
-      const k=PFX+'security_candidate_v6917_'+safeOrigem+'_'+(++seq);
-      localStorage.setItem(k,JSON.stringify({meta:meta||parseJsonPersistido(p.meta),vault:vault||parseJsonPersistido(p.vault),origem:safeOrigem,label:p.label||'',savedAt:new Date().toISOString()}));
-      encontrou=true; if(meta&&meta.salt)temMeta=true; if(vault)temVault=true;
-    }
-    for(const k of SEC_DATA_KEYS){
-      const full=PFX+k;
-      if(Object.prototype.hasOwnProperty.call(d,full)&&d[full]!=null){temLegado=true;break}
-    }
-    if(d.__probeDone)window.__recuperacaoSegurancaProbeConcluidoV6917=true;
-    if(temMeta){
-      window.__recuperacaoSegurancaEncontradaV6917=true;
-      setSecurityMessage('Configuração anterior localizada. Digite a mesma senha mestra novamente.',true);
-    }else if(temVault){
-      window.__recuperacaoSegurancaCofreSemMetaV6917=true;
-      setSecurityMessage('O cofre criptografado foi localizado, mas faltam os metadados da chave. Não apague os dados.');
-    }else if(temLegado){
-      window.__recuperacaoSegurancaLegadoV6917=true;
-      setSecurityMessage('Dados antigos foram localizados. Preserve o aplicativo e não limpe os dados.',true);
-    }
-    return encontrou||temLegado;
-  }catch(_e){return false}
-};
+window.chancelariaReceberRecuperacaoNativaV6916=function(){return false};
 function tentarFontesNativasDiretasV6917(){
   try{
     if(window.ChancelariaNative){
@@ -1611,29 +1558,7 @@ function tentarFontesNativasDiretasV6917(){
   }catch(_e){}
 }
 function solicitarRecuperacaoSegurancaV6916(){
-  if(recuperacaoSegurancaSolicitadaV6917)return;
-  recuperacaoSegurancaSolicitadaV6917=true;
-  setSecurityMessage('Procurando a configuração de segurança anterior neste aparelho...');
-  tentarFontesNativasDiretasV6917();
-  let tentativas=0;
-  const enviar=()=>{
-    if(window.__recuperacaoSegurancaEncontradaV6917)return;
-    tentativas++;
-    try{
-      const ponte=(window.Kodular&&typeof window.Kodular.setWebViewString==='function')?window.Kodular:(window.AppInventor&&typeof window.AppInventor.setWebViewString==='function'?window.AppInventor:null);
-      if(ponte)ponte.setWebViewString('RQ'+Date.now());
-    }catch(_e){}
-    tentarFontesNativasDiretasV6917();
-    if(tentativas<6)setTimeout(enviar,700);
-  };
-  setTimeout(enviar,120);
-  setTimeout(()=>{
-    tentarFontesNativasDiretasV6917();
-    if(window.__recuperacaoSegurancaEncontradaV6917)return;
-    if(window.__recuperacaoSegurancaCofreSemMetaV6917){setSecurityMessage('Cofre localizado, mas sem os metadados necessários para validar a senha. Não desinstale o aplicativo.');return}
-    if(window.__recuperacaoSegurancaLegadoV6917){setSecurityMessage('Dados antigos localizados. Não desinstale o aplicativo nem limpe os dados.');return}
-    setSecurityMessage('Nenhuma configuração anterior foi localizada automaticamente. Não desinstale nem limpe os dados.');
-  },5200);
+  return false;
 }
 function guardarSnapshotSegurancaV6915(){
   try{
@@ -1645,45 +1570,21 @@ function guardarSnapshotSegurancaV6915(){
   }catch(_e){}
 }
 function getSecurityMeta(){
-  const fontes=obterFontesSeguranca();
-  const completa=fontes.find(x=>metaSegurancaCompleta(x.meta));
-  return completa?completa.meta:(fontes.find(x=>x.meta)?.meta||null);
+  return normalizarMetaSeguranca(localStorage.getItem(SEC_META_KEY));
 }
 async function desbloquearCofreComRecuperacao(password){
-  const fontes=obterFontesSeguranca();
-  const metas=fontes.filter(x=>x.meta&&x.meta.salt);
-  if(!metas.length){solicitarRecuperacaoSegurancaV6916();throw new Error('Configuração de segurança inválida. A recuperação automática está procurando a configuração anterior.');}
-  const todosVaults=[];
-  for(const f of fontes)if(f.vault&&!todosVaults.some(x=>x.vault.iv===f.vault.iv&&x.vault.ct===f.vault.ct))todosVaults.push(f);
-  let houveDerivacao=false;
-  for(const fonte of metas){
-    let key;
-    try{key=await deriveVaultKey(password,base64ToBytes(fonte.meta.salt),Number(fonte.meta.iterations)||SEC_ITERATIONS);houveDerivacao=true}catch(_e){continue}
-    let verifierOk=false;
-    const vb=normalizarBoxCripto(fonte.meta.verifier);
-    if(vb){try{const v=await decryptPayload(key,vb);verifierOk=!!(v&&v.ok==='CHANCELARIA-1997')}catch(_e){}}
-    const ordem=[];
-    if(fonte.vault)ordem.push(fonte);
-    for(const x of todosVaults)if(!ordem.includes(x))ordem.push(x);
-    let vaultObj=null,vaultBox=null;
-    for(const x of ordem){
-      try{
-        const v=await decryptPayload(key,x.vault);
-        if(v&&typeof v.data==='object'){vaultObj=v;vaultBox=x.vault;break}
-      }catch(_e){}
-    }
-    if(!verifierOk&&!vaultObj)continue;
-    if(!vaultObj)throw new Error('Senha reconhecida, mas o cofre de dados não pôde ser aberto. Não apague os dados.');
-    const meta={...fonte.meta,version:1,iterations:Number(fonte.meta.iterations)||SEC_ITERATIONS};
-    if(!verifierOk)meta.verifier=await encryptPayload(key,{ok:'CHANCELARIA-1997',version:1});
-    else meta.verifier=vb;
-    guardarSnapshotSegurancaV6915();
-    localStorage.setItem(SEC_META_KEY,JSON.stringify(meta));
-    localStorage.setItem(SEC_VAULT_KEY,JSON.stringify(vaultBox));
-    return {key,meta,vault:vaultObj,origem:fonte.origem};
-  }
-  if(houveDerivacao)throw new Error('Senha incorreta.');
-  throw new Error('Configuração de segurança inválida.');
+  const meta=normalizarMetaSeguranca(localStorage.getItem(SEC_META_KEY));
+  const vaultBox=normalizarBoxCripto(localStorage.getItem(SEC_VAULT_KEY));
+  if(!metaSegurancaCompleta(meta)||!vaultBox)throw new Error('Primeiro acesso. Crie uma nova senha mestra.');
+  let key;
+  try{key=await deriveVaultKey(password,base64ToBytes(meta.salt),Number(meta.iterations)||SEC_ITERATIONS)}catch(_e){throw new Error('Senha incorreta.')}
+  try{
+    const verifier=await decryptPayload(key,normalizarBoxCripto(meta.verifier));
+    if(!verifier||verifier.ok!=='CHANCELARIA-1997')throw new Error();
+    const vaultObj=await decryptPayload(key,vaultBox);
+    if(!vaultObj||typeof vaultObj.data!=='object')throw new Error();
+    return {key,meta,vault:vaultObj,origem:'principal'};
+  }catch(_e){throw new Error('Senha incorreta.')}
 }
 function setSecurityMessage(text,ok=false){
   const el=document.getElementById('securityMessage');
@@ -1809,10 +1710,9 @@ function finalizarAcaoExterna(){
 }
 function iniciarSeguranca(){
   const meta=getSecurityMeta();
-  const vestigio=temVestigioSeguranca();
-  const modo=(meta||vestigio)?'unlock':'setup';
+  const vault=normalizarBoxCripto(localStorage.getItem(SEC_VAULT_KEY));
+  const modo=(metaSegurancaCompleta(meta)&&vault)?'unlock':'setup';
   configureSecurityGate(modo);
-  if(modo==='unlock'&&!metaSegurancaCompleta(meta))solicitarRecuperacaoSegurancaV6916();
   ['pointerdown','touchstart','keydown'].forEach(evt=>document.addEventListener(evt,()=>{if(vaultKey)resetInactivityTimer()},{passive:true}));
   ['backupInput','verifyBackupInput'].forEach(id=>{
     const input=document.getElementById(id);
@@ -5524,7 +5424,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 (function(){
   'use strict';
   window.CHANCELARIA_VERSION='7.0.0';
-  const PDF_BASE='file:///android_asset/imprimir.html?v=7.0.0';
+  const PDF_BASE='file:///android_asset/imprimir.html?v=7.0.1';
   let pendente=null;
   let timeoutPdf=0;
 
