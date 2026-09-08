@@ -12,7 +12,7 @@
     const enviar=()=>{
       tent++;
       try{
-        const out={__probeDone:true,__probeHref:String(location.href||''),__probeVersion:'7.0.5'};
+        const out={__probeDone:true,__probeHref:String(location.href||''),__probeVersion:'7.0.6'};
         for(let i=0;i<localStorage.length;i++){
           const k=localStorage.key(i)||'';
           if(!/^(?:arls1997_|chancelaria1997_v7)/i.test(k))continue;
@@ -41,8 +41,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
-<title>Chancelaria 1997 · Razão e Força · 7.0.5</title>
-<meta name="application-version" content="7.0.5">
+<title>Chancelaria 1997 · Razão e Força · 7.0.6</title>
+<meta name="application-version" content="7.0.6">
 <style>
 :root{
   --azul:#152541;
@@ -751,6 +751,28 @@ main{max-width:720px;padding:14px 12px 28px}
 }
 </style>
 
+
+<style id="v706-session-card-mobile-fix">
+/* V7.0.6: cartões de sessões estáveis no celular. */
+@media(max-width:600px){
+  #listaSessoes .session-list-card{
+    display:grid!important;
+    grid-template-columns:48px minmax(0,1fr)!important;
+    align-items:start!important;
+    gap:10px 11px!important;
+    padding:13px!important;
+  }
+  #listaSessoes .session-list-card>.avatar{grid-column:1;grid-row:1 / span 2;margin-top:1px}
+  #listaSessoes .session-list-card>.item-main{grid-column:2;grid-row:1;min-width:0!important;width:100%!important}
+  #listaSessoes .session-list-card .item-title{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.28!important}
+  #listaSessoes .session-list-card .item-sub{overflow-wrap:anywhere!important}
+  #listaSessoes .session-list-card>.session-card-side{grid-column:2;grid-row:2;width:100%!important;min-width:0!important;align-items:flex-start!important;gap:8px!important}
+  #listaSessoes .session-card-summary{width:100%!important;justify-content:flex-start!important;gap:6px!important}
+  #listaSessoes .session-card-summary .badge{font-size:10px!important;padding:4px 8px!important}
+  #listaSessoes .session-consult-chip{align-self:flex-start!important}
+  #listaSessoes .session-card-side>.btn{align-self:flex-start!important;min-width:104px}
+}
+</style>
 </head>
 <body class="app-locked">
 
@@ -778,8 +800,6 @@ main{max-width:720px;padding:14px 12px 28px}
     <button id="securitySubmitButton" class="security-submit" type="button" onclick="enviarSenha()">Abrir aplicativo</button>
     <div id="securityRestoreBox" style="display:none;margin-top:10px">
       <input id="securityRestoreInput" type="file" accept="application/json,.json" style="display:none" onchange="selecionarBackupPrimeiroAcesso(event)">
-      <button id="securityRestoreButton" class="btn btn-light" type="button" style="width:100%;min-height:46px" onclick="iniciarSelecaoArquivo();document.getElementById('securityRestoreInput').click()">Restaurar backup antigo</button>
-      <div id="securityRestoreInfo" class="security-note" style="margin-top:8px">Use o arquivo backup_chancelaria_1997.json. O arquivo fica apenas na memória durante a restauração e não é enviado ao GitHub.</div>
     </div>
     <div id="securityMessage" class="security-message" aria-live="polite"></div>
     <div id="securityNote" class="security-note">Os dados ficam criptografados neste navegador ou aplicativo. Se você apagar os dados e não tiver backup, perderá os registros.</div>
@@ -1375,7 +1395,7 @@ main{max-width:720px;padding:14px 12px 28px}
 
 <script>
 (function(){
-  // V7.0.5: restauração guiada do backup antigo. O namespace do cofre permanece estável para preservar os dados nas próximas atualizações.
+  // V7.0.6: restauração guiada do backup antigo. O namespace do cofre permanece estável para preservar os dados nas próximas atualizações.
   // Snapshots antigos são oferecidos como candidatos e só viram o principal após a senha descriptografar o cofre.
 })();
 const PFX='chancelaria1997_v704_recuperacao_';
@@ -1510,7 +1530,7 @@ function normalizarMetaSeguranca(valor){
 }
 function metaSegurancaCompleta(m){return !!(m&&m.salt&&normalizarBoxCripto(m.verifier))}
 function lerMigracaoNativaSeguranca(){
-  // v7.0.5: instalação limpa. Configurações nativas de versões anteriores não entram automaticamente.
+  // v7.0.6: instalação limpa. Configurações nativas de versões anteriores não entram automaticamente.
   return null;
 }
 function obterFontesSeguranca(){
@@ -1606,7 +1626,7 @@ function configureSecurityGate(mode,message=''){
   const restoring=mode==='restore';
   const creating=setup||restoring;
   document.getElementById('securityTitle').textContent=restoring?'Restaurar dados do backup':(setup?'Crie sua senha mestra':'Chancelaria protegida');
-  document.getElementById('securitySubtitle').textContent=restoring?'O backup foi validado. Crie e confirme uma nova senha mestra para proteger os dados restaurados.':(setup?'Primeiro acesso neste ambiente. Você pode criar um cofre vazio ou selecionar seu backup antigo antes de criar a senha.':'Digite a senha mestra já cadastrada neste aparelho para abrir o aplicativo. Se a configuração antiga não abrir, use Restaurar backup antigo.');
+  document.getElementById('securitySubtitle').textContent=restoring?'O backup foi validado. Crie e confirme uma nova senha mestra para proteger os dados restaurados.':(setup?'Primeiro acesso neste ambiente. Crie e confirme sua senha mestra para proteger o cofre local.':'Digite a senha mestra já cadastrada neste aparelho para abrir o aplicativo.');
   document.getElementById('securityConfirmBox').style.display=creating?'block':'none';
   const restoreBox=document.getElementById('securityRestoreBox');
   if(restoreBox)restoreBox.style.display='block';
@@ -1731,7 +1751,7 @@ function finalizarAcaoExterna(){
 }
 function migrarDadosAnterioresV703(){
   try{
-    if(localStorage.getItem(SEC_META_KEY)&&localStorage.getItem(SEC_VAULT_KEY))return {tipo:'atual',origem:'v7.0.5'};
+    if(localStorage.getItem(SEC_META_KEY)&&localStorage.getItem(SEC_VAULT_KEY))return {tipo:'atual',origem:'v7.0.6'};
     const pares=[
       ['arls1997_security_v1','arls1997_vault_v1','v6.x'],
       ['chancelaria1997_v703_recuperacao_security_v1','chancelaria1997_v703_recuperacao_vault_v1','v7.0.3'],
@@ -3430,7 +3450,7 @@ const _imprimirRelatorioAnualV56Base=imprimirRelatorioAnualV53;
 imprimirRelatorioAnualV53=function(){_imprimirRelatorioAnualV56Base();setTimeout(()=>{const c=document.getElementById('previewRelatorioConteudo');if(c&&!document.getElementById('jurAnnualV56'))c.insertAdjacentHTML('afterbegin',`<p id="jurAnnualV56" style="text-align:center;font-size:9pt"><b>Federada ao Grande Oriente do Brasil · Jurisdicionada ao GOB-MS</b></p>`)},0)}
 
 window.CHANCELARIA_VERSION='5.7.0-conformidade-integral';
-window.CHANCELARIA_BUILD='7.0.5';
+window.CHANCELARIA_BUILD='7.0.6';
 
 
 
@@ -3647,7 +3667,7 @@ window.CHANCELARIA_VERSION='5.7.0-conformidade-integral';
 
 function renderAtual(){migrarV51Normativo();if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
 
-/* Diagnóstico legado preservado no código, sem abertura automática na v7.0.5. */
+/* Diagnóstico legado preservado no código, sem abertura automática na v7.0.6. */
 function iniciarDiagnosticoV704(){
   const safeGet=(k)=>{try{return localStorage.getItem(k)}catch(_e){return null}};
   const safeParse=(v)=>{try{return v===null?null:JSON.parse(v)}catch(_e){return null}};
@@ -3683,7 +3703,7 @@ function iniciarDiagnosticoV704(){
   const plainRows=plain.length?plain.map(x=>`<div style="font-size:12px;padding:4px 0"><b>${esc(x.k)}</b>${x.n===null?'':` · ${x.n} registro(s)`}</div>`).join(''):'<div style="font-size:12px;color:#666">Nenhuma chave legada simples encontrada.</div>';
   const allRows=all.length?all.map(x=>`<div style="font-size:11px;line-height:1.35;word-break:break-all;padding:3px 0">${esc(x.k)} · ${fmt(x.size)}</div>`).join(''):'<div style="font-size:12px;color:#666">Nenhuma chave da Chancelaria nesta origem.</div>';
   const report=[
-    'CHANCELARIA 1997 v7.0.5 — DIAGNÓSTICO',
+    'CHANCELARIA 1997 v7.0.6 — DIAGNÓSTICO',
     'Origem: '+String(location.origin||location.href),
     'v6 security: '+(present(oldMeta)?'SIM':'NÃO'),
     'v6 vault: '+(present(oldVault)?'SIM':'NÃO')+(present(oldVault)?' ('+fmt(bytes(safeGet(oldVault)))+')':''),
@@ -3698,7 +3718,7 @@ function iniciarDiagnosticoV704(){
   box.innerHTML=`<div style="max-width:470px;margin:12px auto;background:#fbfaf7;border:1px solid rgba(224,197,111,.55);border-radius:24px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.45)">
     <div style="text-align:center;font-size:11px;font-weight:900;letter-spacing:1.2px;color:#8b6a1d">A.R.L.S. RAZÃO E FORÇA Nº 1997</div>
     <h1 style="font-size:24px;text-align:center;margin:8px 0 4px;color:#10223a">Diagnóstico de dados</h1>
-    <div style="text-align:center;color:#6d7581;font-size:13px">Chancelaria 1997 · v7.0.5</div>
+    <div style="text-align:center;color:#6d7581;font-size:13px">Chancelaria 1997 · v7.0.6</div>
     <div style="margin:16px 0;padding:13px;border-radius:13px;background:${bg};color:${color};font-weight:850;line-height:1.35">${esc(headline)}</div>
     <div style="font-size:12px;color:#555;margin-bottom:12px"><b>Origem atual:</b><br><span style="word-break:break-all">${esc(location.origin||location.href)}</span><br><br>Esta tela faz somente leitura. Nenhum cadastro é apagado ou migrado enquanto você permanecer aqui.</div>
     <h2 style="font-size:15px;margin:16px 0 5px">Cofres encontrados</h2>${rows}
@@ -4889,7 +4909,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.0.5';
+  window.CHANCELARIA_VERSION='7.0.6';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -4974,7 +4994,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{
     const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
     if(alvo&&!document.getElementById('v600BuildChip')){
-      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 7.0.5';alvo.appendChild(chip);
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 7.0.6';alvo.appendChild(chip);
     }
   }catch(_e){}
 
@@ -5022,7 +5042,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v603-fluidez-chanceler-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.0.5';
+  window.CHANCELARIA_VERSION='7.0.6';
   const navStackV603=[];
   let restaurandoV603=false;
 
@@ -5216,7 +5236,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 
   // Atualiza rótulo visual da versão e o botão Voltar.
-  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.0.5')chip.textContent='Chancelaria 1997 · núcleo 7.0.5';
+  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.0.6')chip.textContent='Chancelaria 1997 · núcleo 7.0.6';
   const back=document.getElementById('backNowButton');if(back&&!back.querySelector('.back-label'))back.insertAdjacentHTML('beforeend','<span class="back-label">Voltar</span>');
   atualizarBotaoVoltarV603();
 })();
@@ -5225,7 +5245,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
 
 <style id="v610-pdf-navigation-polish">
-/* V7.0.5 — navegação previsível, PDF real e interface enxuta. */
+/* V7.0.6 — navegação previsível, PDF real e interface enxuta. */
 .header.app-compact-header{position:sticky!important;top:0!important;z-index:1300!important}
 #modalAtestadoV603{top:54px!important;height:calc(100vh - 54px)!important;z-index:1200!important}
 #modalAtestadoV603 .v603-doc-actions button[onclick*="fecharAtestadoV603"]{display:none!important}
@@ -5240,7 +5260,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v610-pdf-real-share-and-back">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.0.5';
+  window.CHANCELARIA_VERSION='7.0.6';
   const locks=new Map();
 
   function travaV610(chave,ms=2200){
@@ -5381,7 +5401,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     const nota=document.getElementById('v603AtestadoContatoNota');if(nota&&window.__v603AtestadoId&&nota.textContent!=='O compartilhamento envia o documento como arquivo PDF pelo Android.')nota.textContent='O compartilhamento envia o documento como arquivo PDF pelo Android.';
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){bi.onclick=window.compartilharIndividualContatoV603;if(bi.textContent!=='Compartilhar PDF com o Irmão')bi.textContent='Compartilhar PDF com o Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;if(bp.textContent!=='Compartilhar PDF com o Irmão')bp.textContent='Compartilhar PDF com o Irmão'}
-    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.0.5')chip.textContent='Chancelaria 1997 · núcleo 7.0.5';
+    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.0.6')chip.textContent='Chancelaria 1997 · núcleo 7.0.6';
   }
   // V6.9.8: o observador é desconectado enquanto limpa a interface.
   // Isso evita realimentação de mutações (textContent/remove) e congelamento da tela de login.
@@ -5392,7 +5412,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   });
   limparAcoesV610();
   obs.observe(alvoObsV611,{childList:true,subtree:true});
-  try{audit('Aplicativo atualizado','Núcleo 7.0.5 · restauração guiada · PDF com pulso confirmado · WhatsApp com URI')}catch(_e){}
+  try{audit('Aplicativo atualizado','Núcleo 7.0.6 · restauração guiada · PDF com pulso confirmado · WhatsApp com URI')}catch(_e){}
 })();
 </script>
 
@@ -5406,7 +5426,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v690-session-whatsapp-birthday-and-filenames">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.0.5';
+  window.CHANCELARIA_VERSION='7.0.6';
   const UI_KEY='arls1997_ui_resume_v690';
   let contextoAniversarioV690=null;
 
@@ -5528,7 +5548,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   };
 
   function ajustarRotulosV690(){
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.0.5';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.0.6';
     const b=document.getElementById('btnCompartilharIndividualContatoV603');if(b){const i=irmaoV690(document.getElementById('relIrmao')?.value||'');b.textContent=i?'WhatsApp de '+primeiroV690(i.nome):'WhatsApp do Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp)bp.textContent='WhatsApp do Irmão';
     const d=document.getElementById('v603EnviarAtestadoContato');if(d&&window.__v603AtestadoId){const v=visitaV690(window.__v603AtestadoId);if(v)d.textContent='WhatsApp de '+primeiroV690(v.nome)}
@@ -5601,8 +5621,8 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v692-pdf-bridge-final">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.0.5';
-  const PDF_BASE='file:///android_asset/imprimir.html?v=7.0.5';
+  window.CHANCELARIA_VERSION='7.0.6';
+  const PDF_BASE='file:///android_asset/imprimir.html?v=7.0.6';
   let pendente=null;
   let timeoutPdf=0;
 
@@ -5616,7 +5636,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     try{
       const antiga=new URL(String(url||''),location.href),nova=new URL(PDF_BASE);
       antiga.searchParams.forEach((v,k)=>nova.searchParams.set(k,v));
-      nova.searchParams.set('v','7.0.5');
+      nova.searchParams.set('v','7.0.6');
       nova.hash=antiga.hash;
       return nova.href;
     }catch(_e){return String(url||'')}
@@ -5718,7 +5738,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     const a=document.getElementById('btnCompartilharIndividualContatoV603');if(a)a.onclick=window.compartilharIndividualContatoV603;
     const b=document.getElementById('btnPreviewContatoV603');if(b)b.onclick=window.compartilharIndividualContatoV603;
     const c=document.getElementById('v603EnviarAtestadoContato');if(c)c.onclick=()=>window.compartilharAtestadoContatoV603(window.__v603AtestadoId||'');
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.0.5';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.0.6';
   }
   document.addEventListener('DOMContentLoaded',ligar);setTimeout(ligar,0);
   document.addEventListener('chancelaria:refresh-actions',ligar);
