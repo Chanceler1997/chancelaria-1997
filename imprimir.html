@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Documento · Chancelaria 1997 v7.1.5</title>
+<title>Documento · Chancelaria 1997 v7.1.6</title>
 <style>
 :root{--azul:#152541;--ouro:#c9a84c;--texto:#111;--cinza:#555}
 *{box-sizing:border-box}
@@ -625,7 +625,7 @@ html.native-pdf .page.native-report-page tr{break-inside:avoid!important;page-br
         const h=Math.max(100,Math.floor(alturaFolhaCss*pages));
         const w=larguraCss;
         let sinalizou=false;
-        try{if(window.ChancelariaPDF&&typeof window.ChancelariaPDF.ready==='function'){window.ChancelariaPDF.ready(location.href,w,h,pages);sinalizou=true}}catch(_e){}
+        try{if(window.ChancelariaPDF&&typeof window.ChancelariaPDF.ready==='function'){window.ChancelariaPDF.ready('PH'+h,w,h,pages);sinalizou=true}}catch(_e){}
         try{const ponte=ponteNativaV612();if(ponte){ponte.setWebViewString('PH'+h);sinalizou=true}}catch(_e){}
         if(sinalizou)enviado=true;
       }catch(e){
