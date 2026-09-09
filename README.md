@@ -1,17 +1,16 @@
-# Chancelaria 1997 v7.1.1
+# Chancelaria 1997 v7.1.2
 
-Versão auditada com preservação do cofre existente.
+Pacote web correspondente ao AIA v7.1.2.
 
-Pontos centrais:
+Principais ajustes desta revisão:
 
-1. Mantém o namespace de dados `chancelaria1997_v704_recuperacao_`.
-2. Restaura o fluxo Android de PDF da v6.1.6: o WebViewer principal renderiza o documento antes da captura.
-3. Remove o WebViewer oculto do caminho efetivo de geração de PDF.
-4. Relatório individual e atestado de visitante ficam como compartilhamentos individuais.
-5. Aniversários natalícios, relatórios coletivos, relatórios de sessão e comunicações coletivas usam compartilhamento sem contato pré-selecionado; no WhatsApp, o Chancelar seleciona o grupo.
-6. Aniversário natalício oferece texto ao grupo ou certificado de aniversário ao grupo. Filiação e iniciação permanecem como dados históricos, sem felicitação automática.
-7. Cadastro de visitante preserva o ID permanente ao editar e usa confirmação/lixeira para exclusão e restauração.
-8. Cartões de Sessões foram reforçados para telas móveis estreitas.
-9. Recuperação de backup não aparece na tela de login; permanece na área administrativa.
+1. Mantém o pacote Android `br.org.razaoeforca.chancelaria1997` e o namespace `chancelaria1997_v704_recuperacao_`.
+2. Usa um WebViewer dedicado e visível durante a renderização do PDF, preservando a tela principal e o cofre em memória.
+3. Mantém o WebViewPdfExporter compatível com o fluxo funcional de referência da v6.1.6.
+4. Ajusta a geometria do documento para A4 proporcional em telas móveis.
+5. Exibe o grau nos cartões de Sessões.
+6. Mantém o atestado de visitante como compartilhamento individual.
+7. Após retornar de compartilhamento externo, a interface volta para Início sem recriar a tela de login.
+8. Preserva as correções de Visitantes, paginação, aniversário natalício e reutilização de PDF da v7.1.1.
 
-GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.1`
+GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.2`
