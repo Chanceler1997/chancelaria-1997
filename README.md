@@ -1,6 +1,6 @@
-# Chancelaria 1997 v7.1.4
+# Chancelaria 1997 v7.1.5 ENSAIO
 
-Pacote web correspondente ao AIA v7.1.4.
+Pacote web correspondente ao AIA v7.1.5.
 
 Principais ajustes desta revisão:
 
@@ -13,4 +13,7 @@ Principais ajustes desta revisão:
 7. Após retornar de compartilhamento externo, a interface volta para Início sem recriar a tela de login.
 8. Preserva as correções de Visitantes, paginação, aniversário natalício e reutilização de PDF da v7.1.1.
 
-GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.4`
+GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.5`
+
+
+Ações físicas de PDF em ensaio: compartilhamento Android, envio ao visitante e visualização.
