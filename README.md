@@ -1,6 +1,6 @@
-# Chancelaria 1997 v7.1.2
+# Chancelaria 1997 v7.1.3
 
-Pacote web correspondente ao AIA v7.1.2.
+Pacote web correspondente ao AIA v7.1.3.
 
 Principais ajustes desta revisão:
 
@@ -12,5 +12,6 @@ Principais ajustes desta revisão:
 6. Mantém o atestado de visitante como compartilhamento individual.
 7. Após retornar de compartilhamento externo, a interface volta para Início sem recriar a tela de login.
 8. Preserva as correções de Visitantes, paginação, aniversário natalício e reutilização de PDF da v7.1.1.
+9. Corrige o congelamento após o login removendo o observador global de mutações introduzido na v7.1.2 e evitando renderização administrativa antes do desbloqueio do cofre.
 
-GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.2`
+GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.3`
