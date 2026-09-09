@@ -1,22 +1,17 @@
-# Chancelaria 1997 v7.1.7 ENSAIO
+# Chancelaria 1997 v7.1.8
 
-Pacote web correspondente ao AIA v7.1.7.
+Revisão focada exclusivamente no fluxo físico de PDF.
 
-Principais ajustes desta revisão:
+A geração, reutilização, compartilhamento Android, envio ao WhatsApp e visualização passam pela ponte nativa direta `ChancelariaNative.request`, sem depender do parser de comandos dos blocos para concluir a ação.
 
-1. Mantém o pacote Android `br.org.razaoeforca.chancelaria1997` e o namespace `chancelaria1997_v704_recuperacao_`.
-2. Usa um WebViewer dedicado e visível durante a renderização do PDF, preservando a tela principal e o cofre em memória.
-3. Mantém o WebViewPdfExporter compatível com o fluxo funcional de referência da v6.1.6.
-4. Ajusta a geometria do documento para A4 proporcional em telas móveis.
-5. Exibe o grau nos cartões de Sessões.
-6. Mantém o atestado de visitante como compartilhamento individual.
-7. Após retornar de compartilhamento externo, a interface volta para Início sem recriar a tela de login.
-8. Preserva as correções de Visitantes, paginação, aniversário natalício e reutilização de PDF da v7.1.1.
+O caminho anterior por `TK`, `NI`, `PI`, `SI`, `VI`, `RS`, `Clock1` e `PDFCreated` permanece no projeto como fallback.
 
-GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.7`
+A extensão `WhatsappPdfShare` foi atualizada para aceitar `VIEW_PDF` no fluxo nativo. Nesse modo ela gera ou reutiliza o PDF no MediaStore e abre o URI `content://` com `ACTION_VIEW`.
 
+Compartilhamento usa `ACTION_SEND`, `application/pdf`, `EXTRA_STREAM`, `FLAG_GRANT_READ_URI_PERMISSION` e `ClipData`.
 
-Ações físicas de PDF em ensaio: compartilhamento Android, envio ao visitante e visualização.
+O PDF de impressão é carregado do `android_asset`, reduzindo a dependência do GitHub durante a geração. A tela principal continua no mesmo domínio para preservar o armazenamento do aplicativo.
 
+Pacote Android: `br.org.razaoeforca.chancelaria1997`
 
-Versão 7.1.7: correção da ponte nativa entre GitHub e Kodular para ações físicas de PDF.
+Versão: 7.1.8, versionCode 67.
