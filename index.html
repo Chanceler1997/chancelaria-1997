@@ -12,7 +12,7 @@
     const enviar=()=>{
       tent++;
       try{
-        const out={__probeDone:true,__probeHref:String(location.href||''),__probeVersion:'7.0.6'};
+        const out={__probeDone:true,__probeHref:String(location.href||''),__probeVersion:'7.1.1'};
         for(let i=0;i<localStorage.length;i++){
           const k=localStorage.key(i)||'';
           if(!/^(?:arls1997_|chancelaria1997_v7)/i.test(k))continue;
@@ -41,8 +41,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#0b1729">
-<title>Chancelaria 1997 · Razão e Força · 7.0.6</title>
-<meta name="application-version" content="7.0.6">
+<title>Chancelaria 1997 · Razão e Força · 7.1.1</title>
+<meta name="application-version" content="7.1.1">
 <style>
 :root{
   --azul:#152541;
@@ -753,7 +753,7 @@ main{max-width:720px;padding:14px 12px 28px}
 
 
 <style id="v706-session-card-mobile-fix">
-/* V7.0.6: cartões de sessões estáveis no celular. */
+/* V7.1.1: cartões de sessões estáveis no celular. */
 @media(max-width:600px){
   #listaSessoes .session-list-card{
     display:grid!important;
@@ -1122,7 +1122,7 @@ main{max-width:720px;padding:14px 12px 28px}
       <div class="session-modal-actions">
         <button class="btn btn-light" type="button" onclick="editarSessaoConsultada()">Editar sessão</button>
         <button class="btn btn-info" type="button" onclick="abrirChamadaSessaoConsultada()">Abrir chamada</button>
-        <button class="btn btn-success" type="button" onclick="imprimirSessaoConsultada()">Imprimir/PDF</button>
+        <button class="btn btn-success" type="button" onclick="compartilharSessaoConsultadaV711()">Compartilhar PDF</button>
       </div>
     </div>
   </div>
@@ -1395,7 +1395,7 @@ main{max-width:720px;padding:14px 12px 28px}
 
 <script>
 (function(){
-  // V7.0.6: restauração guiada do backup antigo. O namespace do cofre permanece estável para preservar os dados nas próximas atualizações.
+  // V7.1.1: restauração guiada do backup antigo. O namespace do cofre permanece estável para preservar os dados nas próximas atualizações.
   // Snapshots antigos são oferecidos como candidatos e só viram o principal após a senha descriptografar o cofre.
 })();
 const PFX='chancelaria1997_v704_recuperacao_';
@@ -1530,7 +1530,7 @@ function normalizarMetaSeguranca(valor){
 }
 function metaSegurancaCompleta(m){return !!(m&&m.salt&&normalizarBoxCripto(m.verifier))}
 function lerMigracaoNativaSeguranca(){
-  // v7.0.6: instalação limpa. Configurações nativas de versões anteriores não entram automaticamente.
+  // v7.1.1: instalação limpa. Configurações nativas de versões anteriores não entram automaticamente.
   return null;
 }
 function obterFontesSeguranca(){
@@ -1629,7 +1629,7 @@ function configureSecurityGate(mode,message=''){
   document.getElementById('securitySubtitle').textContent=restoring?'O backup foi validado. Crie e confirme uma nova senha mestra para proteger os dados restaurados.':(setup?'Primeiro acesso neste ambiente. Crie e confirme sua senha mestra para proteger o cofre local.':'Digite a senha mestra já cadastrada neste aparelho para abrir o aplicativo.');
   document.getElementById('securityConfirmBox').style.display=creating?'block':'none';
   const restoreBox=document.getElementById('securityRestoreBox');
-  if(restoreBox)restoreBox.style.display='block';
+  if(restoreBox)restoreBox.style.display='none';
   document.getElementById('securitySubmitButton').textContent=restoring?'Criar nova proteção e restaurar':(setup?(pendingLegacySetupData?'Criar proteção e restaurar':'Criar proteção'):'Abrir aplicativo');
   document.getElementById('securityPassword').value='';
   document.getElementById('securityPasswordConfirm').value='';
@@ -1751,7 +1751,7 @@ function finalizarAcaoExterna(){
 }
 function migrarDadosAnterioresV703(){
   try{
-    if(localStorage.getItem(SEC_META_KEY)&&localStorage.getItem(SEC_VAULT_KEY))return {tipo:'atual',origem:'v7.0.6'};
+    if(localStorage.getItem(SEC_META_KEY)&&localStorage.getItem(SEC_VAULT_KEY))return {tipo:'atual',origem:'v7.1.1'};
     const pares=[
       ['arls1997_security_v1','arls1997_vault_v1','v6.x'],
       ['chancelaria1997_v703_recuperacao_security_v1','chancelaria1997_v703_recuperacao_vault_v1','v7.0.3'],
@@ -3450,7 +3450,7 @@ const _imprimirRelatorioAnualV56Base=imprimirRelatorioAnualV53;
 imprimirRelatorioAnualV53=function(){_imprimirRelatorioAnualV56Base();setTimeout(()=>{const c=document.getElementById('previewRelatorioConteudo');if(c&&!document.getElementById('jurAnnualV56'))c.insertAdjacentHTML('afterbegin',`<p id="jurAnnualV56" style="text-align:center;font-size:9pt"><b>Federada ao Grande Oriente do Brasil · Jurisdicionada ao GOB-MS</b></p>`)},0)}
 
 window.CHANCELARIA_VERSION='5.7.0-conformidade-integral';
-window.CHANCELARIA_BUILD='7.0.6';
+window.CHANCELARIA_BUILD='7.1.1';
 
 
 
@@ -3667,7 +3667,7 @@ window.CHANCELARIA_VERSION='5.7.0-conformidade-integral';
 
 function renderAtual(){migrarV51Normativo();if(aba==='inicio')renderInicio();if(aba==='irmaos')renderIrmaos();if(aba==='sessoes')renderSessoes();if(aba==='presenca')initPresenca();if(aba==='datas')renderDatas();if(aba==='relatorios')initRelatorios()}
 
-/* Diagnóstico legado preservado no código, sem abertura automática na v7.0.6. */
+/* Diagnóstico legado preservado no código, sem abertura automática na v7.1.1. */
 function iniciarDiagnosticoV704(){
   const safeGet=(k)=>{try{return localStorage.getItem(k)}catch(_e){return null}};
   const safeParse=(v)=>{try{return v===null?null:JSON.parse(v)}catch(_e){return null}};
@@ -3703,7 +3703,7 @@ function iniciarDiagnosticoV704(){
   const plainRows=plain.length?plain.map(x=>`<div style="font-size:12px;padding:4px 0"><b>${esc(x.k)}</b>${x.n===null?'':` · ${x.n} registro(s)`}</div>`).join(''):'<div style="font-size:12px;color:#666">Nenhuma chave legada simples encontrada.</div>';
   const allRows=all.length?all.map(x=>`<div style="font-size:11px;line-height:1.35;word-break:break-all;padding:3px 0">${esc(x.k)} · ${fmt(x.size)}</div>`).join(''):'<div style="font-size:12px;color:#666">Nenhuma chave da Chancelaria nesta origem.</div>';
   const report=[
-    'CHANCELARIA 1997 v7.0.6 — DIAGNÓSTICO',
+    'CHANCELARIA 1997 v7.1.1 — DIAGNÓSTICO',
     'Origem: '+String(location.origin||location.href),
     'v6 security: '+(present(oldMeta)?'SIM':'NÃO'),
     'v6 vault: '+(present(oldVault)?'SIM':'NÃO')+(present(oldVault)?' ('+fmt(bytes(safeGet(oldVault)))+')':''),
@@ -3718,7 +3718,7 @@ function iniciarDiagnosticoV704(){
   box.innerHTML=`<div style="max-width:470px;margin:12px auto;background:#fbfaf7;border:1px solid rgba(224,197,111,.55);border-radius:24px;padding:20px;box-shadow:0 24px 70px rgba(0,0,0,.45)">
     <div style="text-align:center;font-size:11px;font-weight:900;letter-spacing:1.2px;color:#8b6a1d">A.R.L.S. RAZÃO E FORÇA Nº 1997</div>
     <h1 style="font-size:24px;text-align:center;margin:8px 0 4px;color:#10223a">Diagnóstico de dados</h1>
-    <div style="text-align:center;color:#6d7581;font-size:13px">Chancelaria 1997 · v7.0.6</div>
+    <div style="text-align:center;color:#6d7581;font-size:13px">Chancelaria 1997 · v7.1.1</div>
     <div style="margin:16px 0;padding:13px;border-radius:13px;background:${bg};color:${color};font-weight:850;line-height:1.35">${esc(headline)}</div>
     <div style="font-size:12px;color:#555;margin-bottom:12px"><b>Origem atual:</b><br><span style="word-break:break-all">${esc(location.origin||location.href)}</span><br><br>Esta tela faz somente leitura. Nenhum cadastro é apagado ou migrado enquanto você permanecer aqui.</div>
     <h2 style="font-size:15px;margin:16px 0 5px">Cofres encontrados</h2>${rows}
@@ -3951,6 +3951,9 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   function setPerfisV58(v){v51Set('visitantePerfis',v)}
   function visitasV58(){return v51Get('visitasVisitantes')}
   function setVisitasV58(v){v51Set('visitasVisitantes',v)}
+  // V7.1.1: bridge explícita para rotinas administrativas fora deste IIFE.
+  window.perfisV58=perfisV58;window.setPerfisV58=setPerfisV58;window.visitasV58=visitasV58;window.setVisitasV58=setVisitasV58;
+  let perfilEditandoV58='';
 
   function chavePerfilV58(x){
     const cim=nomeNormalizado(x?.cim||'');
@@ -4037,6 +4040,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 
   function preencherPerfilV58(p){
+    perfilEditandoV58=p?.id||'';
     v5VisId.value='';
     v5VisNome.value=p.nome||'';v5VisCim.value=p.cim||'';v5VisGrau.value=p.grau||'M';
     v5VisLoja.value=p.loja||'';v5VisNumero.value=p.numero||'';v5VisOriente.value=p.oriente||'';
@@ -4072,7 +4076,9 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     let perfis=perfisV58(),visitas=visitasV58();
     const dados={nome:v5VisNome.value.trim(),cim:v5VisCim.value.trim(),grau:v5VisGrau.value,loja:v5VisLoja.value.trim(),numero:v5VisNumero.value.trim(),oriente:v5VisOriente.value.trim(),telefone};
     const key=chavePerfilV58(dados);
-    let p=perfis.find(x=>chavePerfilV58(x)===key);
+    const idPerfilEditado=String(perfilEditandoV58||'');
+    let p=idPerfilEditado?perfis.find(x=>x.id===idPerfilEditado):perfis.find(x=>chavePerfilV58(x)===key);
+    if(idPerfilEditado&&!p){toast('Cadastro permanente do visitante não foi localizado. Reabra o cadastro antes de salvar.');return}
     const oldPerfil=p?{...p}:null;
     if(!p){
       p={id:uid(),...dados,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
@@ -4080,6 +4086,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     }else{
       Object.assign(p,dados,{updatedAt:new Date().toISOString()});
     }
+    perfilEditandoV58=p.id;
     setPerfisV58(perfis);
 
     const editId=v5VisId.value;
@@ -4111,6 +4118,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
   window.editarVisitanteV5=function(id){
     const x=getVisitantesV5().find(z=>z.id===id);if(!x)return;
+    perfilEditandoV58=x.perfilId||'';
     v5VisId.value=id;v5VisSessao.value=x.sessaoId||'';v5VisNome.value=x.nome||'';v5VisCim.value=x.cim||'';
     v5VisGrau.value=x.grau||'M';v5VisLoja.value=x.loja||'';v5VisNumero.value=x.numero||'';v5VisOriente.value=x.oriente||'';
     v5VisTelefone.value=x.telefone||'';v5VisIdent.value=x.identificacao||'';v5VisObs.value=x.obs||'';
@@ -4158,7 +4166,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
           const s=smap.get(v.sessaoId),num=v.certNumero?` · ${h(v.certNumero)}`:' · certificado ainda não numerado';
           return `<div class="visitor-visit-row"><div class="visitor-visit-main"><div class="visitor-visit-date">${s?brData(s.data):'Sessão não localizada'}</div><div class="visitor-visit-meta">${s?h(nomeSessaoDocumento(s)):'Registro histórico'}${s?.numero?' · '+h(s.numero):''}${num}<br>Identificação: ${h(v.identificacao||'não informada')}</div></div><div class="visitor-visit-actions"><button class="btn btn-success btn-sm" onclick="compartilharPdfVisitanteV585('${v.id}')">Compartilhar PDF</button><button class="btn btn-outline btn-sm" onclick="certificadoVisitanteV5('${v.id}')">Visualizar PDF</button><button class="btn btn-light btn-sm" onclick="editarVisitanteV5('${v.id}')">Editar visita</button><button class="btn btn-danger btn-sm" onclick="excluirVisitanteV5('${v.id}')">Excluir visita</button></div></div>`;
         }).join(''):'<div class="visitor-visit-row"><div class="visitor-visit-meta">Nenhuma visita registrada.</div></div>';
-        return `<div class="visitor-profile-card"><div class="visitor-profile-head"><div class="avatar">${h(iniciais(p.nome))}</div><div class="visitor-profile-main"><div class="visitor-profile-title">${h(p.nome)}</div><div class="visitor-profile-sub">${p.cim?'CIM '+h(p.cim)+' · ':''}${h(grauNome(p.grau)||grauSimbolo(p.grau)||'')}<br>${h(p.loja)}${p.numero?' nº '+h(p.numero):''} · ${h(p.oriente)}${tel}<br>${hist.length} visita(s) registrada(s)</div></div><div class="visitor-profile-actions"><button class="btn btn-primary btn-sm" onclick="novaVisitaVisitanteV58('${p.id}')">Registrar nova visita</button>${p.telefone?`<button class="btn btn-outline btn-sm" onclick="abrirWhatsAppVisitanteV55('${hist[0]?.id||''}')">WhatsApp</button>`:''}<button class="btn btn-danger btn-sm" onclick="excluirCadastroVisitanteV58('${p.id}')">Excluir visitante</button></div></div><div class="visitor-history"><div class="visitor-history-title">Histórico de visitas e certificados</div>${rows}</div></div>`;
+        return `<div class="visitor-profile-card"><div class="visitor-profile-head"><div class="avatar">${h(iniciais(p.nome))}</div><div class="visitor-profile-main"><div class="visitor-profile-title">${h(p.nome)}</div><div class="visitor-profile-sub">${p.cim?'CIM '+h(p.cim)+' · ':''}${h(grauNome(p.grau)||grauSimbolo(p.grau)||'')}<br>${h(p.loja)}${p.numero?' nº '+h(p.numero):''} · ${h(p.oriente)}${tel}<br>${hist.length} visita(s) registrada(s)</div></div><div class="visitor-profile-actions"><button class="btn btn-primary btn-sm" onclick="novaVisitaVisitanteV58('${p.id}')">Registrar nova visita</button>${p.telefone?`<button class="btn btn-outline btn-sm" onclick="abrirWhatsAppVisitanteV55('${hist[0]?.id||''}')">WhatsApp</button>`:''}<button class="btn btn-light btn-sm" onclick="editarCadastroVisitanteV58('${p.id}')">Editar cadastro</button><button class="btn btn-danger btn-sm" onclick="excluirCadastroVisitanteV58('${p.id}')">Excluir visitante</button></div></div><div class="visitor-history"><div class="visitor-history-title">Histórico de visitas e certificados</div>${rows}</div></div>`;
       }).join('')
       :'<div class="empty"><p>Nenhum visitante cadastrado.</p></div>';
   };
@@ -4168,6 +4176,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
     migrarVisitantesV58();
     const ss=sessoesRealizadasV5();v5VisSessao.innerHTML=ss.map(s=>`<option value="${s.id}">${brData(s.data)} · ${h(nomeSessaoDocumento(s))}${s.numero?' · '+h(s.numero):''}</option>`).join('');
     if(sessaoId&&ss.some(s=>s.id===sessaoId))v5VisSessao.value=sessaoId;
+    perfilEditandoV58='';
     v5VisId.value='';
     ['v5VisNome','v5VisCim','v5VisLoja','v5VisNumero','v5VisOriente','v5VisTelefone','v5VisObs'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});
     v5VisGrau.value='M';v5VisIdent.value='';
@@ -4909,7 +4918,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.0.6';
+  window.CHANCELARIA_VERSION='7.1.1';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -4994,7 +5003,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{
     const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
     if(alvo&&!document.getElementById('v600BuildChip')){
-      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 7.0.6';alvo.appendChild(chip);
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 7.1.1';alvo.appendChild(chip);
     }
   }catch(_e){}
 
@@ -5042,7 +5051,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v603-fluidez-chanceler-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.0.6';
+  window.CHANCELARIA_VERSION='7.1.1';
   const navStackV603=[];
   let restaurandoV603=false;
 
@@ -5236,7 +5245,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 
   // Atualiza rótulo visual da versão e o botão Voltar.
-  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.0.6')chip.textContent='Chancelaria 1997 · núcleo 7.0.6';
+  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.1.1')chip.textContent='Chancelaria 1997 · núcleo 7.1.1';
   const back=document.getElementById('backNowButton');if(back&&!back.querySelector('.back-label'))back.insertAdjacentHTML('beforeend','<span class="back-label">Voltar</span>');
   atualizarBotaoVoltarV603();
 })();
@@ -5245,13 +5254,12 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 
 
 <style id="v610-pdf-navigation-polish">
-/* V7.0.6 — navegação previsível, PDF real e interface enxuta. */
+/* V7.1.1 — navegação previsível, PDF real e interface enxuta. */
 .header.app-compact-header{position:sticky!important;top:0!important;z-index:1300!important}
 #modalAtestadoV603{top:54px!important;height:calc(100vh - 54px)!important;z-index:1200!important}
 #modalAtestadoV603 .v603-doc-actions button[onclick*="fecharAtestadoV603"]{display:none!important}
 button[onclick="imprimirIndividual()"],
 button[onclick="imprimirGeral()"],
-button[onclick="imprimirSessaoConsultada()"],
 button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 .v610-pdf-note{font-size:11px;color:var(--muted);padding:6px 10px 10px;text-align:center}
 @media(max-width:430px){#modalAtestadoV603{top:52px!important;height:calc(100vh - 52px)!important}}
@@ -5260,7 +5268,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v610-pdf-real-share-and-back">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.0.6';
+  window.CHANCELARIA_VERSION='7.1.1';
   const locks=new Map();
 
   function travaV610(chave,ms=2200){
@@ -5401,7 +5409,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     const nota=document.getElementById('v603AtestadoContatoNota');if(nota&&window.__v603AtestadoId&&nota.textContent!=='O compartilhamento envia o documento como arquivo PDF pelo Android.')nota.textContent='O compartilhamento envia o documento como arquivo PDF pelo Android.';
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){bi.onclick=window.compartilharIndividualContatoV603;if(bi.textContent!=='Compartilhar PDF com o Irmão')bi.textContent='Compartilhar PDF com o Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;if(bp.textContent!=='Compartilhar PDF com o Irmão')bp.textContent='Compartilhar PDF com o Irmão'}
-    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.0.6')chip.textContent='Chancelaria 1997 · núcleo 7.0.6';
+    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.1.1')chip.textContent='Chancelaria 1997 · núcleo 7.1.1';
   }
   // V6.9.8: o observador é desconectado enquanto limpa a interface.
   // Isso evita realimentação de mutações (textContent/remove) e congelamento da tela de login.
@@ -5412,7 +5420,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   });
   limparAcoesV610();
   obs.observe(alvoObsV611,{childList:true,subtree:true});
-  try{audit('Aplicativo atualizado','Núcleo 7.0.6 · restauração guiada · PDF com pulso confirmado · WhatsApp com URI')}catch(_e){}
+  try{audit('Aplicativo atualizado','Núcleo 7.1.1 · restauração guiada · PDF com pulso confirmado · WhatsApp com URI')}catch(_e){}
 })();
 </script>
 
@@ -5426,7 +5434,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v690-session-whatsapp-birthday-and-filenames">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.0.6';
+  window.CHANCELARIA_VERSION='7.1.1';
   const UI_KEY='arls1997_ui_resume_v690';
   let contextoAniversarioV690=null;
 
@@ -5548,7 +5556,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   };
 
   function ajustarRotulosV690(){
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.0.6';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.1.1';
     const b=document.getElementById('btnCompartilharIndividualContatoV603');if(b){const i=irmaoV690(document.getElementById('relIrmao')?.value||'');b.textContent=i?'WhatsApp de '+primeiroV690(i.nome):'WhatsApp do Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp)bp.textContent='WhatsApp do Irmão';
     const d=document.getElementById('v603EnviarAtestadoContato');if(d&&window.__v603AtestadoId){const v=visitaV690(window.__v603AtestadoId);if(v)d.textContent='WhatsApp de '+primeiroV690(v.nome)}
@@ -5559,194 +5567,186 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 </script>
 
 
-<script id="v690-direct-pdf-whatsapp-final">
+
+
+
+
+
+<style id="v710-auditoria-final-style">
+/* Auditoria final 7.1.1. Layout de sessões resistente a telas estreitas. */
+html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
+#listaSessoes{max-width:100%!important;min-width:0!important;overflow-x:hidden!important}
+#listaSessoes .session-list-card{display:grid!important;grid-template-columns:52px minmax(0,1fr)!important;gap:12px!important;align-items:start!important;padding:14px!important;overflow:hidden!important}
+#listaSessoes .session-list-card>.avatar{grid-column:1;grid-row:1 / span 2;width:46px!important;height:46px!important;min-width:46px!important;margin:0!important}
+#listaSessoes .session-list-card>.item-main{grid-column:2;grid-row:1;min-width:0!important;width:100%!important;overflow:visible!important}
+#listaSessoes .session-list-card .item-title{display:block!important;white-space:normal!important;overflow-wrap:anywhere!important;word-break:normal!important;line-height:1.25!important;font-size:15px!important;margin-bottom:5px!important}
+#listaSessoes .session-list-card .item-sub{white-space:normal!important;overflow-wrap:anywhere!important;line-height:1.35!important}
+#listaSessoes .session-card-side{grid-column:2;grid-row:2;display:flex!important;flex-wrap:wrap!important;align-items:center!important;justify-content:flex-start!important;gap:8px!important;width:100%!important;min-width:0!important;margin-top:8px!important}
+#listaSessoes .session-card-summary{display:flex!important;flex-wrap:wrap!important;gap:6px!important;min-width:0!important;flex:1 1 100%!important}
+#listaSessoes .session-consult-chip,#listaSessoes .session-card-side .btn{flex:0 0 auto!important;white-space:nowrap!important}
+@media(max-width:360px){#listaSessoes .session-list-card{grid-template-columns:44px minmax(0,1fr)!important;padding:12px!important;gap:9px!important}#listaSessoes .session-list-card>.avatar{width:40px!important;height:40px!important;min-width:40px!important}#listaSessoes .session-card-side .btn,#listaSessoes .session-consult-chip{min-height:38px!important;font-size:12px!important}}
+#msgBirthdayPdfButton{min-width:0!important}
+</style>
+<script id="v710-auditoria-final-script">
 (function(){
   'use strict';
-  function ponte(){
+  window.CHANCELARIA_VERSION='7.1.1';
+  const PDF_ASSET='file:///android_asset/imprimir.html?v=7.1.1';
+  let contextoFelicitacaoV710=null;
+
+  function ponteV710(){
     try{if(typeof obterPonteKodular==='function')return obterPonteKodular()}catch(_e){}
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
     if(window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')return window.AppInventor;
     return null;
   }
-  function slug(n,p='DOCUMENTO'){try{return String(n||p).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'').toUpperCase()||p}catch(_e){return p}}
-  function enviarDireto(prefixo,url,nome,telefone){
-    const p=ponte(),n=typeof numeroWhatsApp==='function'?numeroWhatsApp(telefone||''):'';
-    if(!p||!url||!n)return false;
+  function slugV710(v,p='DOCUMENTO'){
+    try{return String(v||p).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'').toUpperCase()||p}catch(_e){return p}
+  }
+  function urlLocalPdfV710(url){
     try{
-      p.setWebViewString('00'+Date.now());
-      setTimeout(()=>{try{p.setWebViewString('WQ'+n)}catch(_e){}},70);
-      setTimeout(()=>{try{p.setWebViewString('NI'+nome)}catch(_e){}},150);
-      setTimeout(()=>{try{p.setWebViewString(prefixo+String(url))}catch(_e){}},260);
-      return true;
-    }catch(_e){return false}
-  }
-  function visita(id){try{return (getVisitantesV5()||[]).find(x=>x.id===id)||null}catch(_e){return null}}
-  function irmao(id){try{return (getIrmaos()||[]).find(x=>x.id===id)||null}catch(_e){return null}}
-  function urlAtestado(x){
-    if(!x)throw new Error('Atestado não localizado');
-    if(typeof garantirNumeroCertificadoV53==='function')garantirNumeroCertificadoV53(x);
-    let u='';if(typeof window.__urlAtestadoV603==='function')u=window.__urlAtestadoV603(x,false);
-    if(!u)throw new Error('Não foi possível montar o atestado');
-    const z=new URL(u);z.searchParams.set('nativepdf','1');
-    const nome=typeof nomeArquivoAtestadoV5817==='function'?nomeArquivoAtestadoV5817(x):`RZ-0000-${new Date().getFullYear()}-${slug(x.nome,'IRMAO')}.pdf`;
-    z.searchParams.set('filename',nome);return {url:z.href,nome};
-  }
-  function urlRelatorioIndividual(i){
-    const payload={titulo:'Relatório individual',corpo:corpoRelatorioIndividual(i),tipo:'individual',irmaoId:i.id};
-    const z=new URL(urlRelatorioParaImpressao(payload.titulo,payload.corpo,false,payload));
-    z.searchParams.set('nativepdf','1');
-    const nome=`RELATORIO-INDIVIDUAL-${new Date().getFullYear()}-${slug(i.nome,'IRMAO')}.pdf`;
-    z.searchParams.set('filename',nome);return {url:z.href,nome,payload};
-  }
-  window.compartilharAtestadoContatoV603=async function(id=''){
-    const x=id?visita(id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);
-    if(!x){toast('Atestado não localizado');return}
-    const n=typeof numeroWhatsApp==='function'?numeroWhatsApp(x.telefone||''):'';
-    if(!n){toast('Cadastre o telefone/WhatsApp do destinatário');return}
-    try{if(typeof prepararRetornoExternoV690==='function')await prepararRetornoExternoV690();const d=urlAtestado(x);if(enviarDireto('SD',d.url,d.nome,n)){toast('Preparando o PDF para o WhatsApp de '+String(x.nome||'').split(/\s+/)[0]);return}toast('Não foi possível iniciar o compartilhamento direto')}catch(e){console.error(e);toast(e?.message||'Não foi possível preparar o PDF')}
-  };
-  window.compartilharIndividualContatoV603=async function(){
-    const id=document.getElementById('relIrmao')?.value||window.pendingPrintPayload?.irmaoId||'';const i=irmao(id);
-    if(!i){toast('Selecione um Irmão');return}
-    const n=typeof numeroWhatsApp==='function'?numeroWhatsApp(i.telefone||''):'';if(!n){toast('Cadastre o telefone/WhatsApp deste Irmão');return}
-    try{if(typeof prepararRetornoExternoV690==='function')await prepararRetornoExternoV690();const d=urlRelatorioIndividual(i);window.pendingPrintPayload=d.payload;if(enviarDireto('PD',d.url,d.nome,n)){toast('Preparando o PDF para o WhatsApp de '+String(i.nome||'').split(/\s+/)[0]);return}toast('Não foi possível iniciar o compartilhamento direto')}catch(e){console.error(e);toast(e?.message||'Não foi possível preparar o relatório')}
-  };
-  // O histórico usa o mesmo PDF persistido. O botão de envio direto não cria uma nova emissão.
-  const antigoAtualizar=window.atualizarAtestadoContatoV603;
-  if(typeof antigoAtualizar==='function')window.atualizarAtestadoContatoV603=function(){const r=antigoAtualizar.apply(this,arguments);setTimeout(()=>{const b=document.getElementById('v603EnviarAtestadoContato');if(b)b.textContent='Enviar PDF ao WhatsApp';},0);return r};
-})();
-</script>
-
-
-<script id="v692-pdf-bridge-final">
-(function(){
-  'use strict';
-  window.CHANCELARIA_VERSION='7.0.6';
-  const PDF_BASE='file:///android_asset/imprimir.html?v=7.0.6';
-  let pendente=null;
-  let timeoutPdf=0;
-
-  function ponte(){
-    try{if(typeof obterPonteKodular==='function')return obterPonteKodular()}catch(_e){}
-    if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
-    if(window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')return window.AppInventor;
-    return null;
-  }
-  function localPdfUrl(url){
-    try{
-      const antiga=new URL(String(url||''),location.href),nova=new URL(PDF_BASE);
-      antiga.searchParams.forEach((v,k)=>nova.searchParams.set(k,v));
-      nova.searchParams.set('v','7.0.6');
-      nova.hash=antiga.hash;
-      return nova.href;
+      const src=new URL(String(url||''),location.href),dst=new URL(PDF_ASSET);
+      src.searchParams.forEach((v,k)=>dst.searchParams.set(k,v));
+      dst.searchParams.set('v','7.1.1');dst.searchParams.delete('sharephone');dst.searchParams.delete('wa');dst.hash=src.hash;
+      return dst.href;
     }catch(_e){return String(url||'')}
   }
-  function normalizar(t){try{return typeof numeroWhatsApp==='function'?numeroWhatsApp(t||''):String(t||'').replace(/\\D/g,'')}catch(_e){return ''}}
-  function slug(t,p='DOCUMENTO'){try{return String(t||p).normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^A-Za-z0-9]+/g,'-').replace(/^-+|-+$/g,'').toUpperCase()||p}catch(_e){return p}}
-  function iniciarStatus(tipo,nome){
-    pendente={tipo,nome,ts:Date.now()};clearTimeout(timeoutPdf);
-    timeoutPdf=setTimeout(()=>{if(!pendente)return;window.chancelariaPdfResultadoV692('error','O PDF não respondeu em 25 segundos. Tente novamente.');},25000);
+  function pulsarV710(ponte,cmd,delay=180){
+    ponte.setWebViewString('00'+Date.now());
+    setTimeout(()=>{try{ponte.setWebViewString(cmd)}catch(_e){}},delay);
   }
-  window.chancelariaPdfResultadoV692=function(status,mensagem){
-    clearTimeout(timeoutPdf);timeoutPdf=0;const p=pendente;pendente=null;
-    const msg=String(mensagem||'');
-    try{
-      if(status==='started'){toast(p&&p.tipo==='whatsapp'?'WhatsApp aberto com o PDF preparado.':'Compartilhamento Android aberto.');return}
-      if(status==='error'){toast(msg||'Não foi possível preparar ou compartilhar o PDF.');return}
-      if(status==='ready'){toast('PDF preparado.');return}
-    }catch(_e){}
-  };
-  function enviar(prefixo,payload,tipo,nome){
-    const b=ponte();if(!b||!payload)return false;
-    try{
-      iniciarStatus(tipo,nome);
-      const comando=String(prefixo||'')+String(payload);
-      b.setWebViewString('00'+Date.now());
-      setTimeout(()=>{
-        try{b.setWebViewString(comando)}
-        catch(e){window.chancelariaPdfResultadoV692('error',e&&e.message||'Falha ao enviar o comando do PDF.')}
-      },120);
+  function emitirPdfV710(url,nome,tipo='RELATORIO',destino='GRUPO'){
+    const ponte=ponteV710();
+    if(!url){toast('Documento não localizado');return false}
+    if(!ponte){
+      try{const u=new URL(url,location.href);u.searchParams.set('print','1');location.href=u.href}catch(_e){location.href=url}
       return true;
-    }catch(e){window.chancelariaPdfResultadoV692('error',e&&e.message);return false}
+    }
+    try{
+      if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
+      const u=urlLocalPdfV710(url),arquivo=(String(nome||'Documento.pdf').replace(/[\/:*?"<>|]/g,'-')||'Documento.pdf');
+      const sig=assinaturaPdfV711(u,arquivo,tipo),cache=cachePdfV711();
+      if(cache&&cache.sig===sig&&Date.now()-Number(cache.ts||0)<15*60*1000){
+        ponte.setWebViewString('00'+Date.now());setTimeout(()=>{try{ponte.setWebViewString('RS'+Date.now())}catch(_e){}},120);
+        toast(destino==='INDIVIDUAL'?'Reutilizando o PDF já gerado. Selecione o destinatário individual.':'Reutilizando o PDF já gerado. Selecione o grupo da Loja.');return true;
+      }
+      try{sessionStorage.setItem(PDF_PENDING_KEY,JSON.stringify({sig,ts:Date.now()}))}catch(_e){}
+      ponte.setWebViewString('00'+Date.now());
+      setTimeout(()=>{try{ponte.setWebViewString('NI'+arquivo)}catch(_e){}},90);
+      setTimeout(()=>{try{ponte.setWebViewString((tipo==='ATESTADO'?'SI':'PI')+u)}catch(_e){}},240);
+      toast(destino==='INDIVIDUAL'?'PDF preparado. Selecione o destinatário individual no compartilhamento.':'PDF preparado. No WhatsApp, selecione o grupo da Loja.');
+      return true;
+    }catch(e){console.error(e);toast('Não foi possível iniciar o PDF.');return false}
   }
-  async function prepararExterno(){try{if(typeof prepararRetornoExternoV690==='function')await prepararRetornoExternoV690()}catch(_e){}}
-  function visita(id){try{return (getVisitantesV5()||[]).find(x=>x.id===id)||null}catch(_e){return null}}
-  function irmao(id){try{return (getIrmaos()||[]).find(x=>x.id===id)||null}catch(_e){return null}}
-  function urlAtestado(x,nativo=true,incluirTelefone=false){
+  function visualizarAtestadoV710(url,nome){
+    const ponte=ponteV710();if(!ponte){location.href=url;return true}
+    try{const u=urlLocalPdfV710(url);ponte.setWebViewString('00'+Date.now());setTimeout(()=>{try{ponte.setWebViewString('NI'+String(nome||'Documento.pdf'))}catch(_e){}},80);setTimeout(()=>{try{ponte.setWebViewString('VI'+u)}catch(_e){}},210);return true}catch(_e){return false}
+  }
+  function irmaoV710(id){try{return (getIrmaos()||[]).find(x=>x.id===id)||null}catch(_e){return null}}
+  function visitaV710(id){try{return (getVisitantesV5()||[]).find(x=>x.id===id)||null}catch(_e){return null}}
+  function nomeAtestadoV710(x){return typeof nomeArquivoAtestadoV5817==='function'?nomeArquivoAtestadoV5817(x):`ATESTADO-${slugV710(x?.nome,'VISITANTE')}.pdf`}
+  function urlAtestadoV710(x){
     if(!x)throw new Error('Atestado não localizado.');
     if(typeof garantirNumeroCertificadoV53==='function')garantirNumeroCertificadoV53(x);
-    let base=typeof window.__urlAtestadoV603==='function'?window.__urlAtestadoV603(x,false):'';
-    if(!base)throw new Error('Não foi possível montar o atestado.');
-    const u=new URL(localPdfUrl(base));
-    if(nativo)u.searchParams.set('nativepdf','1');else u.searchParams.delete('nativepdf');
-    u.searchParams.delete('embed');
-    const nome=typeof nomeArquivoAtestadoV5817==='function'?nomeArquivoAtestadoV5817(x):`RZ-0000-${new Date().getFullYear()}-${slug(x.nome,'IRMAO')}.pdf`;
-    u.searchParams.set('filename',nome);
-    const tel=normalizar(x.telefone||'');
-    if(incluirTelefone&&tel)u.searchParams.set('sharephone',tel);else u.searchParams.delete('sharephone');
-    return {url:u.href,nome,tel};
+    let u=typeof window.__urlAtestadoV603==='function'?window.__urlAtestadoV603(x,false):'';
+    if(!u&&typeof montarUrlVisualizacaoV590==='function')u=montarUrlVisualizacaoV590(x);
+    if(!u)throw new Error('Não foi possível montar o atestado.');
+    const z=new URL(u,location.href);z.searchParams.set('nativepdf','1');z.searchParams.set('filename',nomeAtestadoV710(x));z.searchParams.delete('sharephone');z.searchParams.delete('wa');return z.href;
   }
-  function urlRelatorio(payload,i,incluirTelefone=false){
-    const u=new URL(localPdfUrl(urlRelatorioParaImpressao(payload.titulo,payload.corpo,false,payload)));u.searchParams.set('nativepdf','1');
-    const ano=new Date().getFullYear();
-    const nome=payload.tipo==='individual'?`RELATORIO-INDIVIDUAL-${ano}-${slug(i&&i.nome,'IRMAO')}.pdf`:`RELATORIO-COLETIVO-${ano}-RAZAO-E-FORCA-1997.pdf`;
-    u.searchParams.set('filename',nome);
-    const tel=normalizar(i&&i.telefone||'');
-    if(incluirTelefone&&tel)u.searchParams.set('sharephone',tel);else u.searchParams.delete('sharephone');
-    return {url:u.href,nome,tel};
+  function urlRelatorioV710(payload,i){
+    const z=new URL(urlRelatorioParaImpressao(payload.titulo,payload.corpo,false,payload),location.href);z.searchParams.set('nativepdf','1');
+    const nome=payload.tipo==='individual'?`RELATORIO-INDIVIDUAL-${new Date().getFullYear()}-${slugV710(i?.nome,'IRMAO')}.pdf`:`RELATORIO-${slugV710(payload.tipo||'COLETIVO')}-${new Date().getFullYear()}-RAZAO-E-FORCA-1997.pdf`;
+    z.searchParams.set('filename',nome);z.searchParams.delete('sharephone');z.searchParams.delete('wa');return {url:z.href,nome};
   }
 
-  // Compartilhar PDF usa PX/SX sem sharephone e sempre abre o Sharesheet Android.
-  // Envio direto usa PD/SD com sharephone e permanece exclusivo do WhatsApp.
-  window.compartilharIndividualPDFV602=async function(){
-    const id=document.getElementById('relIrmao')?.value||'';const i=irmao(id);if(!i){toast('Selecione um Irmão');return}
-    const p={titulo:'Relatório individual',corpo:corpoRelatorioIndividual(i),tipo:'individual',irmaoId:i.id};window.pendingPrintPayload=p;
-    await prepararExterno();const d=urlRelatorio(p,i);if(enviar('PX',d.url,'generic',d.nome)){toast('Preparando o PDF para compartilhar...');return}toast('Não foi possível iniciar o PDF.');
+  const PDF_REUSE_KEY='chancelaria1997_pdf_reuse_v711';
+  const PDF_PENDING_KEY='chancelaria1997_pdf_pending_v711';
+  function assinaturaPdfV711(url,nome,tipo){
+    let base=String(url||'');
+    try{
+      const z=new URL(base,location.href),raw=String(z.hash||'').replace(/^#/,'');
+      if(raw){
+        let b64=raw.replace(/-/g,'+').replace(/_/g,'/');while(b64.length%4)b64+='=';
+        const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+        const obj=JSON.parse(new TextDecoder().decode(bytes));
+        const limpar=v=>{if(Array.isArray(v))return v.map(limpar);if(v&&typeof v==='object'){const o={};Object.keys(v).sort().forEach(k=>{if(!['geradoEm','generatedAt'].includes(k))o[k]=limpar(v[k])});return o}return v};
+        z.hash='';base=z.href+'#'+JSON.stringify(limpar(obj));
+      }
+    }catch(_e){}
+    return [String(tipo||''),String(nome||''),base].join('\u241f');
+  }
+  function cachePdfV711(){try{return JSON.parse(sessionStorage.getItem(PDF_REUSE_KEY)||'null')}catch(_e){return null}}
+  function marcarRetornoPdfV711(){
+    try{const p=JSON.parse(sessionStorage.getItem(PDF_PENDING_KEY)||'null');if(!p||!p.sig)return;if(Date.now()-Number(p.ts||0)<1200)return;sessionStorage.setItem(PDF_REUSE_KEY,JSON.stringify({sig:p.sig,ts:Date.now()}));sessionStorage.removeItem(PDF_PENDING_KEY)}catch(_e){}
+  }
+  window.addEventListener('pageshow',()=>setTimeout(marcarRetornoPdfV711,0));window.addEventListener('focus',()=>setTimeout(marcarRetornoPdfV711,0));
+
+  /* Regra central: relatório individual e atestado de visitante são individuais. Os demais documentos seguem ao grupo. */
+  window.compartilharIndividualPDFV602=function(){
+    const i=irmaoV710(document.getElementById('relIrmao')?.value||'');if(!i){toast('Selecione um Irmão');return}
+    const p={titulo:'Relatório individual',corpo:corpoRelatorioIndividual(i),tipo:'individual',irmaoId:i.id};window.pendingPrintPayload=p;const d=urlRelatorioV710(p,i);emitirPdfV710(d.url,d.nome,'RELATORIO','INDIVIDUAL');
   };
-  window.compartilharGeralPDFV602=async function(){
-    const p={titulo:'Relatório coletivo',corpo:corpoRelatorioGeral(),tipo:'coletivo'};window.pendingPrintPayload=p;
-    await prepararExterno();const d=urlRelatorio(p,null);if(enviar('PX',d.url,'generic',d.nome)){toast('Preparando o PDF para compartilhar...');return}toast('Não foi possível iniciar o PDF.');
+  window.compartilharIndividualContatoV603=window.compartilharIndividualPDFV602;
+  window.compartilharGeralPDFV602=function(){const p={titulo:'Relatório coletivo',corpo:corpoRelatorioGeral(),tipo:'coletivo'};window.pendingPrintPayload=p;const d=urlRelatorioV710(p,null);emitirPdfV710(d.url,d.nome,'RELATORIO','GRUPO')};
+  window.compartilharSessaoConsultadaV711=function(){
+    const s=typeof sessaoConsultada==='function'?sessaoConsultada():null;if(!s){toast('Sessão não encontrada');return}
+    const p={titulo:'Relatório de sessão',corpo:corpoRelatorioSessao(s),tipo:'sessao',sessaoId:s.id,assinatura:assinaturaDuplaHTML('Venerável Mestre'),assinaturaClasse:'dual-signature',rodape:`Documento emitido pela Chancelaria da A∴R∴L∴S∴ Razão e Força Nº 1997. A relação considera os registros gravados para esta sessão.`};
+    window.pendingPrintPayload=p;const d=urlRelatorioV710(p,null);emitirPdfV710(d.url,d.nome,'RELATORIO','GRUPO');
   };
-  window.compartilharPreviewRelatorioV588=async function(){
-    const p=window.pendingPrintPayload;if(!p){toast('Gere o relatório novamente');return}
-    const i=p.tipo==='individual'?irmao(p.irmaoId):null;await prepararExterno();const d=urlRelatorio(p,i);if(enviar('PX',d.url,'generic',d.nome)){toast('Preparando o PDF para compartilhar...');return}toast('Não foi possível iniciar o PDF.');
-  };
-  window.compartilharIndividualContatoV603=async function(){
-    const id=document.getElementById('relIrmao')?.value||window.pendingPrintPayload?.irmaoId||'';const i=irmao(id);if(!i){toast('Selecione um Irmão');return}
-    const p={titulo:'Relatório individual',corpo:corpoRelatorioIndividual(i),tipo:'individual',irmaoId:i.id};window.pendingPrintPayload=p;const d=urlRelatorio(p,i,true);
-    if(!d.tel){toast('Cadastre o telefone/WhatsApp deste Irmão');return}await prepararExterno();if(enviar('PD',d.url,'whatsapp',d.nome)){toast('Preparando o PDF para o WhatsApp de '+String(i.nome||'').trim().split(/\\s+/)[0]);return}toast('Não foi possível iniciar o envio.');
-  };
-  window.compartilharPdfVisitanteV585=async function(id=''){
-    const x=id?visita(id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);if(!x){toast('Atestado não localizado');return}
-    const d=urlAtestado(x,true);await prepararExterno();if(enviar('SX',d.url,'generic',d.nome)){toast('Preparando o PDF para compartilhar...');return}toast('Não foi possível iniciar o PDF.');
-  };
+  window.compartilharPreviewRelatorioV588=function(){const p=window.pendingPrintPayload;if(!p){toast('Gere o relatório novamente');return}const i=p.tipo==='individual'?irmaoV710(p.irmaoId):null;const d=urlRelatorioV710(p,i);emitirPdfV710(d.url,d.nome,'RELATORIO',p.tipo==='individual'?'INDIVIDUAL':'GRUPO')};
+  window.compartilharPdfVisitanteV585=function(id=''){const x=id?visitaV710(id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);if(!x){toast('Atestado não localizado');return}try{emitirPdfV710(urlAtestadoV710(x),nomeAtestadoV710(x),'ATESTADO','INDIVIDUAL')}catch(e){toast(e.message||'Não foi possível preparar o atestado')}};
   window.compartilharCertificadoVisitanteV5=window.compartilharPdfVisitanteV585;
-  window.compartilharAtestadoAtualV603=function(){const id=window.__v603AtestadoId||'';if(!id){toast('Atestado não localizado');return}return window.compartilharPdfVisitanteV585(id)};
-  window.compartilharAtestadoContatoV603=async function(id=''){
-    const x=id?visita(id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);if(!x){toast('Atestado não localizado');return}
-    const d=urlAtestado(x,true,true);if(!d.tel){toast('Cadastre o telefone/WhatsApp do destinatário');return}await prepararExterno();
-    if(enviar('SD',d.url,'whatsapp',d.nome)){toast('Preparando o PDF para o WhatsApp de '+String(x.nome||'').trim().split(/\\s+/)[0]);return}toast('Não foi possível iniciar o envio.');
-  };
-  window.certificadoVisitanteV5=function(id=''){
-    const x=id?visita(id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);if(!x){toast('Atestado não localizado');return}
-    try{const d=urlAtestado(x,true);window.__v603AtestadoId=x.id;if(enviar('VI',d.url,'view',d.nome)){clearTimeout(timeoutPdf);pendente=null;toast('Abrindo o atestado...');return}toast('Não foi possível abrir o visualizador de PDF.')}catch(e){toast(e&&e.message||'Não foi possível abrir o atestado')}
-  };
-  window.enviarCertificadoVisitanteV572=window.compartilharAtestadoContatoV603;
+  window.compartilharAtestadoAtualV603=function(){const id=window.__v603AtestadoId||'';if(!id){toast('Atestado não localizado');return}window.compartilharPdfVisitanteV585(id)};
+  window.compartilharAtestadoContatoV603=window.compartilharAtestadoAtualV603;
+  window.enviarCertificadoVisitanteV572=window.compartilharPdfVisitanteV585;
+  window.certificadoVisitanteV5=function(id=''){const x=id?visitaV710(id):(typeof visitanteCertificadoAtual==='function'?visitanteCertificadoAtual():null);if(!x){toast('Atestado não localizado');return}try{window.__v603AtestadoId=x.id;visualizarAtestadoV710(urlAtestadoV710(x),nomeAtestadoV710(x))}catch(e){toast(e.message||'Não foi possível abrir o atestado')}};
 
-  // Ajusta os botões já renderizados sem criar observadores recursivos.
-  function ligar(){
-    const a=document.getElementById('btnCompartilharIndividualContatoV603');if(a)a.onclick=window.compartilharIndividualContatoV603;
-    const b=document.getElementById('btnPreviewContatoV603');if(b)b.onclick=window.compartilharIndividualContatoV603;
-    const c=document.getElementById('v603EnviarAtestadoContato');if(c)c.onclick=()=>window.compartilharAtestadoContatoV603(window.__v603AtestadoId||'');
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.0.6';
+  /* V7.1.1: felicitação automática restrita a aniversário natalício. Dados de ingresso permanecem no cadastro e nos relatórios. */
+  function configurarModalGrupoV710(ctx,titulo,texto){
+    contextoFelicitacaoV710=ctx;mensagemDestinoIrmaoId='';msgTitulo.textContent=titulo;msgTexto.value=texto;
+    const wa=document.getElementById('msgWhatsButton');if(wa){wa.textContent='Enviar texto ao grupo';wa.title='Abra o WhatsApp e selecione o grupo da Loja'}
+    const pdf=document.getElementById('msgBirthdayPdfButton');if(pdf){pdf.style.display=ctx?'inline-flex':'none';pdf.textContent='Enviar certificado de aniversário ao grupo';pdf.title='Gerar o certificado de aniversário e selecionar o grupo da Loja'}
+    abrirModal('modalMensagem');
   }
-  document.addEventListener('DOMContentLoaded',ligar);setTimeout(ligar,0);
-  document.addEventListener('chancelaria:refresh-actions',ligar);
-  const rebindV699=new MutationObserver(()=>{clearTimeout(window.__v699RebindTimer);window.__v699RebindTimer=setTimeout(ligar,60)});
-  try{rebindV699.observe(document.body,{childList:true,subtree:true})}catch(_e){}
+  window.mensagemAniversario=function(irmaoId,tipo,nome){
+    const i=irmaoV710(irmaoId);if(!i)return;let texto='',pessoa=nome||i.nome,t=tipo||'Irmão';
+    if(t==='Irmão')texto=mensagemPessoa('Irmão',i.nome,i.nome);
+    else if(t==='Cunhada')texto=mensagemPessoa('Cunhada',i.familia?.esposa?.nome||pessoa,i.nome);
+    else{const f=(i.familia?.filhos||[]).find(x=>x.nome===pessoa)||(i.familia?.filhos||[])[0];if(!f)return;texto=mensagemPessoa(labelFilho(f),f.nome,i.nome,f.sexo);pessoa=f.nome;t=labelFilho(f)}
+    configurarModalGrupoV710({kind:'aniversario',irmaoId:i.id,nome:pessoa,tipo:t},'Felicitação para o grupo',texto);
+  };
+  window.mensagemPessoaPorDados=function(tipo,id){const i=irmaoV710(id);if(!i)return;window.mensagemAniversario(id,tipo,tipo==='Irmão'?i.nome:(i.familia?.esposa?.nome||''))};
+  window.mensagemFilho=function(id,idx){const i=irmaoV710(id),f=i&&(i.familia?.filhos||[])[idx];if(!f)return;window.mensagemAniversario(id,labelFilho(f),f.nome)};
+  const mensagemDataBaseV710=window.mensagemData;
+  window.mensagemData=function(id){contextoFelicitacaoV710=null;const r=mensagemDataBaseV710(id);setTimeout(()=>{mensagemDestinoIrmaoId='';const wa=document.getElementById('msgWhatsButton');if(wa){wa.textContent='Enviar texto ao grupo';wa.title='Selecione o grupo da Loja no WhatsApp'}const pdf=document.getElementById('msgBirthdayPdfButton');if(pdf)pdf.style.display='none'},0);return r};
+  window.compartilharMensagem=function(){
+    const texto=String(msgTexto.value||'').trim();if(!texto){toast('A mensagem está vazia');return}
+    mensagemDestinoIrmaoId='';
+    if(enviarAcaoNativa('W',texto)){toast('WhatsApp aberto. Selecione o grupo da Loja.');return}
+    const url='https://wa.me/?text='+encodeURIComponent(texto);if(navigator.share){iniciarAcaoExterna();navigator.share({text:texto}).then(finalizarAcaoExterna).catch(()=>{finalizarAcaoExterna();location.href=url})}else{iniciarAcaoExterna();location.href=url}
+  };
+  function payloadFelicitacaoV710(ctx){
+    const titulo='FELIZ ANIVERSÁRIO';
+    return {titulo,documentClass:'birthday-art-v630',aniversario:{titulo,nome:ctx.nome||'',tipo:ctx.tipo||'Irmão',mensagem:String(msgTexto.value||'').trim(),data:new Date().toLocaleDateString('pt-BR'),loja:'A∴R∴L∴S∴ Razão e Força nº 1997',cidade:'Porto Murtinho/MS'},assinatura:'',rodape:''};
+  }
+  window.compartilharFelicitacaoPDFV690=function(){
+    const ctx=contextoFelicitacaoV710;if(!ctx){toast('Selecione uma felicitação');return}
+    const payload=payloadFelicitacaoV710(ctx),u=new URL('imprimir.html',location.href),ano=new Date().getFullYear();u.searchParams.set('nativepdf','1');
+    const nome=`FELICITACAO-RZ-1997-${ano}-${slugV710(ctx.nome,'IRMAO')}.pdf`;u.searchParams.set('filename',nome);u.hash=codificarBase64UrlUtf8(JSON.stringify(payload));emitirPdfV710(u.href,nome,'ATESTADO','GRUPO');
+  };
+
+  /* Ajustes administrativos sem mudança de dados. */
+  function ajustarAcoesV710(){
+    const rb=document.getElementById('securityRestoreBox');if(rb)rb.style.display='none';
+    const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi)bi.textContent='Compartilhar individualmente';
+    const bp=document.getElementById('btnPreviewContatoV603');if(bp)bp.textContent='Compartilhar individualmente';
+    const va=document.getElementById('v603EnviarAtestadoContato');if(va)va.textContent='Compartilhar individualmente';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.1.1';
+  }
+  document.addEventListener('DOMContentLoaded',ajustarAcoesV710);setTimeout(ajustarAcoesV710,0);
+  try{audit('Aplicativo atualizado','Núcleo 7.1.1 · prontidão real do PDF · paginação protegida · visitantes corrigidos')}catch(_e){}
 })();
 </script>
-
 
 </body>
 </html>
