@@ -50,3 +50,17 @@ Publique os 10 arquivos do ZIP na raiz do GitHub Pages. Depois feche e abra o ap
 3. Escolha WhatsApp no seletor e confirme o documento anexado.
 4. Repita com relatório individual, coletivo e de sessão.
 5. Gere o certificado de aniversário e confira enquadramento, textos e marca d'água.
+
+
+## Núcleo 7.2.1 auditado
+
+Base funcional preservada: 7.2.0 estável sobre 6.1.6.
+
+Ajustes desta revisão:
+
+1. impressão nativa usa a cópia empacotada de imprimir.html para impedir regressão por cache ou versão remota
+2. trava curta contra duplo disparo do mesmo PDF
+3. aniversários e aniversários de filiação oferecem texto ou certificado para compartilhamento em grupo
+4. atestado de visitante e relatório individual permanecem fluxos individuais
+5. ações diretas de WhatsApp no cadastro de visitante foram retiradas da interface
+6. estrutura de banco, prefixo de armazenamento, pacote Android, IDs e extensões de PDF foram preservados

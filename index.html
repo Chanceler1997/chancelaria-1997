@@ -537,7 +537,7 @@ main{padding-top:12px}.hero{padding:0;background:transparent;border:0;box-shadow
 
 
 /* V5.5 — certificado em imagem e contato do visitante */
-.visitor-actions-v55{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.visitor-actions-v55{display:grid;grid-template-columns:1fr;gap:9px}
 .visitor-actions-v55 .btn{width:100%;min-height:44px}
 .certificate-image-modal .modal{max-width:620px;background:#0c1728;border:1px solid rgba(201,168,76,.45)}
 .certificate-image-modal .modal-head{color:#f4d77a;background:#101f35;border-bottom:1px solid rgba(201,168,76,.35)}
@@ -2227,8 +2227,19 @@ function aniversarios(dias=365){
   }
   return out.filter(a=>a.dias<=dias).sort((a,b)=>a.dias-b.dias||a.nome.localeCompare(b.nome));
 }
+function filiacoes(dias=365){
+  const hoje=new Date();hoje.setHours(0,0,0,0);const out=[];
+  for(const i of getIrmaos()){
+    if(i.tipoIngresso!=='F'||!/^\d{4}-\d{2}-\d{2}$/.test(String(i.dataIngresso||'')))continue;
+    const [ano,mes,dia]=String(i.dataIngresso).split('-').map(Number),restam=diasAte(i.dataIngresso,1);
+    if(restam>dias)continue;
+    let alvoAno=hoje.getFullYear(),alvo=new Date(alvoAno,mes-1,dia);if(alvo<hoje)alvoAno++;
+    out.push({kind:'filiacao',tipo:'Filiação',nome:i.nome,data:i.dataIngresso,dias:restam,irmaoId:i.id,anos:Math.max(0,alvoAno-ano)});
+  }
+  return out.sort((a,b)=>a.dias-b.dias||a.nome.localeCompare(b.nome,'pt-BR'));
+}
 function datasProximas(dias=365){return getDatas().map(d=>({...d,kind:'data',dias:diasAte(d.data,d.recorrente)})).filter(d=>d.dias<=dias).sort((a,b)=>a.dias-b.dias||a.nome.localeCompare(b.nome))}
-function todasOcorrencias(dias=365){return [...aniversarios(dias),...datasProximas(dias)].sort((a,b)=>a.dias-b.dias||a.nome.localeCompare(b.nome))}
+function todasOcorrencias(dias=365){return [...aniversarios(dias),...filiacoes(dias),...datasProximas(dias)].sort((a,b)=>a.dias-b.dias||a.nome.localeCompare(b.nome,'pt-BR'))}
 
 function renderInicio(){
   renderPeriodoRGF();
@@ -2242,7 +2253,7 @@ function renderInicio(){
   document.getElementById('inicio-painel').innerHTML=painel.join('');
   document.getElementById('st-irmaos').textContent=ir.length;document.getElementById('st-sessoes').textContent=ss.filter(s=>s.data&&s.data<=hojeISO()).length;document.getElementById('st-alertas').textContent=alertas.length;document.getElementById('st-datas').textContent=datas.length;
   const proxSess=ss.filter(s=>s.data>=hojeISO()).sort((a,b)=>a.data.localeCompare(b.data))[0]||ss.slice().sort((a,b)=>b.data.localeCompare(a.data))[0];
-  const an=aniversarios(7);document.getElementById('inicio-aniversarios').innerHTML=an.length?`<div class="card"><div class="card-head">🎂 Aniversários nos próximos 7 dias</div><div class="card-body">${an.map(cardAniv).join('')}</div></div>`:'';
+  const an=aniversarios(7),fi=filiacoes(7);document.getElementById('inicio-aniversarios').innerHTML=(an.length?`<div class="card"><div class="card-head">🎂 Aniversários nos próximos 7 dias</div><div class="card-body">${an.map(cardAniv).join('')}</div></div>`:'')+(fi.length?`<div class="card"><div class="card-head">📜 Filiações nos próximos 7 dias</div><div class="card-body">${fi.map(cardFiliacao).join('')}</div></div>`:'');
   document.getElementById('inicio-proxima-sessao').innerHTML=proxSess?`<div class="card"><div class="card-head">📋 ${proxSess.data>=hojeISO()?'Próxima sessão':'Última sessão'}</div><div class="card-body"><div class="item-title">${h(proxSess.numero||descricaoSessao(proxSess))}</div><div class="item-sub">${brData(proxSess.data)} · ${descricaoSessao(proxSess)}</div><div class="toolbar" style="margin-top:10px;margin-bottom:0"><button class="btn btn-primary btn-sm" onclick="abrirPresenca('${proxSess.id}')">Fazer chamada</button><button class="btn btn-light btn-sm" onclick="editarSessao('${proxSess.id}')">Editar</button></div></div></div>`:'';
   const pd=datasProximas(365)[0];document.getElementById('inicio-proxima-data').innerHTML=pd?cardData(pd,true):'';
   document.getElementById('inicio-alertas').innerHTML=alertas.length?`<div class="card"><div class="card-head">⚠️ Art. 76 do RGF</div><div class="card-body">${alertas.map(i=>{const f=calcFreq(i);return `<div class="alert"><div class="name">${h(i.nome)} ${grauBadge(i.grau)}</div><div class="txt">Falta: ${f.pctFalta}% · ${f.falta} de ${f.total} sessões na janela móvel RGF ${f.periodoTexto}. Atingiu o limite administrativo de 50% previsto no RGF. Gerar notificação não declara irregularidade automática.</div><button class="btn btn-warning btn-sm" style="margin-top:8px" onclick="abrirProcessoFrequencia('${i.id}')">Abrir procedimento</button></div>`}).join('')}</div></div>`:'';
@@ -2472,8 +2483,10 @@ function salvarChamada(){
 }
 
 function abrirSubDatas(t){subDatas=t;['proximas','importantes','todas'].forEach(x=>{document.getElementById('sub-'+x).style.display=x===t?'block':'none';document.getElementById('tab-'+x).classList.toggle('active',x===t)});renderDatas()}
-function renderDatas(){const prox=todasOcorrencias(30);document.getElementById('sub-proximas').innerHTML=prox.length?prox.map(o=>o.kind==='data'?cardData(o,false):cardAniv(o)).join(''):'<div class="empty"><div class="icon">📅</div><p>Nenhuma data nos próximos 30 dias.</p></div>';const imp=datasProximas(365);document.getElementById('listaDatasImportantes').innerHTML=imp.length?imp.map(d=>cardData(d,false)).join(''):'<div class="empty"><p>Nenhuma data importante cadastrada.</p></div>';const todos=[...aniversarios(365),...datasProximas(365)].sort((a,b)=>a.dias-b.dias);document.getElementById('listaTodasDatas').innerHTML=todos.length?todos.map(o=>o.kind==='data'?cardData(o,false):cardAniv(o)).join(''):'<div class="empty"><p>Nenhuma ocorrência cadastrada.</p></div>'}
+function cardOcorrencia(o){return o.kind==='data'?cardData(o,false):o.kind==='filiacao'?cardFiliacao(o):cardAniv(o)}
+function renderDatas(){const prox=todasOcorrencias(30);document.getElementById('sub-proximas').innerHTML=prox.length?prox.map(cardOcorrencia).join(''):'<div class="empty"><div class="icon">📅</div><p>Nenhuma data nos próximos 30 dias.</p></div>';const imp=datasProximas(365);document.getElementById('listaDatasImportantes').innerHTML=imp.length?imp.map(d=>cardData(d,false)).join(''):'<div class="empty"><p>Nenhuma data importante cadastrada.</p></div>';const todos=todasOcorrencias(365);document.getElementById('listaTodasDatas').innerHTML=todos.length?todos.map(cardOcorrencia).join(''):'<div class="empty"><p>Nenhuma ocorrência cadastrada.</p></div>'}
 function cardAniv(a){const tipoTela=tipoAniversarioTela(a);return `<div class="list-item"><div class="avatar">${a.tipo==='Irmão'?'🎂':a.tipo==='Cunhada'?'🌹':a.sexo==='F'?'👧':'👦'}</div><div class="item-main"><div class="item-title">${h(a.nome)}</div><div class="item-sub">${h(tipoTela)}${a.irmao&&a.tipo!=='Irmão'?' · Ir. '+h(a.irmao):''} · ${brAniv(a.data)} · ${a.dias===0?'hoje':'em '+a.dias+' dia(s)'}</div></div><button class="btn btn-warning btn-sm" onclick="mensagemAniversario('${jsArg(a.irmaoId)}','${jsArg(a.tipo)}','${jsArg(a.nome)}')">Mensagem</button></div>`}
+function cardFiliacao(a){return `<div class="list-item"><div class="avatar">📜</div><div class="item-main"><div class="item-title">${h(a.nome)}</div><div class="item-sub">Filiação · ${brData(a.data)} · ${a.anos>0?h(a.anos+'º aniversário de filiação'):'aniversário de filiação'} · ${a.dias===0?'hoje':'em '+a.dias+' dia(s)'}</div></div><button class="btn btn-warning btn-sm" onclick="mensagemFiliacao('${jsArg(a.irmaoId)}')">Felicitar</button></div>`}
 function cardData(d,destaque){return `<div class="card"><div class="card-head">${h(d.icone||'🏛️')} ${destaque?'Próxima data importante':h(d.categoria||'Data')}</div><div class="card-body"><div class="item-title">${h(d.nome)}</div><div class="item-sub">${brData(d.data)} · ${d.dias===0?'hoje':'em '+d.dias+' dia(s)'} · ${String(d.recorrente)==='1'?'anual':'única'}</div><div class="toolbar" style="margin-top:10px;margin-bottom:0"><button class="btn btn-warning btn-sm" onclick="mensagemData('${d.id}')">Mensagem</button><button class="btn btn-light btn-sm" onclick="editarData('${d.id}')">Editar</button></div></div></div>`}
 function abrirModalData(id=''){dId.value=id;btnExcluirData.style.display=id?'inline-flex':'none';if(id){const d=getDatas().find(x=>x.id===id);if(!d)return;dNome.value=d.nome;dData.value=d.data;dIcone.value=d.icone||'🏛️';dRec.value=String(d.recorrente??'1');dCategoria.value=d.categoria||'Loja';dMsg.value=d.msg||''}else{dNome.value='';dData.value=hojeISO();dIcone.value='🏛️';dRec.value='1';dCategoria.value='Loja';dMsg.value=''}abrirModal('modalData')}
 function editarData(id){abrirModalData(id)}
@@ -4922,7 +4935,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.0';
+  window.CHANCELARIA_VERSION='7.2.1';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -5007,7 +5020,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   try{
     const alvo=document.querySelector('#centralSeguranca .card-body,#centralSeguranca');
     if(alvo&&!document.getElementById('v600BuildChip')){
-      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 7.2.0';alvo.appendChild(chip);
+      const chip=document.createElement('div');chip.id='v600BuildChip';chip.className='v600-system-chip';chip.textContent='Chancelaria 1997 · núcleo 7.2.1';alvo.appendChild(chip);
     }
   }catch(_e){}
 
@@ -5055,7 +5068,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v603-fluidez-chanceler-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.0';
+  window.CHANCELARIA_VERSION='7.2.1';
   const navStackV603=[];
   let restaurandoV603=false;
 
@@ -5249,7 +5262,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
   };
 
   // Atualiza rótulo visual da versão e o botão Voltar.
-  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.2.0')chip.textContent='Chancelaria 1997 · núcleo 7.2.0';
+  const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.2.1')chip.textContent='Chancelaria 1997 · núcleo 7.2.1';
   const back=document.getElementById('backNowButton');if(back&&!back.querySelector('.back-label'))back.insertAdjacentHTML('beforeend','<span class="back-label">Voltar</span>');
   atualizarBotaoVoltarV603();
 })();
@@ -5272,7 +5285,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v610-pdf-real-share-and-back">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.0';
+  window.CHANCELARIA_VERSION='7.2.1';
   const locks=new Map();
 
   function travaV610(chave,ms=2200){
@@ -5413,7 +5426,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
     const nota=document.getElementById('v603AtestadoContatoNota');if(nota&&window.__v603AtestadoId&&nota.textContent!=='O compartilhamento envia o documento como arquivo PDF pelo Android.')nota.textContent='O compartilhamento envia o documento como arquivo PDF pelo Android.';
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi){bi.onclick=window.compartilharIndividualContatoV603;if(bi.textContent!=='Compartilhar PDF com o Irmão')bi.textContent='Compartilhar PDF com o Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp){bp.onclick=window.compartilharIndividualContatoV603;if(bp.textContent!=='Compartilhar PDF com o Irmão')bp.textContent='Compartilhar PDF com o Irmão'}
-    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.2.0')chip.textContent='Chancelaria 1997 · núcleo 7.2.0';
+    const chip=document.getElementById('v600BuildChip');if(chip&&chip.textContent!=='Chancelaria 1997 · núcleo 7.2.1')chip.textContent='Chancelaria 1997 · núcleo 7.2.1';
   }
   // V6.9.8: o observador é desconectado enquanto limpa a interface.
   // Isso evita realimentação de mutações (textContent/remove) e congelamento da tela de login.
@@ -5438,7 +5451,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v690-session-whatsapp-birthday-and-filenames">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.0';
+  window.CHANCELARIA_VERSION='7.2.1';
   const UI_KEY='arls1997_ui_resume_v690';
   let contextoAniversarioV690=null;
 
@@ -5568,7 +5581,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
   };
 
   function ajustarRotulosV690(){
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.0';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.1';
     const b=document.getElementById('btnCompartilharIndividualContatoV603');if(b){const i=irmaoV690(document.getElementById('relIrmao')?.value||'');b.textContent=i?'WhatsApp de '+primeiroV690(i.nome):'WhatsApp do Irmão'}
     const bp=document.getElementById('btnPreviewContatoV603');if(bp)bp.textContent='WhatsApp do Irmão';
     const d=document.getElementById('v603EnviarAtestadoContato');if(d&&window.__v603AtestadoId){const v=visitaV690(window.__v603AtestadoId);if(v)d.textContent='WhatsApp de '+primeiroV690(v.nome)}
@@ -5602,8 +5615,8 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
 <script id="v710-auditoria-final-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.0';
-  const PDF_ASSET='file:///android_asset/imprimir.html?v=7.2.0';
+  window.CHANCELARIA_VERSION='7.2.1';
+  const PDF_ASSET='file:///android_asset/imprimir.html?v=7.2.1';
   let contextoFelicitacaoV710=null;
 
   function ponteV710(){
@@ -5619,7 +5632,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
     try{
       const src=new URL(String(url||''),location.href),dst=new URL(PDF_ASSET);
       src.searchParams.forEach((v,k)=>dst.searchParams.set(k,v));
-      dst.searchParams.set('v','7.2.0');dst.searchParams.delete('sharephone');dst.searchParams.delete('wa');dst.hash=src.hash;
+      dst.searchParams.set('v','7.2.1');dst.searchParams.delete('sharephone');dst.searchParams.delete('wa');dst.hash=src.hash;
       return dst.href;
     }catch(_e){return String(url||'')}
   }
@@ -5630,7 +5643,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
   function tokenPdfV712(sig){
     let h=2166136261>>>0;const str=String(sig||'');for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return 'D'+h.toString(16).padStart(8,'0').toUpperCase();
   }
-  function tipoComandoPdfV712(tipoInterno){return ['ATESTADO_VISITANTE','CERTIFICADO_ANIVERSARIO'].includes(String(tipoInterno||''))?'SI':'PI'}
+  function tipoComandoPdfV712(tipoInterno){return ['ATESTADO_VISITANTE','CERTIFICADO_ANIVERSARIO','CERTIFICADO_FILIACAO'].includes(String(tipoInterno||''))?'SI':'PI'}
   function emitirPdfV710(url,nome,tipoInterno='RELATORIO_COLETIVO',destino='GRUPO',telefoneDireto=''){
     const ponte=ponteV710();
     if(!url){toast('Documento não localizado');return false}
@@ -5642,15 +5655,23 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
       if(typeof prepararRetornoExternoV690==='function')prepararRetornoExternoV690();else if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
       const arquivo=(String(nome||'Documento.pdf').replace(/[\/:*?"<>|]/g,'-')||'Documento.pdf');
       const z=new URL(String(url||''),location.href);
-      z.searchParams.set('v','7.2.0');
+      z.searchParams.set('v','7.2.1');
       z.searchParams.set('nativepdf','1');
       z.searchParams.set('filename',arquivo);
       z.searchParams.set('doctype',String(tipoInterno||''));
-      const comando=tipoComandoPdfV712(tipoInterno);
-      /* v7.2.0 ESTÁVEL: sem TK, RS, DW ou ponte WhatsApp. O fluxo físico volta à v6.1.6. */
+      const individual=['RELATORIO_INDIVIDUAL','ATESTADO_VISITANTE'].includes(String(tipoInterno||'')),destinoFinal=individual?'INDIVIDUAL':'GRUPO';
+      z.searchParams.set('sharemode',destinoFinal);z.searchParams.delete('sharephone');z.searchParams.delete('wa');
+      const sig=assinaturaPdfV711(z.href,arquivo,tipoInterno),agora=Date.now();
+      try{
+        const pendente=JSON.parse(sessionStorage.getItem(PDF_PENDING_KEY)||'null');
+        if(pendente&&pendente.sig===sig&&agora-Number(pendente.ts||0)<2200){toast('Este documento já está sendo preparado.');return false}
+        sessionStorage.setItem(PDF_PENDING_KEY,JSON.stringify({sig,token:tokenPdfV712(sig),tipo:String(tipoInterno||''),nome:arquivo,docid:z.searchParams.get('docid')||'',ts:agora}));
+      }catch(_e){}
+      const comando=tipoComandoPdfV712(tipoInterno),urlRender=urlLocalPdfV710(z.href);
+      /* Núcleo 7.2.1: preserva PI/SI -> PH -> CreatePDF -> PDFCreated -> SharePDF da base estável 7.2.0. */
       ponte.setWebViewString('00'+Date.now());
       setTimeout(()=>{try{ponte.setWebViewString('NI'+arquivo)}catch(_e){}},120);
-      setTimeout(()=>{try{ponte.setWebViewString(comando+z.href)}catch(_e){}},320);
+      setTimeout(()=>{try{ponte.setWebViewString(comando+urlRender)}catch(_e){}},320);
       toast('Preparando PDF...');
       return true;
     }catch(e){console.error(e);toast('Não foi possível iniciar o PDF.');return false}
@@ -5660,13 +5681,14 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
     try{
       const arquivo=(String(nome||'Documento.pdf').replace(/[\/:*?"<>|]/g,'-')||'Documento.pdf');
       const z=new URL(String(url||''),location.href);
-      z.searchParams.set('v','7.2.0');
+      z.searchParams.set('v','7.2.1');
       z.searchParams.set('filename',arquivo);
       z.searchParams.set('doctype','ATESTADO_VISITANTE');
-      /* Visualizar não cria outro PDF. VI abre a página do atestado no WebViewer, como na v6.1.6. */
+      /* Visualizar não cria outro PDF. VI abre o documento local já renderizado no WebViewer. */
+      const urlRender=urlLocalPdfV710(z.href);
       ponte.setWebViewString('00'+Date.now());
       setTimeout(()=>{try{ponte.setWebViewString('NI'+arquivo)}catch(_e){}},100);
-      setTimeout(()=>{try{ponte.setWebViewString('VI'+z.href)}catch(_e){}},260);
+      setTimeout(()=>{try{ponte.setWebViewString('VI'+urlRender)}catch(_e){}},260);
       return true;
     }catch(e){console.error(e);toast('Não foi possível abrir o atestado.');return false}
   }
@@ -5745,8 +5767,9 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
   /* V7.1.2: felicitação automática restrita a aniversário natalício. Dados de ingresso permanecem no cadastro e nos relatórios. */
   function configurarModalGrupoV710(ctx,titulo,texto){
     contextoFelicitacaoV710=ctx;mensagemDestinoIrmaoId='';msgTitulo.textContent=titulo;msgTexto.value=texto;
+    const filiacao=ctx?.kind==='filiacao';
     const wa=document.getElementById('msgWhatsButton');if(wa){wa.textContent='Enviar texto ao grupo';wa.title='Abra o WhatsApp e selecione o grupo da Loja'}
-    const pdf=document.getElementById('msgBirthdayPdfButton');if(pdf){pdf.style.display=ctx?'inline-flex':'none';pdf.textContent='Enviar certificado de aniversário ao grupo';pdf.title='Gerar o certificado de aniversário e selecionar o grupo da Loja'}
+    const pdf=document.getElementById('msgBirthdayPdfButton');if(pdf){pdf.style.display=ctx?'inline-flex':'none';pdf.textContent=filiacao?'Enviar certificado de filiação ao grupo':'Enviar certificado de aniversário ao grupo';pdf.title=filiacao?'Gerar o certificado de filiação e selecionar o grupo da Loja':'Gerar o certificado de aniversário e selecionar o grupo da Loja'}
     abrirModal('modalMensagem');
   }
   window.mensagemAniversario=function(irmaoId,tipo,nome){
@@ -5755,6 +5778,12 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
     else if(t==='Cunhada')texto=mensagemPessoa('Cunhada',i.familia?.esposa?.nome||pessoa,i.nome);
     else{const f=(i.familia?.filhos||[]).find(x=>x.nome===pessoa)||(i.familia?.filhos||[])[0];if(!f)return;texto=mensagemPessoa(labelFilho(f),f.nome,i.nome,f.sexo);pessoa=f.nome;t=labelFilho(f)}
     configurarModalGrupoV710({kind:'aniversario',irmaoId:i.id,nome:pessoa,tipo:t},'Felicitação para o grupo',texto);
+  };
+  window.mensagemFiliacao=function(irmaoId){
+    const i=irmaoV710(irmaoId);if(!i||i.tipoIngresso!=='F'||!i.dataIngresso){toast('Filiação não localizada');return}
+    const item=filiacoes(365).find(x=>x.irmaoId===i.id),anos=item?.anos||0,ordem=anos>0?`${anos}º aniversário de filiação`:'aniversário de filiação';
+    const texto=`A A∴R∴L∴S∴ Razão e Força nº 1997 felicita o Ir∴ ${i.nome} por seu ${ordem}. Receba o abraço fraterno dos Irmãos da Loja, com votos de saúde, paz e continuidade em sua caminhada maçônica.`;
+    configurarModalGrupoV710({kind:'filiacao',irmaoId:i.id,nome:i.nome,tipo:'Irmão',anos,dataIngresso:i.dataIngresso},'Felicitação de filiação para o grupo',texto);
   };
   window.mensagemPessoaPorDados=function(tipo,id){const i=irmaoV710(id);if(!i)return;window.mensagemAniversario(id,tipo,tipo==='Irmão'?i.nome:(i.familia?.esposa?.nome||''))};
   window.mensagemFilho=function(id,idx){const i=irmaoV710(id),f=i&&(i.familia?.filhos||[])[idx];if(!f)return;window.mensagemAniversario(id,labelFilho(f),f.nome)};
@@ -5767,13 +5796,14 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
     const url='https://wa.me/?text='+encodeURIComponent(texto);if(navigator.share){iniciarAcaoExterna();navigator.share({text:texto}).then(finalizarAcaoExterna).catch(()=>{finalizarAcaoExterna();location.href=url})}else{iniciarAcaoExterna();location.href=url}
   };
   function payloadFelicitacaoV710(ctx){
-    const titulo='FELIZ ANIVERSÁRIO';
-    return {titulo,documentClass:'birthday-art-v630',aniversario:{titulo,nome:ctx.nome||'',tipo:ctx.tipo||'Irmão',mensagem:String(msgTexto.value||'').trim(),data:new Date().toLocaleDateString('pt-BR'),loja:'A∴R∴L∴S∴ Razão e Força nº 1997',cidade:'Porto Murtinho/MS'},assinatura:'',rodape:''};
+    const filiacao=ctx?.kind==='filiacao',titulo=filiacao?'ANIVERSÁRIO DE FILIAÇÃO':'FELIZ ANIVERSÁRIO';
+    return {titulo,documentClass:'birthday-art-v630',aniversario:{titulo,nome:ctx.nome||'',tipo:filiacao?'Filiação':(ctx.tipo||'Irmão'),mensagem:String(msgTexto.value||'').trim(),data:new Date().toLocaleDateString('pt-BR'),loja:'A∴R∴L∴S∴ Razão e Força nº 1997',cidade:'Porto Murtinho/MS'},assinatura:'',rodape:''};
   }
   window.compartilharFelicitacaoPDFV690=function(){
     const ctx=contextoFelicitacaoV710;if(!ctx){toast('Selecione uma felicitação');return}
-    const payload=payloadFelicitacaoV710(ctx),u=new URL('imprimir.html',location.href),ano=new Date().getFullYear();u.searchParams.set('nativepdf','1');
-    const nome=`FELICITACAO-RZ-1997-${ano}-${slugV710(ctx.nome,'IRMAO')}.pdf`;u.searchParams.set('filename',nome);u.searchParams.set('doctype','CERTIFICADO_ANIVERSARIO');u.searchParams.set('docid',String(ctx.irmaoId||'')+'|'+String(ctx.tipo||'')+'|'+String(ctx.nome||''));u.hash=codificarBase64UrlUtf8(JSON.stringify(payload));emitirPdfV710(u.href,nome,'CERTIFICADO_ANIVERSARIO','GRUPO');
+    const filiacao=ctx.kind==='filiacao',payload=payloadFelicitacaoV710(ctx),u=new URL('imprimir.html',location.href),ano=new Date().getFullYear();u.searchParams.set('nativepdf','1');
+    const prefixo=filiacao?'FILIACAO':'FELICITACAO',tipo=filiacao?'CERTIFICADO_FILIACAO':'CERTIFICADO_ANIVERSARIO',nome=`${prefixo}-RZ-1997-${ano}-${slugV710(ctx.nome,'IRMAO')}.pdf`;
+    u.searchParams.set('filename',nome);u.searchParams.set('doctype',tipo);u.searchParams.set('docid',String(ctx.irmaoId||'')+'|'+String(ctx.tipo||'')+'|'+String(ctx.nome||''));u.hash=codificarBase64UrlUtf8(JSON.stringify(payload));emitirPdfV710(u.href,nome,tipo,'GRUPO');
   };
 
   /* Ajustes administrativos sem mudança de dados. */
@@ -5781,7 +5811,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
     const rb=document.getElementById('securityRestoreBox');if(rb)rb.style.display='none';
     const bi=document.getElementById('btnCompartilharIndividualContatoV603');if(bi)bi.textContent='Compartilhar individualmente';
     const bp=document.getElementById('btnPreviewContatoV603');if(bp)bp.textContent='Compartilhar individualmente';
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.0';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.1';
   }
   document.addEventListener('DOMContentLoaded',ajustarAcoesV710);setTimeout(ajustarAcoesV710,0);
   try{audit('Aplicativo atualizado','Núcleo 7.2.0 · ações físicas de PDF · parser seguro · PDF identificado')}catch(_e){}
@@ -5797,7 +5827,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
 <script id="v712-sessao-atestado-retorno-final">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.0';
+  window.CHANCELARIA_VERSION='7.2.1';
   function rotuloSessaoV712(s){
     try{return typeof nomeSessaoDocumento==='function'?nomeSessaoDocumento(s):descricaoSessao(s)}catch(_e){return descricaoSessao(s)}
   }
@@ -5814,7 +5844,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
     if(principal){principal.textContent='Compartilhar individualmente';principal.title='Compartilhar o PDF do atestado com um destinatário individual'}
     const secundario=document.getElementById('v603EnviarAtestadoContato');if(secundario)secundario.style.display='none';
     const nota=document.getElementById('v603AtestadoContatoNota');if(nota)nota.textContent='O atestado é um documento individual. Toque em Compartilhar individualmente e escolha o destinatário.';
-    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.0';
+    const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.1';
   }
   function aplicarAjusteAtestadoV712(){try{ajustarAtestadoV712()}catch(_e){}}
   document.addEventListener('DOMContentLoaded',aplicarAjusteAtestadoV712,{once:true});
@@ -5845,106 +5875,23 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
 })();
 </script>
 
+
+<style id="v721-sharing-visitor-audit-style">
+.v603-direct-contact,#v603EnviarAtestadoContato{display:none!important}
+button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
+#modalVisitantesV5 .visitor-actions-v55 button:not(:first-child){display:none!important}
+#listaSessoes .session-list-card{min-height:0!important}
+#listaSessoes .session-card-side{overflow:visible!important}
+</style>
 <script id="v720-estavel-base-616">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.0';
+  window.CHANCELARIA_VERSION='7.2.1';
   try{
     const chip=document.getElementById('v600BuildChip');
-    if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.0 estável';
+    if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.1 auditado';
   }catch(_e){}
 })();
 </script>
-
-<script id="v720r1-botoes-visitantes">
-(function(){
-  'use strict';
-  /* Ajuste restrito sobre a v7.2.0: interface de visitantes e nova rota nativa isolada SD.
-     O fluxo aprovado de Visualizar PDF e Compartilhar PDF genérico da v7.2.0 não é sobrescrito. */
-  function visitas(){try{return getVisitantesV5()||[]}catch(_e){return []}}
-  function perfis(){try{return typeof window.perfisV58==='function'?window.perfisV58():[]}catch(_e){return []}}
-  function visita(id){return visitas().find(v=>v.id===id)||null}
-  function perfil(v){return perfis().find(p=>p.id===v?.perfilId)||null}
-  function telefone(v){const p=perfil(v);return String(p?.telefone||v?.telefone||'').trim()}
-  function numero(v){const t=telefone(v);return typeof numeroWhatsApp==='function'?numeroWhatsApp(t):t.replace(/\D/g,'')}
-  function ponte(){
-    if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
-    if(window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')return window.AppInventor;
-    return null;
-  }
-  function nomePdf(v){
-    if(typeof window.nomeArquivoAtestadoV5817==='function')return window.nomeArquivoAtestadoV5817(v);
-    const n=String(v?.nome||'VISITANTE').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toUpperCase()||'VISITANTE';
-    return `ATESTADO-${n}.pdf`;
-  }
-  function urlPdf(v,nome){
-    if(!v)throw new Error('Atestado não localizado.');
-    if(typeof garantirNumeroCertificadoV53==='function')garantirNumeroCertificadoV53(v);
-    let u=typeof window.__urlAtestadoV603==='function'?window.__urlAtestadoV603(v,false):'';
-    if(!u&&typeof montarUrlVisualizacaoV590==='function')u=montarUrlVisualizacaoV590(v);
-    if(!u)throw new Error('Não foi possível montar o atestado.');
-    const z=new URL(u,location.href);
-    z.searchParams.set('v','7.2.0');
-    z.searchParams.set('nativepdf','1');
-    z.searchParams.set('filename',nome);
-    z.searchParams.set('doctype','ATESTADO_VISITANTE');
-    z.searchParams.set('visitaid',String(v.id||''));
-    z.searchParams.set('visitanteid',String(v.perfilId||''));
-    z.searchParams.set('docid',String(v.id||'')+'|'+String(v.perfilId||''));
-    z.searchParams.delete('sharephone');z.searchParams.delete('wa');
-    return z.href;
-  }
-  window.compartilharPdfContatoV720R1=function(id){
-    const v=visita(id);if(!v){toast('Atestado não localizado');return}
-    const tel=numero(v);if(!tel){toast('Cadastre o telefone/WhatsApp do visitante');return}
-    const p=ponte();if(!p){toast('Envio direto disponível no aplicativo Android');return}
-    try{
-      const nome=nomePdf(v),url=urlPdf(v,nome);
-      if(typeof prepararRetornoExternoV690==='function')prepararRetornoExternoV690();else if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
-      p.setWebViewString('00'+Date.now());
-      setTimeout(()=>{try{p.setWebViewString('DW'+tel)}catch(_e){}},100);
-      setTimeout(()=>{try{p.setWebViewString('NI'+nome)}catch(_e){}},220);
-      setTimeout(()=>{try{p.setWebViewString('SD'+url)}catch(_e){}},420);
-      toast('Preparando PDF para o visitante...');
-    }catch(e){console.error(e);toast(e?.message||'Não foi possível preparar o PDF')}
-  };
-
-  function idDoCard(actions){
-    const b=[...actions.querySelectorAll('button')].find(x=>/\('([^']+)'\)/.test(String(x.getAttribute('onclick')||'')));
-    const m=String(b?.getAttribute('onclick')||'').match(/\('([^']+)'\)/);return m?.[1]||'';
-  }
-  function quatroBotoes(actions,id,origem){
-    if(!actions||!id)return;
-    const v=visita(id);if(!v)return;
-    actions.innerHTML='';
-    const criar=(texto,classe,fn)=>{const b=document.createElement('button');b.className='btn btn-sm '+classe;b.type='button';b.textContent=texto;b.onclick=fn;return b};
-    actions.appendChild(criar('Visualizar PDF','btn-primary',()=>certificadoVisitanteV5(id)));
-    actions.appendChild(criar('Compartilhar PDF','btn-success',()=>window.compartilharPdfContatoV720R1(id)));
-    actions.appendChild(criar('WhatsApp','btn-outline',()=>abrirWhatsAppVisitanteV55(id)));
-    actions.appendChild(criar('Editar','btn-light',()=>{
-      if(origem==='historico'){
-        fecharModal('modalHistoricoAtestadosWeb');
-        abrirVisitantesV5(v.sessaoId||'');
-        setTimeout(()=>editarVisitanteV5(id),0);
-      }else editarVisitanteV5(id);
-    }));
-  }
-  function ajustarHistorico(){
-    document.querySelectorAll('#v600HistoricoLista .v600-history-actions').forEach(actions=>quatroBotoes(actions,idDoCard(actions),'historico'));
-  }
-  function ajustarVisitantes(){
-    document.querySelectorAll('#v5VisLista .visitor-visit-actions').forEach(actions=>quatroBotoes(actions,idDoCard(actions),'visitantes'));
-    const barra=document.querySelector('#modalVisitantesV5 .visitor-actions-v55');
-    if(barra)barra.querySelectorAll('button').forEach(b=>{if(!String(b.getAttribute('onclick')||'').includes('salvarVisitanteV5'))b.remove()});
-  }
-  const rh=window.renderHistoricoAtestadosWeb;
-  if(typeof rh==='function')window.renderHistoricoAtestadosWeb=function(...a){const r=rh.apply(this,a);setTimeout(ajustarHistorico,0);return r};
-  const rv=window.renderVisitantesV5;
-  if(typeof rv==='function')window.renderVisitantesV5=function(...a){const r=rv.apply(this,a);setTimeout(ajustarVisitantes,0);return r};
-  document.addEventListener('DOMContentLoaded',()=>{ajustarHistorico();ajustarVisitantes()});
-  setTimeout(()=>{ajustarHistorico();ajustarVisitantes()},0);
-})();
-</script>
-
 </body>
 </html>
