@@ -1,4 +1,4 @@
-# Chancelaria 1997 — v7.2.3 HOMOLOGAÇÃO
+# Chancelaria 1997 — v7.2.5 HOMOLOGAÇÃO
 
 Esta revisão combina a camada web mais completa da Chancelaria com o motor Android de PDF da v6.1.6, a referência que funcionou fisicamente no Samsung.
 
@@ -29,9 +29,9 @@ Esta revisão combina a camada web mais completa da Chancelaria com o motor Andr
 
 - package: `br.org.razaoeforca.chancelaria1997`
 - main/namespace nativo: `io.kodular.chancelaria1997.Chancelaria1997_V6_0_3_FINAL`
-- VersionName: 7.2.3
+- VersionName: 7.2.4
 - VersionCode: 73
-- URL: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.2.3`
+- URL: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.2.4`
 
 O VersionCode 72 mantém o mesmo package e permite atualização sobre as compilações anteriores.
 
@@ -79,8 +79,15 @@ Alteração funcional restrita a `imprimir.html`:
 Metadados de versão e cache foram atualizados para 7.2.2. Banco, IDs, package Android, Webviewpdfexporter, CreatePDF, PDFCreated e compartilhamento não foram alterados.
 
 
-## v7.2.3 — revisão visual da tela Sessões
+## v7.2.5 — revisão visual da tela Sessões
 
 Alteração pontual de interface. Os cartões de Sessões receberam alinhamento uniforme, espaçamento consistente, melhor quebra de textos, área de indicadores organizada e botões Consultar e Chamada com dimensões equivalentes em telas estreitas.
 
 Nenhuma regra de cadastro, sessão, frequência, banco, PDF ou compartilhamento foi alterada. O arquivo imprimir.html foi preservado integralmente em relação à v7.2.2.
+
+
+## v7.2.5 — cabeçalho fixo
+
+- Cabeçalho principal passa de `position: sticky` para `position: fixed`.
+- Reserva de 58 px no layout geral e 52 px em telas móveis para impedir sobreposição do conteúdo.
+- Rodapé de navegação, tela Sessões, PDFs, banco e compartilhamento permanecem inalterados.
