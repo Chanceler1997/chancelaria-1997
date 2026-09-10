@@ -6202,5 +6202,102 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
 })();
 </script>
 
+
+<style id="v728-relatorios-coletivos-style">
+/* v7.2.8 — clareza dos relatórios coletivos. Sem mudança de cálculo, banco ou motor de PDF. */
+#relatorios .v728-share-note{
+  display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:9px 11px;
+  border:1px solid var(--linha);border-radius:11px;background:#f7f9fc;
+  color:var(--muted);font-size:11px;font-weight:800;line-height:1.35
+}
+#relatorios .v728-share-note strong{color:var(--text)}
+#relatorios .v728-report-summary{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 12px
+}
+#relatorios .v728-report-metric{
+  min-width:0;padding:10px;border:1px solid var(--linha);border-radius:12px;background:#fff
+}
+#relatorios .v728-report-metric b{display:block;font-size:17px;line-height:1.1;color:var(--text)}
+#relatorios .v728-report-metric span{display:block;margin-top:4px;font-size:10px;line-height:1.25;color:var(--muted);font-weight:800}
+#relatorios .v728-report-period{
+  margin:0 0 10px;padding:9px 11px;border-radius:11px;background:#f8f5ed;
+  border:1px solid #dfd4bc;font-size:11px;line-height:1.35;color:#5b513e;font-weight:800
+}
+@media(max-width:520px){
+  #relatorios .v728-report-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+<script id="v728-relatorios-coletivos-final">
+(function(){
+  'use strict';
+  window.CHANCELARIA_VERSION='7.2.8';
+
+  function numeroV728(v){v=Number(v||0);return Number.isFinite(v)?v:0}
+  function metricasV728(){
+    let per={ativo:false,texto:'',completo12:false};
+    try{per=periodoRGFDatas()||per}catch(_e){}
+    let irmaos=[];try{irmaos=getIrmaos()||[]}catch(_e){}
+    const dados=irmaos.map(i=>{try{return {i,f:calcFreq(i)||{}}}catch(_e){return {i,f:{}}}});
+    const ativos=dados.filter(x=>x.f.periodoAtivo);
+    const alertas=ativos.filter(x=>x.f.periodo12&&numeroV728(x.f.total)>0&&numeroV728(x.f.pctFalta)>=50).length;
+    const abonos=ativos.reduce((s,x)=>s+numeroV728(x.f.abonado),0);
+    return {per,irmaos:irmaos.length,ativos:ativos.length,alertas,abonos};
+  }
+  function resumoV728(){
+    const m=metricasV728();
+    if(!m.per.ativo)return '<div class="v728-report-period">Cadastre uma sessão para iniciar a apuração coletiva.</div>';
+    const estado=m.per.completo12?'Base histórica cobrindo a janela móvel':'Base histórica parcial';
+    return `<div class="v728-report-period">${h(m.per.texto||'Período de apuração')} · ${estado}</div><div class="v728-report-summary"><div class="v728-report-metric"><b>${m.irmaos}</b><span>Irmãos cadastrados</span></div><div class="v728-report-metric"><b>${m.ativos}</b><span>Com apuração no período</span></div><div class="v728-report-metric"><b>${m.alertas}</b><span>No limite formal de frequência</span></div><div class="v728-report-metric"><b>${m.abonos}</b><span>Faltas abonadas</span></div></div>`;
+  }
+  function notaDestinoV728(card,tipo){
+    if(!card||card.querySelector('.v728-share-note'))return;
+    const body=card.querySelector('.card-body');if(!body)return;
+    const toolbar=body.querySelector('.report-toolbar');if(!toolbar)return;
+    const d=document.createElement('div');d.className='v728-share-note';
+    d.innerHTML=tipo==='individual'?'Destino do PDF: <strong>compartilhamento individual</strong>.':'Destino do PDF e do resumo: <strong>grupo da Loja</strong>.';
+    toolbar.insertAdjacentElement('beforebegin',d);
+  }
+  function ajustarRelatoriosV728(){
+    const cards=document.querySelectorAll('#relatorios > .card');
+    const individual=[...cards].find(c=>c.querySelector('button[onclick="compartilharIndividualPDFV602()"]'));
+    const coletivo=[...cards].find(c=>c.querySelector('button[onclick="compartilharGeralPDFV602()"]'));
+    notaDestinoV728(individual,'individual');notaDestinoV728(coletivo,'coletivo');
+    const bi=document.querySelector('#relatorios button[onclick="compartilharIndividualPDFV602()"]');
+    if(bi){bi.textContent='Compartilhar individualmente';bi.title='Compartilhar o relatório individual'}
+    const bg=document.querySelector('#relatorios button[onclick="compartilharGeralPDFV602()"]');
+    if(bg){bg.textContent='Compartilhar no grupo';bg.title='Compartilhar o relatório coletivo no grupo da Loja'}
+    const mg=document.querySelector('#relatorios button[onclick="mensagemFrequenciaGeral()"]');
+    if(mg){mg.textContent='Resumo para o grupo';mg.title='Abrir o resumo coletivo para compartilhamento no grupo da Loja'}
+    try{const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.8 homologação'}catch(_e){}
+  }
+
+  const renderBaseV728=window.renderRelatorioGeral;
+  if(typeof renderBaseV728==='function')window.renderRelatorioGeral=function(...args){
+    const r=renderBaseV728.apply(this,args);
+    const el=document.getElementById('relGeral');
+    if(el)el.insertAdjacentHTML('afterbegin',resumoV728());
+    ajustarRelatoriosV728();
+    return r;
+  };
+
+  const compartilharGeralBaseV728=window.compartilharGeralPDFV602;
+  if(typeof compartilharGeralBaseV728==='function')window.compartilharGeralPDFV602=function(...args){
+    let per=null,irmaos=[];try{per=periodoRGFDatas()}catch(_e){}try{irmaos=getIrmaos()||[]}catch(_e){}
+    if(!irmaos.length){toast('Nenhum Irmão cadastrado para o relatório coletivo');return}
+    if(!per||!per.ativo){toast('Cadastre uma sessão para iniciar a apuração coletiva');return}
+    return compartilharGeralBaseV728.apply(this,args);
+  };
+
+  const abrirAbaBaseV728=window.abrirAba;
+  if(typeof abrirAbaBaseV728==='function')window.abrirAba=function(id,...args){
+    const r=abrirAbaBaseV728.call(this,id,...args);
+    if(id==='relatorios')setTimeout(()=>{ajustarRelatoriosV728();try{renderRelatorioGeral()}catch(_e){}},0);
+    return r;
+  };
+
+  document.addEventListener('DOMContentLoaded',()=>{ajustarRelatoriosV728();setTimeout(()=>{try{if(document.getElementById('relatorios')?.classList.contains('active'))renderRelatorioGeral()}catch(_e){}},0)},{once:true});
+  setTimeout(ajustarRelatoriosV728,0);
+})();
+</script>
 </body>
 </html>
