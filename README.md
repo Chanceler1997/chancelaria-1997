@@ -1,17 +1,52 @@
-# Chancelaria 1997 v7.1.7
+# Chancelaria 1997 — v7.2.0 ESTÁVEL
 
-Pacote web correspondente ao AIA v7.1.7.
+Esta revisão combina a camada web mais completa da Chancelaria com o motor Android de PDF da v6.1.6, a referência que funcionou fisicamente no Samsung.
 
-Principais ajustes desta revisão:
+## Mantido da evolução recente
 
-1. Mantém o pacote Android `br.org.razaoeforca.chancelaria1997` e o namespace `io.kodular.chancelaria1997.Chancelaria1997_V6_0_3_FINAL`.
-2. Restaura para a geração o mesmo `Web_Viewer1` visível usado pela v6.1.6, cujo compartilhamento funcionou fisicamente no Samsung.
-3. Executa `TK`, `DW`, `NI` e `PI`, `SI`, `VI` ou `RS`, aguarda `Webviewpdfexporter1.PDFCreated` e só então abre a ação final correspondente.
-4. Mantém separadas as ações `ShareAndroidChooser`, `ShareToWhatsApp` e `OpenPDF`.
-5. Reutiliza o PDF armazenado pela identidade integral do documento e não cria outra cópia quando `RS` encontra a URI válida.
-6. Liga também `WhatsappPdfShare1.AttachBridges` aos dois WebViewers e resolve o `WebView` interno quando o Kodular o entrega dentro de um contêiner Android.
-7. Usa no envio dirigido o telefone permanente e a mesma normalização do botão WhatsApp.
-8. Mantém intactos A4, assinatura na última página, paginação, certificado, atestado e responsividade.
-9. Remove dos botões de PDF o atalho direto que podia ficar aguardando `ChancelariaPDF.ready` e terminar apenas em “Preparando PDF...”.
+- recuperação do cofre e migração dos dados da família `arls1997_` para o namespace atual;
+- histórico completo de atestados;
+- lixeira e restauração;
+- grau visível nos cartões de Sessões;
+- relatórios individual, coletivo e por sessão;
+- certificado de aniversário natalício;
+- certificado-base mais recente com marca d'água;
+- melhorias de Visitantes, frequência, segurança e retorno de ações externas;
+- layout A4 e paginação mais recentes de `imprimir.html`.
 
-GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.7`
+## PDF estabilizado sobre a v6.1.6
+
+- componentes Android e blocos da v6.1.6 preservados;
+- `Webviewpdfexporter` original preservado byte a byte;
+- compartilhamento físico por `PI/SI -> PH -> CreatePDF -> PDFCreated -> SharePDF`;
+- nome do arquivo enviado por `NI`;
+- visualização de atestado por `VI`, sem gerar outra cópia;
+- sem `TK`, `RS` ou `DW` no despacho final da interface;
+- sem `WhatsappPdfShare` e sem extensão específica para anexar PDF ao WhatsApp;
+- o WhatsApp volta a ser escolhido pelo seletor Android após o PDF ser anexado.
+
+## Identidade Android
+
+- package: `br.org.razaoeforca.chancelaria1997`
+- main/namespace nativo: `io.kodular.chancelaria1997.Chancelaria1997_V6_0_3_FINAL`
+- VersionName: 7.2.0
+- VersionCode: 70
+- URL: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.2.0`
+
+O VersionCode 70 foi escolhido para atualizar as compilações 7.1.x usadas nos ensaios sem trocar o package.
+
+## Cache
+
+O service worker trata `index.html` e `imprimir.html` separadamente. Se a rede falhar, a página de impressão usa sua própria cópia em cache. Ela não é substituída pela tela inicial.
+
+## Publicação
+
+Publique os 10 arquivos do ZIP na raiz do GitHub Pages. Depois feche e abra o aplicativo para atualizar o service worker. Compile o AIA no Kodular e instale a atualização sobre o aplicativo existente.
+
+## Ensaio no Samsung
+
+1. Abra um atestado duas vezes. A visualização deve abrir sem criar novas cópias.
+2. Compartilhe o atestado. O seletor Android deve abrir com um PDF anexado.
+3. Escolha WhatsApp no seletor e confirme o documento anexado.
+4. Repita com relatório individual, coletivo e de sessão.
+5. Gere o certificado de aniversário e confira enquadramento, textos e marca d'água.
