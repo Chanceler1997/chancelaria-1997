@@ -6204,7 +6204,7 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
 
 
 <style id="v728-relatorios-coletivos-style">
-/* v7.2.8 — clareza dos relatórios coletivos. Sem mudança de cálculo, banco ou motor de PDF. */
+/* v7.2.9 — CIM em linha única nos relatórios coletivos. Sem mudança de cálculo, banco ou motor de PDF. */
 #relatorios .v728-share-note{
   display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:9px 11px;
   border:1px solid var(--linha);border-radius:11px;background:#f7f9fc;
@@ -6230,7 +6230,7 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
 <script id="v728-relatorios-coletivos-final">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.8';
+  window.CHANCELARIA_VERSION='7.2.9';
 
   function numeroV728(v){v=Number(v||0);return Number.isFinite(v)?v:0}
   function metricasV728(){
@@ -6268,7 +6268,7 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
     if(bg){bg.textContent='Compartilhar no grupo';bg.title='Compartilhar o relatório coletivo no grupo da Loja'}
     const mg=document.querySelector('#relatorios button[onclick="mensagemFrequenciaGeral()"]');
     if(mg){mg.textContent='Resumo para o grupo';mg.title='Abrir o resumo coletivo para compartilhamento no grupo da Loja'}
-    try{const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.8 homologação'}catch(_e){}
+    try{const chip=document.getElementById('v600BuildChip');if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.9 homologação'}catch(_e){}
   }
 
   const renderBaseV728=window.renderRelatorioGeral;

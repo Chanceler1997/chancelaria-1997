@@ -569,6 +569,17 @@ html.native-pdf .page.native-report-page tr{break-inside:avoid!important;page-br
    linha que cabe integralmente, sem redistribuir linhas para equilibrar folhas. */
 html.native-pdf .page.native-report-page .native-continuation{font-size:1.18vw!important;margin:-.45vw 0 .75vw!important}
 html.native-pdf .page.native-report-page .native-footer-emissao{position:absolute!important;left:0!important;bottom:0!important;font-size:1.16vw!important;font-weight:600!important;color:#5b6068!important;white-space:nowrap!important}
+
+/* V7.2.9 — CIM sempre em uma única linha no relatório coletivo.
+   Corrige apenas a quebra visual da segunda coluna, sem alterar dados,
+   paginação, cálculo, geração ou compartilhamento do PDF. */
+html.native-pdf .page.native-report-page .collective-table th:nth-child(2),
+html.native-pdf .page.native-report-page .collective-table td:nth-child(2){
+  white-space:nowrap!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+}
 </style>
 
 </head>
