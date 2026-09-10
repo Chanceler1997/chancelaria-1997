@@ -1,3 +1,7 @@
+## Chancelaria 1997 · v7.2.6 HOMOLOGAÇÃO
+
+Ajuste pontual de edição e exclusão administrativa de irmãos e visitantes, preservando o núcleo estável de PDF e dados.
+
 # Chancelaria 1997 — v7.2.5 HOMOLOGAÇÃO
 
 Esta revisão combina a camada web mais completa da Chancelaria com o motor Android de PDF da v6.1.6, a referência que funcionou fisicamente no Samsung.
