@@ -1,16 +1,15 @@
-# Chancelaria 1997 v7.1.9
+# Chancelaria 1997 v7.1.5
 
-Pacote web correspondente ao AIA v7.1.9.
+Pacote web correspondente ao AIA v7.1.5.
 
 Principais ajustes desta revisão:
 
 1. Mantém o pacote Android `br.org.razaoeforca.chancelaria1997` e o namespace `chancelaria1997_v704_recuperacao_`.
-2. Usa um WebViewer dedicado e visível durante a renderização do PDF, preservando a tela principal e o cofre em memória.
-3. Mantém o WebViewPdfExporter compatível com o fluxo funcional de referência da v6.1.6.
-4. Ajusta a geometria do documento para A4 proporcional em telas móveis.
-5. Exibe o grau nos cartões de Sessões.
-6. Mantém o atestado de visitante como compartilhamento individual.
-7. Após retornar de compartilhamento externo, a interface volta para Início sem recriar a tela de login.
-8. Preserva as correções de Visitantes, paginação, aniversário natalício e reutilização de PDF da v7.1.1.
+2. Executa a ação Android correta depois de `PDFCreated`: compartilhar, enviar ao visitante ou visualizar.
+3. Executa a mesma ação final quando `RS` localiza um PDF válido, sem criar cópia desnecessária.
+4. Invalida solicitações anteriores e mantém token, identidade, nome físico e URI associados.
+5. Usa o WebViewer dedicado na geração de relatórios e atestados.
+6. Usa no envio dirigido o telefone permanente e a mesma normalização do botão WhatsApp.
+7. Mantém intactos A4, assinatura na última página, paginação, certificado, atestado e responsividade.
 
-GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.9`
+GitHub Pages: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.1.5`
