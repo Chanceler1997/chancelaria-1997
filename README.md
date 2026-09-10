@@ -1,4 +1,4 @@
-# Chancelaria 1997 — v7.2.0 ESTÁVEL
+# Chancelaria 1997 — v7.2.2 HOMOLOGAÇÃO
 
 Esta revisão combina a camada web mais completa da Chancelaria com o motor Android de PDF da v6.1.6, a referência que funcionou fisicamente no Samsung.
 
@@ -29,11 +29,11 @@ Esta revisão combina a camada web mais completa da Chancelaria com o motor Andr
 
 - package: `br.org.razaoeforca.chancelaria1997`
 - main/namespace nativo: `io.kodular.chancelaria1997.Chancelaria1997_V6_0_3_FINAL`
-- VersionName: 7.2.0
-- VersionCode: 70
-- URL: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.2.0`
+- VersionName: 7.2.2
+- VersionCode: 72
+- URL: `https://chanceler1997.github.io/chancelaria-1997/index.html?v=7.2.2`
 
-O VersionCode 70 foi escolhido para atualizar as compilações 7.1.x usadas nos ensaios sem trocar o package.
+O VersionCode 72 mantém o mesmo package e permite atualização sobre as compilações anteriores.
 
 ## Cache
 
@@ -64,3 +64,16 @@ Ajustes desta revisão:
 4. atestado de visitante e relatório individual permanecem fluxos individuais
 5. ações diretas de WhatsApp no cadastro de visitante foram retiradas da interface
 6. estrutura de banco, prefixo de armazenamento, pacote Android, IDs e extensões de PDF foram preservados
+
+
+## v7.2.2 — homologação de paginação
+
+Alteração funcional restrita a `imprimir.html`:
+
+1. relatórios multipágina voltam a preencher cada folha progressivamente até a última linha inteira que cabe;
+2. removido o rebalanceamento que deslocava linhas para a folha seguinte e ampliava a faixa branca inferior;
+3. cabeçalho, título, tabela, assinatura, paginação e motor Android de PDF permanecem preservados;
+4. rodapé de relatórios passa a mostrar data e hora de emissão, usando a área já reservada para rodapé;
+5. indicador de continuação foi compactado para devolver área útil ao relatório.
+
+Metadados de versão e cache foram atualizados para 7.2.2. Banco, IDs, package Android, Webviewpdfexporter, CreatePDF, PDFCreated e compartilhamento não foram alterados.
