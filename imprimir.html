@@ -2240,6 +2240,164 @@ html.native-pdf .page.native-report-page table.collective-table.collective-table
 }
 </style>
 
+
+<style id="v7228-individual-report">
+/* V7.2.28 — relatório individual: identificação compacta, resumo e tabela de 3 colunas. */
+.individual-meta-v7228{
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1fr);
+  gap:2.2mm 5mm;
+  margin:0 0 4mm;
+  font-size:10.5pt;
+  line-height:1.35;
+  color:#222;
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+.individual-meta-v7228 .periodo{grid-column:1/-1}
+.individual-ingresso-v7228{color:#555}
+.individual-summary-v7228{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  border:1px solid #8ea0b3;
+  margin:0 0 5mm;
+  background:#f5f8fb;
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+.individual-summary-v7228>div{
+  min-width:0;
+  text-align:center;
+  border-right:1px solid #8ea0b3;
+}
+.individual-summary-v7228>div:last-child{border-right:0}
+.individual-summary-v7228 span{
+  display:flex;
+  min-height:12mm;
+  align-items:center;
+  justify-content:center;
+  padding:1.6mm 1mm;
+  background:#183a61;
+  color:#fff;
+  font-size:7.2pt;
+  font-weight:800;
+  line-height:1.12;
+}
+.individual-summary-v7228 b{
+  display:block;
+  padding:2.2mm 1mm;
+  color:#152541;
+  font-size:13pt;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.individual-procedure-v7228{
+  margin:-1mm 0 4mm;
+  padding:2mm 2.5mm;
+  border:1px solid #d8c893;
+  background:#fffaf0;
+  color:#594b25;
+  font-size:8.5pt;
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+.individual-table-v7228{
+  width:100%;
+  table-layout:fixed;
+  border-collapse:collapse;
+  margin-top:0;
+}
+.individual-table-v7228 col:nth-child(1){width:20%}
+.individual-table-v7228 col:nth-child(2){width:55%}
+.individual-table-v7228 col:nth-child(3){width:25%}
+.individual-table-v7228 th{
+  text-align:center;
+  vertical-align:middle;
+  background:#e7edf4;
+  color:#152541;
+  font-weight:800;
+  letter-spacing:.1px;
+}
+.individual-table-v7228 td{vertical-align:middle}
+.individual-table-v7228 td:nth-child(1),
+.individual-table-v7228 td:nth-child(3){text-align:center;white-space:nowrap}
+.individual-table-v7228 td:nth-child(2){text-align:left}
+.individual-status-v7228{font-weight:700}
+.individual-status-v7228.presenca{color:#187a3b}
+.individual-status-v7228.falta{color:#b3261e}
+.individual-status-v7228.abonada{color:#80620c}
+.individual-status-v7228.analise{color:#805000}
+
+html.native-pdf .page.native-report-page .individual-meta-v7228{
+  grid-template-columns:minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1fr)!important;
+  gap:.85vw 2.2vw!important;
+  margin:0 0 1.65vw!important;
+  font-size:1.68vw!important;
+  line-height:1.25!important;
+}
+html.native-pdf .page.native-report-page .individual-summary-v7228{
+  margin:0 0 1.7vw!important;
+  border-width:1px!important;
+}
+html.native-pdf .page.native-report-page .individual-summary-v7228 span{
+  min-height:4.2vw!important;
+  padding:.52vw .20vw!important;
+  font-size:1.04vw!important;
+  line-height:1.02!important;
+}
+html.native-pdf .page.native-report-page .individual-summary-v7228 b{
+  padding:.72vw .15vw!important;
+  font-size:2.05vw!important;
+  line-height:1!important;
+}
+html.native-pdf .page.native-report-page .individual-procedure-v7228{
+  margin:-.25vw 0 1.35vw!important;
+  padding:.65vw .85vw!important;
+  font-size:1.28vw!important;
+  line-height:1.22!important;
+}
+html.native-pdf .page.native-report-page table.individual-table-v7228{
+  width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  margin-top:.55vw!important;
+  font-size:1.48vw!important;
+  line-height:1.10!important;
+}
+html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-child(1){width:20%!important}
+html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-child(2){width:55%!important}
+html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-child(3){width:25%!important}
+html.native-pdf .page.native-report-page table.individual-table-v7228 th,
+html.native-pdf .page.native-report-page table.individual-table-v7228 td{
+  padding:.58vw .52vw!important;
+  vertical-align:middle!important;
+  overflow:hidden!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+html.native-pdf .page.native-report-page table.individual-table-v7228 th{
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-size:.96em!important;
+}
+html.native-pdf .page.native-report-page table.individual-table-v7228 td:nth-child(1),
+html.native-pdf .page.native-report-page table.individual-table-v7228 td:nth-child(3){
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-variant-numeric:tabular-nums!important;
+}
+html.native-pdf .page.native-report-page table.individual-table-v7228 td:nth-child(2){
+  text-align:left!important;
+  white-space:normal!important;
+}
+@media(max-width:800px){
+  html:not(.native-pdf) .individual-meta-v7228{grid-template-columns:1fr 1fr;font-size:13px}
+  html:not(.native-pdf) .individual-meta-v7228>div:first-child{grid-column:1/-1}
+  html:not(.native-pdf) .individual-summary-v7228 span{font-size:8px;min-height:42px}
+  html:not(.native-pdf) .individual-summary-v7228 b{font-size:16px}
+}
+</style>
+
 </head>
 <body>
 <div class="toolbar"><button class="share" onclick="compartilharDocumento()">Compartilhar PDF</button><button class="secondary close-doc" onclick="voltarAoAplicativo()">Voltar ao aplicativo</button></div>
