@@ -1,5 +1,5 @@
-const VERSION='7.2.29';
-const CACHE=`chancelaria-1997-v${VERSION}-relatorio-individual`;
+const VERSION='7.2.30';
+const CACHE=`chancelaria-1997-v${VERSION}-relatorio-individual-refino`;
 const CORE=[
   './index.html','./imprimir.html','./manifest.json',
   './icon-192.png','./icon-512.png','./cabecalho-oficial.jpg',

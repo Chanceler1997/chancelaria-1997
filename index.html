@@ -2776,7 +2776,7 @@ function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false,opcoes={}){
   const payload={titulo,corpo,tipo:opcoes.tipo||'relatorio',irmaoId:opcoes.irmaoId||'',sessaoId:opcoes.sessaoId||'',geradoEm:new Date().toISOString(),assinatura:opcoes.assinatura||'',assinaturaClasse:opcoes.assinaturaClasse||'',rodape:opcoes.rodape||''};
   const url=new URL('imprimir.html',location.href);
   url.searchParams.set('doctype','relatorio');
-  url.searchParams.set('v','7.2.29');
+  url.searchParams.set('v','7.2.30');
   url.searchParams.set('filename',nomeArquivoRelatorioV602(titulo,opcoes));
   if(modoImpressao)url.searchParams.set('print','1');
   return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
@@ -6334,7 +6334,7 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
 <script id="v729-relatorio-individual-final">
 (function(){
   'use strict';
-  window.__CHANCELARIA_RELATORIO_INDIVIDUAL__='7.2.29';
+  window.__CHANCELARIA_RELATORIO_INDIVIDUAL__='7.2.30';
 
   function nomeSessaoIndividualV729(s){
     if(!s)return 'Sessão';
@@ -6391,9 +6391,9 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
       `${estado?`<div class="individual-procedure-v7228"><b>Procedimento:</b> ${h(estado)}</div>`:''}`+
       `<table class="individual-table individual-table-v7228"><colgroup><col><col><col></colgroup><thead><tr><th>DATA</th><th>SESSÃO</th><th>SITUAÇÃO</th></tr></thead><tbody>${rows}</tbody></table>`;
   };
-  window.CHANCELARIA_VERSION='7.2.29';
+  window.CHANCELARIA_VERSION='7.2.30';
 })();
 </script>
-<script>window.__CHANCELARIA_WEB_BUILD__="7.2.29";</script>
+<script>window.__CHANCELARIA_WEB_BUILD__="7.2.30";</script>
 </body>
 </html>

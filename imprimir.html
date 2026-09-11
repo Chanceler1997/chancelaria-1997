@@ -2410,6 +2410,78 @@ html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-ch
 html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-child(2){width:56%!important}
 html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-child(3){width:25%!important}
 </style>
+
+<style id="v7230-individual-refinement">
+/* V7.2.30 — refinamento do relatório individual, sem alterar cálculos/PDF. */
+.individual-summary-v7228 span{
+  min-height:auto!important;
+  padding:1.35mm .8mm!important;
+}
+.individual-base-v7230{
+  margin:-1.2mm 0 3mm;
+  color:#5c6570;
+  font-size:8.6pt;
+  line-height:1.2;
+}
+.individual-legend-v7230{
+  margin-top:2.5mm;
+  padding:1.8mm 2.2mm;
+  border:1px solid #d7dbe0;
+  background:#fafbfc;
+  color:#505862;
+  font-size:8.2pt;
+  line-height:1.25;
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+.individual-continuation-id-v7230{
+  margin:-1.2mm 0 2.6mm;
+  text-align:center;
+  color:#4f5965;
+  font-size:8.6pt;
+  font-weight:600;
+  letter-spacing:.05px;
+}
+html.native-pdf .page.native-report-page table.individual-table-v7228{
+  font-size:1.36vw!important;
+  line-height:1.06!important;
+  margin-top:.40vw!important;
+}
+html.native-pdf .page.native-report-page table.individual-table-v7228 th,
+html.native-pdf .page.native-report-page table.individual-table-v7228 td{
+  padding:.43vw .48vw!important;
+}
+html.native-pdf .page.native-report-page .individual-meta-v7228{
+  margin-bottom:1.05vw!important;
+}
+html.native-pdf .page.native-report-page .individual-base-v7230{
+  margin:-.35vw 0 .85vw!important;
+  font-size:1.15vw!important;
+}
+html.native-pdf .page.native-report-page .individual-summary-v7228{
+  margin-bottom:1.18vw!important;
+}
+html.native-pdf .page.native-report-page .individual-summary-v7228 span{
+  min-height:2.85vw!important;
+  padding:.38vw .16vw!important;
+  font-size:1.12vw!important;
+  line-height:1!important;
+}
+html.native-pdf .page.native-report-page .individual-summary-v7228 b{
+  padding:.58vw .14vw!important;
+  font-size:1.86vw!important;
+}
+html.native-pdf .page.native-report-page .individual-legend-v7230{
+  margin-top:.80vw!important;
+  padding:.50vw .65vw!important;
+  font-size:1.10vw!important;
+  line-height:1.18!important;
+}
+html.native-pdf .page.native-report-page .individual-continuation-id-v7230{
+  margin:-.30vw 0 .72vw!important;
+  font-size:1.18vw!important;
+}
+</style>
 </head>
 <body>
 <div class="toolbar"><button class="share" onclick="compartilharDocumento()">Compartilhar PDF</button><button class="secondary close-doc" onclick="voltarAoAplicativo()">Voltar ao aplicativo</button></div>
@@ -2544,12 +2616,24 @@ html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-ch
     }
     const ix=filhos.indexOf(tabelaOriginal),antes=filhos.slice(0,ix).filter(n=>n!==tituloOriginal),depois=filhos.slice(ix+1),linhas=[...tabelaOriginal.querySelectorAll(':scope > tbody > tr')];
     const colCount=Math.max(tabelaOriginal.querySelectorAll(':scope > thead th').length,linhas[0]?.children?.length||0);
+    const individualV7230=tabelaOriginal.classList.contains('individual-table-v7228');
+    let individualIdentV7230='';
+    if(individualV7230){
+      const meta=fonte.querySelector('.individual-meta-v7228');
+      if(meta){
+        const txt=[...meta.children].map(n=>(n.textContent||'').replace(/\s+/g,' ').trim());
+        const nome=(txt.find(x=>/^Irmão:/i.test(x))||'').replace(/^Irmão:\s*/i,'');
+        const cim=(txt.find(x=>/^CIM:/i.test(x))||'').replace(/^CIM:\s*/i,'');
+        individualIdentV7230=[nome,cim?`CIM ${cim}`:''].filter(Boolean).join(' · ');
+      }
+    }
     const maxPaginas=Math.max(1,linhas.length+1);
     function montarCandidato(qtd){
       app.innerHTML='';paginas.length=0;const estados=[];
       for(let i=0;i<qtd;i++){
         const o=nova(i>0);classeTabela(o.page,colCount);app.appendChild(o.page);
         if(i===0)for(const n of antes)o.content.appendChild(n.cloneNode(true));
+        else if(individualV7230&&individualIdentV7230){const id=document.createElement('div');id.className='individual-continuation-id-v7230';id.textContent=individualIdentV7230;o.content.appendChild(id)}
         const tabela=tabelaV711(tabelaOriginal),tbody=tabela.querySelector('tbody');o.content.appendChild(tabela);
         let fechar=null;if(i===qtd-1){fechar=fechamentoV711(assinatura,data.assinaturaClasse||'',depois);o.content.appendChild(fechar)}
         estados.push({o,tabela,tbody,fechar,rows:0});
@@ -2654,7 +2738,7 @@ html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-ch
     const normalizarSessao=(tipo,ident)=>{let t=String(tipo||'').replace(/\s+/g,' ').trim();if(/^Ordinária\s*[·-]\s*Regular$/i.test(t))return `Ordinária de ${grauNome(ident)}`;t=t.replace(/^Sessão\s+/i,'').replace(/\s*[·-]\s*/g,' de ').replace(/\bgraus\b/gi,'Graus');return t||'Sessão'};
     const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     const body=rows.map(r=>{const c=[...r.children],data=c[0]?.textContent.trim()||'',tipo=c[1]?.textContent.trim()||'',ident=c[2]?.textContent.trim()||'';let sit=c[3]?.textContent.trim()||'';let cls=/abon/i.test(sit)?'abonada':/anál/i.test(sit)?'analise':/presen/i.test(sit)?'presenca':'falta';if(/presen/i.test(sit))sit='Presença';else if(/abon/i.test(sit))sit='Falta abonada';else if(/anál/i.test(sit))sit='Falta em análise';else sit='Falta';return `<tr><td>${esc(data)}</td><td>${esc(normalizarSessao(tipo,ident))}</td><td><span class="individual-status-v7228 ${cls}">${esc(sit)}</span></td></tr>`}).join('');
-    return `<h2>Relatório individual de frequência</h2><div class="individual-meta-v7228"><div><b>Irmão:</b> ${esc(irmao)}</div><div><b>CIM:</b> ${esc(cim)}</div><div><b>Grau atual:</b> ${esc(grau)}</div><div class="periodo"><b>Período:</b> ${esc(periodo)}</div></div><div class="individual-summary-v7228"><div><span>PRESENÇAS<br>(P)</span><b>${esc(pres||'0')}</b></div><div><span>FALTAS<br>(F)</span><b>${esc(falta||'0')}</b></div><div><span>FALTAS ABONADAS<br>(FA)</span><b>${esc(abon||'0')}</b></div><div><span>TOTAL DE SESSÕES</span><b>${esc(total)}</b></div><div><span>FREQUÊNCIA</span><b>${esc(freq||'0')}%</b></div></div><table class="individual-table individual-table-v7228"><colgroup><col><col><col></colgroup><thead><tr><th>DATA</th><th>SESSÃO</th><th>SITUAÇÃO</th></tr></thead><tbody>${body}</tbody></table>`;
+    return `<h2>Relatório individual de frequência</h2><div class="individual-meta-v7228"><div><b>Irmão:</b> ${esc(irmao)}</div><div><b>CIM:</b> ${esc(cim)}</div><div><b>Grau atual:</b> ${esc(grau)}</div><div class="periodo"><b>Período:</b> ${esc(periodo)}</div></div><div class="individual-base-v7230">${esc(total)} sessões consideradas no período.</div><div class="individual-summary-v7228"><div><span>P</span><b>${esc(pres||'0')}</b></div><div><span>F</span><b>${esc(falta||'0')}</b></div><div><span>FA</span><b>${esc(abon||'0')}</b></div><div><span>TOTAL</span><b>${esc(total)}</b></div><div><span>FREQ. %</span><b>${esc(freq||'0')}%</b></div></div><table class="individual-table individual-table-v7228"><colgroup><col><col><col></colgroup><thead><tr><th>DATA</th><th>SESSÃO</th><th>SITUAÇÃO</th></tr></thead><tbody>${body}</tbody></table><div class="individual-legend-v7230">P = Presença. F = Falta. FA = Falta abonada. Freq. % = percentual de presença.</div>`;
   }
 
   try{
