@@ -229,7 +229,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -261,7 +261,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -297,82 +297,80 @@ html.native-pdf .page.native-report-page .collective-table-v7216 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7216 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7216 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.20 — tabela coletiva em paisagem seguindo a referência visual aprovada. */
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218{
+/* V7.2.23 — relatório coletivo simplificado e legível em retrato. */
+html.native-pdf .page.native-report-page .collective-table-v7223{
   width:100%!important;
   table-layout:fixed!important;
   border-collapse:collapse!important;
-  border-spacing:0!important;
-  margin-top:.42vw!important;
-  font-size:.82vw!important;
-  line-height:1.04!important;
+  font-size:1.18vw!important;
+  line-height:1.08!important;
+  margin-top:1.25vw!important;
 }
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(1){width:21%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(2){width:10.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(3){width:8.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(4){width:11%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(5){width:9%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(6){width:11.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(7){width:11.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(8){width:8.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(9){width:8.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 th,
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 td{
-  border:1px solid #a8a8a8!important;
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(1){width:39%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(2){width:14%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(3){width:6.5%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(4){width:6.5%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(5){width:6.5%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(6){width:8%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(7){width:9.75%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(8){width:9.75%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 th,
+html.native-pdf .page.native-report-page .collective-table-v7223 td{
   box-sizing:border-box!important;
+  border:1px solid #aaa!important;
+  padding:.42vw .18vw!important;
   vertical-align:middle!important;
   overflow:hidden!important;
-  text-overflow:clip!important;
 }
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 thead th{
-  background:#ece8df!important;
-  color:#102744!important;
-  font-weight:800!important;
+html.native-pdf .page.native-report-page .collective-table-v7223 thead th{
   text-align:center!important;
-  white-space:normal!important;
-  overflow-wrap:normal!important;
-  word-break:normal!important;
-  hyphens:none!important;
+  font-size:.82em!important;
+  line-height:1.00!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
   letter-spacing:0!important;
 }
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 thead tr:first-child th{
-  font-size:.76em!important;
-  line-height:1.02!important;
-  padding:.22vw .12vw!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 thead tr:nth-child(2) th{
-  font-size:.62em!important;
-  line-height:1.00!important;
-  padding:.17vw .08vw!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 th[rowspan="2"]{
-  vertical-align:middle!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 tbody td{
-  font-size:.92em!important;
-  line-height:1.03!important;
-  padding:.19vw .24vw!important;
-  white-space:nowrap!important;
-  font-variant-numeric:tabular-nums!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 tbody td:first-child{
+html.native-pdf .page.native-report-page .collective-table-v7223 thead tr:first-child th{padding-top:.44vw!important;padding-bottom:.18vw!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 thead tr:nth-child(2) th{padding-top:.18vw!important;padding-bottom:.40vw!important;font-size:.80em!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 th[rowspan="2"]{vertical-align:middle!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 th[colspan="2"]{text-align:center!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 td:first-child{
   text-align:left!important;
   white-space:normal!important;
-  line-height:1.02!important;
-  padding-left:.28vw!important;
+  line-height:1.06!important;
+  padding-left:.36vw!important;
+  padding-right:.24vw!important;
 }
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 tbody td:nth-child(n+2){
+html.native-pdf .page.native-report-page .collective-table-v7223 td:nth-child(2){
   text-align:center!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 tbody td:nth-child(2){
   white-space:nowrap!important;
-  font-size:.90em!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 tbody td:nth-child(8),
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 tbody td:nth-child(9){
+  font-variant-numeric:tabular-nums!important;
   font-weight:700!important;
+  padding-left:.10vw!important;
+  padding-right:.10vw!important;
 }
-
+html.native-pdf .page.native-report-page .collective-table-v7223 td:nth-child(n+3){
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-variant-numeric:tabular-nums!important;
+  padding-left:.06vw!important;
+  padding-right:.06vw!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7223 td:nth-child(7),
+html.native-pdf .page.native-report-page .collective-table-v7223 td:nth-child(8){font-weight:700!important}
+html.native-pdf .page.native-report-page .collective-legend-v7223{
+  margin-top:1.15vw!important;
+  padding:.72vw .86vw!important;
+  border:1px solid #c9c3b8!important;
+  background:#faf8f3!important;
+  color:#4c4a46!important;
+  font-size:1.20vw!important;
+  line-height:1.28!important;
+  break-inside:avoid!important;
+  page-break-inside:avoid!important;
+}
 </style>
 
 <style id="v630-certificado-fundo-oficial">
@@ -411,7 +409,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -443,7 +441,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -497,7 +495,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -529,7 +527,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -594,7 +592,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -626,7 +624,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -717,7 +715,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -749,7 +747,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -830,7 +828,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -862,7 +860,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -908,7 +906,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -940,7 +938,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -1020,7 +1018,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -1052,7 +1050,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -1101,7 +1099,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -1133,7 +1131,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -1202,7 +1200,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -1234,7 +1232,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -1301,7 +1299,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -1333,7 +1331,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -1489,7 +1487,7 @@ html.native-pdf .page.native-report-page .collective-table th:nth-child(n+2),
 html.native-pdf .page.native-report-page .collective-table td:nth-child(n+2){text-align:center!important}
 html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-height:1.08!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -1521,7 +1519,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -1576,7 +1574,7 @@ html.native-pdf .page.native-report-page .collective-table td:nth-child(1){line-
 html.native-pdf .page.native-report-page .collective-table th:nth-child(2),html.native-pdf .page.native-report-page .collective-table td:nth-child(2){white-space:nowrap!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}
 html.native-pdf .page.native-report-page .collective-table th:nth-child(8),html.native-pdf .page.native-report-page .collective-table td:nth-child(8),html.native-pdf .page.native-report-page .collective-table th:nth-child(9),html.native-pdf .page.native-report-page .collective-table td:nth-child(9){white-space:nowrap!important}
 
-/* V7.2.18 — tabela coletiva conforme modelo aprovado. */
+/* V7.2.23 — tabela coletiva conforme modelo aprovado. */
 html.native-pdf .page.native-report-page .collective-table-v7215{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.12vw!important;line-height:1.08!important;margin-top:1.35vw!important;
@@ -1608,7 +1606,7 @@ html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(2)
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7215 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
 
-/* V7.2.18 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
+/* V7.2.23 — cabeçalho abreviado, mais espaço para OBREIRO e CIM. */
 html.native-pdf .page.native-report-page .collective-table-v7216{
   width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
   font-size:1.10vw!important;line-height:1.06!important;margin-top:1.32vw!important;
@@ -1646,7 +1644,7 @@ html.native-pdf .page.native-report-page .collective-table-v7216 td:nth-child(9)
 </style>
 
 <style id="v7217-tabela-coletiva-final">
-/* V7.2.18 — distribuição final da tabela coletiva.
+/* V7.2.23 — distribuição final da tabela coletiva.
    Prioriza OBREIRO e CIM, reduz colunas numéricas e impede sobreposição. */
 html.native-pdf .page.native-report-page .collective-table-v7217{
   width:100%!important;
@@ -1725,86 +1723,142 @@ html.native-pdf .page.native-report-page .collective-table-v7217 td:nth-child(n+
 html.native-pdf .page.native-report-page .collective-table-v7217 td:nth-child(8),
 html.native-pdf .page.native-report-page .collective-table-v7217 td:nth-child(9){font-weight:700!important}
 
-/* V7.2.18 — A4 paisagem exclusivo para RELATORIO_COLETIVO. */
-html.native-pdf.native-landscape .page.native-report-page{
-  width:100%!important;height:70.7vw!important;min-height:70.7vw!important;max-height:70.7vw!important;
-  padding:2.5vw 3.2vw 3.0vw!important;overflow:hidden!important;
+/* V7.2.23 — retorno ao fluxo estável em retrato.
+   Ajuste mínimo: cabeçalho simples, sem sobreposição e com prioridade para nome e CIM. */
+html.native-pdf .page.native-report-page .collective-table-v7222{
+  width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  font-size:1.10vw!important;
+  line-height:1.08!important;
+  margin-top:1.25vw!important;
 }
-html.native-pdf.native-landscape .native-page-content{left:3.2vw!important;right:3.2vw!important;top:2.2vw!important;bottom:3.0vw!important}
-html.native-pdf.native-landscape .page.native-report-page .official-header{width:70%!important;margin:0 auto .55vw!important}
-html.native-pdf.native-landscape .page.native-report-page .official-header img{width:100%!important;height:auto!important}
-html.native-pdf.native-landscape .page.native-report-page .jurisdiction-line{font-size:1.02vw!important;line-height:1.05!important;margin:0 0 .55vw!important}
-html.native-pdf.native-landscape .page.native-report-page h2{font-size:1.55vw!important;line-height:1.08!important;margin:0 0 .65vw!important}
-html.native-pdf.native-landscape .page.native-report-page p{font-size:1.02vw!important;line-height:1.18!important;margin:0 0 .70vw!important}
-html.native-pdf.native-landscape .page.native-report-page .native-continuation{font-size:.90vw!important;margin:-.15vw 0 .45vw!important}
-html.native-pdf.native-landscape .page.native-report-page .native-page-footer{left:3.2vw!important;right:3.2vw!important;bottom:.72vw!important;height:1.35vw!important;font-size:.82vw!important}
-html.native-pdf.native-landscape .page.native-report-page .native-page-number{font-size:.90vw!important;right:0!important;bottom:0!important}
-html.native-pdf.native-landscape .page.native-report-page .native-footer-emissao{font-size:.82vw!important;left:0!important;bottom:0!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218{
-  width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;
-  font-size:.92vw!important;line-height:1.08!important;margin-top:.45vw!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(1){width:24%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(2){width:10%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(3){width:8%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(4){width:11%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(5){width:8%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(6){width:11%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(7){width:11%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(8){width:8.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(9){width:8.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 th,
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 td{
-  border:1px solid #aaa!important;padding:.26vw .34vw!important;vertical-align:middle!important;box-sizing:border-box!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 thead th{
-  text-align:center!important;font-size:.90em!important;font-weight:800!important;white-space:normal!important;
-  overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 thead tr:first-child th{padding-top:.30vw!important;padding-bottom:.15vw!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 thead tr:nth-child(2) th{padding-top:.15vw!important;padding-bottom:.30vw!important;font-size:.86em!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 th[rowspan="2"]{vertical-align:middle!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 td:first-child{text-align:left!important;white-space:normal!important;line-height:1.06!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 td:nth-child(2){white-space:nowrap!important;font-variant-numeric:tabular-nums!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 td:nth-child(n+2){text-align:center!important;font-variant-numeric:tabular-nums!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 td:nth-child(8),
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 td:nth-child(9){white-space:nowrap!important;font-weight:700!important}
-
-/* V7.2.20 — cabeçalho da tabela coletiva mais limpo e sem sobreposição. */
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(1){width:23%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(2){width:10%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(3){width:8%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(4){width:11%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(5){width:9%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(6){width:10.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(7){width:10.5%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(8){width:9%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 col:nth-child(9){width:9%!important}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 thead th{
-  font-size:.72em!important;
-  line-height:1.02!important;
-  padding:.14vw .10vw!important;
-  white-space:normal!important;
-  overflow:visible!important;
-  overflow-wrap:normal!important;
-  word-break:normal!important;
-  hyphens:none!important;
-  letter-spacing:0!important;
+html.native-pdf .page.native-report-page .collective-table-v7222 col:nth-child(1){width:30%!important}
+html.native-pdf .page.native-report-page .collective-table-v7222 col:nth-child(2){width:13%!important}
+html.native-pdf .page.native-report-page .collective-table-v7222 col:nth-child(3){width:9%!important}
+html.native-pdf .page.native-report-page .collective-table-v7222 col:nth-child(4){width:8%!important}
+html.native-pdf .page.native-report-page .collective-table-v7222 col:nth-child(5){width:7%!important}
+html.native-pdf .page.native-report-page .collective-table-v7222 col:nth-child(6){width:8%!important}
+html.native-pdf .page.native-report-page .collective-table-v7222 col:nth-child(7){width:8%!important}
+html.native-pdf .page.native-report-page .collective-table-v7222 col:nth-child(8){width:8.5%!important}
+html.native-pdf .page.native-report-page .collective-table-v7222 col:nth-child(9){width:8.5%!important}
+html.native-pdf .page.native-report-page .collective-table-v7222 th,
+html.native-pdf .page.native-report-page .collective-table-v7222 td{
   box-sizing:border-box!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 thead tr:first-child th{
-  font-size:.74em!important;
-  padding-top:.16vw!important;
-  padding-bottom:.10vw!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 thead tr:nth-child(2) th{
-  font-size:.66em!important;
-  line-height:1.00!important;
-  padding-top:.09vw!important;
-  padding-bottom:.14vw!important;
-}
-html.native-pdf.native-landscape .page.native-report-page .collective-table-v7218 th[rowspan="2"]{
+  border:1px solid #aaa!important;
+  padding:.34vw .16vw!important;
   vertical-align:middle!important;
+  overflow:hidden!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7222 thead th{
+  text-align:center!important;
+  font-size:.76em!important;
+  line-height:1.00!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+  letter-spacing:-.015em!important;
+  padding-top:.42vw!important;
+  padding-bottom:.42vw!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7222 td:first-child{
+  text-align:left!important;
+  white-space:normal!important;
+  line-height:1.05!important;
+  padding-left:.34vw!important;
+  padding-right:.24vw!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7222 td:nth-child(2){
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-variant-numeric:tabular-nums!important;
+  padding-left:.08vw!important;
+  padding-right:.08vw!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7222 td:nth-child(n+3){
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-variant-numeric:tabular-nums!important;
+  padding-left:.06vw!important;
+  padding-right:.06vw!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7222 td:nth-child(8),
+html.native-pdf .page.native-report-page .collective-table-v7222 td:nth-child(9){font-weight:700!important}
+
+/* V7.2.23 — relatório coletivo simplificado e legível em retrato. */
+html.native-pdf .page.native-report-page .collective-table-v7223{
+  width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  font-size:1.18vw!important;
+  line-height:1.08!important;
+  margin-top:1.25vw!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(1){width:39%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(2){width:14%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(3){width:6.5%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(4){width:6.5%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(5){width:6.5%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(6){width:8%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(7){width:9.75%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 col:nth-child(8){width:9.75%!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 th,
+html.native-pdf .page.native-report-page .collective-table-v7223 td{
+  box-sizing:border-box!important;
+  border:1px solid #aaa!important;
+  padding:.42vw .18vw!important;
+  vertical-align:middle!important;
+  overflow:hidden!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7223 thead th{
+  text-align:center!important;
+  font-size:.82em!important;
+  line-height:1.00!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+  letter-spacing:0!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7223 thead tr:first-child th{padding-top:.44vw!important;padding-bottom:.18vw!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 thead tr:nth-child(2) th{padding-top:.18vw!important;padding-bottom:.40vw!important;font-size:.80em!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 th[rowspan="2"]{vertical-align:middle!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 th[colspan="2"]{text-align:center!important}
+html.native-pdf .page.native-report-page .collective-table-v7223 td:first-child{
+  text-align:left!important;
+  white-space:normal!important;
+  line-height:1.06!important;
+  padding-left:.36vw!important;
+  padding-right:.24vw!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7223 td:nth-child(2){
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-variant-numeric:tabular-nums!important;
+  font-weight:700!important;
+  padding-left:.10vw!important;
+  padding-right:.10vw!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7223 td:nth-child(n+3){
+  text-align:center!important;
+  white-space:nowrap!important;
+  font-variant-numeric:tabular-nums!important;
+  padding-left:.06vw!important;
+  padding-right:.06vw!important;
+}
+html.native-pdf .page.native-report-page .collective-table-v7223 td:nth-child(7),
+html.native-pdf .page.native-report-page .collective-table-v7223 td:nth-child(8){font-weight:700!important}
+html.native-pdf .page.native-report-page .collective-legend-v7223{
+  margin-top:1.15vw!important;
+  padding:.72vw .86vw!important;
+  border:1px solid #c9c3b8!important;
+  background:#faf8f3!important;
+  color:#4c4a46!important;
+  font-size:1.20vw!important;
+  line-height:1.28!important;
+  break-inside:avoid!important;
+  page-break-inside:avoid!important;
 }
 </style>
 
@@ -1814,12 +1868,9 @@ html.native-pdf.native-landscape .page.native-report-page .collective-table-v721
 <main id="app"></main>
 <script>
 (function(){
-  const paramsDocumento=new URLSearchParams(location.search);
-  const nativePdf=paramsDocumento.get('nativepdf')==='1';
-  const landscapePdf=nativePdf&&paramsDocumento.get('doctype')==='RELATORIO_COLETIVO';
+  const nativePdf=new URLSearchParams(location.search).get('nativepdf')==='1';
   if(nativePdf){
     document.documentElement.classList.add('native-pdf');
-    if(landscapePdf)document.documentElement.classList.add('native-landscape');
     const vp=document.querySelector('meta[name="viewport"]');
     if(vp)vp.setAttribute('content','width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
   }
@@ -1863,11 +1914,11 @@ html.native-pdf.native-landscape .page.native-report-page .collective-table-v721
         const page=pronto.page;
         const folhas=[...app.querySelectorAll(':scope > .page')];
         const larguraCss=Math.max(1,Math.round(document.documentElement.clientWidth||window.innerWidth||(page?page.getBoundingClientRect().width:0)||1));
-        const alturaFolhaCss=larguraCss*(landscapePdf?0.707:1.414);
+        const alturaFolhaCss=larguraCss*1.414;
         const alturaConteudo=folhas.length?folhas.reduce((soma,folha)=>soma+folha.getBoundingClientRect().height,0):Math.max(page?page.getBoundingClientRect().height:0,app.scrollHeight||0);
         const pages=Math.max(1,folhas.length||Math.ceil(alturaConteudo/alturaFolhaCss));
-        /* Retrato usa 1414/1000. O relatório coletivo em paisagem usa 707/1000,
-           exatamente a razão do exportador Android dedicado. */
+        /* O exportador Android cria cada página com altura = largura do WebView × 1414 / 1000.
+           Usamos a mesma razão e arredondamos para baixo para não provocar uma página extra de 1 px. */
         const h=Math.max(100,Math.floor(alturaFolhaCss*pages));
         const w=larguraCss;
         let sinalizou=false;
@@ -1896,7 +1947,7 @@ html.native-pdf.native-landscape .page.native-report-page .collective-table-v721
         return;
       }
       const ponte=(window.Kodular&&typeof window.Kodular.setWebViewString==='function')?window.Kodular:((window.AppInventor&&typeof window.AppInventor.setWebViewString==='function')?window.AppInventor:null);
-      if(ponte){const cmd=(tipoDocumentoAtual==='RELATORIO_COLETIVO'?'PL':((tipoDocumentoAtual==='ATESTADO'||tipoDocumentoAtual==='CERTIFICADO')?'SI':'PI'))+u.href;ponte.setWebViewString('00'+Date.now());setTimeout(()=>{try{ponte.setWebViewString(cmd)}catch(_e){}},120);return}
+      if(ponte){const cmd=((tipoDocumentoAtual==='ATESTADO'||tipoDocumentoAtual==='CERTIFICADO')?'SI':'PI')+u.href;ponte.setWebViewString('00'+Date.now());setTimeout(()=>{try{ponte.setWebViewString(cmd)}catch(_e){}},120);return}
       throw new Error('Ponte Android indisponível.');
     }catch(e){alert(String(e.message||e))}
   };

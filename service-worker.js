@@ -1,4 +1,4 @@
-const VERSION='7.2.21';
+const VERSION='7.2.23';
 const CACHE=`chancelaria-1997-v${VERSION}-estavel`;
 const CORE=[
   './index.html','./imprimir.html','./manifest.json',

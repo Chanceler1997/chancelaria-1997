@@ -3124,7 +3124,7 @@ function selecionarFaltaProcesso(sessaoId){const p=processoModalAtual(),i=getIrm
 function cancelarAnaliseFalta(){processoAnaliseAtual='';if(document.getElementById('processoSessaoId'))processoSessaoId.value='';if(document.getElementById('processoAnaliseBox'))processoAnaliseBox.style.display='none';if(document.getElementById('procDataFalta'))procDataFalta.value='';if(document.getElementById('procSessaoDescricao'))procSessaoDescricao.value=''}
 function salvarAnaliseFalta(){const p=processoModalAtual(),i=getIrmaos().find(x=>x.id===processoIrmaoId.value),sid=processoSessaoId.value,s=getSessoes().find(x=>x.id===sid);if(!p||!i||!s)return;const justificativa=procJustificativa.value.trim(),apresentadaEm=procDataApresentacao.value,decisao=procDecisao.value,referencia=procReferenciaDecisao.value.trim(),nota=procNotaDecisao.value.trim();if(!justificativa){toast('Informe a justificativa apresentada');return}if(!apresentadaEm){toast('Informe a data da apresentação');return}if(p.notificacao.prazo&&apresentadaEm>p.notificacao.prazo&&!confirm('A justificativa foi apresentada após o prazo de 30 dias. Deseja registrar mesmo assim?'))return;if(['aceita','recusada'].includes(decisao)&&!referencia){toast('Informe a referência da decisão ou da ata');return}p.itens=p.itens||{};p.itens[sid]={justificativa,apresentadaEm,decisao,decididaEm:decisao==='pendente'?'':new Date().toISOString(),referencia,nota,migrado:false};salvarProcessoObjeto(p);audit(decisao==='aceita'?'Falta abonada':decisao==='recusada'?'Justificativa recusada':'Justificativa registrada',`${i.nome} · ${brData(s.data)} · ${referencia||'decisão pendente'}`);cancelarAnaliseFalta();renderProcessoFrequencia();renderRelatorioIndividual(false);renderRelatorioGeral();renderInicio();toast(decisao==='aceita'?'Falta abonada':'Análise registrada')}
 function linhaRelatorioColetivo(i){const f=calcFreq(i),p=processoMaisRecenteIrmao(i.id),estado=p?estadoProcesso(i,f,p):'';const resumo=f.periodoAtivo?`Período ${f.periodoTexto} · presença ${f.pctPresenca}% · ${f.faltasRegistradas} falta(s) · ${f.abonado} abonada(s) · ${f.pctFalta}% sem justa causa${estado?' · '+estado:''}`:'Sem período de apuração';return `<button type="button" class="collective-person-card" onclick="abrirIrmaoDoRelatorioColetivo('${i.id}')"><span class="avatar">${h(iniciais(i.nome))}</span><span><span class="collective-name">${h(i.nome)}</span><span class="collective-meta">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''}<br>${h(resumo)}</span><span class="progress"><span class="bar" style="display:block;width:${f.pctPresenca}%;background:${corPct(f.pctPresenca)}"></span></span></span><span class="collective-action"><span class="badge ${classeFreq(f)}">${f.pctFalta}% sem justa causa</span><span class="collective-link">Revisar</span><span class="collective-arrow">›</span></span></button>`}
-function corpoRelatorioGeral(){const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório coletivo de frequência</h2><p>Cadastre uma sessão para iniciar a contagem.</p>';return `<h2>Relatório coletivo de frequência</h2><p>Critério: janela móvel dos últimos 12 meses, ${per.texto}. A chamada registra Presença ou Falta. Justificativas aceitas geram abono e aparecem separadas das faltas sem justificativa.</p><table class="collective-table collective-table-v7218"><colgroup><col><col><col><col><col><col><col><col><col></colgroup><thead><tr><th rowspan="2">OBREIRO</th><th rowspan="2">CIM</th><th rowspan="2">GRAU</th><th rowspan="2">Nº SESSÕES<br>NO PERÍODO</th><th rowspan="2">PRESENÇA</th><th colspan="2">FALTA</th><th colspan="2">FREQ. %</th></tr><tr><th>SEM<br>JUSTIFICATIVA</th><th>COM<br>JUSTIFICATIVA</th><th>PRESENÇA</th><th>FALTA</th></tr></thead><tbody>${getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td>${i.cim?h(i.cim):'Não informado'}</td><td>${h(grauSimbolo(i.grau))}</td><td>${f.total}</td><td>${f.presente}</td><td>${f.falta}</td><td>${f.abonado}</td><td>${f.pctPresenca}%</td><td>${f.pctFaltaBruta}%</td></tr>`}).join('')}</tbody></table>`}
+function corpoRelatorioGeral(){const per=periodoRGFDatas();if(!per.ativo)return '<h2>Relatório coletivo de frequência</h2><p>Cadastre uma sessão para iniciar a contagem.</p>';return `<h2>Relatório coletivo de frequência</h2><p>Critério: janela móvel dos últimos 12 meses, ${per.texto}. A chamada registra Presença ou Falta. As faltas abonadas permanecem registradas administrativamente e são apresentadas separadamente.</p><table class="collective-table collective-table-v7223"><colgroup><col><col><col><col><col><col><col><col></colgroup><thead><tr><th rowspan="2">OBREIRO</th><th rowspan="2">CIM</th><th rowspan="2">P</th><th rowspan="2">F</th><th rowspan="2">FA</th><th rowspan="2">TOTAL</th><th colspan="2">FREQ. %</th></tr><tr><th>P</th><th>F</th></tr></thead><tbody>${getIrmaos().slice().sort((a,b)=>a.nome.localeCompare(b.nome)).map(i=>{const f=calcFreq(i);return `<tr><td>${h(i.nome)}</td><td>${i.cim?h(i.cim):'Não informado'}</td><td>${f.presente}</td><td>${f.falta}</td><td>${f.abonado}</td><td>${f.total}</td><td>${f.pctPresenca}%</td><td>${f.pctFalta}%</td></tr>`}).join('')}</tbody></table><div class="collective-legend-v7223"><b>Legenda:</b> P = Presenças. F = Faltas sem abono. FA = Faltas abonadas. Total = sessões consideradas no período. Freq. % P = percentual de presença. Freq. % F = percentual de faltas sem abono.</div>`}
 function corpoRelatorioIndividual(i){const f=calcFreq(i);if(!f.periodoAtivo)return `<h2>Relatório individual de frequência</h2><p>Cadastre uma sessão para iniciar a contagem.</p>`;const rows=getSessoes().filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s)).sort((a,b)=>a.data.localeCompare(b.data)).map(s=>{const r=(getPresencas()[s.id]||{})[i.id]||'F',d=decisaoAbonoSessao(i.id,s.id);return `<tr><td>${brData(s.data)}</td><td>${h(descricaoSessao(s))}</td><td>${h(s.numero||'')} ${h(grauSimbolo(grauNaData(i,s.data)))}</td><td>${h(statusSessaoIrmao(i,s,r))}${d?.referencia?` · ${h(d.referencia)}`:''}</td></tr>`}).join('');const p=processoMaisRecenteIrmao(i.id),estado=p?estadoProcesso(i,f,p):'';return `<h2>Relatório individual de frequência</h2><p><b>Irmão:</b> ${h(i.nome)} · <b>CIM:</b> ${i.cim?h(i.cim):'Não informado'} · <b>Grau atual:</b> ${h(grauSimbolo(i.grau))}${i.dataIngresso?` · <b>Ingresso:</b> ${h(descricaoIngresso(i))}`:''} · <b>Período:</b> ${brData(f.inicio)} a ${brData(f.fim)}</p><p><b>Presença:</b> ${f.pctPresenca}% (${f.presente}) · <b>Faltas registradas:</b> ${f.pctFaltaBruta}% (${f.faltasRegistradas}) · <b>Faltas abonadas:</b> ${f.abonado} · <b>Faltas sem justa causa:</b> ${f.pctFalta}% (${f.falta})${estado?` · <b>Procedimento:</b> ${h(estado)}`:''}</p><table class="individual-table"><thead><tr><th>Data</th><th>Tipo</th><th>Identificação</th><th>Status administrativo</th></tr></thead><tbody>${rows}</tbody></table>`}
 function htmlRelatorioIndividual(i,editavel=false){const f=calcFreq(i);if(!f.periodoAtivo)return `<div class="empty"><p>${h(f.motivoParcial||'Cadastre uma sessão para iniciar a contagem.')}</p></div>`;return `<div class="list-item"><div class="avatar">${h(iniciais(i.nome))}</div><div class="item-main"><div class="item-title">${h(i.nome)}</div><div class="item-sub">${grauBadge(i.grau)}${i.cim?' · CIM '+h(i.cim):''}${i.dataIngresso?' · '+h(descricaoIngresso(i)):''} · presença ${f.pctPresenca}% · falta sem justa causa ${f.pctFalta}% · período ${f.periodoTexto}</div></div></div>${htmlFreqDetalhe(i,editavel)}`}
 function mensagemFalta(id){const i=getIrmaos().find(x=>x.id===id);if(!i)return;const f=calcFreq(i);if(!f.periodoAtivo){toast('Cadastre uma sessão para iniciar a contagem');return}const formal=f.periodo12&&f.pctFalta>=50&&f.total>0,titulo=formal?'Notificação administrativa de frequência':'Mensagem fraternal de frequência';let texto=`Meu Irmão ${primeiroNome(i.nome)}, saúde e alegria.\n\nA Chancelaria apurou, no período ${f.periodoTexto}, ${f.faltasRegistradas} falta(s) em ${f.total} sessão(ões), correspondentes a ${f.pctFaltaBruta}% de faltas registradas. Após os abonos já aceitos, permanecem ${f.falta} falta(s) sem justa causa, equivalentes a ${f.pctFalta}%.\n\nA chamada original registra apenas Presença ou Falta. A apresentação e a análise de justificativas ocorrem em procedimento administrativo separado.`;if(formal)texto+=`\n\nNos termos dos arts. 76 e 77 do RGF, fica o Irmão notificado a apresentar justificativa no prazo de 30 dias contado do recebimento. Esta notificação não o torna irregular. As justificativas serão registradas e submetidas à decisão da Loja.`;else texto+=`\n\nEsta mensagem possui caráter fraternal de acompanhamento e não inicia procedimento formal, pois ${f.motivoParcial?f.motivoParcial.toLowerCase():'o limite formal não foi alcançado'}.`;texto+=`\n\nFraternalmente,\nChancelaria da A∴R∴L∴S∴ Razão e Força Nº 1997.`;abrirMensagem(titulo,texto,i.id)}
@@ -4936,7 +4936,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v600-core-reconstruido">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.18';
+  window.CHANCELARIA_VERSION='7.2.7';
 
   function ponteV600(){
     if(window.Kodular&&typeof window.Kodular.setWebViewString==='function')return window.Kodular;
@@ -5069,7 +5069,7 @@ document.addEventListener('DOMContentLoaded',()=>{try{v57PrepararEleitoral()}cat
 <script id="v603-fluidez-chanceler-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.18';
+  window.CHANCELARIA_VERSION='7.2.7';
   const navStackV603=[];
   let restaurandoV603=false;
 
@@ -5286,7 +5286,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v610-pdf-real-share-and-back">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.18';
+  window.CHANCELARIA_VERSION='7.2.7';
   const locks=new Map();
 
   function travaV610(chave,ms=2200){
@@ -5452,7 +5452,7 @@ button[onclick="imprimirPreviewRelatorio()"]{display:none!important}
 <script id="v690-session-whatsapp-birthday-and-filenames">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.18';
+  window.CHANCELARIA_VERSION='7.2.7';
   const UI_KEY='arls1997_ui_resume_v690';
   let contextoAniversarioV690=null;
 
@@ -5609,8 +5609,8 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
 <script id="v710-auditoria-final-script">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.18';
-  const PDF_ASSET='file:///android_asset/imprimir.html?v=7.2.18';
+  window.CHANCELARIA_VERSION='7.2.7';
+  const PDF_ASSET='file:///android_asset/imprimir.html?v=7.2.2';
   let contextoFelicitacaoV710=null;
 
   function ponteV710(){
@@ -5626,7 +5626,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
     try{
       const src=new URL(String(url||''),location.href),dst=new URL(PDF_ASSET);
       src.searchParams.forEach((v,k)=>dst.searchParams.set(k,v));
-      dst.searchParams.set('v','7.2.18');dst.searchParams.delete('sharephone');dst.searchParams.delete('wa');dst.hash=src.hash;
+      dst.searchParams.set('v','7.2.2');dst.searchParams.delete('sharephone');dst.searchParams.delete('wa');dst.hash=src.hash;
       return dst.href;
     }catch(_e){return String(url||'')}
   }
@@ -5637,7 +5637,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
   function tokenPdfV712(sig){
     let h=2166136261>>>0;const str=String(sig||'');for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0}return 'D'+h.toString(16).padStart(8,'0').toUpperCase();
   }
-  function tipoComandoPdfV712(tipoInterno){const t=String(tipoInterno||'');if(t==='RELATORIO_COLETIVO')return 'PL';return ['ATESTADO_VISITANTE','CERTIFICADO_ANIVERSARIO','CERTIFICADO_FILIACAO'].includes(t)?'SI':'PI'}
+  function tipoComandoPdfV712(tipoInterno){return ['ATESTADO_VISITANTE','CERTIFICADO_ANIVERSARIO','CERTIFICADO_FILIACAO'].includes(String(tipoInterno||''))?'SI':'PI'}
   function emitirPdfV710(url,nome,tipoInterno='RELATORIO_COLETIVO',destino='GRUPO',telefoneDireto=''){
     const ponte=ponteV710();
     if(!url){toast('Documento não localizado');return false}
@@ -5649,7 +5649,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
       if(typeof prepararRetornoExternoV690==='function')prepararRetornoExternoV690();else if(typeof iniciarAcaoExterna==='function')iniciarAcaoExterna();
       const arquivo=(String(nome||'Documento.pdf').replace(/[\/:*?"<>|]/g,'-')||'Documento.pdf');
       const z=new URL(String(url||''),location.href);
-      z.searchParams.set('v','7.2.18');
+      z.searchParams.set('v','7.2.7');
       z.searchParams.set('nativepdf','1');
       z.searchParams.set('filename',arquivo);
       z.searchParams.set('doctype',String(tipoInterno||''));
@@ -5675,7 +5675,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
     try{
       const arquivo=(String(nome||'Documento.pdf').replace(/[\/:*?"<>|]/g,'-')||'Documento.pdf');
       const z=new URL(String(url||''),location.href);
-      z.searchParams.set('v','7.2.18');
+      z.searchParams.set('v','7.2.7');
       z.searchParams.set('filename',arquivo);
       z.searchParams.set('doctype','ATESTADO_VISITANTE');
       /* Visualizar não cria outro PDF. VI abre o documento local já renderizado no WebViewer. */
@@ -5821,7 +5821,7 @@ html,body{overflow-x:hidden!important}main{overflow-x:hidden!important}
 <script id="v712-sessao-atestado-retorno-final">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.18';
+  window.CHANCELARIA_VERSION='7.2.7';
   function rotuloSessaoV712(s){
     try{return typeof nomeSessaoDocumento==='function'?nomeSessaoDocumento(s):descricaoSessao(s)}catch(_e){return descricaoSessao(s)}
   }
@@ -5880,7 +5880,7 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
 <script id="v720-estavel-base-616">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.18';
+  window.CHANCELARIA_VERSION='7.2.7';
   try{
     const chip=document.getElementById('v600BuildChip');
     if(chip)chip.textContent='Chancelaria 1997 · núcleo 7.2.7 homologação';
@@ -6004,7 +6004,7 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
 <script id="v726-cadastros-admin-final">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.18';
+  window.CHANCELARIA_VERSION='7.2.7';
 
   function irmaoV726(id){try{return (getIrmaos()||[]).find(x=>x.id===id)||null}catch(_e){return null}}
   function registrosIrmaoV726(id){
@@ -6117,7 +6117,7 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
 <script id="v727-frequencia-confirmacao-final">
 (function(){
   'use strict';
-  window.CHANCELARIA_VERSION='7.2.18';
+  window.CHANCELARIA_VERSION='7.2.7';
 
   function normalizarV727(regs){
     const out={};
