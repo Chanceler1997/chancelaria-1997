@@ -1,11 +1,9 @@
-# Chancelaria 1997 — v7.2.29
+# Chancelaria 1997 v7.2.31
 
-Correção focada no relatório individual de frequência.
+Correção pontual do relatório individual.
 
-- DATA | SESSÃO | SITUAÇÃO
-- Ordinárias exibem o grau da sessão, por exemplo: Ordinária de Mestre
-- quadro-resumo: P, F, FA, Total de Sessões e Frequência
-- remove a coluna Identificação do relatório individual
-- assinatura permanece na última página
-- relatório coletivo, banco e compartilhamento permanecem intactos
-- service worker atualizado para renovar os arquivos web
+- Aplica P, F, FA, TOTAL e FREQ. % também quando o relatório já usa a tabela de 3 colunas.
+- Exibe a linha de sessões consideradas no período.
+- Exibe a legenda após a tabela.
+- Mantém DATA, SESSÃO e SITUAÇÃO.
+- Não altera banco, TinyDB, PDF, compartilhamento ou Kodular.

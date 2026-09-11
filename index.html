@@ -2776,7 +2776,7 @@ function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false,opcoes={}){
   const payload={titulo,corpo,tipo:opcoes.tipo||'relatorio',irmaoId:opcoes.irmaoId||'',sessaoId:opcoes.sessaoId||'',geradoEm:new Date().toISOString(),assinatura:opcoes.assinatura||'',assinaturaClasse:opcoes.assinaturaClasse||'',rodape:opcoes.rodape||''};
   const url=new URL('imprimir.html',location.href);
   url.searchParams.set('doctype','relatorio');
-  url.searchParams.set('v','7.2.30');
+  url.searchParams.set('v','7.2.31');
   url.searchParams.set('filename',nomeArquivoRelatorioV602(titulo,opcoes));
   if(modoImpressao)url.searchParams.set('print','1');
   return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
@@ -6331,10 +6331,15 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
 })();
 </script>
 
+<style id="v7231-individual-visible-refinement">
+.individual-base-v7231{margin:-2px 0 8px;color:#5c6570;font-size:12px;line-height:1.2}
+.individual-legend-v7231{margin-top:8px;padding:6px 8px;border:1px solid #d7dbe0;background:#fafbfc;color:#505862;font-size:11px;line-height:1.25}
+.individual-summary-v7231 span{min-height:auto!important;padding:6px 2px!important}
+</style>
 <script id="v729-relatorio-individual-final">
 (function(){
   'use strict';
-  window.__CHANCELARIA_RELATORIO_INDIVIDUAL__='7.2.30';
+  window.__CHANCELARIA_RELATORIO_INDIVIDUAL__='7.2.31';
 
   function nomeSessaoIndividualV729(s){
     if(!s)return 'Sessão';
@@ -6387,13 +6392,15 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
     const estado=p&&typeof estadoProcesso==='function'?estadoProcesso(i,f,p):'';
     return `<h2>Relatório individual de frequência</h2>`+
       `<div class="individual-meta-v7228"><div><b>Irmão:</b> ${h(i.nome)}</div><div><b>CIM:</b> ${i.cim?h(i.cim):'Não informado'}</div><div><b>Grau atual:</b> ${h(grauSimbolo(i.grau))}</div><div class="periodo"><b>Período:</b> ${brData(f.inicio)} a ${brData(f.fim)}</div></div>`+
-      `<div class="individual-summary-v7228"><div><span>PRESENÇAS<br>(P)</span><b>${pres}</b></div><div><span>FALTAS<br>(F)</span><b>${falta}</b></div><div><span>FALTAS ABONADAS<br>(FA)</span><b>${abonada}</b></div><div><span>TOTAL DE SESSÕES</span><b>${total}</b></div><div><span>FREQUÊNCIA</span><b>${freq}%</b></div></div>`+
+      `<div class="individual-base-v7231">${total} sessões consideradas no período.</div>`+
+      `<div class="individual-summary-v7228 individual-summary-v7231"><div><span>P</span><b>${pres}</b></div><div><span>F</span><b>${falta}</b></div><div><span>FA</span><b>${abonada}</b></div><div><span>TOTAL</span><b>${total}</b></div><div><span>FREQ. %</span><b>${freq}%</b></div></div>`+
       `${estado?`<div class="individual-procedure-v7228"><b>Procedimento:</b> ${h(estado)}</div>`:''}`+
-      `<table class="individual-table individual-table-v7228"><colgroup><col><col><col></colgroup><thead><tr><th>DATA</th><th>SESSÃO</th><th>SITUAÇÃO</th></tr></thead><tbody>${rows}</tbody></table>`;
+      `<table class="individual-table individual-table-v7228"><colgroup><col><col><col></colgroup><thead><tr><th>DATA</th><th>SESSÃO</th><th>SITUAÇÃO</th></tr></thead><tbody>${rows}</tbody></table>`+
+      `<div class="individual-legend-v7231">P = Presença. F = Falta. FA = Falta abonada. Freq. % = percentual de presença.</div>`;
   };
-  window.CHANCELARIA_VERSION='7.2.30';
+  window.CHANCELARIA_VERSION='7.2.31';
 })();
 </script>
-<script>window.__CHANCELARIA_WEB_BUILD__="7.2.30";</script>
+<script>window.__CHANCELARIA_WEB_BUILD__="7.2.31";</script>
 </body>
 </html>
