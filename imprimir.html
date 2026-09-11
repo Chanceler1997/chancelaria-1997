@@ -2398,6 +2398,18 @@ html.native-pdf .page.native-report-page table.individual-table-v7228 td:nth-chi
 }
 </style>
 
+
+<style id="v729-individual-final-css">
+.individual-meta-v7228{margin:10px 0 10px!important}
+.individual-summary-v7228{margin:8px 0 12px!important}
+.individual-table-v7228 th{text-align:center!important}
+.individual-table-v7228 td:nth-child(1),.individual-table-v7228 td:nth-child(3){text-align:center!important}
+.individual-table-v7228 td:nth-child(2){text-align:left!important}
+html.native-pdf .page.native-report-page table.individual-table-v7228{table-layout:fixed!important;width:100%!important}
+html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-child(1){width:19%!important}
+html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-child(2){width:56%!important}
+html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-child(3){width:25%!important}
+</style>
 </head>
 <body>
 <div class="toolbar"><button class="share" onclick="compartilharDocumento()">Compartilhar PDF</button><button class="secondary close-doc" onclick="voltarAoAplicativo()">Voltar ao aplicativo</button></div>
@@ -2622,10 +2634,34 @@ html.native-pdf .page.native-report-page table.individual-table-v7228 td:nth-chi
     numerar();return paginas.map(x=>x.page);
   }
 
+
+  function normalizarIndividualLegadoV729(html){
+    const wrap=document.createElement('div');wrap.innerHTML=String(html||'');
+    const h2=wrap.querySelector('h2'),table=wrap.querySelector('table');
+    if(!h2||!table||!/relatório individual/i.test(h2.textContent||''))return html;
+    const th=[...table.querySelectorAll('thead th')].map(x=>(x.textContent||'').trim().toLowerCase());
+    if(table.classList.contains('individual-table-v7228')&&th.length===3)return html;
+    if(th.length<4)return html;
+    const pars=[...wrap.querySelectorAll(':scope > p')];
+    const metaText=pars[0]?pars[0].textContent.replace(/\s+/g,' ').trim():'',resumoText=pars[1]?pars[1].textContent.replace(/\s+/g,' ').trim():'';
+    const capt=(re,txt)=>{const m=String(txt||'').match(re);return m?m[1].trim():''};
+    const irmao=capt(/Irmão:\s*(.*?)(?:\s*·\s*CIM:|$)/i,metaText),cim=capt(/CIM:\s*(.*?)(?:\s*·\s*Grau atual:|$)/i,metaText),grau=capt(/Grau atual:\s*(.*?)(?:\s*·\s*(?:Ingresso|Período):|$)/i,metaText),periodo=capt(/Período:\s*(.*)$/i,metaText).replace(/\s*·\s*.*$/,'');
+    const pres=capt(/Presença(?: real)?:\s*(?:\d+%\s*\()?([0-9]+)\)?/i,resumoText)||capt(/Presença(?: real)?:\s*([0-9]+)/i,resumoText),faltasReg=capt(/Faltas registradas:\s*(?:\d+%\s*\()?([0-9]+)\)?/i,resumoText),abon=capt(/Faltas abonadas:\s*([0-9]+)/i,resumoText)||capt(/Falta justificada:\s*([0-9]+)/i,resumoText)||'0';
+    let falta=capt(/Faltas sem justa causa:\s*(?:\d+%\s*\()?([0-9]+)\)?/i,resumoText)||capt(/Falta:\s*(?:\d+%\s*\()?([0-9]+)\)?/i,resumoText);
+    const freq=capt(/Presença(?: real)?:\s*([0-9]+)%/i,resumoText)||capt(/Frequência:\s*([0-9]+)%/i,resumoText),rows=[...table.querySelectorAll('tbody tr')],total=rows.length||Number(pres||0)+Number(faltasReg||falta||0);
+    if(!falta&&faltasReg)falta=String(Math.max(0,Number(faltasReg)-Number(abon||0)));
+    const grauNome=txt=>{const t=String(txt||'').toUpperCase();if(/APR/.test(t))return 'Aprendiz';if(/C[^A-Z0-9]*[∴.:]*\s*M/.test(t)||/COMP/.test(t))return 'Companheiro';return 'Mestre'};
+    const normalizarSessao=(tipo,ident)=>{let t=String(tipo||'').replace(/\s+/g,' ').trim();if(/^Ordinária\s*[·-]\s*Regular$/i.test(t))return `Ordinária de ${grauNome(ident)}`;t=t.replace(/^Sessão\s+/i,'').replace(/\s*[·-]\s*/g,' de ').replace(/\bgraus\b/gi,'Graus');return t||'Sessão'};
+    const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    const body=rows.map(r=>{const c=[...r.children],data=c[0]?.textContent.trim()||'',tipo=c[1]?.textContent.trim()||'',ident=c[2]?.textContent.trim()||'';let sit=c[3]?.textContent.trim()||'';let cls=/abon/i.test(sit)?'abonada':/anál/i.test(sit)?'analise':/presen/i.test(sit)?'presenca':'falta';if(/presen/i.test(sit))sit='Presença';else if(/abon/i.test(sit))sit='Falta abonada';else if(/anál/i.test(sit))sit='Falta em análise';else sit='Falta';return `<tr><td>${esc(data)}</td><td>${esc(normalizarSessao(tipo,ident))}</td><td><span class="individual-status-v7228 ${cls}">${esc(sit)}</span></td></tr>`}).join('');
+    return `<h2>Relatório individual de frequência</h2><div class="individual-meta-v7228"><div><b>Irmão:</b> ${esc(irmao)}</div><div><b>CIM:</b> ${esc(cim)}</div><div><b>Grau atual:</b> ${esc(grau)}</div><div class="periodo"><b>Período:</b> ${esc(periodo)}</div></div><div class="individual-summary-v7228"><div><span>PRESENÇAS<br>(P)</span><b>${esc(pres||'0')}</b></div><div><span>FALTAS<br>(F)</span><b>${esc(falta||'0')}</b></div><div><span>FALTAS ABONADAS<br>(FA)</span><b>${esc(abon||'0')}</b></div><div><span>TOTAL DE SESSÕES</span><b>${esc(total)}</b></div><div><span>FREQUÊNCIA</span><b>${esc(freq||'0')}%</b></div></div><table class="individual-table individual-table-v7228"><colgroup><col><col><col></colgroup><thead><tr><th>DATA</th><th>SESSÃO</th><th>SITUAÇÃO</th></tr></thead><tbody>${body}</tbody></table>`;
+  }
+
   try{
     const raw=location.hash.slice(1);if(!raw)throw new Error('Documento não recebido.');
     const data=JSON.parse(decodeBase64UrlUtf8(raw));
     const reportType=String(data.tipo||'').toLowerCase();
+    if(reportType==='individual')data.corpo=normalizarIndividualLegadoV729(data.corpo);
     if(reportType==='coletivo'&&(/<b>\s*Irmão\s*:/i.test(String(data.corpo||''))||!/relatório coletivo/i.test(String(data.corpo||''))))throw new Error('Template coletivo incompatível com o conteúdo recebido.');
     if(reportType==='individual'&&(!/<b>\s*Irmão\s*:/i.test(String(data.corpo||''))||!/relatório individual/i.test(String(data.corpo||''))))throw new Error('Template individual incompatível com o conteúdo recebido.');
     if(reportType==='sessao'&&!/(Relação de participantes presentes|Relatório de sessão)/i.test(String(data.corpo||'')))throw new Error('Template de sessão incompatível com o conteúdo recebido.');

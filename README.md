@@ -1,35 +1,11 @@
-## Chancelaria 1997 v7.2.14 — correção PDF + tabela coletiva
+# Chancelaria 1997 — v7.2.29
 
-## Chancelaria 1997 · v7.2.12 HOMOLOGAÇÃO
+Correção focada no relatório individual de frequência.
 
-Revisão pontual dos relatórios coletivos sobre a v7.2.7.
-
-Alterações desta versão:
-
-1. Identifica visualmente o destino do relatório individual como compartilhamento individual.
-2. Identifica visualmente o destino do relatório coletivo e do resumo como grupo da Loja.
-3. Renomeia as ações para reduzir erro de destino: “Compartilhar individualmente”, “Compartilhar no grupo” e “Resumo para o grupo”.
-4. Exibe no relatório coletivo um resumo com período, cobertura histórica, Irmãos cadastrados, Irmãos com apuração, alertas formais e faltas abonadas.
-5. Impede geração de relatório coletivo sem Irmãos ou sem período de apuração válido.
-6. Mantém a geração única e a regra central de compartilhamento da v7.2.7.
-
-Preservado sem alteração funcional:
-
-- motor de PDF e extensões
-- imprimir.html e paginação aprovada
-- banco, TinyDB e chaves
-- frequência e abonos
-- cadastros e lixeira
-- tela Sessões
-- cabeçalho fixo
-- retorno após WhatsApp e visualização
-- certificados e atestados
-
-Package: br.org.razaoeforca.chancelaria1997
-VersionCode: 79
-VersionName: 7.2.9
-
-
-### Ajuste v7.2.12
-- CIM do relatório coletivo permanece em uma única linha, sem quebra entre dígitos.
-- Nenhuma mudança em cálculo, banco, paginação, geração ou compartilhamento de PDF.
+- DATA | SESSÃO | SITUAÇÃO
+- Ordinárias exibem o grau da sessão, por exemplo: Ordinária de Mestre
+- quadro-resumo: P, F, FA, Total de Sessões e Frequência
+- remove a coluna Identificação do relatório individual
+- assinatura permanece na última página
+- relatório coletivo, banco e compartilhamento permanecem intactos
+- service worker atualizado para renovar os arquivos web

@@ -2776,6 +2776,7 @@ function urlRelatorioParaImpressao(titulo,corpo,modoImpressao=false,opcoes={}){
   const payload={titulo,corpo,tipo:opcoes.tipo||'relatorio',irmaoId:opcoes.irmaoId||'',sessaoId:opcoes.sessaoId||'',geradoEm:new Date().toISOString(),assinatura:opcoes.assinatura||'',assinaturaClasse:opcoes.assinaturaClasse||'',rodape:opcoes.rodape||''};
   const url=new URL('imprimir.html',location.href);
   url.searchParams.set('doctype','relatorio');
+  url.searchParams.set('v','7.2.29');
   url.searchParams.set('filename',nomeArquivoRelatorioV602(titulo,opcoes));
   if(modoImpressao)url.searchParams.set('print','1');
   return url.href+'#'+codificarBase64UrlUtf8(JSON.stringify(payload));
@@ -6329,6 +6330,70 @@ button[onclick*="abrirWhatsAppVisitanteV55"]{display:none!important}
   setTimeout(ajustarRelatoriosV728,0);
 })();
 </script>
-<script>window.__CHANCELARIA_WEB_BUILD__="7.2.15";</script>
+
+<script id="v729-relatorio-individual-final">
+(function(){
+  'use strict';
+  window.__CHANCELARIA_RELATORIO_INDIVIDUAL__='7.2.29';
+
+  function nomeSessaoIndividualV729(s){
+    if(!s)return 'Sessão';
+    try{
+      const x=typeof v5LegacySession==='function'?v5LegacySession(s):s;
+      const grau=typeof nomeGrauDocumento==='function'?nomeGrauDocumento(x.grauSessao):({A:'Aprendiz',C:'Companheiro',M:'Mestre',MI:'Mestre'}[x.grauSessao]||'');
+      const modalidade=typeof v5ModalidadeNome==='function'?v5ModalidadeNome(x):String(x.modalidade||'');
+      if(x.tipo==='ordinaria'&&x.modalidade==='regular')return `Ordinária de ${grau||'Maçom'}`;
+      if(x.tipo==='ordinaria'){
+        const base=modalidade||'Sessão';
+        return grau?`Ordinária de ${base} · ${grau}`:`Ordinária de ${base}`;
+      }
+      if(x.tipo==='magna'){
+        let base=String(modalidade||'Sessão');
+        base=base.replace(/\bgraus\b/gi,'Graus');
+        return `Magna de ${base}`;
+      }
+      if(x.tipo==='extraordinaria')return `Extraordinária de ${modalidade||'Sessão'}`;
+      const nome=typeof nomeSessaoDocumento==='function'?nomeSessaoDocumento(x):(typeof descricaoSessao==='function'?descricaoSessao(x):'Sessão');
+      return String(nome||'Sessão').replace(/^Sessão\s+/i,'').replace(/\s+—\s+Grau\s+[IVX]+$/i,'');
+    }catch(_e){
+      return String(typeof descricaoSessao==='function'?descricaoSessao(s):'Sessão').replace(/^Sessão\s+/i,'').replace(/\s*·\s*/g,' de ');
+    }
+  }
+
+  function situacaoIndividualV729(i,s,r){
+    try{
+      if(statusPresenca(r)==='P')return {texto:'Presença',classe:'presenca'};
+      const d=typeof decisaoAbonoSessao==='function'?decisaoAbonoSessao(i.id,s.id):null;
+      if(d&&d.decisao==='aceita')return {texto:'Falta abonada',classe:'abonada'};
+      if(d&&d.decisao==='pendente')return {texto:'Falta em análise',classe:'analise'};
+    }catch(_e){}
+    return {texto:'Falta',classe:'falta'};
+  }
+
+  window.corpoRelatorioIndividual=function(i){
+    const f=calcFreq(i);
+    if(!f||!f.periodoAtivo)return '<h2>Relatório individual de frequência</h2><p>Cadastre uma sessão para iniciar a contagem.</p>';
+    const sessoes=(getSessoes()||[])
+      .filter(s=>s.data&&s.data<=hojeISO()&&s.data>=f.inicio&&s.data<=f.fim&&contaParaIrmao(i,s))
+      .sort((a,b)=>String(a.data).localeCompare(String(b.data)));
+    const rows=sessoes.map(s=>{
+      const r=(getPresencas()[s.id]||{})[i.id]||'F';
+      const sit=situacaoIndividualV729(i,s,r);
+      return `<tr><td>${brData(s.data)}</td><td>${h(nomeSessaoIndividualV729(s))}</td><td><span class="individual-status-v7228 ${sit.classe}">${h(sit.texto)}</span></td></tr>`;
+    }).join('');
+    const total=Number(f.total||0),pres=Number(f.presente||0),falta=Number(f.falta||0),abonada=Number(f.abonado||0);
+    const freq=Number(f.pctPresenca!=null?f.pctPresenca:(total?Math.round(pres/total*100):0));
+    const p=typeof processoMaisRecenteIrmao==='function'?processoMaisRecenteIrmao(i.id):null;
+    const estado=p&&typeof estadoProcesso==='function'?estadoProcesso(i,f,p):'';
+    return `<h2>Relatório individual de frequência</h2>`+
+      `<div class="individual-meta-v7228"><div><b>Irmão:</b> ${h(i.nome)}</div><div><b>CIM:</b> ${i.cim?h(i.cim):'Não informado'}</div><div><b>Grau atual:</b> ${h(grauSimbolo(i.grau))}</div><div class="periodo"><b>Período:</b> ${brData(f.inicio)} a ${brData(f.fim)}</div></div>`+
+      `<div class="individual-summary-v7228"><div><span>PRESENÇAS<br>(P)</span><b>${pres}</b></div><div><span>FALTAS<br>(F)</span><b>${falta}</b></div><div><span>FALTAS ABONADAS<br>(FA)</span><b>${abonada}</b></div><div><span>TOTAL DE SESSÕES</span><b>${total}</b></div><div><span>FREQUÊNCIA</span><b>${freq}%</b></div></div>`+
+      `${estado?`<div class="individual-procedure-v7228"><b>Procedimento:</b> ${h(estado)}</div>`:''}`+
+      `<table class="individual-table individual-table-v7228"><colgroup><col><col><col></colgroup><thead><tr><th>DATA</th><th>SESSÃO</th><th>SITUAÇÃO</th></tr></thead><tbody>${rows}</tbody></table>`;
+  };
+  window.CHANCELARIA_VERSION='7.2.29';
+})();
+</script>
+<script>window.__CHANCELARIA_WEB_BUILD__="7.2.29";</script>
 </body>
 </html>
