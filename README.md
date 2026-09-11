@@ -1,4 +1,4 @@
-## Chancelaria 1997 · v7.2.11 HOMOLOGAÇÃO
+## Chancelaria 1997 · v7.2.13 HOMOLOGAÇÃO
 
 Revisão pontual dos relatórios coletivos sobre a v7.2.7.
 
@@ -28,6 +28,6 @@ VersionCode: 79
 VersionName: 7.2.9
 
 
-### Ajuste v7.2.11
+### Ajuste v7.2.13
 - CIM do relatório coletivo permanece em uma única linha, sem quebra entre dígitos.
 - Nenhuma mudança em cálculo, banco, paginação, geração ou compartilhamento de PDF.
