@@ -2412,7 +2412,7 @@ html.native-pdf .page.native-report-page table.individual-table-v7228 col:nth-ch
 </style>
 
 <style id="v7230-individual-refinement">
-/* V7.2.31 — refinamento do relatório individual, sem alterar cálculos/PDF. */
+/* V7.2.32 — remove linha redundante e iguala a legenda ao relatório coletivo. */
 .individual-summary-v7228 span{
   min-height:auto!important;
   padding:1.35mm .8mm!important;
@@ -2729,17 +2729,14 @@ html.native-pdf .page.native-report-page .individual-continuation-id-v7230{
       const summary=wrap.querySelector('.individual-summary-v7228');
       const bodyRows=[...table.querySelectorAll('tbody tr')];
       const total=bodyRows.length;
-      if(meta&&!wrap.querySelector('.individual-base-v7231')){
-        const base=document.createElement('div');base.className='individual-base-v7230 individual-base-v7231';base.textContent=`${total} sessões consideradas no período.`;meta.insertAdjacentElement('afterend',base);
-      }
+      wrap.querySelectorAll('.individual-base-v7230,.individual-base-v7231').forEach(el=>el.remove());
       if(summary){
         const labels=['P','F','FA','TOTAL','FREQ. %'];
         [...summary.children].slice(0,5).forEach((d,i)=>{const sp=d.querySelector('span');if(sp)sp.textContent=labels[i]});
         summary.classList.add('individual-summary-v7231');
       }
-      if(!wrap.querySelector('.individual-legend-v7231')){
-        const legend=document.createElement('div');legend.className='individual-legend-v7230 individual-legend-v7231';legend.textContent='P = Presença. F = Falta. FA = Falta abonada. Freq. % = percentual de presença.';table.insertAdjacentElement('afterend',legend);
-      }
+      wrap.querySelectorAll('.individual-legend-v7230,.individual-legend-v7231,.individual-legend-v7232').forEach(el=>el.remove());
+      const legend=document.createElement('div');legend.className='collective-legend-v7223 individual-legend-v7232';legend.innerHTML='<b>Legenda:</b> P = Presenças. F = Faltas sem abono. FA = Faltas abonadas. Total = sessões consideradas no período. Freq. % P = percentual de presença. Freq. % F = percentual de faltas sem abono.';table.insertAdjacentElement('afterend',legend);
       return wrap.innerHTML;
     }
     if(th.length<4)return html;
@@ -2755,7 +2752,7 @@ html.native-pdf .page.native-report-page .individual-continuation-id-v7230{
     const normalizarSessao=(tipo,ident)=>{let t=String(tipo||'').replace(/\s+/g,' ').trim();if(/^Ordinária\s*[·-]\s*Regular$/i.test(t))return `Ordinária de ${grauNome(ident)}`;t=t.replace(/^Sessão\s+/i,'').replace(/\s*[·-]\s*/g,' de ').replace(/\bgraus\b/gi,'Graus');return t||'Sessão'};
     const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     const body=rows.map(r=>{const c=[...r.children],data=c[0]?.textContent.trim()||'',tipo=c[1]?.textContent.trim()||'',ident=c[2]?.textContent.trim()||'';let sit=c[3]?.textContent.trim()||'';let cls=/abon/i.test(sit)?'abonada':/anál/i.test(sit)?'analise':/presen/i.test(sit)?'presenca':'falta';if(/presen/i.test(sit))sit='Presença';else if(/abon/i.test(sit))sit='Falta abonada';else if(/anál/i.test(sit))sit='Falta em análise';else sit='Falta';return `<tr><td>${esc(data)}</td><td>${esc(normalizarSessao(tipo,ident))}</td><td><span class="individual-status-v7228 ${cls}">${esc(sit)}</span></td></tr>`}).join('');
-    return `<h2>Relatório individual de frequência</h2><div class="individual-meta-v7228"><div><b>Irmão:</b> ${esc(irmao)}</div><div><b>CIM:</b> ${esc(cim)}</div><div><b>Grau atual:</b> ${esc(grau)}</div><div class="periodo"><b>Período:</b> ${esc(periodo)}</div></div><div class="individual-base-v7230 individual-base-v7231">${esc(total)} sessões consideradas no período.</div><div class="individual-summary-v7228"><div><span>P</span><b>${esc(pres||'0')}</b></div><div><span>F</span><b>${esc(falta||'0')}</b></div><div><span>FA</span><b>${esc(abon||'0')}</b></div><div><span>TOTAL</span><b>${esc(total)}</b></div><div><span>FREQ. %</span><b>${esc(freq||'0')}%</b></div></div><table class="individual-table individual-table-v7228"><colgroup><col><col><col></colgroup><thead><tr><th>DATA</th><th>SESSÃO</th><th>SITUAÇÃO</th></tr></thead><tbody>${body}</tbody></table><div class="individual-legend-v7230 individual-legend-v7231">P = Presença. F = Falta. FA = Falta abonada. Freq. % = percentual de presença.</div>`;
+    return `<h2>Relatório individual de frequência</h2><div class="individual-meta-v7228"><div><b>Irmão:</b> ${esc(irmao)}</div><div><b>CIM:</b> ${esc(cim)}</div><div><b>Grau atual:</b> ${esc(grau)}</div><div class="periodo"><b>Período:</b> ${esc(periodo)}</div></div><div class="individual-summary-v7228"><div><span>P</span><b>${esc(pres||'0')}</b></div><div><span>F</span><b>${esc(falta||'0')}</b></div><div><span>FA</span><b>${esc(abon||'0')}</b></div><div><span>TOTAL</span><b>${esc(total)}</b></div><div><span>FREQ. %</span><b>${esc(freq||'0')}%</b></div></div><table class="individual-table individual-table-v7228"><colgroup><col><col><col></colgroup><thead><tr><th>DATA</th><th>SESSÃO</th><th>SITUAÇÃO</th></tr></thead><tbody>${body}</tbody></table><div class="collective-legend-v7223 individual-legend-v7232"><b>Legenda:</b> P = Presenças. F = Faltas sem abono. FA = Faltas abonadas. Total = sessões consideradas no período. Freq. % P = percentual de presença. Freq. % F = percentual de faltas sem abono.</div>`;
   }
 
   try{

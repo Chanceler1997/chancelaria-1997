@@ -1,9 +1,11 @@
-# Chancelaria 1997 v7.2.31
+Chancelaria 1997 v7.2.32 — ajuste pontual do relatório individual
 
-Correção pontual do relatório individual.
+Arquivos para substituir no GitHub:
+- index.html
+- imprimir.html
+- service-worker.js
 
-- Aplica P, F, FA, TOTAL e FREQ. % também quando o relatório já usa a tabela de 3 colunas.
-- Exibe a linha de sessões consideradas no período.
-- Exibe a legenda após a tabela.
-- Mantém DATA, SESSÃO e SITUAÇÃO.
-- Não altera banco, TinyDB, PDF, compartilhamento ou Kodular.
+Alterações:
+- removida a linha “42 sessões consideradas no período”;
+- legenda do relatório individual igual à legenda do relatório coletivo, inclusive no estilo visual;
+- nenhuma alteração em banco, TinyDB, Kodular, PDF, compartilhamento ou relatório coletivo.
